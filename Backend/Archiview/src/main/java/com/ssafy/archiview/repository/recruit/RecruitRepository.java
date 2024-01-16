@@ -4,5 +4,5 @@ import com.ssafy.archiview.entity.Recruit;
 import com.ssafy.archiview.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public class RecruitRepository implements JpaRepository<Recruit, Long> {
+public interface RecruitRepository extends JpaRepository<Recruit, Long> {
 }

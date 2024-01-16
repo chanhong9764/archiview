@@ -12,13 +12,11 @@ public class CsSubQuestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "question_id")
-    @NotNull
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer questionId;
+    @ManyToOne
+    @JoinColumn(name = "cs_sub_id")
+    private CsSub csSub;
 
-    @Column(name = "cs_sub_id")
-    @NotNull
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer csSubId;
+    @ManyToOne
+    @JoinColumn(name = "question_id")
+    private Question question;
 }

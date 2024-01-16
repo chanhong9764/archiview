@@ -1,7 +1,7 @@
 package com.ssafy.archiview.validation.user;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class UserPasswordValidator implements ConstraintValidator<UserPassword, String> {
     @Override

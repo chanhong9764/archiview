@@ -1,6 +1,7 @@
 package com.ssafy.archiview.validation.user;
 
-import javax.validation.Constraint;
+import jakarta.validation.Constraint;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

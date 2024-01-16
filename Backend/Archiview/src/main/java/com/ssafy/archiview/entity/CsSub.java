@@ -12,11 +12,11 @@ public class CsSub {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "cs_main_id")
-    @NotNull
-    private Integer csMainId;
-
     @Column(name = "name", length = 64)
     @NotNull
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "cs_main_id")
+    private CsMain csMain;
 }

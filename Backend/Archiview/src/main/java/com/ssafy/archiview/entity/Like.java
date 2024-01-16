@@ -12,12 +12,12 @@ public class Like {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "user_id")
-    @NotNull
-    private String userId;
-
     @Column(name = "reply_id")
     @NotNull
     private Integer replyId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
 

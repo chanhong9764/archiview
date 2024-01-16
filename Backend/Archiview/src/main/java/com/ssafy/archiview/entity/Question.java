@@ -12,11 +12,12 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "company_id")
-    @NotNull
-    private Integer companyId;
-
     @Column(name = "content")
     @NotNull
     private String content;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
+
 }

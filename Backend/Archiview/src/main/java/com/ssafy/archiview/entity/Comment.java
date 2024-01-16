@@ -15,17 +15,16 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "user_id", length = 16)
-    @NotNull
-    private String userId;
-
-    @Column(name = "reply_id")
-    @NotNull
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer replyId;
-
     @Column(name = "content", length = 255)
     @NotNull
     @ColumnDefault("''")
     private String content;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "reply_id")
+    private Reply reply;
 }

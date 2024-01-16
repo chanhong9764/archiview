@@ -17,10 +17,6 @@ public class Reply {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "user_id")
-    @NotNull
-    private String userId;
-
     @Column(name = "question_id")
     @NotNull
     private Integer questionId;
@@ -40,4 +36,8 @@ public class Reply {
     @Column(name = "created_at")
     @NotNull
     private LocalDateTime createdAt;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

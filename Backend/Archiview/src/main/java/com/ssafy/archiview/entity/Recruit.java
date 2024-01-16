@@ -14,10 +14,6 @@ public class Recruit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "company_id")
-    @NotNull
-    private Integer companyId;
-
     @Column(name = "title")
     @NotNull
     private String title;
@@ -33,4 +29,8 @@ public class Recruit {
     @Column(name = "end")
     @NotNull
     private LocalDateTime end;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
 }

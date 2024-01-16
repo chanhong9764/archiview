@@ -26,6 +26,6 @@ public class Comment {
 
     @Column(name = "content", length = 255)
     @NotNull
-    @ColumnDefault("'")
+    @ColumnDefault("''")
     private String content;
 }

@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
-@Table(name = "like") // 추천
+@Table(name = "\"like\"") // 추천
 public class Like {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,3 +20,4 @@ public class Like {
     @NotNull
     private Integer replyId;
 }
+

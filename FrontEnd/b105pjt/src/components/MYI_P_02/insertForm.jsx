@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material";
 import React from "react";
-import SearchSection from "../utils/SearchSection";
+import SearchSection from "../utils/searchSection";
 
 const insertForm = () => {
   return (

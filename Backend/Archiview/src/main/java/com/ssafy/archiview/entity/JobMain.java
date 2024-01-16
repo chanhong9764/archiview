@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -18,7 +19,6 @@ public class JobMain {
     @NotNull
     private String name;
 
-    @OneToMany(mappedBy = "job_main")
-    private List<JobSub> jobSubList;
-
+//    @OneToMany(mappedBy = "jobMain")
+//    private List<JobSub> jobSubList = new ArrayList<>();
 }

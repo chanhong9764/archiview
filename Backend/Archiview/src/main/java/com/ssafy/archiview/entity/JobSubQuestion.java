@@ -12,11 +12,11 @@ public class JobSubQuestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "question_id")
-    @NotNull
-    private Integer questionId;
+    @ManyToOne
+    @JoinColumn(name = "job_sub_id")
+    private JobSub jobSub;
 
-    @Column(name = "job_sub_id")
-    @NotNull
-    private Integer jobSubId;
+    @ManyToOne
+    @JoinColumn(name = "question_id")
+    private Question question;
 }

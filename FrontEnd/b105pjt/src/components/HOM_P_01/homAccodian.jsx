@@ -15,6 +15,7 @@ function HomAccodian({ title, children }) {
     console.log("등록하기 버튼 클릭");
   };
 
+  //여기서 부터 화면에 출력해줍니다.
   return (
     <MuiAccordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>

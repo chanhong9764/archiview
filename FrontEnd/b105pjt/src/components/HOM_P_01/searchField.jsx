@@ -1,14 +1,18 @@
 import React from "react";
 import { TextField, Button, Box } from "@mui/material";
 
+//props로 flag와 반응형 함수 setFlag를 받아옴
 const SearchField = ({ onSearch, flag, setFlag }) => {
+  //검색창이랑 반응해줄 함수와 변수
   const [inputValue, setInputValue] = React.useState("");
 
+  //찾아주는 함수 onSearch
   const handleSearch = (event) => {
     event.preventDefault();
     onSearch(inputValue.trim());
   };
 
+  //여기서 부터 화면에 출력해줍니다.
   return (
     <Box
       component="form"

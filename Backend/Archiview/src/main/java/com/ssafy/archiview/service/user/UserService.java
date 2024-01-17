@@ -6,5 +6,5 @@ import com.####.archiview.entity.User;
 public interface UserService {
     // 회원정보 생성
     void userAdd(UserDto.AddRequestDto requestDto);
-    void userLogin();
+    boolean userLogin(UserDto.loginRequestDto requestDto);
 }

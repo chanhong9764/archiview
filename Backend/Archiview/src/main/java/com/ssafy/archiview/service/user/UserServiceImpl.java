@@ -1,9 +1,12 @@
 package com.####.archiview.service.user;
 
 import com.####.archiview.dto.user.UserDto;
+import com.####.archiview.entity.User;
 import com.####.archiview.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -16,7 +19,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void userLogin() {
+    public boolean userLogin(UserDto.loginRequestDto requestDto) {
+        Optional<User> opUser = repository.findById(requestDto.getId());
+        // 입력된 아이디와 일치하는 아이디가 없으면 false 리턴
+        if (opUser.isEmpty()){
+            return false;
+        }
 
+        User user = opUser.get();
+        // 입력된 비밀번호와 조회된 비밀번호가 일치하지 않으면 false 리턴
+        if(user.getPw().equals(requestDto.getPw())){
+            return false;
+        }
+        return true;
     }
 }

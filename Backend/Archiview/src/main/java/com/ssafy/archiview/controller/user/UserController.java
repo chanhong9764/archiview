@@ -22,11 +22,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> userLogin(@RequestBody UserDto.loginRequestDto requestDto){
-        UserDto.loginRequestDto dto = requestDto;
-        return SuccessResponse.createSuccess(SuccessCode.LOGIN_SUCCESS, dto);
+        service.userLogin(requestDto);
+        return SuccessResponse.createSuccess(SuccessCode.LOGIN_SUCCESS);
     }
-
-
-
-
 }

@@ -1,4 +1,4 @@
-package com.ssafy.archiview.repository.question;
+package com.ssafy.archiview.repository;
 
 import com.ssafy.archiview.entity.Question;
 import com.ssafy.archiview.entity.Recruit;

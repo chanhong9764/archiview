@@ -3,7 +3,6 @@ package com.####.archiview.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-
 @Entity
 @Getter
 @Table(name = "\"like\"") // 추천

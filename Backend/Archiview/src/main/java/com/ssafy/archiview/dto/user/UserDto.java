@@ -1,5 +1,6 @@
 package com.####.archiview.dto.user;
 
+import com.####.archiview.entity.Role;
 import com.####.archiview.entity.User;
 import com.####.archiview.validation.user.UserEmail;
 import com.####.archiview.validation.user.UserId;
@@ -22,6 +23,7 @@ public class UserDto {
         private String email;
         @UserName
         private String name;
+
         @Builder
         public AddRequestDto(String id, String pw, String email, String name) {
             this.id = id;

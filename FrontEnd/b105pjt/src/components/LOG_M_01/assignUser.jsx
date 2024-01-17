@@ -15,7 +15,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const FindIDModal = ({ onSwitch }) => {
+const AssignUser = ({ onSwitch }) => {
   const [showSignupFields, setShowSignupFields] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -23,22 +23,34 @@ const FindIDModal = ({ onSwitch }) => {
   // '인증하기' 버튼 클릭 시 핸들러 함수
   const handleVerifyClick = () => {
     setIsButtonDisabled(true); // 버튼을 비활성화 시킴
-    setShowSignupFields(true); // 인증번호 필드를 보여줌
+    setShowSignupFields(true); // 회원가입 및 인증번호 필드를 보여줌
   };
 
-  // '아이디 찾기' 버튼 클릭시 핸들러 함수
+  // '회원가입' 버튼 클릭시 핸들러 함수
   const handleAssignClick = () => {
     setOpenSnackbar(true);
+
+    setTimeout(() => {
+      setOpenSnackbar(false);
+      onSwitch("Login");
+    }, 1000);
   };
 
-  // 모달창 닫을 시 로그인 페이지로 돌아가기
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return; // 클릭 이외의 이유로 닫히는 것을 방지
-    }
+  // 간단한 비밀번호 검증시 사용되는 변수
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
 
-    setOpenSnackbar(false);
-    onSwitch("Login");
+  // 비밀번호 입력창 변경시 값 업데이트
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+    setPasswordError(event.target.value !== confirmPassword);
+  };
+
+  // 비밀번호 점검창 변경시 값 업데이트
+  const handleConfirmPasswordChange = (event) => {
+    setConfirmPassword(event.target.value);
+    setPasswordError(password !== event.target.value);
   };
 
   return (
@@ -50,7 +62,7 @@ const FindIDModal = ({ onSwitch }) => {
           </div>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid className="Input-Grid" item xs={12}>
           <TextField
             className="ID-input"
             style={{ width: "100%" }}
@@ -62,11 +74,70 @@ const FindIDModal = ({ onSwitch }) => {
           />
         </Grid>
 
-        {/* 이메일 인증 */}
-        <Grid item xs={8}>
+        {/* ID */}
+        <Grid className="Input-Grid" item xs={12}>
+          <TextField
+            className="ID-input"
+            style={{ width: "100%" }}
+            required
+            id="id"
+            label="ID"
+            placeholder="사용자 ID"
+            variant="filled"
+          />
+        </Grid>
+
+        {/* PW */}
+        <Grid className="Input-Grid" item xs={12}>
           <TextField
             className="PW-input"
-            style={{ width: "100%" }}
+            label="PW"
+            required
+            placeholder="비밀번호"
+            type="password"
+            variant="filled"
+            onChange={handlePasswordChange}
+            value={password}
+            error={passwordError && password.length < 8}
+            helperText={
+              passwordError && password.length < 8
+                ? "비밀번호는 8자 이상이어야 합니다."
+                : ""
+            }
+          />
+        </Grid>
+
+        {/* PW2 */}
+        <Grid className="Input-Grid" item xs={12}>
+          <TextField
+            className="PW-input"
+            required
+            id="password-confirm"
+            label="PW 확인"
+            placeholder="비밀번호 확인"
+            type="password"
+            variant="filled"
+            error={
+              passwordError &&
+              confirmPassword.length > 0 &&
+              password !== confirmPassword
+            }
+            helperText={
+              passwordError &&
+              confirmPassword.length > 0 &&
+              password !== confirmPassword
+                ? "비밀번호가 일치하지 않습니다."
+                : ""
+            }
+            value={confirmPassword}
+            onChange={handleConfirmPasswordChange}
+          />
+        </Grid>
+
+        {/* 이메일 인증 */}
+        <Grid className="Input-Grid" item xs={8}>
+          <TextField
+            className="PW-input"
             required
             id="filled-required"
             label="이메일"
@@ -75,13 +146,12 @@ const FindIDModal = ({ onSwitch }) => {
             variant="filled"
           />
         </Grid>
-        <Grid item xs={4}>
+        <Grid className="Input-Grid" item xs={4}>
           <Button
             variant="contained"
             endIcon={<SendIcon />}
             style={{ height: "56px", width: "100%" }}
             onClick={handleVerifyClick} // 버튼 클릭 핸들러
-            disabled={isButtonDisabled}
           >
             인증하기
           </Button>
@@ -90,7 +160,7 @@ const FindIDModal = ({ onSwitch }) => {
         {/* 이메일 인증번호 & 회원가입 완료 버튼 */}
         {showSignupFields && (
           <>
-            <Grid item xs={12}>
+            <Grid className="Input-Grid" item xs={12}>
               <TextField
                 className="PW-input"
                 required
@@ -110,18 +180,17 @@ const FindIDModal = ({ onSwitch }) => {
                 style={{ height: "56px", width: "100%" }}
                 onClick={handleAssignClick}
               >
-                아이디 찾기
+                회원가입 완료
               </Button>
               <Dialog
                 open={openSnackbar}
-                onClose={handleSnackbarClose}
                 TransitionComponent={Transition}
                 keepMounted
                 aria-describedby="alert-dialog-slide-description"
               >
                 <DialogContent>
                   <DialogContentText id="alert-dialog-slide-description">
-                    ID : SSAFY
+                    회원가입이 정상적으로 되었습니다.
                   </DialogContentText>
                 </DialogContent>
               </Dialog>
@@ -133,4 +202,4 @@ const FindIDModal = ({ onSwitch }) => {
   );
 };
 
-export default FindIDModal;
+export default AssignUser;

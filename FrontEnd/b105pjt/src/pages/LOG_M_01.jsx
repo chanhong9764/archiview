@@ -1,67 +1,35 @@
-import { Button, Grid, TextField } from "@mui/material";
-import React from "react";
-import LoginIcon from "@mui/icons-material/Login";
-import "../assets/css/LOG_M_01.css";
+import React, { useState } from "react";
+import LoginModal from "../components/LOG_M_01/loginModal";
+import FindIDModal from "../components/LOG_M_01/findIDModal";
+import FindPWModal from "../components/LOG_M_01/findPWModal";
+import AssignUser from "../components/LOG_M_01/assignUser";
+import ChangPWModal from "../components/LOG_M_01/changePWModal";
 
 const LOG_M_01 = () => {
-  return (
-    <div className="LOG-M-01-Content">
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <div className="Logo">
-            <img src="http://placehold.it/240X80" alt="" />
-          </div>
-        </Grid>
+  const [currentComponent, setCurrentComponent] = useState("Login");
 
-        <Grid item xs={12}>
-          <TextField
-            className="ID-input"
-            required
-            id="filled-required"
-            label="ID"
-            defaultValue=""
-            variant="filled"
-          />
-        </Grid>
+  const switchComponent = (componentName) => {
+    setCurrentComponent(componentName);
+  };
 
-        <Grid item xs={12}>
-          <TextField
-            className="PW-input"
-            required
-            id="filled-required"
-            label="PW"
-            defaultValue=""
-            variant="filled"
-          />
-        </Grid>
+  const renderComponent = () => {
+    switch (currentComponent) {
+      case "Login":
+        return <LoginModal onSwitch={switchComponent} />;
+      case "FindID":
+        return <FindIDModal onSwitch={switchComponent} />;
+      case "FindPW":
+        return <FindPWModal onSwitch={switchComponent} />;
+      case "Assign":
+        return <AssignUser onSwitch={switchComponent} />;
+      case "ChangePW":
+        return <ChangPWModal onSwitch={switchComponent} />;
+      default:
+        return null;
+    }
+  };
 
-        <Grid item xs={12}>
-          <Button
-            className="Login-btn"
-            variant="contained"
-            endIcon={<LoginIcon />}
-            color="success"
-          >
-            로그인
-          </Button>
-        </Grid>
-
-        <Grid className="Link-group" item xs={12}>
-          <div style={{ marginRight: "20px" }}>아이디 찾기</div>
-          <div
-            style={{
-              borderRight: "1px solid #000",
-              borderLeft: "1px solid #000",
-              padding: "0 20px",
-            }}
-          >
-            비밀번호 찾기
-          </div>
-          <div style={{ marginLeft: "20px" }}>회원가입</div>
-        </Grid>
-      </Grid>
-    </div>
-  );
+  return renderComponent();
 };
 
 export default LOG_M_01;

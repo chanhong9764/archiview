@@ -3,10 +3,9 @@ package com.ssafy.archiview.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-
+@Entity // 공통/특화 소분류 테이블
 @Getter
-@Entity
-@Table(name = "cs_sub")  // 공통/특화 소분류 테이블
+@Table(name = "cs_sub")
 public class CsSub {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

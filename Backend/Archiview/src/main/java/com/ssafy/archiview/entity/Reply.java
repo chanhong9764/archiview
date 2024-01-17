@@ -7,11 +7,9 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
-
-@Entity
+@Entity // 답변
 @Getter
 @DynamicInsert
-@Table(name = "reply") // 답변
 public class Reply {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,15 +19,12 @@ public class Reply {
     @NotNull
     private Integer questionId;
 
-    @ColumnDefault("''")
     @Column(name = "script")
     private String script;
 
-    @ColumnDefault("''")
     @Column(name = "video_url")
     private String videoUrl;
 
-    @ColumnDefault("''")
     @Column(name = "thumbnail_url")
     private String thumbnailUrl;
 

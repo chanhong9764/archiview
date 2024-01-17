@@ -7,13 +7,13 @@ import Grid from "@mui/material/Grid";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { MenuItem } from "@mui/material";
+import { Button, MenuItem } from "@mui/material";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
 import Chip from "@mui/material/Chip";
 
-const SearchSection = () => {
+const SearchSection = ({ flag, setFlag }) => {
   // 각 분류에 대한 검색 옵션
   const searchOptions = {
     category1: ["기업명", "상품명", "모델명"],
@@ -68,16 +68,17 @@ const SearchSection = () => {
   };
 
   return (
-    <Box sx={{ paddingTop: 2, paddingBottom: 2 }}>
+    <Box sx={{ paddingTop: 2, paddingBottom: 2, width: "100%" }}>
       <Grid container spacing={2}>
         {" "}
         {/* Grid container를 사용해 항목 간 간격을 조절합니다. */}
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={3}>
           {" "}
           {/* Grid item을 사용해 반응형으로 크기를 조절합니다. */}
           <Autocomplete
             options={searchOptions.category1}
             freeSolo
+            readOnly={flag ? true : false}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -88,13 +89,14 @@ const SearchSection = () => {
             )}
           />
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={3}>
           <FormControl fullWidth>
             <InputLabel id="demo-multiple-chip-label">대분류</InputLabel>
             <Select
               labelId="demo-multiple-chip-label2"
               id="demo-multiple-chip2" // 고유한 값으로 변경
               multiple
+              readOnly={flag ? true : false}
               value={category2}
               onChange={handleChange2}
               input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
@@ -124,7 +126,7 @@ const SearchSection = () => {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={flag ? 6 : 5}>
           <FormControl fullWidth>
             <InputLabel id="demo-multiple-chip-label3">소분류</InputLabel>
             <Select
@@ -132,6 +134,7 @@ const SearchSection = () => {
               id="demo-multiple-chip3" // 고유한 값으로 변경
               multiple
               value={category3}
+              readOnly={flag ? true : false}
               onChange={handleChange3}
               input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
               renderValue={(selected) => (
@@ -160,6 +163,26 @@ const SearchSection = () => {
             </Select>
           </FormControl>
         </Grid>
+        {flag ? null : (
+          <Grid
+            item
+            sm={1}
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Button
+              variant="contained"
+              color="primary"
+              // size="large"
+              // type="submit"
+              onClick={() => (!flag ? setFlag(!flag) : null)}
+            >
+              검색
+            </Button>
+          </Grid>
+        )}
       </Grid>
     </Box>
   );

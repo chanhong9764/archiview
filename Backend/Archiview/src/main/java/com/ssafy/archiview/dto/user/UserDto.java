@@ -41,4 +41,25 @@ public class UserDto {
                     .build();
         }
     }
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class loginRequestDto{
+        @UserId
+        private String id;
+        @UserPassword
+        private String pw;
+
+        @Builder
+        public loginRequestDto(String id, String pw){
+            this.id = id;
+            this.pw = pw;
+        }
+
+        public User toEntity(){
+            return User.builder()
+                    .id(id)
+                    .pw(pw)
+                    .build();
+        }
+    }
 }

@@ -19,4 +19,14 @@ public class UserController {
         service.userAdd(requestDto);
         return SuccessResponse.createSuccess(SuccessCode.JOIN_SUCCESS);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<Object> userLogin(@RequestBody UserDto.loginRequestDto requestDto){
+        UserDto.loginRequestDto dto = requestDto;
+        return SuccessResponse.createSuccess(SuccessCode.LOGIN_SUCCESS, dto);
+    }
+
+
+
+
 }

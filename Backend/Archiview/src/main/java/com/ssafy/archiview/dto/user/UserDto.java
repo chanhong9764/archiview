@@ -1,5 +1,6 @@
 package com.ssafy.archiview.dto.user;
 
+import com.ssafy.archiview.entity.Role;
 import com.ssafy.archiview.entity.User;
 import com.ssafy.archiview.validation.user.UserEmail;
 import com.ssafy.archiview.validation.user.UserId;
@@ -22,6 +23,7 @@ public class UserDto {
         private String email;
         @UserName
         private String name;
+
         @Builder
         public AddRequestDto(String id, String pw, String email, String name) {
             this.id = id;

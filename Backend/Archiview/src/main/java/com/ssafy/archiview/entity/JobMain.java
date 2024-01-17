@@ -6,10 +6,9 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Entity // 직무 대분류 테이블
 @Getter
-@Entity
-@Table(name = "job_main")  // 직무 대분류 테이블
+@Table(name = "job_main")
 public class JobMain {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +17,4 @@ public class JobMain {
     @Column(name = "name", length = 64)
     @NotNull
     private String name;
-
-//    @OneToMany(mappedBy = "jobMain")
-//    private List<JobSub> jobSubList = new ArrayList<>();
 }

@@ -3,10 +3,8 @@ package com.ssafy.archiview.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-
-@Entity
+@Entity // 질문
 @Getter
-@Table(name = "qeustion") // 질문
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

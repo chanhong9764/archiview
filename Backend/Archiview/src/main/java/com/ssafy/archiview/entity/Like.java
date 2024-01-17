@@ -11,9 +11,9 @@ public class Like {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "reply_id")
-    @NotNull
-    private Integer replyId;
+    @ManyToOne
+    @JoinColumn(name = "reply_id")
+    private Reply reply;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

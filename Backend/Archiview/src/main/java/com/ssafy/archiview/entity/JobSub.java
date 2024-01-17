@@ -11,7 +11,7 @@ public class JobSub {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name")
+    @Column(name = "name", length = 64)
     @NotNull
     private String name;
 

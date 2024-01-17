@@ -1,7 +1,8 @@
 import SearchSection from "../components/HOM_P_01/HOM_SearchSection";
-import { Container, Box, Typography, Button } from "@mui/material";
+import { Container, Box, Typography, Button, Grid } from "@mui/material";
 import SearchField from "../components/HOM_P_01/searchField";
 import Logo from "../components/HOM_P_01/logo";
+import Video from "../components/HOM_P_01/video";
 import HomAccodian from "../components/HOM_P_01/homAccodian";
 import { useState } from "react";
 
@@ -9,8 +10,8 @@ function HOM_P_01() {
   const [flag, setFlag] = useState(false);
 
   const dumy = [
-    { title: "더미", content: "미더" },
-    { title: "더미1", content: "미더1" },
+    { title: "제목", content: "상세 내용칸" },
+    { title: "제목1", content: "상새 내용칸1" },
   ];
 
   const handleEdit = (index) => {
@@ -39,19 +40,45 @@ function HOM_P_01() {
                 <div style={{ paddingTop: "15px" }}>
                   {dumy.map((item, index) => (
                     <HomAccodian key={index} title={item.title}>
-                      <Box
-                        display="flex"
-                        justifyContent="space-between"
-                        alignItems="center"
-                      >
-                        <Typography>{item.content}</Typography>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={() => handleEdit(index)}
-                        >
-                          등록하기
-                        </Button>
+                      <Box display="flex" alignItems="center">
+                        <Grid container>
+                          <Grid item sm={2}>
+                            <Video />
+                          </Grid>
+                          <Grid
+                            item
+                            sm={9}
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <Typography>{item.content}</Typography>
+                            <div style={{ marginTop: "8px", color: "gray" }}>
+                              태그 데이터
+                            </div>
+                          </Grid>
+                          <Grid
+                            item
+                            sm={1}
+                            sx={{ display: "flex", alignItems: "flex-end" }}
+                          >
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              onClick={() => handleEdit(index)}
+                              sx={{
+                                backgroundColor: "green",
+                                "&:hover": {
+                                  backgroundColor: "green",
+                                },
+                              }}
+                            >
+                              자세히
+                            </Button>
+                          </Grid>
+                        </Grid>
                       </Box>
                     </HomAccodian>
                   ))}

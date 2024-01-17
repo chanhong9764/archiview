@@ -4,14 +4,36 @@ import {
   AccordionSummary,
   AccordionDetails,
   Typography,
+  Button,
+  Box,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 function HomAccodian({ title, children }) {
+  const handleButtonClick = () => {
+    // 등록하기 버튼 클릭 시 실행될 동작 추가
+    console.log("등록하기 버튼 클릭");
+  };
+
   return (
     <MuiAccordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>{title}</Typography>
+        <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
+          <Typography sx={{ flexGrow: 1, marginLeft: 1 }}>{title}</Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleButtonClick}
+            sx={{
+              backgroundColor: "#ff4081",
+              "&:hover": {
+                backgroundColor: "#ff4081",
+              },
+            }}
+          >
+            등록하기
+          </Button>
+        </Box>
       </AccordionSummary>
       <AccordionDetails>
         <Typography component="div">{children}</Typography>

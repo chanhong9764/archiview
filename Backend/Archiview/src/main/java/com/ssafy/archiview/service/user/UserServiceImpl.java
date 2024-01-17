@@ -19,4 +19,11 @@ public class UserServiceImpl implements UserService {
 
         repository.save(requestDto.toEntity());
     }
+
+    @Override
+    public UserDto.DetailResponseDto userDetail(String id) {
+        return repository.getById(id).toDetailResponseDto();
+    }
+
+
 }

@@ -1,7 +1,7 @@
 package com.####.archiview.service.user;
 
 import com.####.archiview.dto.user.UserDto;
-import com.####.archiview.repository.user.UserRepository;
+import com.####.archiview.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

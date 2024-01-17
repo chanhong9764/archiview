@@ -1,9 +1,9 @@
 package com.####.archiview.repository;
 
 import com.####.archiview.entity.Question;
-import com.####.archiview.entity.Recruit;
+import com.####.archiview.entity.Reply;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface QuestionRepository extends JpaRepository<Question, Integer> {
+public interface ReplyRepository extends JpaRepository<Reply, Integer> {
 
 }

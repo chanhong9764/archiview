@@ -1,0 +1,4 @@
+.Calendar-container {
+  height: calc(100vh - 200px);
+  overflow-y: auto; /* 필요한 경우에만 세로 스크롤바 표시 */
+}

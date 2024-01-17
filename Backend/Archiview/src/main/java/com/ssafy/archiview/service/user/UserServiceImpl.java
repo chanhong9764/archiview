@@ -1,7 +1,7 @@
 package com.ssafy.archiview.service.user;
 
 import com.ssafy.archiview.dto.user.UserDto;
-import com.ssafy.archiview.repository.user.UserRepository;
+import com.ssafy.archiview.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

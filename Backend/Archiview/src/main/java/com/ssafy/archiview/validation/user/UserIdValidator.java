@@ -10,6 +10,6 @@ public class UserIdValidator implements ConstraintValidator<UserId, String> {
         if(value == null) {
             return false;
         }
-        return value.matches("^[a-z0-9]{4,20}$");
+        return value.matches("^[a-z0-9]{4,16}$");
     }
 }

@@ -14,15 +14,17 @@ import ListItemText from "@mui/material/ListItemText";
 import Chip from "@mui/material/Chip";
 
 const SearchSection = ({ flag, setFlag }) => {
-  // 각 분류에 대한 검색 옵션
+  // 더미 데이터
   const searchOptions = {
     category1: ["기업명", "상품명", "모델명"],
     category2: ["서울특별시", "경기도", "부산광역시"],
     category3: ["컴퓨터", "휴대폰", "가전제품"],
   };
 
+  // 내장 함수를 변수처럼 사용하기위해 선언
   const theme = useTheme();
 
+  // 스타일 입히는 작업 해주는 함수
   function getStyles(name, personName, theme) {
     return {
       fontWeight:
@@ -32,10 +34,13 @@ const SearchSection = ({ flag, setFlag }) => {
     };
   }
 
+  //(반응형 함수) 검색창 체크박스를 검색창 내용물 표시가 바뀔때 마다 반응하는 함수
   const [category2, setCategory2] = useState([]);
 
   const [category3, setCategory3] = useState([]);
 
+  //반응형 함수를 보충해서 원하는 기능을 넣음, split(,) 으로 나눈 리스트 목록을
+  //검색창 안에 넣어줄 역활을 담당해줌
   const handleChange2 = (event) => {
     const {
       target: { value },
@@ -56,6 +61,7 @@ const SearchSection = ({ flag, setFlag }) => {
     );
   };
 
+  // 검색창 내부 스타일 담당 변수들
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
   const MenuProps = {
@@ -67,6 +73,7 @@ const SearchSection = ({ flag, setFlag }) => {
     },
   };
 
+  //여기서 부터 화면에 출력해줍니다.
   return (
     <Box sx={{ paddingTop: 2, paddingBottom: 2, width: "100%" }}>
       <Grid container spacing={2}>

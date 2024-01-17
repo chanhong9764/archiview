@@ -7,13 +7,16 @@ import HomAccodian from "../components/HOM_P_01/homAccodian";
 import { useState } from "react";
 
 function HOM_P_01() {
+  //flag는 컴포넌트의 css 속성을 바꿔주는 역활을 함.
   const [flag, setFlag] = useState(false);
 
+  // 더미 데이터
   const dumy = [
     { title: "제목", content: "상세 내용칸" },
     { title: "제목1", content: "상새 내용칸1" },
   ];
 
+  //더미형 함수 onclick을 위한
   const handleEdit = (index) => {
     console.log("Editing item:", index);
   };

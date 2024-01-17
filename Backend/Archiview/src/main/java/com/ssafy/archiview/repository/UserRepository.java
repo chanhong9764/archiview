@@ -1,4 +1,4 @@
-package com.####.archiview.repository.user;
+package com.####.archiview.repository;
 
 import com.####.archiview.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

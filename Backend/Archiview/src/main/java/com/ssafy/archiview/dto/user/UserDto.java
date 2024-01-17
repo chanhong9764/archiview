@@ -41,4 +41,23 @@ public class UserDto {
                     .build();
         }
     }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class DetailResponseDto {
+        private String id;
+        private String name;
+        private String email;
+        private String introduce;
+        private String profileUrl;
+
+        @Builder
+        public DetailResponseDto(String id, String name, String email, String introduce, String profileUrl) {
+            this.id = id;
+            this.name = name;
+            this.email = email;
+            this.introduce = introduce;
+            this.profileUrl = profileUrl;
+        }
+    }
 }

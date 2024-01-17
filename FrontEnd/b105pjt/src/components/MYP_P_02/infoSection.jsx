@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
 import { Card, CardContent, Typography, TextField, List, ListItem } from '@mui/material';
 
+// password, confirmPassword, passwordError 관리 전체적인거
 const InfoSection = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
 
+  // 새 비밀번호 입력 필드의 값이 변경 시 호출되는 함수
   const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-    setPasswordError(event.target.value !== confirmPassword);
+    setPassword(event.target.value);    // 패스워드 업데이트
+    setPasswordError(event.target.value !== confirmPassword);  //현재 입력 새 비밀번호 !== 비밀번호 확인 -> 오류를 'true'로 설정
   };
 
+  // 비밀번호 재입력 필드의 값이 변경 시 호출되는 함수
   const handleConfirmPasswordChange = (event) => {
     setConfirmPassword(event.target.value);
-    setPasswordError(password !== event.target.value);
+    setPasswordError(password !== event.target.value);  // 마찬가지로 오류를 'true'로
   };
 
   return (

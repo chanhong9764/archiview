@@ -13,11 +13,10 @@ import org.hibernate.annotations.DynamicInsert;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-@Entity
+@Entity // 회원
 @Getter
+@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "user") // 회원
 public class User {
     @Id
     @Column(name = "id")
@@ -41,22 +40,23 @@ public class User {
     @Column(name = "introduce")
     private String introduce;
 
+    @Column(name = "role")
+    @ColumnDefault("'USER'")
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-
-    @OneToMany(mappedBy = "user")
-    private List<Reply> replies = new ArrayList<>();
-
     @Builder
-    public User(String id, String pw, String name, String email, String profileUrl, String introduce, LocalDateTime createdAt, List<Reply> replies) {
+    public User(String id, String pw, String name, String email, String profileUrl, String introduce, Role role, LocalDateTime createdAt) {
         this.id = id;
         this.pw = pw;
         this.name = name;
         this.email = email;
         this.profileUrl = profileUrl;
         this.introduce = introduce;
+        this.role = role;
         this.createdAt = createdAt;
-        this.replies = replies;
     }
 }

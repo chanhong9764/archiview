@@ -3,10 +3,9 @@ package com.####.archiview.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-
-@Entity
+@Entity // 직무 소분류
 @Getter
-@Table(name = "job_sub") // 직무 소분류
+@Table(name = "job_sub")
 public class JobSub {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

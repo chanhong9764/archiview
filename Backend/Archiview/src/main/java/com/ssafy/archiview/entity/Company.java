@@ -3,9 +3,8 @@ package com.####.archiview.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-
+@Entity // 기업 테이블
 @Getter
-@Entity(name = "company")  // 기업 테이블
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

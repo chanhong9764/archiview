@@ -5,10 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-
-@Entity
+@Entity // 채용공고
 @Getter
-@Table(name = "recruit") // 채용공고
 public class Recruit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

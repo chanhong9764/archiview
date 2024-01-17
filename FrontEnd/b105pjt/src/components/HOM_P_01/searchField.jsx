@@ -1,7 +1,7 @@
 import React from "react";
 import { TextField, Button, Box } from "@mui/material";
 
-const SearchField = ({ onSearch }) => {
+const SearchField = ({ onSearch, flag, setFlag }) => {
   const [inputValue, setInputValue] = React.useState("");
 
   const handleSearch = (event) => {
@@ -31,7 +31,12 @@ const SearchField = ({ onSearch }) => {
           flexGrow: 1, // TextField가 성장하여 여유 공간을 채우도록 함
         }}
       />
-      <Button variant="contained" color="primary" type="submit">
+      <Button
+        variant="contained"
+        color="primary"
+        // type="submit"
+        onClick={() => (!flag ? setFlag(!flag) : null)}
+      >
         검색
       </Button>
     </Box>

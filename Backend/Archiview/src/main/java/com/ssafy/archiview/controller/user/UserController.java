@@ -1,6 +1,7 @@
 package com.ssafy.archiview.controller.user;
 
 import com.ssafy.archiview.dto.user.UserDto;
+import com.ssafy.archiview.entity.User;
 import com.ssafy.archiview.response.code.SuccessCode;
 import com.ssafy.archiview.response.structure.SuccessResponse;
 import com.ssafy.archiview.service.user.UserService;
@@ -22,7 +23,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> userLogin(@RequestBody UserDto.loginRequestDto requestDto){
-        service.userLogin(requestDto);
-        return SuccessResponse.createSuccess(SuccessCode.LOGIN_SUCCESS);
+        User user = service.userLogin(requestDto);
+        return SuccessResponse.createSuccess(SuccessCode.LOGIN_SUCCESS, user);
     }
 }

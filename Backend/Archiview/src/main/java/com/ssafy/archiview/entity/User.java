@@ -20,34 +20,34 @@ import java.util.List;
 public class User {
     @Id
     @Column(name = "id")
-    private String id;
+    private String id;  // 아이디
 
     @NotNull
     @Column(name = "pw")
-    private String pw;
+    private String pw;  // 비밀번호
 
     @NotNull
     @Column(name = "name")
-    private String name;
+    private String name;  // 이름
 
     @NotNull
     @Column(name = "email", unique = true)
-    private String email;
+    private String email;  // 이름
 
     @Column(name = "profile_url")
-    private String profileUrl;
+    private String profileUrl;  // 프로필 URL
 
     @Column(name = "introduce")
-    private String introduce;
+    private String introduce;  // 자기소개
 
     @Column(name = "role")
     @ColumnDefault("'USER'")
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role;  // 권한
 
     @CreationTimestamp
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt;  // 생성 날짜
     @Builder
     public User(String id, String pw, String name, String email, String profileUrl, String introduce, Role role, LocalDateTime createdAt) {
         this.id = id;

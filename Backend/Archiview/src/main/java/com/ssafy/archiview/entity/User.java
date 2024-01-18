@@ -1,5 +1,6 @@
 package com.ssafy.archiview.entity;
 
+import com.ssafy.archiview.dto.user.UserDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -64,5 +65,15 @@ public class User implements Persistable<String> {
     @Override
     public boolean isNew() {
         return this.createdAt == null;
+    }
+
+    public UserDto.DetailResponseDto toDetailResponseDto() {
+        return UserDto.DetailResponseDto.builder()
+                .id(id)
+                .email(email)
+                .name(name)
+                .introduce(introduce)
+                .profileUrl(profileUrl)
+                .build();
     }
 }

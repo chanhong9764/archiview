@@ -16,6 +16,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import java.util.Map;
 import java.util.Optional;
@@ -52,6 +53,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             HttpHeaders headers,
             HttpStatusCode status,
             WebRequest request) {
+        System.out.println("hihih");
         final ResponseCode responseCode = ErrorCode.INVALID_PARAMETER;
         return handleExceptionInternal(e, responseCode);
     }
@@ -63,6 +65,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleConstraintViolationException(final ConstraintViolationException e) {
         final ResponseCode responseCode = ErrorCode.INVALID_PARAMETER;
         return handleExceptionInternal(e, responseCode);
+    }
+
+    /**
+     * RequestParam, PathVariable 타입이 다른 값이 들어왔을 경우
+     */
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Object> handleMethodArgumentTypeMismatchException(final MethodArgumentTypeMismatchException e) {
+        final ResponseCode responseCode = ErrorCode.INVALID_PARAMETER;
+        return handleExceptionInternal(responseCode, responseCode.getMessage());
     }
 
     /**

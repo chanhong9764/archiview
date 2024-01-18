@@ -15,7 +15,8 @@ const ProfileSection = ({ imageUrl, children }) => {
         maxWidth: '300px',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
+        borderRadius: '10px'
       }}
     >
       <Avatar

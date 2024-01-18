@@ -8,7 +8,7 @@ import "../assets/css/CAL_P_01.css";
 const CAL_P_01 = () => {
   const [events, setEvents] = useState([
     { title: "event 1", date: "2024-01-16" },
-    { title: "event 2", date: "2024-01-17", date: "2024-01-21" },
+    { title: "event 2", date: "2024-01-17" },
   ]);
 
   return (

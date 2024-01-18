@@ -1,27 +1,90 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SearchSection from "../components/utils/searchSection";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import koLocale from "@fullcalendar/core/locales/ko";
 import "../assets/css/CAL_P_01.css";
+import { Modal } from "@mui/material";
+import { Box } from "@mui/system";
+import CAL_M_01 from "./CAL_M_01";
+import transformEventData from "../utils/transformEventData";
+
+const dummyEvent = {
+  code: 200,
+  message: "채용 공고 리스트를 조회했습니다.",
+  data: [
+    {
+      recruit_id: 10,
+      company_name: "네이버",
+      start: "2024-01-16",
+      end: "2024-02-18",
+    },
+    {
+      recruit_id: 11,
+      company_name: "카카오",
+      start: "2024-01-22",
+      end: "2024-02-28",
+    },
+  ],
+};
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  maxHeight: 700,
+  overflowY: "auto",
+  bgcolor: "white",
+  border: "2px solid #000",
+  boxShadow: 24,
+  pt: 2,
+  px: 4,
+  pb: 3,
+  borderRadius: "10px",
+};
 
 const CAL_P_01 = () => {
-  const [events, setEvents] = useState([
-    { title: "event 1", date: "2024-01-16" },
-    { title: "event 2", date: "2024-01-17" },
-  ]);
+  const [open, setOpen] = useState(false);
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    const newEvents = transformEventData(dummyEvent);
+    setEvents(newEvents);
+  }, []);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  // 이벤트 클릭시 동작
+  const handleEventClick = (clickInfo) => {
+    console.log("Event clicked:", clickInfo.event.title);
+    handleOpen();
+  };
 
   return (
     <div>
-      <SearchSection></SearchSection>
+      <SearchSection />
       <div className="Calendar-container">
         <FullCalendar
           plugins={[dayGridPlugin]}
           initialView="dayGridMonth"
           events={events}
           locale={koLocale}
+          eventClick={handleEventClick}
         />
       </div>
+
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description"
+      >
+        <Box sx={{ ...style, width: 600 }}>
+          <CAL_M_01></CAL_M_01>
+        </Box>
+      </Modal>
     </div>
   );
 };

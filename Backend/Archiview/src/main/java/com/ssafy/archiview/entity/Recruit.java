@@ -16,7 +16,7 @@ public class Recruit {
     @NotNull
     private String title;
 
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition = "TEXT")
     @NotNull
     private String content;
 

@@ -3,6 +3,8 @@ package com.####.archiview.service.user;
 import com.####.archiview.dto.user.UserDto;
 import com.####.archiview.entity.User;
 import com.####.archiview.repository.UserRepository;
+import com.####.archiview.response.code.ErrorCode;
+import com.####.archiview.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +16,10 @@ public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     @Override
     public void userAdd(UserDto.AddRequestDto requestDto) {
-        System.out.println(requestDto.toString());
+        repository.findById(requestDto.getId()).ifPresent(user -> {
+            throw new RestApiException(ErrorCode.DUPLICATED_USER);
+        });
+
         repository.save(requestDto.toEntity());
     }
 
@@ -33,5 +38,9 @@ public class UserServiceImpl implements UserService {
         }
 
         return user;
+    }
+
+    public UserDto.DetailResponseDto userDetail(String id) {
+        return repository.getById(id).toDetailResponseDto();
     }
 }

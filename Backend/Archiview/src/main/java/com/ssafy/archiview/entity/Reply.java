@@ -19,7 +19,7 @@ public class Reply {
     @NotNull
     private Integer questionId;
 
-    @Column(name = "script")
+    @Column(name = "script", columnDefinition = "TEXT")
     private String script;
 
     @Column(name = "video_url")

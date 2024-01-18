@@ -21,7 +21,16 @@ public enum ErrorCode implements ResponseCode {
         USER
      */
     DUPLICATED_USER(HttpStatus.CONFLICT, "이미 가입된 유저 정보입니다."),
+<<<<<<< HEAD
 
+=======
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저의 정보를 찾을 수 없습니다."),
+
+    /*
+        QUESTION
+     */
+    QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "질문을 찾을 수 없습니다."),
+>>>>>>> e219f5b6c1d5feeb25dbef2837ec4ba2852a1061
     ;
     private final HttpStatus httpStatus;
     private final String message;

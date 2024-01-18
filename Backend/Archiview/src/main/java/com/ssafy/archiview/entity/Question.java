@@ -3,6 +3,10 @@ package com.####.archiview.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity // 질문
 @Getter
 public class Question {
@@ -18,4 +22,9 @@ public class Question {
     @JoinColumn(name = "company_id")
     private Company company;
 
+    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
+    private List<CsSubQuestion> csSubQuestionList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
+    private List<JobSubQuestion> jobSubQuestionList = new ArrayList<>();
 }

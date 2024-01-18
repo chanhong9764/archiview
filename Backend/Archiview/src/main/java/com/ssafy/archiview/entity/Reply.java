@@ -1,12 +1,17 @@
 package com.####.archiview.entity;
 
+import com.####.archiview.dto.reply.ReplyDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity // 답변
 @Getter
 @DynamicInsert
@@ -28,11 +33,34 @@ public class Reply {
     @Column(name = "thumbnail_url")
     private String thumbnailUrl;
 
+    @CreationTimestamp
     @Column(name = "created_at")
-    @NotNull
     private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "reply", fetch = FetchType.LAZY)
+    private List<Like> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "reply", fetch = FetchType.LAZY)
+    private List<Comment> comments = new ArrayList<>();
+
+    public static ReplyDto.DetailResponseDto toDto(Reply reply, Question question, boolean isLike) {
+        return ReplyDto.DetailResponseDto.builder()
+                .id(reply.getId())
+                .userId(reply.getUser().getId())
+                .questionContent(question.getContent())
+                .script(reply.getScript())
+                .videoUrl(reply.getVideoUrl())
+                .thumbnailUrl(reply.getThumbnailUrl())
+                .isLike(isLike)
+                .likeCount(reply.getLikes().size())
+                .comments(reply.getComments())
+                .companyName(question.getCompany().getName())
+                .csList(question.getCsSubQuestionList())
+                .jobList(question.getJobSubQuestionList())
+                .build();
+    }
 }

@@ -10,7 +10,7 @@ const SaveButton = ({ onSave }) => {
         margin: '20px auto', 
       width: '40%', 
       textAlign: 'center', 
-      mt: 4, 
+      mt: 1.5, 
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center' 

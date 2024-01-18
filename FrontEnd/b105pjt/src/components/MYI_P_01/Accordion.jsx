@@ -1,6 +1,11 @@
-import React from 'react';
-import { Accordion as MuiAccordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import React from "react";
+import {
+  Accordion as MuiAccordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const Accordion = ({ title, children }) => {
   return (
@@ -16,8 +21,3 @@ const Accordion = ({ title, children }) => {
 };
 
 export default Accordion;
-
-
-
-
-

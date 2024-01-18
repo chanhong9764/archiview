@@ -17,20 +17,21 @@ public class UserServiceImpl implements UserService {
         System.out.println(requestDto.toString());
         repository.save(requestDto.toEntity());
     }
-
+    
     @Override
-    public boolean userLogin(UserDto.loginRequestDto requestDto) {
+    public User userLogin(UserDto.loginRequestDto requestDto) {
         Optional<User> opUser = repository.findById(requestDto.getId());
         // 입력된 아이디와 일치하는 아이디가 없으면 false 리턴
         if (opUser.isEmpty()){
-            return false;
+            return null;
         }
 
         User user = opUser.get();
         // 입력된 비밀번호와 조회된 비밀번호가 일치하지 않으면 false 리턴
-        if(user.getPw().equals(requestDto.getPw())){
-            return false;
+        if(!user.getPw().equals(requestDto.getPw())){
+            return null;
         }
-        return true;
+
+        return user;
     }
 }

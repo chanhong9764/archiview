@@ -1,6 +1,7 @@
 package com.####.archiview.controller.user;
 
 import com.####.archiview.dto.user.UserDto;
+import com.####.archiview.entity.User;
 import com.####.archiview.response.code.SuccessCode;
 import com.####.archiview.response.structure.SuccessResponse;
 import com.####.archiview.service.user.UserService;
@@ -22,7 +23,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> userLogin(@RequestBody UserDto.loginRequestDto requestDto){
-        service.userLogin(requestDto);
-        return SuccessResponse.createSuccess(SuccessCode.LOGIN_SUCCESS);
+        User user = service.userLogin(requestDto);
+        return SuccessResponse.createSuccess(SuccessCode.LOGIN_SUCCESS, user);
     }
 }

@@ -14,6 +14,6 @@ public class Company {
     @NotNull
     private String name;
 
-    @Column(name = "url", length = 255)
+    @Column(name = "url")
     private String url;
 }

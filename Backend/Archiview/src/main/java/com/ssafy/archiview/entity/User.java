@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
+import org.springframework.data.domain.Persistable;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,17 +18,17 @@ import java.util.List;
 @Getter
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class User implements Persistable<String> {
     @Id
-    @Column(name = "id")
+    @Column(name = "id", length = 16)
     private String id;
 
     @NotNull
-    @Column(name = "pw")
+    @Column(name = "pw", length = 64)
     private String pw;
 
     @NotNull
-    @Column(name = "name")
+    @Column(name = "name", length = 32)
     private String name;
 
     @NotNull
@@ -37,7 +38,7 @@ public class User {
     @Column(name = "profile_url")
     private String profileUrl;
 
-    @Column(name = "introduce")
+    @Column(name = "introduce", columnDefinition = "TEXT")
     private String introduce;
 
     @Column(name = "role")
@@ -58,5 +59,10 @@ public class User {
         this.introduce = introduce;
         this.role = role;
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public boolean isNew() {
+        return this.createdAt == null;
     }
 }

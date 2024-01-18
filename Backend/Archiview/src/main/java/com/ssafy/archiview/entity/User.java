@@ -21,6 +21,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User implements Persistable<String> {
     @Id
+
     @Column(name = "id", length = 16)
     private String id;
 
@@ -34,10 +35,10 @@ public class User implements Persistable<String> {
 
     @NotNull
     @Column(name = "email", unique = true)
-    private String email;
+    private String email;  // 이름
 
     @Column(name = "profile_url")
-    private String profileUrl;
+    private String profileUrl;  // 프로필 URL
 
     @Column(name = "introduce", columnDefinition = "TEXT")
     private String introduce;
@@ -45,11 +46,11 @@ public class User implements Persistable<String> {
     @Column(name = "role")
     @ColumnDefault("'USER'")
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role;  // 권한
 
     @CreationTimestamp
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt;  // 생성 날짜
     @Builder
     public User(String id, String pw, String name, String email, String profileUrl, String introduce, Role role, LocalDateTime createdAt) {
         this.id = id;

@@ -1,5 +1,6 @@
 package com.####.archiview.entity;
 
+import com.####.archiview.dto.reply.ReplyDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -45,4 +46,21 @@ public class Reply {
 
     @OneToMany(mappedBy = "reply", fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
+
+    public static ReplyDto.DetailResponseDto toDto(Reply reply, Question question, boolean isLike) {
+        return ReplyDto.DetailResponseDto.builder()
+                .id(reply.getId())
+                .userId(reply.getUser().getId())
+                .questionContent(question.getContent())
+                .script(reply.getScript())
+                .videoUrl(reply.getVideoUrl())
+                .thumbnailUrl(reply.getThumbnailUrl())
+                .isLike(isLike)
+                .likeCount(reply.getLikes().size())
+                .comments(reply.getComments())
+                .companyName(question.getCompany().getName())
+                .csList(question.getCsSubQuestionList())
+                .jobList(question.getJobSubQuestionList())
+                .build();
+    }
 }

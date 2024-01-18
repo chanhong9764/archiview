@@ -1,7 +1,7 @@
 version: '0.0.1'
 
 services:
-  java-server-tutorial:
+  signaling-server:
     image: charlesoo5/signaling-server:0.0.1
     container_name: signaling-server
     ports:

@@ -10,6 +10,7 @@ public enum SuccessCode implements ResponseCode {
     /*
         USER
      */
+    LOGIN_SUCCESS(HttpStatus.OK, "로그인에 성공했습니다."),
     JOIN_SUCCESS(HttpStatus.CREATED, "회원가입에 성공했습니다."),
 
     /*

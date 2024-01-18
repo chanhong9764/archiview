@@ -8,7 +8,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     #hibernate:
       # DB를 실행할 때, 기존의 DB를 지우고 새로 생성
-      # ddl-auto: create
+       #ddl-auto: none
     properties:
       hibernate:
         # Hibernate가 실행한 모든 SQL을 출력 

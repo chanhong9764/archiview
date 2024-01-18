@@ -15,13 +15,12 @@ import org.springframework.data.domain.Persistable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-@Entity // 회원
+@Entity
 @Getter
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User implements Persistable<String> {
     @Id
-
     @Column(name = "id", length = 16)
     private String id;
 
@@ -35,10 +34,10 @@ public class User implements Persistable<String> {
 
     @NotNull
     @Column(name = "email", unique = true)
-    private String email;  // 이름
+    private String email;
 
     @Column(name = "profile_url")
-    private String profileUrl;  // 프로필 URL
+    private String profileUrl;
 
     @Column(name = "introduce", columnDefinition = "TEXT")
     private String introduce;
@@ -68,6 +67,17 @@ public class User implements Persistable<String> {
         return this.createdAt == null;
     }
 
+    public UserDto.loginResponseDto toLoginResponseDto(){
+        return UserDto.loginResponseDto.builder()
+                .id(id)
+                .email(email)
+                .name(name)
+                .introduce(introduce)
+                .profileUrl(profileUrl)
+                .role(role)
+                .build();
+    }
+
     public UserDto.DetailResponseDto toDetailResponseDto() {
         return UserDto.DetailResponseDto.builder()
                 .id(id)
@@ -75,6 +85,7 @@ public class User implements Persistable<String> {
                 .name(name)
                 .introduce(introduce)
                 .profileUrl(profileUrl)
+                .role(role)
                 .build();
     }
 }

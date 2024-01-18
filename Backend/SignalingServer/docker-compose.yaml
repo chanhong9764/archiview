@@ -1,0 +1,26 @@
+version: '0.0.1'
+
+services:
+  java-server-tutorial:
+    image: charlesoo5/signaling-server:0.0.1
+    container_name: signaling-server
+    ports:
+      - 5000:5000
+    volumes:
+      - /app/videos:/app/videos
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      OPENVIDU_DEV_URL: openvidu-dev:4443
+      OPENVIDU_RECORDING: true
+      OPENVIDU_RECORDING_PATH: /app/videos
+
+  openvidu-dev:
+    image: openvidu/openvidu-dev:latest
+    container_name: openvidu-dev
+    ports:
+      - 4443:4443
+    environment:
+      OPENVIDU_SECRET: SECRETKEY_VALUE
+
+volumes:
+  videos:

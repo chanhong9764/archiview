@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -216,7 +217,85 @@ public class RecordingController {
         }
     }
 
+    // Recording API
+    @RequestMapping(value = "/recording/start", method = RequestMethod.POST)
+    public ResponseEntity<?> startRecording(@RequestBody Map<String, Object> params) {
+        String sessionId = (String) params.get("session");
+        Recording.OutputMode outputMode = Recording.OutputMode.valueOf((String) params.get("outputMode"));
+        boolean hasAudio = (boolean) params.get("hasAudio");
+        boolean hasVideo = (boolean) params.get("hasVideo");
 
+        RecordingProperties properties = new RecordingProperties.Builder().outputMode(outputMode).hasAudio(hasAudio)
+                .hasVideo(hasVideo).build();
+
+        System.out.println("Starting recording for session " + sessionId + " with properties {outputMode=" + outputMode
+                + ", hasAudio=" + hasAudio + ", hasVideo=" + hasVideo + "}");
+
+        try {
+            Recording recording = this.openVidu.startRecording(sessionId, properties);
+            this.sessionRecordings.put(sessionId, true);
+            return new ResponseEntity<>(recording, HttpStatus.OK);
+        } catch (OpenViduJavaClientException | OpenViduHttpException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/recording/stop", method = RequestMethod.POST)
+    public ResponseEntity<?> stopRecording(@RequestBody Map<String, Object> params) {
+        String recordingId = (String) params.get("recording");
+
+        System.out.println("Stoping recording | {recordingId}=" + recordingId);
+
+        try {
+            Recording recording = this.openVidu.stopRecording(recordingId);
+            this.sessionRecordings.remove(recording.getSessionId());
+            return new ResponseEntity<>(recording, HttpStatus.OK);
+        } catch (OpenViduJavaClientException | OpenViduHttpException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/recording/delete", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteRecording(@RequestBody Map<String, Object> params) {
+        String recordingId = (String) params.get("recording");
+
+        System.out.println("Deleting recording | {recordingId}=" + recordingId);
+
+        try {
+            this.openVidu.deleteRecording(recordingId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (OpenViduJavaClientException | OpenViduHttpException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/recording/get/{recordingId}", method = RequestMethod.GET)
+    public ResponseEntity<?> getRecording(@PathVariable(value = "recordingId") String recordingId) {
+
+        System.out.println("Getting recording | {recordingId}=" + recordingId);
+
+        try {
+            Recording recording = this.openVidu.getRecording(recordingId);
+            return new ResponseEntity<>(recording, HttpStatus.OK);
+        } catch (OpenViduJavaClientException | OpenViduHttpException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/recording/list", method = RequestMethod.GET)
+    public ResponseEntity<?> listRecordings() {
+
+        System.out.println("Listing recordings");
+
+        try {
+            List<Recording> recordings = this.openVidu.listRecordings();
+
+            return new ResponseEntity<>(recordings, HttpStatus.OK);
+        } catch (OpenViduJavaClientException | OpenViduHttpException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    // End - Recording API
 
     private ResponseEntity<JsonObject> getErrorResponse(Exception e) {
         JsonObject json = new JsonObject();

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/sessions")
 public class CallController {
@@ -32,7 +31,7 @@ public class CallController {
      * @param   params  세션 정보를 담은 SessionProperties 객체
      * @return          세션 ID
      */
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<String> initSession(@RequestBody(required = false)Map<String, Object> params)
         throws OpenViduJavaClientException, OpenViduHttpException {
         SessionProperties sessionProperties = SessionProperties.fromJson(params).build();

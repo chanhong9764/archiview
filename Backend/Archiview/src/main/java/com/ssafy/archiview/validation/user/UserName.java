@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = UserNameValidator.class)
 public @interface UserName {
-    String message() default "이름은 한글 2 ~ 20자를 입력해주세요.";
+    String message() default "이름은 한글 2 ~ 32자를 입력해주세요.";
     Class[] groups() default {};
     Class[] payload() default {};
 }

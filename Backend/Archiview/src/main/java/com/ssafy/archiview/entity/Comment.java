@@ -13,7 +13,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "content", length = 255)
+    @Column(name = "content")
     @NotNull
     private String content;
 

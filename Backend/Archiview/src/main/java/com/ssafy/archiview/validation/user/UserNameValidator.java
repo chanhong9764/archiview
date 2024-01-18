@@ -9,6 +9,6 @@ public class UserNameValidator implements ConstraintValidator<UserName, String> 
         if(value == null) {
             return false;
         }
-        return value.matches("^[가-힣]{2,20}$");
+        return value.matches("^[가-힣]{2,32}$");
     }
 }

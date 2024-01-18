@@ -9,7 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+<<<<<<< HEAD
 import java.util.List;
+=======
+>>>>>>> 27e8fcb1a007b996af2991b40876dfdecda839f8
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -217,6 +220,7 @@ public class RecordingController {
         }
     }
 
+<<<<<<< HEAD
     // Recording API
     @RequestMapping(value = "/recording/start", method = RequestMethod.POST)
     public ResponseEntity<?> startRecording(@RequestBody Map<String, Object> params) {
@@ -296,6 +300,9 @@ public class RecordingController {
         }
     }
     // End - Recording API
+=======
+
+>>>>>>> 27e8fcb1a007b996af2991b40876dfdecda839f8
 
     private ResponseEntity<JsonObject> getErrorResponse(Exception e) {
         JsonObject json = new JsonObject();

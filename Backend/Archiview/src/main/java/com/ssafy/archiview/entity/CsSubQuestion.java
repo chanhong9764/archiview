@@ -12,7 +12,7 @@ public class CsSubQuestion {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "cs_sub_id")
+    @JoinColumn(name = "cs_sub_name")
     private CsSub csSub;
 
     @ManyToOne

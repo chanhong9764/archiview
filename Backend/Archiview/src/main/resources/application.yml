@@ -5,13 +5,21 @@ spring:
     username: ssafy
     password: ssafy
   jpa:
+    # Hibernate가 실행한 모든 SQL을 출력
+    show-sql: true
     database-platform: org.hibernate.dialect.MySQL8Dialect
-    #hibernate:
+    hibernate:
       # DB를 실행할 때, 기존의 DB를 지우고 새로 생성
-      # ddl-auto: create
+      #ddl-auto: create
     properties:
       hibernate:
-        # Hibernate가 실행한 모든 SQL을 출력 
-        show_sql: true
-        # 실행한 SQL의 가독성을 좋게 변환
-        format_sql: ture
+        format_sql: true
+
+logging:
+  level:
+    org:
+      hibernate:
+        sql: debug
+        type:
+          descriptor:
+            sql: trace

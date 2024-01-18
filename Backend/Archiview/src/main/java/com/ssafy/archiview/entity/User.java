@@ -51,6 +51,7 @@ public class User implements Persistable<String> {
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;  // 생성 날짜
+
     @Builder
     public User(String id, String pw, String name, String email, String profileUrl, String introduce, Role role, LocalDateTime createdAt) {
         this.id = id;

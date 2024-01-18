@@ -1,10 +1,8 @@
 package com.ssafy.archiview.dto.reply;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ssafy.archiview.entity.*;
-import com.ssafy.archiview.validation.user.UserEmail;
-import com.ssafy.archiview.validation.user.UserId;
-import com.ssafy.archiview.validation.user.UserName;
-import com.ssafy.archiview.validation.user.UserPassword;
 import lombok.*;
 
 import java.util.List;
@@ -24,8 +22,8 @@ public class ReplyDto {
         private int likeCount;
         private List<CommentDto> comments;
         private String companyName;
-        private List<CsSubQuestion> csList;
-        private List<JobSubQuestion> jobList;
+        private List<String> csList;
+        private List<String> jobList;
 
         @Builder
         public DetailResponseDto(int id, String userId, String questionContent, String script, String videoUrl, String thumbnailUrl, boolean isLike, int likeCount, List<Comment> comments, String companyName, List<CsSubQuestion> csList, List<JobSubQuestion> jobList) {
@@ -41,21 +39,31 @@ public class ReplyDto {
                     .map(CommentDto::new)
                     .collect(Collectors.toList());
             this.companyName = companyName;
-            this.csList = csList;
-            this.jobList = jobList;
+            this.csList = csList.stream()
+                    .map(o -> o.getCsSub().getName())
+                    .collect(Collectors.toList());
+            this.jobList = jobList.stream()
+                    .map(o -> o.getJobSub().getName())
+                    .collect(Collectors.toList());
         }
+    }
+    @Getter
+    @AllArgsConstructor
+    public static class DetailRequestDto {
+        private final int id;
+        private final String userId;
+    }
 
-        @Getter
-        public static class CommentDto {
-            private int id;
-            private String userId;
-            private String content;
+    @Getter
+    public static class CommentDto {
+        private final int id;
+        private final String userId;
+        private final String content;
 
-            public CommentDto(Comment entity) {
-                this.id = entity.getId();
-                this.userId = entity.getUser().getId();
-                this.content = entity.getContent();
-            }
+        public CommentDto(Comment entity) {
+            this.id = entity.getId();
+            this.userId = entity.getUser().getId();
+            this.content = entity.getContent();
         }
     }
 }

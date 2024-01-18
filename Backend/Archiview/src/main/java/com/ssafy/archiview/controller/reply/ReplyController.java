@@ -16,8 +16,8 @@ public class ReplyController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> replyDetail(@PathVariable("id") int id) {
-        ReplyDto.DetailResponseDto responseDto = service.replyDetail(id);
-        return SuccessResponse.createSuccess(SuccessCode.CREATE_REPLY_SUCCESS, responseDto);
+        ReplyDto.DetailResponseDto responseDto = service.replyDetail(new ReplyDto.DetailRequestDto(id, "chanhong9784"));
+        return SuccessResponse.createSuccess(SuccessCode.SELECT_REPLY_SUCCESS, responseDto);
     }
 
     @DeleteMapping("/{id}")

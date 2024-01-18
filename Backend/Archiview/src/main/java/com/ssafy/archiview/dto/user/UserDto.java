@@ -44,6 +44,7 @@ public class UserDto {
                     .build();
         }
     }
+
     @Getter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class loginRequestDto{
@@ -68,7 +69,7 @@ public class UserDto {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class loginResponseDto{
+    public static class loginResponseDto {
         @UserId
         private String id;
         @UserName
@@ -81,7 +82,7 @@ public class UserDto {
         private Role role;
 
 
-        public loginResponseDto(String id, String name, String email, String profileUrl, String introduce, LocalDateTime createdAt, Role role){
+        public loginResponseDto(String id, String name, String email, String profileUrl, String introduce, LocalDateTime createdAt, Role role) {
             this.id = id;
             this.name = name;
             this.email = email;
@@ -91,7 +92,7 @@ public class UserDto {
             this.role = role;
         }
 
-        public User toEntity(){
+        public User toEntity() {
             return User.builder()
                     .id(id)
                     .name(name)
@@ -101,6 +102,24 @@ public class UserDto {
                     .createdAt(createdAt)
                     .role(role)
                     .build();
+        }
+    }
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class DetailResponseDto {
+        private String id;
+        private String name;
+        private String email;
+        private String introduce;
+        private String profileUrl;
+
+        @Builder
+        public DetailResponseDto(String id, String name, String email, String introduce, String profileUrl) {
+            this.id = id;
+            this.name = name;
+            this.email = email;
+            this.introduce = introduce;
+            this.profileUrl = profileUrl;
         }
     }
 }

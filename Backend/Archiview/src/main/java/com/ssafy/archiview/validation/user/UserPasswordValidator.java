@@ -9,6 +9,6 @@ public class UserPasswordValidator implements ConstraintValidator<UserPassword, 
         if(value == null) {
             return false;
         }
-        return value.matches("^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$");
+        return value.matches("^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{9,16}$");
     }
 }

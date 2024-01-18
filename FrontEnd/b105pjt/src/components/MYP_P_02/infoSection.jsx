@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardContent, Typography, TextField, List, ListItem } from '@mui/material';
+import { Card, CardContent, Typography, TextField } from '@mui/material';
 
 // password, confirmPassword, passwordError 관리 전체적인거
 const InfoSection = () => {
@@ -21,6 +21,7 @@ const InfoSection = () => {
 
   return (
     <Card variant="outlined" 
+      elevation={3}
       sx={{  
         mb: 2,
         width: '47%',
@@ -28,13 +29,21 @@ const InfoSection = () => {
         display: 'flex',
         mx:'auto',
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
+        borderRadius: '10px',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
         }}>
       <CardContent>
-        <Typography variant="h6" sx={{ mb: 2 }}>비밀번호 변경</Typography>
-        <List sx={{ mb: 2 }}>
-          <ListItem>비밀번호는 8자 이상 입력해야 합니다.</ListItem>
-        </List>
+      <Typography variant="h6" sx={{ 
+          mb: 0.5, 
+          fontWeight: 'bold', // 글꼴 두께 변경
+          color: 'primary.main', // 색상 변경
+        }}>
+          비밀번호 변경
+        </Typography>
+
+        <hr />
+
         <TextField
           label="새 비밀번호"
           type="password"

@@ -7,14 +7,16 @@ import com.####.archiview.response.code.ErrorCode;
 import com.####.archiview.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService{
     private final UserRepository repository;
     @Override
+    @Transactional
     public void userAdd(UserDto.AddRequestDto requestDto) {
         repository.findById(requestDto.getId()).ifPresent(user -> {
             throw new RestApiException(ErrorCode.DUPLICATED_USER);

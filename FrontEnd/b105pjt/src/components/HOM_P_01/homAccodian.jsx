@@ -10,9 +10,9 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 function HomAccodian({ title, children }) {
-  const handleButtonClick = () => {
+  const handleButtonClick = (event) => {
     // 등록하기 버튼 클릭 시 실행될 동작 추가
-    console.log("등록하기 버튼 클릭");
+    event.stopPropagation();
   };
 
   //여기서 부터 화면에 출력해줍니다.

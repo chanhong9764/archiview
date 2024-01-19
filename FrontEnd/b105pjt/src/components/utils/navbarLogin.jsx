@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import { useState } from "react";
 import { Modal } from "@mui/material";
 import LOG_M_01 from "../../pages/LOG_M_01";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const pages = ["캘린더"];
 const settings = ["로그인"];
@@ -30,6 +31,20 @@ const style = {
 
 function NavbarLogin() {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // LOGO 클릭시
+  const handleRefresh = () => {
+    // 현재 경로로 다시 이동하여 컴포넌트를 리프레시합니다.
+    navigate("/", { replace: true });
+  };
+
+  // 메뉴 클릭시
+  const handleCalendar = () => {
+    // 현재 경로로 다시 이동하여 컴포넌트를 리프레시합니다.
+    navigate("/cal", { replace: true });
+  };
 
   const handleOpen = () => {
     setOpen(true);
@@ -38,16 +53,15 @@ function NavbarLogin() {
     setOpen(false);
   };
 
-  const handleClickCalendar = () => {
-    alert("캘린더 클릭");
-  };
-
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* 큰 사이즈 logo */}
-          <Box sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}>
+          <Box
+            onClick={handleRefresh}
+            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+          >
             <img
               src="http://placehold.it/120X40"
               alt="Logo"
@@ -56,7 +70,10 @@ function NavbarLogin() {
           </Box>
 
           {/* 작은 사이즈 logo */}
-          <Box sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}>
+          <Box
+            onClick={handleRefresh}
+            sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
+          >
             <img
               src="http://placehold.it/120X40"
               alt="Logo"
@@ -69,7 +86,7 @@ function NavbarLogin() {
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleClickCalendar}
+                onClick={handleCalendar}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page}
@@ -102,7 +119,7 @@ function NavbarLogin() {
           aria-describedby="parent-modal-description"
         >
           <Box sx={{ ...style, width: 400 }}>
-            <LOG_M_01></LOG_M_01>
+            <LOG_M_01 close={handleClose}></LOG_M_01>
           </Box>
         </Modal>
       </div>

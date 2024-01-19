@@ -23,7 +23,6 @@ public class UserDto {
         @UserName
         private String name;
 
-
         @Builder
         public AddRequestDto(String id, String pw, String email, String name) {
             this.id = id;
@@ -74,6 +73,7 @@ public class UserDto {
         private String profileUrl;
         private String introduce;
         private Role role;
+        private String jwtToken;
 
         @Builder
         public loginResponseDto(String id, String name, String email, String profileUrl, String introduce, Role role) {
@@ -83,6 +83,10 @@ public class UserDto {
             this.profileUrl = profileUrl;
             this.introduce = introduce;
             this.role = role;
+        }
+
+        public void insertToken(String token){
+            this.jwtToken = token;
         }
     }
     @Getter

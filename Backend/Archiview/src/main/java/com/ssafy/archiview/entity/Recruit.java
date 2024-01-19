@@ -1,10 +1,13 @@
 package com.ssafy.archiview.entity;
 
+import com.ssafy.archiview.dto.recruit.RecruitDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Entity // 채용공고
 @Getter
 public class Recruit {
@@ -31,4 +34,12 @@ public class Recruit {
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
+
+    public RecruitDto.DetailListResponseDto toDetailListDto(Recruit entity) {
+        return RecruitDto.DetailListResponseDto.builder()
+                .companyName(entity.company.getName())
+                .start(entity.start.format(DateTimeFormatter.ISO_DATE))
+                .end(entity.end.format(DateTimeFormatter.ISO_DATE))
+                .build();
+    }
 }

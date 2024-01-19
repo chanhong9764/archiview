@@ -8,6 +8,7 @@ import { Modal } from "@mui/material";
 import { Box } from "@mui/system";
 import CAL_M_01 from "./CAL_M_01";
 import transformEventData from "../utils/transformEventData";
+import { selectImg } from "../api/naverAPI";
 
 const dummyEvent = {
   code: 200,
@@ -47,6 +48,30 @@ const style = {
 const CAL_P_01 = () => {
   const [open, setOpen] = useState(false);
   const [events, setEvents] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(null); // 선택된 이벤트 상태 추가
+
+  const [imageUrl, setImageUrl] = useState(""); // 이미지 URL 상태
+
+  // 이미지 검색 함수
+  const fetchImage = async (title) => {
+    try {
+      // 이미지 검색 API 요청
+      await selectImg(
+        { query: title }, // 검색어
+        (response) => {
+          // 성공 콜백: 첫 번째 이미지의 URL을 설정
+          const firstImage = response.data.items[0].link;
+          setImageUrl(firstImage);
+        },
+        (error) => {
+          // 실패 콜백
+          console.error("이미지 검색 실패:", error);
+        }
+      );
+    } catch (error) {
+      console.error("이미지 검색 오류:", error);
+    }
+  };
 
   useEffect(() => {
     const newEvents = transformEventData(dummyEvent);
@@ -56,9 +81,11 @@ const CAL_P_01 = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  // 이벤트 클릭시 동작
+  // 이벤트 클릭시 동작 수정
   const handleEventClick = (clickInfo) => {
     console.log("Event clicked:", clickInfo.event.title);
+    setSelectedEvent(clickInfo.event); // 선택된 이벤트 저장
+    fetchImage(clickInfo.event.title);
     handleOpen();
   };
 
@@ -82,7 +109,7 @@ const CAL_P_01 = () => {
         aria-describedby="parent-modal-description"
       >
         <Box sx={{ ...style, width: 600 }}>
-          <CAL_M_01></CAL_M_01>
+          <CAL_M_01 event={selectedEvent}></CAL_M_01>
         </Box>
       </Modal>
     </div>

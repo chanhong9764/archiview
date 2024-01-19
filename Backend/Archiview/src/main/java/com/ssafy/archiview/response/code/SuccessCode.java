@@ -19,6 +19,18 @@ public enum SuccessCode implements ResponseCode {
     DELETE_QUESTION_SUCCESS(HttpStatus.OK, "질문 삭제에 성공했습니다."),
 
     /*
+        LIKE
+     */
+    CREATE_LIKE_SUCCESS(HttpStatus.CREATED, "추천에 성공했습니다."),
+    DELETE_LIKE_SUCCESS(HttpStatus.CREATED, "추천 삭제에 성공했습니다."),
+
+    /*
+        COMMENT
+     */
+    CREATE_COMMENT_SUCCESS(HttpStatus.CREATED, "댓글 작성에 성공했습니다."),
+    DELETE_COMMENT_SUCCESS(HttpStatus.CREATED, "댓글 삭제에 성공했습니다."),
+
+    /*
         REPLY
      */
     CREATE_REPLY_SUCCESS(HttpStatus.CREATED, "질문/답변 생성에 성공했습니다."),

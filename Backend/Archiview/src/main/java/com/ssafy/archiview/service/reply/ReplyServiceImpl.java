@@ -1,18 +1,16 @@
 package com.ssafy.archiview.service.reply;
 
 import com.ssafy.archiview.dto.reply.ReplyDto;
-import com.ssafy.archiview.entity.Like;
-import com.ssafy.archiview.entity.Question;
-import com.ssafy.archiview.entity.Reply;
-import com.ssafy.archiview.repository.LikeRepository;
-import com.ssafy.archiview.repository.QuestionRepository;
-import com.ssafy.archiview.repository.ReplyRepository;
+import com.ssafy.archiview.entity.*;
+import com.ssafy.archiview.repository.*;
 import com.ssafy.archiview.response.code.ErrorCode;
 import com.ssafy.archiview.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -20,6 +18,8 @@ public class ReplyServiceImpl implements ReplyService {
     private final ReplyRepository replyRepository;
     private final QuestionRepository questionRepository;
     private final LikeRepository likeRepository;
+    private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
     @Override
     public ReplyDto.DetailResponseDto replyDetail(ReplyDto.DetailRequestDto requestDto) {
         // 답변/댓글/추천 조회
@@ -39,5 +39,48 @@ public class ReplyServiceImpl implements ReplyService {
     public void replyDelete(int id) {
         replyRepository.delete(replyRepository.findById(id)
                 .orElseThrow(() -> new RestApiException(ErrorCode.REPLY_NOT_FOUND)));
+    }
+
+    @Override
+    public ReplyDto.LikeResponseDto replyLike(ReplyDto.LikeRequestDto requestDto) {
+        Reply reply = replyRepository.findById(requestDto.getId())
+                .orElseThrow(() -> new RestApiException(ErrorCode.REPLY_NOT_FOUND));
+
+        likeRepository.findByReplyIdAndUserId(requestDto.getId(), requestDto.getUserId())
+                        .ifPresent(like -> {
+                            throw new RestApiException(ErrorCode.LIKE_CONFLICT);
+                        });
+
+        User user = userRepository.getById(requestDto.getUserId());
+        likeRepository.save(requestDto.toEntity(reply, user));
+
+        List<Like> replies = likeRepository.findByReplyId(requestDto.getId());
+        return new ReplyDto.LikeResponseDto(replies.size());
+    }
+
+    @Override
+    public void replyLikeDelete(int id) {
+        likeRepository.delete(likeRepository.findById(id)
+                .orElseThrow(() -> new RestApiException(ErrorCode.LIKE_NOT_FOUND)));
+    }
+
+    @Override
+    public List<ReplyDto.CommentResponseDto> replyComment(ReplyDto.CommentRequestDto requestDto) {
+        Reply reply = replyRepository.findById(requestDto.getReplyId())
+                .orElseThrow(() -> new RestApiException(ErrorCode.REPLY_NOT_FOUND));
+
+        User user = userRepository.getById(requestDto.getUserId());
+
+        commentRepository.save(requestDto.toEntity(reply, user, requestDto.getContent()));
+
+        return commentRepository.findByReplyId(reply.getId()).stream()
+                .map(Comment::toCommentDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void replyCommentDelete(int id) {
+        commentRepository.delete(commentRepository.findById(id)
+                .orElseThrow(() -> new RestApiException(ErrorCode.COMMENT_NOT_FOUND)));
     }
 }

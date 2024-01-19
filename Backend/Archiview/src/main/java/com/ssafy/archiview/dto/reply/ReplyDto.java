@@ -55,15 +55,76 @@ public class ReplyDto {
     }
 
     @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class CommentDto {
-        private final int id;
-        private final String userId;
-        private final String content;
+        private int id;
+        private String userId;
+        private String content;
 
+        @Builder
         public CommentDto(Comment entity) {
             this.id = entity.getId();
             this.userId = entity.getUser().getId();
             this.content = entity.getContent();
+        }
+    }
+
+    @Getter
+    public static class LikeRequestDto {
+        private final int id;
+        private final String userId;
+
+        @Builder
+        public LikeRequestDto(int id, String userId) {
+            this.id = id;
+            this.userId = userId;
+        }
+
+        public Like toEntity(Reply reply, User user) {
+            return Like.builder()
+                    .user(user)
+                    .reply(reply)
+                    .build();
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class LikeResponseDto {
+        private final int likeCount;
+    }
+
+    @Getter
+    public static class CommentRequestDto {
+        private final int replyId;
+        private final String userId;
+        private final String content;
+        @Builder
+        public CommentRequestDto(int replyId, String userId, String content) {
+            this.replyId = replyId;
+            this.userId = userId;
+            this.content = content;
+        }
+        public Comment toEntity(Reply reply, User user, String content) {
+            return Comment.builder()
+                    .reply(reply)
+                    .user(user)
+                    .content(content)
+                    .build();
+        }
+    }
+
+    @Getter
+    public static class CommentResponseDto {
+        private final int id;
+        private final String userId;
+        private final String content;
+
+        @Builder
+        public CommentResponseDto(int id, String userId, String content) {
+            this.id = id;
+            this.userId = userId;
+            this.content = content;
         }
     }
 }

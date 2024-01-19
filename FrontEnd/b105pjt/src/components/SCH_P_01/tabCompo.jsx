@@ -6,6 +6,9 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import AutoCompleteCompo from "./autoCompleteCompo";
 import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Unstable_Grid2";
+import FirstTabFirstList from "./firstTabFirstList";
+import FirstTabSecondList from "./firstTabSecondList";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -43,6 +46,8 @@ function a11yProps(index) {
 export default function BasicTabs() {
   const [value, setValue] = React.useState(0);
 
+  const [tagData, setTagData] = React.useState([]);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -71,7 +76,15 @@ export default function BasicTabs() {
       <CustomTabPanel value={value} index={0} padding="0px">
         <AutoCompleteCompo />
         <Divider />
-        <AutoCompleteCompo />
+        <Grid container spacing={2}>
+          <Grid xs={5} sx={{ pr: "0px" }}>
+            <FirstTabFirstList />
+          </Grid>
+          <Divider orientation="vertical" variant="middle" flexItem />
+          <Grid>
+            <FirstTabSecondList />
+          </Grid>
+        </Grid>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         Select 2

@@ -12,6 +12,7 @@ export default function CheckboxesTags() {
   return (
     <Autocomplete
       id="company"
+      freeSolo
       options={company}
       getOptionLabel={(option) => option.title}
       renderOption={(props, option, { selected }) => (

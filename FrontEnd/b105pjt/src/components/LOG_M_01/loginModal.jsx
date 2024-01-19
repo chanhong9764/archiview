@@ -1,9 +1,18 @@
 import { Button, Grid, TextField } from "@mui/material";
-import React from "react";
+import { useDispatch } from "react-redux";
+import React, { useState } from "react";
 import LoginIcon from "@mui/icons-material/Login";
 import "../../assets/css/LOG_M_01_login.css";
+import { Navigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const LoginModal = ({ onSwitch }) => {
+const LoginModal = ({ onSwitch, close }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [id, setId] = useState("");
+  const [pw, setPw] = useState("");
+
   const handleClickFindID = () => {
     onSwitch("FindID");
   };
@@ -14,6 +23,24 @@ const LoginModal = ({ onSwitch }) => {
 
   const handleClickAssignUser = () => {
     onSwitch("Assign");
+  };
+
+  const handleIdChange = (event) => {
+    setId(event.target.value);
+  };
+
+  const handlePwChange = (event) => {
+    setPw(event.target.value);
+  };
+
+  // 로그인 버튼 클릭 시 (로그인 동작)
+  const handleLogin = () => {
+    if (id === "123" && pw === "123") {
+      dispatch({ type: "LOGIN" });
+      close();
+    } else {
+      alert("로그인 실패");
+    }
   };
 
   return (
@@ -33,6 +60,7 @@ const LoginModal = ({ onSwitch }) => {
             label="ID"
             defaultValue=""
             variant="filled"
+            onChange={handleIdChange}
           />
         </Grid>
 
@@ -40,10 +68,12 @@ const LoginModal = ({ onSwitch }) => {
           <TextField
             className="Form-input"
             required
+            type="password"
             id="filled-required"
             label="PW"
             defaultValue=""
             variant="filled"
+            onChange={handlePwChange}
           />
         </Grid>
 
@@ -52,6 +82,7 @@ const LoginModal = ({ onSwitch }) => {
             className="Login-btn"
             variant="contained"
             endIcon={<LoginIcon />}
+            onClick={handleLogin}
             color="success"
           >
             로그인

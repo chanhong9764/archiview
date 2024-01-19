@@ -7,9 +7,7 @@ import Button from "@mui/material/Button";
 import { useState } from "react";
 import { Modal } from "@mui/material";
 import LOG_M_01 from "../../pages/LOG_M_01";
-import { Link } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
-import { rootShouldForwardProp } from "@mui/material/styles/styled";
 
 const pages = ["캘린더"];
 const settings = ["로그인"];

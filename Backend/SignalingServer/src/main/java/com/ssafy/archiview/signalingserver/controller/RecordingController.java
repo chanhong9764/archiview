@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.openvidu.java.client.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,15 +18,22 @@ import java.util.concurrent.ConcurrentHashMap;
 @RestController
 @RequestMapping("/api/recording")
 public class RecordingController {
-    private OpenVidu openVidu;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final OpenVidu openVidu;
     @Value("${OPENVIDU_URL}")
     private String OPENVIDU_URL;
     @Value("${OPENVIDU_SECRET}")
     private String OPENVIDU_SECRET;
 
-    private Map<String, Session> mapSessions = new ConcurrentHashMap<>();
-    private Map<String, Map<String, OpenViduRole>> mapSessionNamesTokens = new ConcurrentHashMap<>();
-    private Map<String, Boolean> sessionRecordings = new ConcurrentHashMap<>();
+    private final Map<String, Session> mapSessions = new ConcurrentHashMap<>();
+    private final Map<String, Map<String, OpenViduRole>> mapSessionNamesTokens = new ConcurrentHashMap<>();
+
+    // sessionRecordings 는 녹화 세션에 관련된 옵션을 저장하고 있으나,
+    // 이 옵션을 사용하는 부분은 튜토리얼 코드에 존재하지 않는다.
+    // 24.01.19(금) 까지는 없어도 무방한 코드로 보인다.
+    // 사용 결정 시 sessionRecordings 가 참조된 3줄의 코드를 주석 해제 할 것.
+
+    // private final Map<String, Boolean> sessionRecordings = new ConcurrentHashMap<>();
 
     public RecordingController(@Value("${OPENVIDU_SECRET}") String secret, @Value("${OPENVIDU_URL}") String openViduURL) {
         this.OPENVIDU_SECRET = secret;
@@ -82,7 +91,7 @@ public class RecordingController {
     }
 
     @PostMapping("/remove-user")
-    public ResponseEntity<JsonObject> removeUser(@RequestBody Map<String, Object> sessionNameToken) throws Exception {
+    public ResponseEntity<JsonObject> removeUser(@RequestBody Map<String, Object> sessionNameToken) {
 
         System.out.println("RecordingController -> removeUser | {sessionName, token}=" + sessionNameToken);
 
@@ -121,7 +130,7 @@ public class RecordingController {
             s.close();
             this.mapSessions.remove(session);
             this.mapSessionNamesTokens.remove(session);
-            this.sessionRecordings.remove(s.getSessionId());
+            // this.sessionRecordings.remove(s.getSessionId());
             return new ResponseEntity<>(HttpStatus.OK);
         }
         // 세션 없음
@@ -151,7 +160,7 @@ public class RecordingController {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
-            e.printStackTrace();
+            logger.error("Exception [Err_Msg]: {}", e.getMessage());
             return getErrorResponse(e);
         }
     }
@@ -168,7 +177,7 @@ public class RecordingController {
             }
             return new ResponseEntity<>(jsonArray, HttpStatus.OK);
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
-            e.printStackTrace();
+            logger.error("Exception [Err_Msg]: {}", e.getMessage());
             return getErrorResponse(e);
         }
     }
@@ -190,7 +199,7 @@ public class RecordingController {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
-            e.printStackTrace();
+            logger.error("Exception [Err_Msg]: {}", e.getMessage());
             return getErrorResponse(e);
         }
     }
@@ -212,13 +221,13 @@ public class RecordingController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
-            e.printStackTrace();
+            logger.error("Exception [Err_Msg]: {}", e.getMessage());
             return getErrorResponse(e);
         }
     }
 
     // Recording API
-    @RequestMapping(value = "/recording/start", method = RequestMethod.POST)
+    @PostMapping("/recording/start")
     public ResponseEntity<?> startRecording(@RequestBody Map<String, Object> params) {
         String sessionId = (String) params.get("session");
         Recording.OutputMode outputMode = Recording.OutputMode.valueOf((String) params.get("outputMode"));
@@ -233,29 +242,29 @@ public class RecordingController {
 
         try {
             Recording recording = this.openVidu.startRecording(sessionId, properties);
-            this.sessionRecordings.put(sessionId, true);
+            // this.sessionRecordings.put(sessionId, true);
             return new ResponseEntity<>(recording, HttpStatus.OK);
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @RequestMapping(value = "/recording/stop", method = RequestMethod.POST)
+    @PostMapping("/recording/stop")
     public ResponseEntity<?> stopRecording(@RequestBody Map<String, Object> params) {
         String recordingId = (String) params.get("recording");
 
-        System.out.println("Stoping recording | {recordingId}=" + recordingId);
+        System.out.println("Stopping recording | {recordingId}=" + recordingId);
 
         try {
             Recording recording = this.openVidu.stopRecording(recordingId);
-            this.sessionRecordings.remove(recording.getSessionId());
+            // this.sessionRecordings.remove(recording.getSessionId());
             return new ResponseEntity<>(recording, HttpStatus.OK);
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @RequestMapping(value = "/recording/delete", method = RequestMethod.DELETE)
+    @DeleteMapping("/recording/delete")
     public ResponseEntity<?> deleteRecording(@RequestBody Map<String, Object> params) {
         String recordingId = (String) params.get("recording");
 
@@ -269,7 +278,7 @@ public class RecordingController {
         }
     }
 
-    @RequestMapping(value = "/recording/get/{recordingId}", method = RequestMethod.GET)
+    @GetMapping("/recording/get/{recordingId}")
     public ResponseEntity<?> getRecording(@PathVariable(value = "recordingId") String recordingId) {
 
         System.out.println("Getting recording | {recordingId}=" + recordingId);
@@ -282,7 +291,7 @@ public class RecordingController {
         }
     }
 
-    @RequestMapping(value = "/recording/list", method = RequestMethod.GET)
+    @GetMapping("/recording/list")
     public ResponseEntity<?> listRecordings() {
 
         System.out.println("Listing recordings");
@@ -326,13 +335,9 @@ public class RecordingController {
             c.addProperty("clientData", con.getClientData());
             c.addProperty("serverData", con.getServerData());
             JsonArray pubs = new JsonArray();
-            con.getPublishers().forEach(p -> {
-                pubs.add(gson.toJsonTree(p).getAsJsonObject());
-            });
+            con.getPublishers().forEach(p -> pubs.add(gson.toJsonTree(p).getAsJsonObject()));
             JsonArray subs = new JsonArray();
-            con.getSubscribers().forEach(s -> {
-                subs.add(s);
-            });
+            con.getSubscribers().forEach(s -> subs.add(s));
             c.add("publishers", pubs);
             c.add("subscribers", subs);
             jsonArrayConnections.add(c);

@@ -29,6 +29,16 @@ public enum ErrorCode implements ResponseCode {
     QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "질문을 찾을 수 없습니다."),
 
     /*
+        LIKE
+     */
+    LIKE_CONFLICT(HttpStatus.CONFLICT, "이미 추천한 답변 입니다."),
+    LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "추천이 존재하지 않습니다."),
+
+    /*
+        COMMENT
+     */
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글이 존재하지 않습니다."),
+    /*
         REPLY
      */
     REPLY_NOT_FOUND(HttpStatus.NOT_FOUND, "답변이 존재하지 않습니다."),

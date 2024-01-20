@@ -1,15 +1,13 @@
 package com.ssafy.archiview.controller.recruit;
 
 import com.ssafy.archiview.dto.recruit.RecruitDto;
+import com.ssafy.archiview.entity.Recruit;
 import com.ssafy.archiview.response.code.SuccessCode;
 import com.ssafy.archiview.response.structure.SuccessResponse;
 import com.ssafy.archiview.service.recruit.RecruitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,8 +17,20 @@ import java.util.List;
 public class RecruitController {
     private final RecruitService service;
     @GetMapping
-    public ResponseEntity<Object> recruitDetailList(@RequestParam("date") String date) {
-        List<RecruitDto.DetailListResponseDto> responseDto = service.recruitDetailList(date);
+    public ResponseEntity<Object> recruitDetailList(@RequestParam("date") String date,
+                                                    @RequestParam(value = "company", required = false, defaultValue = "0") int id
+    ) {
+        RecruitDto.DetailListRequestDto requestDto = RecruitDto.DetailListRequestDto.builder()
+                .date(date)
+                .companyId(id).build();
+
+        List<RecruitDto.DetailListResponseDto> responseDto = service.recruitDetailList(requestDto);
         return SuccessResponse.createSuccess(SuccessCode.SELECT_RECRUIT_LIST_SUCCESS, responseDto);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> recruitDetail(@PathVariable("id") int id) {
+        RecruitDto.DetailResponseDto responseDto = service.recruitDetail(id);
+        return SuccessResponse.createSuccess(SuccessCode.SELECT_RECRUIT_SUCCESS, responseDto);
     }
 }

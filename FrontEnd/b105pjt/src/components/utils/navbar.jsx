@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import Logo from "../../assets/img/symbolLogo_Slogun-removebg-preview.png";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -61,32 +62,18 @@ function Navbar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar style={{ background: "white" }} position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* 큰 사이즈 logo */}
 
-          <Box
-            onClick={handleRefresh}
-            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-          >
-            <img
-              src="http://placehold.it/120X40"
-              alt="Logo"
-              style={{ height: "40px" }}
-            />
+          <Box onClick={handleRefresh} sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}>
+            <img src={Logo} alt="Logo" style={{ height: "40px" }} />
           </Box>
 
           {/* 작은 사이즈 logo */}
-          <Box
-            onClick={handleRefresh}
-            sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
-          >
-            <img
-              src="http://placehold.it/120X40"
-              alt="Logo"
-              style={{ height: "40px" }}
-            />
+          <Box onClick={handleRefresh} sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}>
+            <img src={Logo} alt="Logo" style={{ height: "40px" }} />
           </Box>
 
           {/* 작은 사이즈 메뉴 버튼 */}
@@ -97,7 +84,6 @@ function Navbar() {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="inherit"
             >
               <MenuIcon />
             </IconButton>
@@ -134,16 +120,10 @@ function Navbar() {
 
           {/* 큰 사이즈 메뉴 */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            <Button
-              onClick={handleCalendar}
-              sx={{ my: 2, color: "white", display: "block" }}
-            >
+            <Button onClick={handleCalendar} sx={{ my: 2, color: "#222222", display: "block" }}>
               취업 캘린더
             </Button>
-            <Button
-              onClick={handleMyInterview}
-              sx={{ my: 2, color: "white", display: "block" }}
-            >
+            <Button onClick={handleMyInterview} sx={{ my: 2, color: "#222222", display: "block" }}>
               내 인터뷰
             </Button>
           </Box>

@@ -9,7 +9,7 @@ const pages = ["질문 등록", "내 질문"];
 
 function MyNavbar() {
   return (
-    <AppBar position="static" sx={{ height: 40, minHeight: 40 }}>
+    <AppBar style={{ background: "white" }} position="static" sx={{ height: 40, minHeight: 40 }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={{ height: 40, minHeight: 40 }}>
           {/* 큰 사이즈 메뉴 */}
@@ -18,7 +18,7 @@ function MyNavbar() {
               <Button
                 key={page}
                 sx={{
-                  color: "white",
+                  color: "#222222",
                   display: "block",
                   height: 40,
                   minHeight: 40,

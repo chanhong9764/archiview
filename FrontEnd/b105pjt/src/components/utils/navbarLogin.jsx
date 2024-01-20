@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Modal } from "@mui/material";
 import LOG_M_01 from "../../pages/LOG_M_01";
 import { useLocation, useNavigate } from "react-router-dom";
+import Logo from "../../assets/img/symbolLogo_Slogun-removebg-preview.png";
 
 const pages = ["캘린더"];
 const settings = ["로그인"];
@@ -54,31 +55,17 @@ function NavbarLogin() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar style={{ background: "white" }} position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* 큰 사이즈 logo */}
-          <Box
-            onClick={handleRefresh}
-            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-          >
-            <img
-              src="http://placehold.it/120X40"
-              alt="Logo"
-              style={{ height: "40px" }}
-            />
+          <Box onClick={handleRefresh} sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}>
+            <img src={Logo} alt="Logo" style={{ height: "40px" }} />
           </Box>
 
           {/* 작은 사이즈 logo */}
-          <Box
-            onClick={handleRefresh}
-            sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
-          >
-            <img
-              src="http://placehold.it/120X40"
-              alt="Logo"
-              style={{ height: "40px" }}
-            />
+          <Box onClick={handleRefresh} sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}>
+            <img src={Logo} alt="Logo" style={{ height: "40px" }} />
           </Box>
 
           {/* 좌측 메뉴 */}
@@ -87,7 +74,7 @@ function NavbarLogin() {
               <Button
                 key={page}
                 onClick={handleCalendar}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{ my: 2, color: "#222222", display: "block" }}
               >
                 {page}
               </Button>
@@ -101,7 +88,7 @@ function NavbarLogin() {
                 <Button
                   key={setting}
                   onClick={handleOpen}
-                  sx={{ my: 2, color: "white", display: "block" }}
+                  sx={{ my: 2, color: "#222222", display: "block" }}
                 >
                   {setting}
                 </Button>

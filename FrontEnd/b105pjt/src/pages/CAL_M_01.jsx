@@ -75,7 +75,7 @@ const CAL_M_01 = (props) => {
         </Grid>
 
         <Grid className="moreList" item xs={12}>
-          질문 더보기
+          <div className="moreList-content">질문 더보기</div>
         </Grid>
 
         {/* 질문 */}

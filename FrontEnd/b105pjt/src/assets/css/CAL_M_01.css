@@ -26,9 +26,10 @@
 .moreList {
   display: flex;
   justify-content: flex-end; /* 오른쪽 정렬 */
+  width: 10px;
   font-size: 0.775rem; /* 글자 크기 조정 */
 }
 
-.moreList:hover {
+.moreList-content:hover {
   font-weight: bold; /* 호버 시 볼드체 */
 }

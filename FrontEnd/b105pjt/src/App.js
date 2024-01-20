@@ -5,8 +5,9 @@ import NavbarLogin from "./components/utils/navbarLogin";
 import { Route, Routes } from "react-router-dom";
 import HOM_P_01 from "./pages/HOM_P_01";
 import CAL_P_01 from "./pages/CAL_P_01";
-import Navbar from "./components/utils/navbar";
 import MYI_P_01 from "./pages/MYI_P_01";
+import MYP_P_01 from "./pages/MYP_P_01";
+import Navbar from "./components/utils/navbar";
 
 const initialState = {
   isLoggedIn: false,
@@ -36,6 +37,7 @@ function App() {
         <Route path="/" element={<HOM_P_01 />}></Route>
         <Route path="/cal" element={<CAL_P_01 />}></Route>
         <Route path="/myinterview" element={<MYI_P_01 />}></Route>
+        <Route path="/mypage" element={<MYP_P_01 />}></Route>
       </Routes>
     </Provider>
   );

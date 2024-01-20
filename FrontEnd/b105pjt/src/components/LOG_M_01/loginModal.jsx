@@ -3,11 +3,9 @@ import { useDispatch } from "react-redux";
 import React, { useState } from "react";
 import LoginIcon from "@mui/icons-material/Login";
 import "../../assets/css/LOG_M_01_login.css";
-import { Navigate } from "react-router-dom";
-import { useLocation, useNavigate } from "react-router-dom";
+import Logo from "../../assets/img/mainLogo-removebg-preview.png";
 
 const LoginModal = ({ onSwitch, close }) => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [id, setId] = useState("");
@@ -48,7 +46,7 @@ const LoginModal = ({ onSwitch, close }) => {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <div className="Logo">
-            <img src="http://placehold.it/240X240" alt="" />
+            <img src={Logo} style={{ width: "65%" }} alt="" />
           </div>
         </Grid>
 

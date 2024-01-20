@@ -10,6 +10,7 @@ import {
 import React, { useState } from "react";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import SendIcon from "@mui/icons-material/Send";
+import Logo from "../../assets/img/mainLogo-removebg-preview.png";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -58,7 +59,7 @@ const AssignUser = ({ onSwitch }) => {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <div className="Logo">
-            <img src="http://placehold.it/240X240" alt="" />
+            <img src={Logo} style={{ width: "65%" }} alt="" />
           </div>
         </Grid>
 
@@ -100,9 +101,7 @@ const AssignUser = ({ onSwitch }) => {
             value={password}
             error={passwordError && password.length < 8}
             helperText={
-              passwordError && password.length < 8
-                ? "비밀번호는 8자 이상이어야 합니다."
-                : ""
+              passwordError && password.length < 8 ? "비밀번호는 8자 이상이어야 합니다." : ""
             }
           />
         </Grid>
@@ -117,15 +116,9 @@ const AssignUser = ({ onSwitch }) => {
             placeholder="비밀번호 확인"
             type="password"
             variant="filled"
-            error={
-              passwordError &&
-              confirmPassword.length > 0 &&
-              password !== confirmPassword
-            }
+            error={passwordError && confirmPassword.length > 0 && password !== confirmPassword}
             helperText={
-              passwordError &&
-              confirmPassword.length > 0 &&
-              password !== confirmPassword
+              passwordError && confirmPassword.length > 0 && password !== confirmPassword
                 ? "비밀번호가 일치하지 않습니다."
                 : ""
             }

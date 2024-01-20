@@ -91,15 +91,17 @@ const CAL_P_01 = () => {
 
   return (
     <div>
-      <SearchSection />
-      <div className="Calendar-container">
-        <FullCalendar
-          plugins={[dayGridPlugin]}
-          initialView="dayGridMonth"
-          events={events}
-          locale={koLocale}
-          eventClick={handleEventClick}
-        />
+      <div className="parent-container">
+        <SearchSection />
+        <div className="calendar-container">
+          <FullCalendar
+            plugins={[dayGridPlugin]}
+            initialView="dayGridMonth"
+            events={events}
+            locale={koLocale}
+            eventClick={handleEventClick}
+          />
+        </div>
       </div>
 
       <Modal

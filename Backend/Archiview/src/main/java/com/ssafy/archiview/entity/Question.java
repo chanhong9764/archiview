@@ -1,5 +1,6 @@
 package com.ssafy.archiview.entity;
 
+import com.ssafy.archiview.dto.question.QuestionDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -27,4 +28,11 @@ public class Question {
 
     @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
     private List<JobSubQuestion> jobSubQuestionList = new ArrayList<>();
+
+    public QuestionDto.info toDto() {
+        return QuestionDto.info.builder()
+                .id(id)
+                .content(content)
+                .build();
+    }
 }

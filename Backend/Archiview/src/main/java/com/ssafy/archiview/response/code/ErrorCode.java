@@ -42,6 +42,11 @@ public enum ErrorCode implements ResponseCode {
         REPLY
      */
     REPLY_NOT_FOUND(HttpStatus.NOT_FOUND, "답변이 존재하지 않습니다."),
+
+    /*
+        RECRUIT
+     */
+    RECRUIT_NOT_FOUND(HttpStatus.NOT_FOUND, "채용 공고가 존재하지 않습니다."),
     ;
     private final HttpStatus httpStatus;
     private final String message;

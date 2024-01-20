@@ -56,9 +56,14 @@ function Navbar() {
     navigate("/cal", { replace: true });
   };
 
-  // 내 인터뷰 클릭시
+  // 면접 관리 클릭시
   const handleMyInterview = () => {
     navigate("/myinterview", { replace: true });
+  };
+
+  // 면접 관리 클릭시
+  const handleMypage = () => {
+    navigate("/mypage", { replace: true });
   };
 
   return (
@@ -124,7 +129,7 @@ function Navbar() {
               취업 캘린더
             </Button>
             <Button onClick={handleMyInterview} sx={{ my: 2, color: "#222222", display: "block" }}>
-              내 인터뷰
+              면접 관리
             </Button>
           </Box>
 
@@ -157,7 +162,9 @@ function Navbar() {
                 </Typography>
               </MenuItem>
               <MenuItem onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">마이페이지</Typography>
+                <Typography onClick={handleMypage} textAlign="center">
+                  마이페이지
+                </Typography>
               </MenuItem>
             </Menu>
           </Box>

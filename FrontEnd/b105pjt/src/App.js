@@ -6,7 +6,10 @@ import { Route, Routes } from "react-router-dom";
 import HOM_P_01 from "./pages/HOM_P_01";
 import CAL_P_01 from "./pages/CAL_P_01";
 import MYI_P_01 from "./pages/MYI_P_01";
+import MYI_P_02 from "./pages/MYI_P_02";
 import MYP_P_01 from "./pages/MYP_P_01";
+import MYP_P_02 from "./pages/MYP_P_02";
+import SCH_P_01 from "./pages/SCH_P_01";
 import Navbar from "./components/utils/navbar";
 
 const initialState = {
@@ -34,10 +37,15 @@ function App() {
     <Provider store={store}>
       <NavbarComponent />
       <Routes>
-        <Route path="/" element={<HOM_P_01 />}></Route>
         <Route path="/cal" element={<CAL_P_01 />}></Route>
+        <Route path="/" element={<HOM_P_01 />}></Route>
         <Route path="/myinterview" element={<MYI_P_01 />}></Route>
+        <Route path="/addquestion" element={<MYI_P_02 />}></Route>
         <Route path="/mypage" element={<MYP_P_01 />}></Route>
+
+        {/* 아직 미완성 라우팅 */}
+        <Route path="/modify" element={<MYP_P_02 />}></Route>
+        <Route path="/search" element={<SCH_P_01 />}></Route>
       </Routes>
     </Provider>
   );

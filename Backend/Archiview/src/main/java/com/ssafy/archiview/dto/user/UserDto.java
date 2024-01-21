@@ -12,7 +12,9 @@ import java.time.LocalDateTime;
 
 public class UserDto {
     @Getter
+    @Setter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    @ToString
     public static class AddRequestDto {
         @UserId
         private String id;

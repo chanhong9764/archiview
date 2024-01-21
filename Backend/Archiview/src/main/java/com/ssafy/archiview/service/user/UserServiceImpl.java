@@ -6,6 +6,7 @@ import com.####.archiview.repository.UserRepository;
 import com.####.archiview.response.code.ErrorCode;
 import com.####.archiview.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,13 +16,15 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService{
     private final UserRepository repository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     @Override
     @Transactional
     public void userAdd(UserDto.AddRequestDto requestDto) {
         repository.findById(requestDto.getId()).ifPresent(user -> {
             throw new RestApiException(ErrorCode.DUPLICATED_USER);
         });
-
+        // 패스워드 암호화
+        requestDto.setPw(bCryptPasswordEncoder.encode(requestDto.getPw()));
         repository.save(requestDto.toEntity());
     }
 

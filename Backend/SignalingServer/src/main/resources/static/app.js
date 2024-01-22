@@ -192,7 +192,7 @@ function enableBtn() {
 
 /* APPLICATION REST METHODS */
 
-let APPLICATION_SERVER_URL = "http://152.67.197.10:5000/";
+let APPLICATION_SERVER_URL = "http://152.67.197.10:5442/";
 
 function getToken(callback) {
   sessionName = $("#sessionName").val(); // Video-call chosen by the user

@@ -23,13 +23,13 @@ public class QuestionDto {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class DetailInfo {
-        private String questionContent;
+        private String content;
         private String companyName;
         private List<String> csList;
         private List<String> jobList;
         @Builder
-        public DetailInfo(String questionContent, String companyName, List<String> csList, List<String> jobList) {
-            this.questionContent = questionContent;
+        public DetailInfo(String content, String companyName, List<String> csList, List<String> jobList) {
+            this.content = content;
             this.companyName = companyName;
             this.csList = csList;
             this.jobList = jobList;

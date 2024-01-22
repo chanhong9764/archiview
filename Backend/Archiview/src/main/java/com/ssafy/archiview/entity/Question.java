@@ -51,7 +51,7 @@ public class Question {
 
     public QuestionDto.DetailInfo toDetailInfoDto() {
         return QuestionDto.DetailInfo.builder()
-                .questionContent(content)
+                .content(content)
                 .companyName(company.getName())
                 .csList(csSubQuestionList.stream()
                         .map(csSubQuestion -> csSubQuestion.getCsSub().getName())

@@ -23,39 +23,54 @@ function MyNavbar() {
   };
 
   return (
-    <AppBar style={{ background: "white" }} position="static" sx={{ height: 40, minHeight: 40 }}>
-      <Container maxWidth="xl">
-        <Toolbar disableGutters sx={{ height: 40, minHeight: 40 }}>
-          {/* 큰 사이즈 메뉴 */}
-          <Box sx={{ display: "flex", height: "100%" }}>
-            <Button
-              onClick={handleAddQuestion}
-              sx={{
-                color: "#222222",
-                display: "block",
-                height: 40,
-                minHeight: 40,
-                padding: "0 8px",
-              }}
-            >
-              질문 등록
-            </Button>
-            <Button
-              onClick={handleMyInterview}
-              sx={{
-                color: "#222222",
-                display: "block",
-                height: 40,
-                minHeight: 40,
-                padding: "0 8px",
-              }}
-            >
-              내 질문들
-            </Button>
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+    <div>
+      <AppBar
+        style={{ background: "white" }}
+        position="fixed"
+        sx={{
+          height: 40,
+          minHeight: 40,
+          marginTop: {
+            xs: "56px", // 600px 이하에서 적용될 marginTop 값
+            sm: "64px", // 600px 이상에서 적용될 marginTop 값
+          },
+        }}
+      >
+        <Container maxWidth="xl">
+          <Toolbar disableGutters sx={{ height: 40, minHeight: 40 }}>
+            {/* 큰 사이즈 메뉴 */}
+            <Box sx={{ display: "flex", height: "100%" }}>
+              <Button
+                onClick={handleAddQuestion}
+                sx={{
+                  color: "#222222",
+                  display: "block",
+                  height: 40,
+                  minHeight: 40,
+                  padding: "0 8px",
+                }}
+              >
+                질문 등록
+              </Button>
+              <Button
+                onClick={handleMyInterview}
+                sx={{
+                  color: "#222222",
+                  display: "block",
+                  height: 40,
+                  minHeight: 40,
+                  padding: "0 8px",
+                }}
+              >
+                내 질문들
+              </Button>
+            </Box>
+          </Toolbar>
+        </Container>
+      </AppBar>
+
+      <Toolbar></Toolbar>
+    </div>
   );
 }
 export default MyNavbar;

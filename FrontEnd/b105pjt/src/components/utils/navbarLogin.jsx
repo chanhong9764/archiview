@@ -55,62 +55,71 @@ function NavbarLogin() {
   };
 
   return (
-    <AppBar style={{ background: "white" }} position="static">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          {/* 큰 사이즈 logo */}
-          <Box onClick={handleRefresh} sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}>
-            <img src={Logo} alt="Logo" style={{ height: "40px" }} />
-          </Box>
+    <div>
+      <AppBar style={{ background: "white" }} position="fixed">
+        <Container maxWidth="xl">
+          <Toolbar disableGutters>
+            {/* 큰 사이즈 logo */}
+            <Box
+              onClick={handleRefresh}
+              sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+            >
+              <img src={Logo} alt="Logo" style={{ height: "40px" }} />
+            </Box>
 
-          {/* 작은 사이즈 logo */}
-          <Box onClick={handleRefresh} sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}>
-            <img src={Logo} alt="Logo" style={{ height: "40px" }} />
-          </Box>
+            {/* 작은 사이즈 logo */}
+            <Box
+              onClick={handleRefresh}
+              sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
+            >
+              <img src={Logo} alt="Logo" style={{ height: "40px" }} />
+            </Box>
 
-          {/* 좌측 메뉴 */}
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCalendar}
-                sx={{ my: 2, color: "#222222", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
-
-          {/* 우측 메뉴 */}
-          <Box sx={{ flexGrow: 0 }}>
+            {/* 좌측 메뉴 */}
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "flex" } }}>
-              {settings.map((setting) => (
+              {pages.map((page) => (
                 <Button
-                  key={setting}
-                  onClick={handleOpen}
+                  key={page}
+                  onClick={handleCalendar}
                   sx={{ my: 2, color: "#222222", display: "block" }}
                 >
-                  {setting}
+                  {page}
                 </Button>
               ))}
             </Box>
-          </Box>
-        </Toolbar>
-      </Container>
 
-      <div>
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="parent-modal-title"
-          aria-describedby="parent-modal-description"
-        >
-          <Box sx={{ ...style, width: 400 }}>
-            <LOG_M_01 close={handleClose}></LOG_M_01>
-          </Box>
-        </Modal>
-      </div>
-    </AppBar>
+            {/* 우측 메뉴 */}
+            <Box sx={{ flexGrow: 0 }}>
+              <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "flex" } }}>
+                {settings.map((setting) => (
+                  <Button
+                    key={setting}
+                    onClick={handleOpen}
+                    sx={{ my: 2, color: "#222222", display: "block" }}
+                  >
+                    {setting}
+                  </Button>
+                ))}
+              </Box>
+            </Box>
+          </Toolbar>
+        </Container>
+
+        <div>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="parent-modal-title"
+            aria-describedby="parent-modal-description"
+          >
+            <Box sx={{ ...style, width: 400 }}>
+              <LOG_M_01 close={handleClose}></LOG_M_01>
+            </Box>
+          </Modal>
+        </div>
+      </AppBar>
+      <Toolbar></Toolbar>
+    </div>
   );
 }
 export default NavbarLogin;

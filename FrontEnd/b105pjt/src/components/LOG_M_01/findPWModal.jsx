@@ -2,6 +2,7 @@ import { Button, Grid, TextField } from "@mui/material";
 import React, { useState } from "react";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import SendIcon from "@mui/icons-material/Send";
+import Logo from "../../assets/img/mainLogo-removebg-preview.png";
 
 const FindPWModal = ({ onSwitch }) => {
   const [showSignupFields, setShowSignupFields] = useState(false);
@@ -23,7 +24,7 @@ const FindPWModal = ({ onSwitch }) => {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <div className="Logo">
-            <img src="http://placehold.it/240X240" alt="" />
+            <img src={Logo} style={{ width: "65%" }} alt="" />
           </div>
         </Grid>
 

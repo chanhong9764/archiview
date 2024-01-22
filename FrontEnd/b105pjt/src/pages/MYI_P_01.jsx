@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ProfileSection from '../components/MYI_P_01/profileSection.jsx';
-import Accordion from '../components/MYI_P_01/Accordion.jsx';
+import Accordion from '../components/MYI_P_01/accordion.jsx';
 import SearchSection from '../components/utils/searchSection.jsx';
 import { Container, Typography, Button, Card, Grid, CardActions, CardContent, CardMedia, useTheme } from '@mui/material';
 

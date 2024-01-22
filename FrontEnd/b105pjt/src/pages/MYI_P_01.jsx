@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ProfileSection from '../components/MYI_P_01/profileSection.jsx';
-import Accordion from '../components/MYI_P_01/Accordion.jsx';
+import Accordion from '../components/MYI_P_01/accordion.jsx';
 import SearchSection from '../components/utils/searchSection.jsx';
 import { Container, Typography, Button, Box, Paper, AccordionSummary, AccordionDetails, Divider, useTheme } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';

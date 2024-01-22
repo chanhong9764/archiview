@@ -2,6 +2,8 @@ package com.####.archiview.dto.reply;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.####.archiview.dto.comment.CommentDto;
+import com.####.archiview.dto.question.QuestionDto;
 import com.####.archiview.entity.*;
 import lombok.*;
 
@@ -10,41 +12,37 @@ import java.util.stream.Collectors;
 
 public class ReplyDto {
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class DetailResponseDto {
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class info {
         private int id;
         private String userId;
-        private String questionContent;
         private String script;
         private String videoUrl;
         private String thumbnailUrl;
-        private boolean isLike;
-        private int likeCount;
-        private List<CommentDto> comments;
-        private String companyName;
-        private List<String> csList;
-        private List<String> jobList;
-
+        private List<CommentDto.info> comments;
+        private int likeCnt;
         @Builder
-        public DetailResponseDto(int id, String userId, String questionContent, String script, String videoUrl, String thumbnailUrl, boolean isLike, int likeCount, List<Comment> comments, String companyName, List<CsSubQuestion> csList, List<JobSubQuestion> jobList) {
+        public info(int id, String userId, String script, String videoUrl, String thumbnailUrl, List<CommentDto.info> comments, int likeCnt) {
             this.id = id;
             this.userId = userId;
-            this.questionContent = questionContent;
             this.script = script;
             this.videoUrl = videoUrl;
             this.thumbnailUrl = thumbnailUrl;
+            this.comments = comments;
+            this.likeCnt = likeCnt;
+        }
+    }
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class DetailResponseDto {
+        ReplyDto.info reply;
+        QuestionDto.DetailInfo question;
+        private boolean isLike;
+        @Builder
+        public DetailResponseDto(Reply reply, Question question, boolean isLike) {
+            this.reply = reply.toDto();
+            this.question = question.toDetailInfoDto();
             this.isLike = isLike;
-            this.likeCount = likeCount;
-            this.comments = comments.stream()
-                    .map(CommentDto::new)
-                    .collect(Collectors.toList());
-            this.companyName = companyName;
-            this.csList = csList.stream()
-                    .map(o -> o.getCsSub().getName())
-                    .collect(Collectors.toList());
-            this.jobList = jobList.stream()
-                    .map(o -> o.getJobSub().getName())
-                    .collect(Collectors.toList());
         }
     }
     @Getter
@@ -52,21 +50,6 @@ public class ReplyDto {
     public static class DetailRequestDto {
         private final int id;
         private final String userId;
-    }
-
-    @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class CommentDto {
-        private int id;
-        private String userId;
-        private String content;
-
-        @Builder
-        public CommentDto(Comment entity) {
-            this.id = entity.getId();
-            this.userId = entity.getUser().getId();
-            this.content = entity.getContent();
-        }
     }
 
     @Getter
@@ -92,39 +75,5 @@ public class ReplyDto {
     @AllArgsConstructor
     public static class LikeResponseDto {
         private final int likeCount;
-    }
-
-    @Getter
-    public static class CommentRequestDto {
-        private final int replyId;
-        private final String userId;
-        private final String content;
-        @Builder
-        public CommentRequestDto(int replyId, String userId, String content) {
-            this.replyId = replyId;
-            this.userId = userId;
-            this.content = content;
-        }
-        public Comment toEntity(Reply reply, User user, String content) {
-            return Comment.builder()
-                    .reply(reply)
-                    .user(user)
-                    .content(content)
-                    .build();
-        }
-    }
-
-    @Getter
-    public static class CommentResponseDto {
-        private final int id;
-        private final String userId;
-        private final String content;
-
-        @Builder
-        public CommentResponseDto(int id, String userId, String content) {
-            this.id = id;
-            this.userId = userId;
-            this.content = content;
-        }
     }
 }

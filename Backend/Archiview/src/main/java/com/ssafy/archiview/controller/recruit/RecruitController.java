@@ -1,5 +1,6 @@
 package com.####.archiview.controller.recruit;
 
+import com.querydsl.core.BooleanBuilder;
 import com.####.archiview.dto.recruit.RecruitDto;
 import com.####.archiview.entity.Recruit;
 import com.####.archiview.response.code.SuccessCode;
@@ -9,6 +10,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -21,7 +28,7 @@ public class RecruitController {
                                                     @RequestParam(value = "company", required = false, defaultValue = "0") int id
     ) {
         RecruitDto.DetailListRequestDto requestDto = RecruitDto.DetailListRequestDto.builder()
-                .date(date)
+                .date(date.substring(0, 7))
                 .companyId(id).build();
 
         List<RecruitDto.DetailListResponseDto> responseDto = service.recruitDetailList(requestDto);

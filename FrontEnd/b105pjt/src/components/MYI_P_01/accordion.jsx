@@ -11,7 +11,7 @@ const Accordion = ({ title, children }) => {
   return (
     <MuiAccordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>{title}</Typography>
+        <Typography component="div">{title}</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Typography component="div">{children}</Typography>

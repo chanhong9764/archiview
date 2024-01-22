@@ -1,6 +1,17 @@
-import React, { useState } from 'react';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, useTheme } from '@mui/material';
-import PasswordChangeModal from './passwordModal';
+import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  useTheme,
+} from "@mui/material";
+import PasswordChangeModal from "./passwordModal";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 // 확인 다이얼로그 컴포넌트
 // onConfirm 함수는 회원 탈퇴를 확인할 때 호출되는 함수 -> 이건 ActionButton 컴포넌트에서 정의된 'handleConfirmDelete' 함수
@@ -9,15 +20,13 @@ const ConfirmationDialog = ({ open, onClose, onConfirm }) => {
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>회원 탈퇴</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          정말로 탈퇴하시겠습니까?
-        </DialogContentText>
+        <DialogContentText>정말로 탈퇴하시겠습니까?</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <Button onClick={onConfirm} color="primary">
           예
         </Button>
-        <Button onClick={onConfirm} color="primary">
+        <Button onClick={onClose} color="primary">
           아니오
         </Button>
       </DialogActions>
@@ -27,6 +36,9 @@ const ConfirmationDialog = ({ open, onClose, onConfirm }) => {
 
 // 메인 컴포넌트 -> onDelete - 부모 컴포넌트에서 전달되는 회원탈퇴 처리 함수
 const ActionButton = ({ onDelete }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const theme = useTheme();
   const [openModal, setOpenModal] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
@@ -52,36 +64,41 @@ const ActionButton = ({ onDelete }) => {
   const handleConfirmDelete = () => {
     onDelete();
     handleCloseConfirmDialog();
+
+    dispatch({ type: "LOGOUT" });
+    navigate("/", { replace: true });
   };
 
   return (
     <>
-      <Box sx={{
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        flexDirection: 'row',
-        gap: theme.spacing(2),
-        mt: 3,
-        flexWrap: 'wrap'
-      }}>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "row",
+          gap: theme.spacing(2),
+          mt: 3,
+          flexWrap: "wrap",
+        }}
+      >
         <Button
           variant="contained"
           color="primary"
           onClick={handleOpenModal}
           sx={{
-            margin: theme.spacing(1)
+            margin: theme.spacing(1),
           }}
         >
           비밀번호 변경
         </Button>
-        
+
         <Button
           variant="contained"
           color="error"
           onClick={handleOpenConfirmDialog}
           sx={{
-            margin: theme.spacing(1)
+            margin: theme.spacing(1),
           }}
         >
           회원탈퇴
@@ -89,7 +106,11 @@ const ActionButton = ({ onDelete }) => {
       </Box>
 
       <PasswordChangeModal open={openModal} onClose={handleCloseModal} />
-      <ConfirmationDialog open={openConfirmDialog} onClose={handleCloseConfirmDialog} onConfirm={handleConfirmDelete} />
+      <ConfirmationDialog
+        open={openConfirmDialog}
+        onClose={handleCloseConfirmDialog}
+        onConfirm={handleConfirmDelete}
+      />
     </>
   );
 };

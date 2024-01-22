@@ -3,9 +3,14 @@ import { Container, Typography } from "@mui/material";
 import ProfileSection from "../components/MYP_P_02/profileSection";
 import InfoSection from "../components/MYP_P_02/infoSection";
 import SaveButton from "../components/MYP_P_02/saveButton";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Page = () => {
-  const handleSave = () => {};
+  const navigate = useNavigate();
+
+  const handleSave = () => {
+    navigate("/mypage", { replace: true });
+  };
 
   return (
     <Container>

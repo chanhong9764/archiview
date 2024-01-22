@@ -28,19 +28,13 @@ public class ReplyServiceImpl implements ReplyService {
     private final JobSubQuestionRepository jobSubQuestionRepository;
     @Override
     public ReplyDto.DetailResponseDto replyDetail(ReplyDto.DetailRequestDto requestDto) {
-        // 답변/댓글/추천 조회
         Reply reply = replyRepository.findById(requestDto.getId())
                 .orElseThrow(() -> new RestApiException(ErrorCode.REPLY_NOT_FOUND));
-        // 질문/태그/회사 조회
-        Question question = questionRepository.findById(reply.getQuestionId())
-                .orElseThrow(() -> new RestApiException(ErrorCode.QUESTION_NOT_FOUND));
-
         // 추천 여부 조회
         Optional<Like> isLike = likeRepository.findByReplyIdAndUserId(reply.getId(), requestDto.getUserId());
 
         return ReplyDto.DetailResponseDto.builder()
                 .reply(reply)
-                .question(question)
                 .isLike(isLike.isPresent())
                 .build();
     }
@@ -80,16 +74,17 @@ public class ReplyServiceImpl implements ReplyService {
         }
         User user = userRepository.getById("chanhong9784");
         replyRepository.save(Reply.builder()
-                        .questionId(question.getId())
-                        .script(requestDto.getScript())
-                        .videoUrl(requestDto.getVideoUrl())
-                        .thumbnailUrl(requestDto.getThumbnailUrl())
-                        .user(user).build());
+                .question(question)
+                .script(requestDto.getScript())
+                .videoUrl(requestDto.getVideoUrl())
+                .thumbnailUrl(requestDto.getThumbnailUrl())
+                .user(user).build());
     }
 
     @Override
-    public void replyModify(ReplyDto.ModifyRequestDto requestDto) {
-
+    public Reply replyModify(ReplyDto.ModifyRequestDto requestDto) {
+        return replyRepository.findById(requestDto.getId())
+                .orElseThrow(() -> new RestApiException(ErrorCode.REPLY_NOT_FOUND));
     }
 
     @Override

@@ -25,10 +25,6 @@ public class Reply {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "question_id")
-    @NotNull
-    private Integer questionId;
-
     @Column(name = "script", columnDefinition = "TEXT")
     private String script;
 
@@ -46,6 +42,10 @@ public class Reply {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "question_id")
+    private Question question;
+
     @OneToMany(mappedBy = "reply", fetch = FetchType.LAZY)
     private List<Like> likes = new ArrayList<>();
 
@@ -53,8 +53,8 @@ public class Reply {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Reply(Integer questionId, String script, String videoUrl, String thumbnailUrl, User user) {
-        this.questionId = questionId;
+    public Reply(Question question, String script, String videoUrl, String thumbnailUrl, User user) {
+        this.question = question;
         this.script = script;
         this.videoUrl = videoUrl;
         this.thumbnailUrl = thumbnailUrl;
@@ -69,9 +69,16 @@ public class Reply {
                 .comments(comments.stream()
                         .map(Comment::toCommentDto)
                         .collect(Collectors.toList()))
+                .question(question.toDetailInfoDto())
                 .videoUrl(videoUrl)
                 .thumbnailUrl(thumbnailUrl)
                 .likeCnt(likes.size())
                 .build();
+    }
+
+    public void updateEntity(String script, String videoUrl, String thumbnailUrl) {
+        this.script = script;
+        this.videoUrl = videoUrl;
+        this.thumbnailUrl = thumbnailUrl;
     }
 }

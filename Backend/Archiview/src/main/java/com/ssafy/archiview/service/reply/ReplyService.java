@@ -2,6 +2,7 @@ package com.####.archiview.service.reply;
 
 import com.####.archiview.dto.comment.CommentDto;
 import com.####.archiview.dto.reply.ReplyDto;
+import com.####.archiview.entity.Reply;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface ReplyService {
     // 질문 / 답변 등록
     void replyAdd(ReplyDto.AddRequestDto requestDto);
     // 답변 수정
-    void replyModify(ReplyDto.ModifyRequestDto requestDto);
+    Reply replyModify(ReplyDto.ModifyRequestDto requestDto);
     // 추천 생성
     ReplyDto.LikeResponseDto replyLike(ReplyDto.LikeRequestDto requestDto);
     // 추천 삭제

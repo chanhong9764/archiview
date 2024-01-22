@@ -2,6 +2,7 @@ package com.####.archiview.controller.reply;
 
 import com.####.archiview.dto.comment.CommentDto;
 import com.####.archiview.dto.reply.ReplyDto;
+import com.####.archiview.entity.Reply;
 import com.####.archiview.response.code.SuccessCode;
 import com.####.archiview.response.structure.SuccessResponse;
 import com.####.archiview.service.reply.ReplyService;
@@ -37,8 +38,8 @@ public class ReplyController {
 
     @PatchMapping
     public ResponseEntity<Object> replyModify(@RequestBody ReplyDto.ModifyRequestDto requestDto) {
-        service.replyModify(requestDto);
-        return SuccessResponse.createSuccess(SuccessCode.MODIFY_REPLY_SUCCESS);
+        Reply reply = service.replyModify(requestDto);
+        return SuccessResponse.createSuccess(SuccessCode.MODIFY_REPLY_SUCCESS, reply);
     }
 
     @PostMapping("/{id}/like")

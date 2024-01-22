@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.openvidu.java.client.*;
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,14 +17,16 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/api/recording")
 public class RecordingController {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private final OpenVidu openVidu;
+
     @Value("${OPENVIDU_URL}")
     private String OPENVIDU_URL;
     @Value("${OPENVIDU_SECRET}")
     private String OPENVIDU_SECRET;
+    private OpenVidu openVidu;
 
     private final Map<String, Session> mapSessions = new ConcurrentHashMap<>();
     private final Map<String, Map<String, OpenViduRole>> mapSessionNamesTokens = new ConcurrentHashMap<>();
@@ -35,15 +38,14 @@ public class RecordingController {
 
     // private final Map<String, Boolean> sessionRecordings = new ConcurrentHashMap<>();
 
-    public RecordingController(@Value("${OPENVIDU_SECRET}") String secret, @Value("${OPENVIDU_URL}") String openViduURL) {
-        this.OPENVIDU_SECRET = secret;
-        this.OPENVIDU_URL = openViduURL;
+    @PostConstruct
+    public void init() {
         this.openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
     }
 
     @PostMapping("/get-token")
     public ResponseEntity<JsonObject> getToken(@RequestBody Map<String, Object> sessionNameParam) {
-        System.out.println("RecordingController -> getToken | {sessionName}=" + sessionNameParam);
+        logger.info("RecordingController -> getToken |" + sessionNameParam);
         String sessionName = (String)sessionNameParam.get("sessionName");
         OpenViduRole role = OpenViduRole.PUBLISHER;
         ConnectionProperties connectionProperties = new ConnectionProperties.Builder().type(ConnectionType.WEBRTC)
@@ -52,7 +54,7 @@ public class RecordingController {
         JsonObject responseJson = new JsonObject();
         // 기존 세션
         if (this.mapSessions.get(sessionName) != null) {
-            System.out.println("Existing session " + sessionName);
+            logger.info("Existing session " + sessionName);
             try {
                 String token = this.mapSessions.get(sessionName).createConnection(connectionProperties).getToken();
                 this.mapSessionNamesTokens.get(sessionName).put(token, role);
@@ -71,7 +73,7 @@ public class RecordingController {
         // End - 기존세션
 
         // 새 세션
-        System.out.println("New session " + sessionName);
+        logger.info("New session " + sessionName);
         try {
             Session session = this.openVidu.createSession();
             String token = session.createConnection(connectionProperties).getToken();
@@ -93,7 +95,7 @@ public class RecordingController {
     @PostMapping("/remove-user")
     public ResponseEntity<JsonObject> removeUser(@RequestBody Map<String, Object> sessionNameToken) {
 
-        System.out.println("RecordingController -> removeUser | {sessionName, token}=" + sessionNameToken);
+        logger.info("RecordingController -> removeUser | {sessionName, token}=" + sessionNameToken);
 
         String sessionName = (String) sessionNameToken.get("sessionName");
         String token = (String) sessionNameToken.get("token");
@@ -106,21 +108,21 @@ public class RecordingController {
                 }
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
-                System.out.println("Problems in the app server: the TOKEN wasn't valid");
+                logger.info("Problems in the app server: the TOKEN wasn't valid");
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
         }
         // 새 세션
         else {
-            System.out.println("Problems in the app server: the SESSION does not exist");
+            logger.info("Problems in the app server: the SESSION does not exist");
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @DeleteMapping("/close-session")
     public ResponseEntity<JsonObject> closeSession(@RequestBody Map<String, Object> sessionName) throws Exception {
-        System.out.println("RecordingController -> closeSession | {sessionName}=" + sessionName);
+        logger.info("RecordingController -> closeSession | {sessionName}=" + sessionName);
 
         String session = (String) sessionName.get("sessionName");
 
@@ -135,7 +137,7 @@ public class RecordingController {
         }
         // 세션 없음
         else {
-            System.out.println("Problems in the app server: the SESSION does not exist");
+            logger.info("Problems in the app server: the SESSION does not exist");
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -143,7 +145,7 @@ public class RecordingController {
     @PostMapping("/fetch-info")
     public ResponseEntity<JsonObject> fetchInfo(@RequestBody Map<String, Object> sessionName) {
         try {
-            System.out.println("RecordingController -> fetchInfo | {sessionName}=" + sessionName);
+            logger.info("RecordingController -> fetchInfo | {sessionName}=" + sessionName);
 
             String session = (String) sessionName.get("sessionName");
 
@@ -151,12 +153,12 @@ public class RecordingController {
             if (this.mapSessions.get(session) != null && this.mapSessionNamesTokens.get(session) != null) {
                 Session s = this.mapSessions.get(session);
                 boolean changed = s.fetch();
-                System.out.println("Any change: " + changed);
+                logger.info("Any change: " + changed);
                 return new ResponseEntity<>(this.sessionToJson(s), HttpStatus.OK);
             }
             // 세션 없음
             else {
-                System.out.println("Problems in the app server: the SESSION does not exist");
+                logger.info("Problems in the app server: the SESSION does not exist");
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
@@ -168,9 +170,9 @@ public class RecordingController {
     @GetMapping("/fetch-all")
     public ResponseEntity<?> fetchAll() {
         try {
-            System.out.println("Fetching all session info");
+            logger.info("Fetching all session info");
             boolean changed = this.openVidu.fetch();
-            System.out.println("Any change: " + changed);
+            logger.info("Any change: " + changed);
             JsonArray jsonArray = new JsonArray();
             for (Session s : this.openVidu.getActiveSessions()) {
                 jsonArray.add(this.sessionToJson(s));
@@ -237,7 +239,7 @@ public class RecordingController {
         RecordingProperties properties = new RecordingProperties.Builder().outputMode(outputMode).hasAudio(hasAudio)
                 .hasVideo(hasVideo).build();
 
-        System.out.println("Starting recording for session " + sessionId + " with properties {outputMode=" + outputMode
+        logger.info("Starting recording for session " + sessionId + " with properties {outputMode=" + outputMode
                 + ", hasAudio=" + hasAudio + ", hasVideo=" + hasVideo + "}");
 
         try {
@@ -253,7 +255,7 @@ public class RecordingController {
     public ResponseEntity<?> stopRecording(@RequestBody Map<String, Object> params) {
         String recordingId = (String) params.get("recording");
 
-        System.out.println("Stopping recording | {recordingId}=" + recordingId);
+        logger.info("Stopping recording | {recordingId}=" + recordingId);
 
         try {
             Recording recording = this.openVidu.stopRecording(recordingId);
@@ -268,7 +270,7 @@ public class RecordingController {
     public ResponseEntity<?> deleteRecording(@RequestBody Map<String, Object> params) {
         String recordingId = (String) params.get("recording");
 
-        System.out.println("Deleting recording | {recordingId}=" + recordingId);
+        logger.info("Deleting recording | {recordingId}=" + recordingId);
 
         try {
             this.openVidu.deleteRecording(recordingId);
@@ -281,7 +283,7 @@ public class RecordingController {
     @GetMapping("/recording/get/{recordingId}")
     public ResponseEntity<?> getRecording(@PathVariable(value = "recordingId") String recordingId) {
 
-        System.out.println("Getting recording | {recordingId}=" + recordingId);
+        logger.info("Getting recording | {recordingId}=" + recordingId);
 
         try {
             Recording recording = this.openVidu.getRecording(recordingId);
@@ -294,7 +296,7 @@ public class RecordingController {
     @GetMapping("/recording/list")
     public ResponseEntity<?> listRecordings() {
 
-        System.out.println("Listing recordings");
+        logger.info("Listing recordings");
 
         try {
             List<Recording> recordings = this.openVidu.listRecordings();

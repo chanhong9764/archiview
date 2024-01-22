@@ -70,7 +70,6 @@ const AssignUser = ({ onSwitch }) => {
             className="ID-input"
             style={{ width: "100%" }}
             required
-            id="name"
             label="이름"
             placeholder="홍길동"
             variant="filled"
@@ -83,7 +82,6 @@ const AssignUser = ({ onSwitch }) => {
             className="ID-input"
             style={{ width: "100%" }}
             required
-            id="id"
             label="ID"
             placeholder="사용자 ID"
             variant="filled"
@@ -115,7 +113,6 @@ const AssignUser = ({ onSwitch }) => {
           <TextField
             className="PW-input"
             required
-            id="password-confirm"
             label="PW 확인"
             placeholder="비밀번호 확인"
             type="password"
@@ -142,7 +139,6 @@ const AssignUser = ({ onSwitch }) => {
           <TextField
             className="PW-input"
             required
-            id="filled-required"
             label="이메일"
             placeholder="example@mail.com"
             defaultValue=""
@@ -167,7 +163,6 @@ const AssignUser = ({ onSwitch }) => {
               <TextField
                 className="PW-input"
                 required
-                id="email-verification"
                 label="인증번호"
                 placeholder="인증번호 입력"
                 variant="filled"

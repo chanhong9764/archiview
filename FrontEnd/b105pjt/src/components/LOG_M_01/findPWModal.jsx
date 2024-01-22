@@ -33,7 +33,6 @@ const FindPWModal = ({ onSwitch }) => {
             className="ID-input"
             style={{ width: "100%" }}
             required
-            id="name"
             label="아이디"
             placeholder="ID"
             variant="filled"
@@ -46,7 +45,6 @@ const FindPWModal = ({ onSwitch }) => {
             className="PW-input"
             style={{ width: "100%" }}
             required
-            id="filled-required"
             label="이메일"
             placeholder="example@mail.com"
             defaultValue=""
@@ -72,7 +70,6 @@ const FindPWModal = ({ onSwitch }) => {
               <TextField
                 className="PW-input"
                 required
-                id="email-verification"
                 label="인증번호"
                 placeholder="인증번호 입력"
                 variant="filled"

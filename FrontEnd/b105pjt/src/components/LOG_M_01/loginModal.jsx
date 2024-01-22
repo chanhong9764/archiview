@@ -54,7 +54,6 @@ const LoginModal = ({ onSwitch, close }) => {
           <TextField
             className="Form-input"
             required
-            id="filled-required"
             label="ID"
             defaultValue=""
             variant="filled"
@@ -67,7 +66,6 @@ const LoginModal = ({ onSwitch, close }) => {
             className="Form-input"
             required
             type="password"
-            id="filled-required"
             label="PW"
             defaultValue=""
             variant="filled"

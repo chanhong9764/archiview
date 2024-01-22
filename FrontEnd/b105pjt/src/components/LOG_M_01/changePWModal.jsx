@@ -66,7 +66,9 @@ const ChangPWModal = ({ onSwitch }) => {
             value={password}
             error={passwordError && password.length < 8}
             helperText={
-              passwordError && password.length < 8 ? "비밀번호는 8자 이상이어야 합니다." : ""
+              passwordError && password.length < 8
+                ? "비밀번호는 8자 이상이어야 합니다."
+                : ""
             }
           />
         </Grid>
@@ -75,14 +77,19 @@ const ChangPWModal = ({ onSwitch }) => {
           <TextField
             className="PW-input"
             required
-            id="password-confirm"
             label="PW 확인"
             placeholder="비밀번호 확인"
             type="password"
             variant="filled"
-            error={passwordError && confirmPassword.length > 0 && password !== confirmPassword}
+            error={
+              passwordError &&
+              confirmPassword.length > 0 &&
+              password !== confirmPassword
+            }
             helperText={
-              passwordError && confirmPassword.length > 0 && password !== confirmPassword
+              passwordError &&
+              confirmPassword.length > 0 &&
+              password !== confirmPassword
                 ? "비밀번호가 일치하지 않습니다."
                 : ""
             }

@@ -39,14 +39,13 @@ function App() {
       <NavbarComponent />
       <div className="App">
         <Routes>
-          <Route path="/cal" element={<CAL_P_01 />}></Route>
           <Route path="/" element={<HOM_P_01 />}></Route>
+          <Route path="/cal" element={<CAL_P_01 />}></Route>
           <Route path="/myinterview" element={<MYI_P_01 />}></Route>
           <Route path="/addquestion" element={<MYI_P_02 />}></Route>
           <Route path="/mypage" element={<MYP_P_01 />}></Route>
-
-          {/* 아직 미완성 라우팅 */}
           <Route path="/modify" element={<MYP_P_02 />}></Route>
+
           <Route path="/search" element={<SCH_P_01 />}></Route>
         </Routes>
       </div>

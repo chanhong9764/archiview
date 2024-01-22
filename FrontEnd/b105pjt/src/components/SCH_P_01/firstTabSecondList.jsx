@@ -7,24 +7,21 @@ const ListItem = styled("li")(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
 
-export default function ChipsArray() {
-  const [chipData, setChipData] = React.useState([
-    { key: 0, label: "Angular" },
-    { key: 1, label: "jQuery" },
-    { key: 2, label: "Polymer" },
-    { key: 3, label: "React" },
-    { key: 4, label: "Vue.js" },
-  ]);
-
-  const [selectedChips, setSelectedChips] = React.useState([]);
-
+export default function ChipsArray({
+  tagDataList,
+  bigTagData,
+  setTagDataList,
+  smallTagData,
+  smallTagList,
+  setSmallTagData,
+}) {
   const AllClick = (key) => {
-    setSelectedChips(chipData);
+    setSmallTagData(Object.keys(smallTagList));
   };
 
   const handleClick = (key) => {
-    setSelectedChips((prevSelectedChips) => {
-      if (selectedChips.length === chipData.length) {
+    setSmallTagData((prevSelectedChips) => {
+      if (smallTagData.length === smallTagList.length) {
         return [key];
       } else {
         if (prevSelectedChips.includes(key)) {
@@ -48,18 +45,22 @@ export default function ChipsArray() {
       }}
       component="ul"
     >
-      <ListItem key="All">
-        <Chip
-          label="All"
-          variant="outlined"
-          onClick={() => AllClick()}
-          color={
-            selectedChips.length === chipData.length ? "primary" : "default"
-          }
-        />
-      </ListItem>
-      {chipData.map((data) => {
-        const isSelected = selectedChips.includes(data.key);
+      {bigTagData ? (
+        <ListItem key="All">
+          <Chip
+            label="All"
+            variant="outlined"
+            onClick={() => AllClick()}
+            color={
+              smallTagData.length === smallTagList.length
+                ? "primary"
+                : "default"
+            }
+          />
+        </ListItem>
+      ) : null}
+      {smallTagList.map((data) => {
+        const isSelected = smallTagData.includes(data.key);
 
         return (
           <ListItem key={data.key}>
@@ -68,8 +69,8 @@ export default function ChipsArray() {
               onClick={() => handleClick(data.key)}
               variant="outlined"
               color={
-                selectedChips.length !== chipData.length &&
-                selectedChips.includes(data.key)
+                smallTagData.length !== smallTagList.length &&
+                smallTagData.includes(data.key)
                   ? "primary"
                   : "default"
               }

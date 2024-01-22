@@ -34,15 +34,16 @@ public class Recruit {
     @NotNull
     private LocalDateTime end;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private Company company;
 
     public RecruitDto.DetailListResponseDto toDetailListDto() {
         return RecruitDto.DetailListResponseDto.builder()
-                .companyName(this.company.getName())
-                .start(this.start.format(DateTimeFormatter.ISO_DATE))
-                .end(this.end.format(DateTimeFormatter.ISO_DATE))
+                .id(id)
+                .companyName(company.getName())
+                .start(start.format(DateTimeFormatter.ISO_DATE))
+                .end(end.format(DateTimeFormatter.ISO_DATE))
                 .build();
     }
 

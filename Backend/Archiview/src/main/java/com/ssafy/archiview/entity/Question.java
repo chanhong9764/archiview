@@ -3,13 +3,17 @@ package com.####.archiview.entity;
 import com.####.archiview.dto.question.QuestionDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity // 질문
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Question {
     @Id
@@ -29,6 +33,14 @@ public class Question {
 
     @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
     private List<JobSubQuestion> jobSubQuestionList = new ArrayList<>();
+    @Builder
+    public Question(Integer id, String content, Company company, List<CsSubQuestion> csSubQuestionList, List<JobSubQuestion> jobSubQuestionList) {
+        this.id = id;
+        this.content = content;
+        this.company = company;
+        this.csSubQuestionList = csSubQuestionList;
+        this.jobSubQuestionList = jobSubQuestionList;
+    }
 
     public QuestionDto.info toDto() {
         return QuestionDto.info.builder()

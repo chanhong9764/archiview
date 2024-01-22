@@ -3,7 +3,10 @@ package com.####.archiview.entity;
 import com.####.archiview.dto.reply.ReplyDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
@@ -15,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Entity // 답변
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 public class Reply {
     @Id
@@ -47,6 +51,15 @@ public class Reply {
 
     @OneToMany(mappedBy = "reply", fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
+
+    @Builder
+    public Reply(Integer questionId, String script, String videoUrl, String thumbnailUrl, User user) {
+        this.questionId = questionId;
+        this.script = script;
+        this.videoUrl = videoUrl;
+        this.thumbnailUrl = thumbnailUrl;
+        this.user = user;
+    }
 
     public ReplyDto.info toDto() {
         return ReplyDto.info.builder()

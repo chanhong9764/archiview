@@ -1,5 +1,6 @@
 package com.ssafy.archiview.controller.reply;
 
+import com.ssafy.archiview.dto.comment.CommentDto;
 import com.ssafy.archiview.dto.reply.ReplyDto;
 import com.ssafy.archiview.response.code.SuccessCode;
 import com.ssafy.archiview.response.structure.SuccessResponse;
@@ -44,8 +45,8 @@ public class ReplyController {
     }
 
     @PostMapping("/{id}/comment")
-    public ResponseEntity<Object> replyComment(@PathVariable("id") int id, @RequestBody ReplyDto.CommentDto requestDto) {
-        List<ReplyDto.CommentResponseDto> responseDto = service.replyComment(ReplyDto.CommentRequestDto.builder()
+    public ResponseEntity<Object> replyComment(@PathVariable("id") int id, @RequestBody CommentDto.request requestDto) {
+        List<CommentDto.info> responseDto = service.replyComment(CommentDto.request.builder()
                 .replyId(id)
                 .content(requestDto.getContent())
                 .userId("chanhong9784").build());

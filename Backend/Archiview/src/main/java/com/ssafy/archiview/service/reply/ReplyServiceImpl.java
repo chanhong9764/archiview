@@ -1,5 +1,6 @@
 package com.ssafy.archiview.service.reply;
 
+import com.ssafy.archiview.dto.comment.CommentDto;
 import com.ssafy.archiview.dto.reply.ReplyDto;
 import com.ssafy.archiview.entity.*;
 import com.ssafy.archiview.repository.*;
@@ -32,7 +33,11 @@ public class ReplyServiceImpl implements ReplyService {
         // 추천 여부 조회
         Optional<Like> isLike = likeRepository.findByReplyIdAndUserId(reply.getId(), requestDto.getUserId());
 
-        return Reply.toDto(reply, question, isLike.isPresent());
+        return ReplyDto.DetailResponseDto.builder()
+                .reply(reply)
+                .question(question)
+                .isLike(isLike.isPresent())
+                .build();
     }
 
     @Override
@@ -65,7 +70,7 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public List<ReplyDto.CommentResponseDto> replyComment(ReplyDto.CommentRequestDto requestDto) {
+    public List<CommentDto.info> replyComment(CommentDto.request requestDto) {
         Reply reply = replyRepository.findById(requestDto.getReplyId())
                 .orElseThrow(() -> new RestApiException(ErrorCode.REPLY_NOT_FOUND));
 

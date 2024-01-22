@@ -7,6 +7,7 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity // 질문
 @Getter
@@ -33,6 +34,19 @@ public class Question {
         return QuestionDto.info.builder()
                 .id(id)
                 .content(content)
+                .build();
+    }
+
+    public QuestionDto.DetailInfo toDetailInfoDto() {
+        return QuestionDto.DetailInfo.builder()
+                .questionContent(content)
+                .companyName(company.getName())
+                .csList(csSubQuestionList.stream()
+                        .map(csSubQuestion -> csSubQuestion.getCsSub().getName())
+                        .collect(Collectors.toList()))
+                .jobList(jobSubQuestionList.stream()
+                        .map(jobSubQuestion -> jobSubQuestion.getJobSub().getName())
+                        .collect(Collectors.toList()))
                 .build();
     }
 }

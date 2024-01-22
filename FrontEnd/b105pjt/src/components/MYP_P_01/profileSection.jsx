@@ -81,6 +81,8 @@ const ProfileSection = ({ children }) => {
         alignItems: 'center'
       }}
     >
+      <Typography variant="h4" sx={{ mb: 2 }}>Profile <hr /></Typography>
+      
       <Box sx={{ position: 'relative', mb: 2 }}>
         <Avatar
           src={imageUrl}

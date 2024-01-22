@@ -1,5 +1,6 @@
 package com.ssafy.archiview.service.reply;
 
+import com.ssafy.archiview.dto.comment.CommentDto;
 import com.ssafy.archiview.dto.reply.ReplyDto;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface ReplyService {
     // 추천 삭제
     void replyLikeDelete(int id);
     // 댓글 생성
-    List<ReplyDto.CommentResponseDto> replyComment(ReplyDto.CommentRequestDto requestDto);
+    List<CommentDto.info> replyComment(CommentDto.request requestDto);
     // 댓글 삭제
     void replyCommentDelete(int id);
 }

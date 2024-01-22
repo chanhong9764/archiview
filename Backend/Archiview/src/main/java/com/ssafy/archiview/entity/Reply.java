@@ -11,6 +11,7 @@ import org.hibernate.annotations.DynamicInsert;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity // 답변
 @Getter
@@ -47,20 +48,17 @@ public class Reply {
     @OneToMany(mappedBy = "reply", fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 
-    public static ReplyDto.DetailResponseDto toDto(Reply reply, Question question, boolean isLike) {
-        return ReplyDto.DetailResponseDto.builder()
-                .id(reply.getId())
-                .userId(reply.getUser().getId())
-                .questionContent(question.getContent())
-                .script(reply.getScript())
-                .videoUrl(reply.getVideoUrl())
-                .thumbnailUrl(reply.getThumbnailUrl())
-                .isLike(isLike)
-                .likeCount(reply.getLikes().size())
-                .comments(reply.getComments())
-                .companyName(question.getCompany().getName())
-                .csList(question.getCsSubQuestionList())
-                .jobList(question.getJobSubQuestionList())
+    public ReplyDto.info toDto() {
+        return ReplyDto.info.builder()
+                .id(id)
+                .userId(user.getId())
+                .script(script)
+                .comments(comments.stream()
+                        .map(Comment::toCommentDto)
+                        .collect(Collectors.toList()))
+                .videoUrl(videoUrl)
+                .thumbnailUrl(thumbnailUrl)
+                .likeCnt(likes.size())
                 .build();
     }
 }

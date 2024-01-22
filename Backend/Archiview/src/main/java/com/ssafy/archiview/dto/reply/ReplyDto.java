@@ -76,4 +76,56 @@ public class ReplyDto {
     public static class LikeResponseDto {
         private final int likeCount;
     }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class AddRequestDto {
+        private int companyId;
+        private String content;
+        private List<String> csList;
+        private List<String> jobList;
+
+        private int questionId;
+        private String script;
+        private String videoUrl;
+        private String thumbnailUrl;
+        @Builder
+        public AddRequestDto(int companyId, String content, List<String> csList, List<String> jobList, int questionId, String script, String videoUrl, String thumbnailUrl) {
+            this.companyId = companyId;
+            this.content = content;
+            this.csList = csList;
+            this.jobList = jobList;
+            this.questionId = questionId;
+            this.script = script;
+            this.videoUrl = videoUrl;
+            this.thumbnailUrl = thumbnailUrl;
+        }
+
+        public Question toQuestionEntity(Company company) {
+            return Question.builder()
+                    .company(company)
+                    .content(content)
+                    .build();
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ModifyRequestDto {
+        private List<String> csList;
+        private List<String> jobList;
+        private int questionId;
+        private String script;
+        private String videoUrl;
+        private String thumbnailUrl;
+        @Builder
+        public ModifyRequestDto(List<String> csList, List<String> jobList, int questionId, String script, String videoUrl, String thumbnailUrl) {
+            this.csList = csList;
+            this.jobList = jobList;
+            this.questionId = questionId;
+            this.script = script;
+            this.videoUrl = videoUrl;
+            this.thumbnailUrl = thumbnailUrl;
+        }
+    }
 }

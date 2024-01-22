@@ -36,6 +36,7 @@ public enum SuccessCode implements ResponseCode {
     CREATE_REPLY_SUCCESS(HttpStatus.CREATED, "질문/답변 생성에 성공했습니다."),
     SELECT_REPLY_SUCCESS(HttpStatus.OK, "답변 조회에 성공했습니다."),
     DELETE_REPLY_SUCCESS(HttpStatus.OK, "내 답변 삭제에 성공했습니다."),
+    MODIFY_REPLY_SUCCESS(HttpStatus.OK, "내 답변 수정에 성공했습니다."),
 
     /*
         RECRUIT

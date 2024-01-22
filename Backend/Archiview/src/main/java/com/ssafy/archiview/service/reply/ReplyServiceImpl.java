@@ -21,6 +21,11 @@ public class ReplyServiceImpl implements ReplyService {
     private final LikeRepository likeRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
+    private final CompanyRepository companyRepository;
+    private final CsSubRepository csSubRepository;
+    private final JobSubRepository jobSubRepository;
+    private final CsSubQuestionRepository csSubQuestionRepository;
+    private final JobSubQuestionRepository jobSubQuestionRepository;
     @Override
     public ReplyDto.DetailResponseDto replyDetail(ReplyDto.DetailRequestDto requestDto) {
         // 답변/댓글/추천 조회
@@ -44,6 +49,47 @@ public class ReplyServiceImpl implements ReplyService {
     public void replyDelete(int id) {
         replyRepository.delete(replyRepository.findById(id)
                 .orElseThrow(() -> new RestApiException(ErrorCode.REPLY_NOT_FOUND)));
+    }
+
+    @Override
+    public void replyAdd(ReplyDto.AddRequestDto requestDto) {
+        Company company = companyRepository.findById(requestDto.getCompanyId())
+                    .orElseThrow(() -> new RestApiException(ErrorCode.COMPANY_NOT_FOUND));
+
+        final Question question = questionRepository.save(requestDto.toQuestionEntity(company));
+
+        List<CsSub> csSubList = requestDto.getCsList().stream()
+                .map(s -> csSubRepository.findById(s)
+                        .orElseThrow(() -> new RestApiException(ErrorCode.CSSUB_NOT_FOUND)))
+                .toList();
+        List<JobSub> jobSubList = requestDto.getJobList().stream()
+                .map(j -> jobSubRepository.findById(j)
+                        .orElseThrow(() -> new RestApiException(ErrorCode.JOBSUB_NOT_FOUND)))
+                .toList();
+
+        for(CsSub cs : csSubList) {
+            csSubQuestionRepository.save(CsSubQuestion.builder()
+                    .csSub(cs)
+                    .question(question).build());
+        }
+
+        for(JobSub job : jobSubList) {
+            jobSubQuestionRepository.save(JobSubQuestion.builder()
+                    .jobSub(job)
+                    .question(question).build());
+        }
+        User user = userRepository.getById("chanhong9784");
+        replyRepository.save(Reply.builder()
+                        .questionId(question.getId())
+                        .script(requestDto.getScript())
+                        .videoUrl(requestDto.getVideoUrl())
+                        .thumbnailUrl(requestDto.getThumbnailUrl())
+                        .user(user).build());
+    }
+
+    @Override
+    public void replyModify(ReplyDto.ModifyRequestDto requestDto) {
+
     }
 
     @Override

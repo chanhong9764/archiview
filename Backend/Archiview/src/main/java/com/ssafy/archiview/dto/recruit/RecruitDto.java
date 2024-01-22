@@ -36,11 +36,13 @@ public class RecruitDto {
 
     @Getter
     public static class DetailListResponseDto {
+        private final int id;
         private final String companyName;
         private final String start;
         private final String end;
         @Builder
-        public DetailListResponseDto(String companyName, String start, String end) {
+        public DetailListResponseDto(int id, String companyName, String start, String end) {
+            this.id = id;
             this.companyName = companyName;
             this.start = start;
             this.end = end;

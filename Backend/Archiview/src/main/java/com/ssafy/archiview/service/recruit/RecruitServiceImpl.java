@@ -4,7 +4,7 @@ import com.ssafy.archiview.dto.recruit.RecruitDto;
 import com.ssafy.archiview.entity.Question;
 import com.ssafy.archiview.entity.Recruit;
 import com.ssafy.archiview.repository.QuestionRepository;
-import com.ssafy.archiview.repository.RecruitRepository;
+import com.ssafy.archiview.repository.Recruit.RecruitRepository;
 import com.ssafy.archiview.response.code.ErrorCode;
 import com.ssafy.archiview.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +23,7 @@ public class RecruitServiceImpl implements RecruitService {
     private final QuestionRepository questionRepository;
     @Override
     public List<RecruitDto.DetailListResponseDto> recruitDetailList(RecruitDto.DetailListRequestDto requestDto) {
-        LocalDate base = LocalDate.parse(requestDto.getDate());
-        LocalDateTime start = base.withDayOfMonth(1).atStartOfDay();
-        LocalDateTime end = base.withDayOfMonth(base.lengthOfMonth()).atTime(LocalTime.MAX);
-        return recruitRepository.findAllByStartBetween(start, end).stream()
+       return recruitRepository.searchAll(requestDto).stream()
                 .map(Recruit::toDetailListDto)
                 .collect(Collectors.toList());
     }

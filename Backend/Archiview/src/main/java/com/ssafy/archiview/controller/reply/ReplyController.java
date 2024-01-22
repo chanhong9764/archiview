@@ -29,6 +29,18 @@ public class ReplyController {
         return SuccessResponse.createSuccess(SuccessCode.DELETE_REPLY_SUCCESS);
     }
 
+    @PostMapping
+    public ResponseEntity<Object> replyAdd(@RequestBody ReplyDto.AddRequestDto requestDto) {
+        service.replyAdd(requestDto);
+        return SuccessResponse.createSuccess(SuccessCode.CREATE_REPLY_SUCCESS);
+    }
+
+    @PatchMapping
+    public ResponseEntity<Object> replyModify(@RequestBody ReplyDto.ModifyRequestDto requestDto) {
+        service.replyModify(requestDto);
+        return SuccessResponse.createSuccess(SuccessCode.MODIFY_REPLY_SUCCESS);
+    }
+
     @PostMapping("/{id}/like")
     public ResponseEntity<Object> replyLike(@PathVariable("id") int id) {
         ReplyDto.LikeResponseDto responseDto = service.replyLike(

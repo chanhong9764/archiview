@@ -42,16 +42,18 @@ const AssignUser = ({ onSwitch }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState(false);
 
-  // 비밀번호 입력창 변경시 값 업데이트
+  // 새 비밀번호 입력 필드의 값이 변경 시 호출되는 함수
   const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-    setPasswordError(event.target.value !== confirmPassword);
+    const newPassword = event.target.value;
+    setPassword(newPassword);
+    setPasswordError(newPassword.length < 8 || newPassword !== confirmPassword);
   };
 
-  // 비밀번호 점검창 변경시 값 업데이트
+  // 비밀번호 재입력 필드의 값이 변경 시 호출되는 함수
   const handleConfirmPasswordChange = (event) => {
-    setConfirmPassword(event.target.value);
-    setPasswordError(password !== event.target.value);
+    const newConfirmPassword = event.target.value;
+    setConfirmPassword(newConfirmPassword);
+    setPasswordError(password.length < 8 || password !== newConfirmPassword);
   };
 
   return (
@@ -101,7 +103,9 @@ const AssignUser = ({ onSwitch }) => {
             value={password}
             error={passwordError && password.length < 8}
             helperText={
-              passwordError && password.length < 8 ? "비밀번호는 8자 이상이어야 합니다." : ""
+              passwordError && password.length < 8
+                ? "비밀번호는 8자 이상이어야 합니다."
+                : ""
             }
           />
         </Grid>
@@ -116,9 +120,15 @@ const AssignUser = ({ onSwitch }) => {
             placeholder="비밀번호 확인"
             type="password"
             variant="filled"
-            error={passwordError && confirmPassword.length > 0 && password !== confirmPassword}
+            error={
+              passwordError &&
+              confirmPassword.length > 0 &&
+              password !== confirmPassword
+            }
             helperText={
-              passwordError && confirmPassword.length > 0 && password !== confirmPassword
+              passwordError &&
+              confirmPassword.length > 0 &&
+              password !== confirmPassword
                 ? "비밀번호가 일치하지 않습니다."
                 : ""
             }

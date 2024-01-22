@@ -14,9 +14,13 @@ const style = {
 
 // currentPassword는 현재 사용자가 입력한 비밀번호를 저장하는 상태
 // 'error' : 비밀번호 확인 과정에서 발생한 오류 메시지를 저장
-const PasswordCheckModal = ({ open, onClose, onPasswordVerified }) => {
+const PasswordCheckModal = ({ open, onClose }) => {
     const [currentPassword, setCurrentPassword] = useState('');
     const [error, setError] = useState(''); // 오류 메시지 상태를 추가합니다.
+
+  const onPasswordVerified =()=>{
+    // 비밀번호 검증 과정 -> 로그인과 동일 동작
+  }
 
     // 사용자가 비밀번호 입력 필드에 타이핑할 때마다 호출되는 함수, 입력된 비밀번호 값을 'currentPassword'에 저장
     // 이미 오류 메시지가 표시된 상태라면 이를 초기화

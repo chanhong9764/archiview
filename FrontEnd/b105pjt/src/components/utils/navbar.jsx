@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import Logo from "../../assets/img/symbolLogo_Slogun-removebg-preview.png";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -55,135 +56,136 @@ function Navbar() {
     navigate("/cal", { replace: true });
   };
 
-  // 내 인터뷰 클릭시
+  // 면접 관리 클릭시
   const handleMyInterview = () => {
     navigate("/myinterview", { replace: true });
   };
 
+  // 면접 관리 클릭시
+  const handleMypage = () => {
+    navigate("/mypage", { replace: true });
+  };
+
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          {/* 큰 사이즈 logo */}
+    <div>
+      <AppBar style={{ background: "white" }} position="fixed">
+        <Container maxWidth="xl">
+          <Toolbar disableGutters>
+            {/* 큰 사이즈 logo */}
 
-          <Box
-            onClick={handleRefresh}
-            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-          >
-            <img
-              src="http://placehold.it/120X40"
-              alt="Logo"
-              style={{ height: "40px" }}
-            />
-          </Box>
-
-          {/* 작은 사이즈 logo */}
-          <Box
-            onClick={handleRefresh}
-            sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
-          >
-            <img
-              src="http://placehold.it/120X40"
-              alt="Logo"
-              style={{ height: "40px" }}
-            />
-          </Box>
-
-          {/* 작은 사이즈 메뉴 버튼 */}
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
+            <Box
+              onClick={handleRefresh}
+              sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
             >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              <MenuItem onClick={handleCloseNavMenu}>
-                <Typography onClick={handleCalendar} textAlign="center">
-                  취업 캘린더
-                </Typography>
-              </MenuItem>
-              <MenuItem onClick={handleCloseNavMenu}>
-                <Typography onClick={handleMyInterview} textAlign="center">
-                  내 인터뷰
-                </Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
+              <img src={Logo} alt="Logo" style={{ height: "40px" }} />
+            </Box>
 
-          {/* 큰 사이즈 메뉴 */}
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            <Button
-              onClick={handleCalendar}
-              sx={{ my: 2, color: "white", display: "block" }}
+            {/* 작은 사이즈 logo */}
+            <Box
+              onClick={handleRefresh}
+              sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
             >
-              취업 캘린더
-            </Button>
-            <Button
-              onClick={handleMyInterview}
-              sx={{ my: 2, color: "white", display: "block" }}
-            >
-              내 인터뷰
-            </Button>
-          </Box>
+              <img src={Logo} alt="Logo" style={{ height: "40px" }} />
+            </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                {/* 프로필 이미지 */}
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+            {/* 작은 사이즈 메뉴 버튼 */}
+            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleOpenNavMenu}
+              >
+                <MenuIcon />
               </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              <MenuItem onClick={handleCloseUserMenu}>
-                <Typography onClick={handleLogout} textAlign="center">
-                  로그아웃
-                </Typography>
-              </MenuItem>
-              <MenuItem onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">마이페이지</Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: "block", md: "none" },
+                }}
+              >
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography onClick={handleCalendar} textAlign="center">
+                    취업 캘린더
+                  </Typography>
+                </MenuItem>
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography onClick={handleMyInterview} textAlign="center">
+                    내 인터뷰
+                  </Typography>
+                </MenuItem>
+              </Menu>
+            </Box>
+
+            {/* 큰 사이즈 메뉴 */}
+            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+              <Button
+                onClick={handleCalendar}
+                sx={{ my: 2, color: "#222222", display: "block" }}
+              >
+                취업 캘린더
+              </Button>
+              <Button
+                onClick={handleMyInterview}
+                sx={{ my: 2, color: "#222222", display: "block" }}
+              >
+                면접 관리
+              </Button>
+            </Box>
+
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  {/* 프로필 이미지 */}
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography onClick={handleLogout} textAlign="center">
+                    로그아웃
+                  </Typography>
+                </MenuItem>
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography onClick={handleMypage} textAlign="center">
+                    마이페이지
+                  </Typography>
+                </MenuItem>
+              </Menu>
+            </Box>
+          </Toolbar>
+        </Container>
+      </AppBar>
+      <Toolbar></Toolbar>
+    </div>
   );
 }
 export default Navbar;

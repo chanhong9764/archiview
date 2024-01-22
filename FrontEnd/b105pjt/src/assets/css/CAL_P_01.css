@@ -1,4 +1,13 @@
-.Calendar-container {
-  height: calc(100vh - 200px);
+.calendar-container {
+  height: 100%; /* Set the height to 100% */
+  margin: 0 auto;
   overflow-y: auto; /* 필요한 경우에만 세로 스크롤바 표시 */
+  width: 100%;
+}
+
+/* If the parent of calendar-container doesn't have a height, set it here */
+.parent-container {
+  padding: 0 24px 0 24px;
+  margin: 0 auto;
+  height: 500px; /* Example height, adjust as needed */
 }

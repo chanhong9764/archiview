@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Typography, Box } from '@mui/material';
+import { Container, Typography, Box, Divider } from '@mui/material';
 import ActionButton from '../components/MYP_P_01/actionButton';
 import ProfileSection from '../components/MYP_P_01/profileSection';
 
@@ -27,35 +27,26 @@ const ProfilePage = () => {
     // 회원탈퇴 로직
   };
 
-  return (
-    <Container sx={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      mt: 4,
-      mb: 4
-    }}>
-      <Box sx={{ 
-        p: 2, 
-        backgroundColor: 'primary.main', 
-        borderRadius: 2,
-        color: 'white',
-        mb: 4,
-        width: 'fit-content',
-        boxShadow: 1 
-      }}>
-        <Typography variant="h4">내 정보</Typography>
+return (
+  <Container sx={{
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    mt: 4,
+    mb: 4,
+    maxWidth: 'md' // 최대 너비를 medium으로 설정
+  }}>
+    <ProfileSection imageUrl={profile_url} sx={{ mb: 4, width: '100%' }}>
+      <Box sx={{ textAlign: 'center', width: '100%' }}>
+        <Typography variant="h5" sx={{ mb: 2 }}>{name}</Typography>
+        <Typography variant="h6" sx={{ mb: 2 }}>{email}</Typography>
+        <Typography sx={{ mb: 3 }}>{introduce}</Typography>
+        <Divider sx={{ width: '100%', my: 2 }} />
+        <ActionButton onSave={handleSave} onDelete={handleDelete} />
       </Box>
-      <ProfileSection imageUrl={profile_url} sx={{ mb: 4 }}>
-        <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="h5" sx={{ mb: 2 }}>{name}</Typography>
-          <Typography variant="h6" sx={{ mb: 2 }}>{email}</Typography>
-          <Typography sx={{ mb: 3 }}>{introduce}</Typography>
-          <ActionButton onSave={handleSave} onDelete={handleDelete} />
-        </Box>
-      </ProfileSection>
-    </Container>
-  );
+    </ProfileSection>
+  </Container>
+);
 };
 
 export default ProfilePage;

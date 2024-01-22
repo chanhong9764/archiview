@@ -3,6 +3,8 @@ package com.####.archiview.service.user;
 import com.####.archiview.dto.user.CustomUserDetails;
 import com.####.archiview.entity.User;
 import com.####.archiview.repository.UserRepository;
+import com.####.archiview.response.code.ErrorCode;
+import com.####.archiview.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,11 +22,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 //    }
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        User userData = userRepository.findByid(userId);
-
-        if(userData != null) {
+//        User userData = userRepository.findByid(userId);
+        User userData = userRepository.getById(userId);
+//        if(userData != null) {
             return new CustomUserDetails(userData);
-        }
-        return null;
+//        }
+//        return null;
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,19 +23,18 @@ public class QuestionController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Object> searchQuestion(@RequestParam("userId") String userId,
-                                                 @RequestParam("company") String companyName,
-                                                 @RequestParam("cs") String cs,
-                                                 @RequestParam("job") String job,
-                                                 @RequestParam("pgno") int pgno) {
+    public ResponseEntity<Object> searchQuestion(@RequestParam(value = "company", required = false, defaultValue = "") String companyName,
+                                                 @RequestParam(value = "cs", required = false, defaultValue = "") String cs,
+                                                 @RequestParam(value = "job", required = false, defaultValue = "") String job,
+                                                 @RequestParam(value = "pgno", required = false, defaultValue = "1") int pgno) {
         QuestionDto.SearchRequest requestDto = QuestionDto.SearchRequest.builder()
-                .userId(userId)
+                .userId("chanhong9784")
                 .companyName(companyName)
                 .csList(Arrays.stream(cs.split(",")).toList())
                 .jobList(Arrays.stream(job.split(",")).toList())
                 .pgno(pgno)
                 .build();
-        service.searchQuestion(requestDto);
-        return SuccessResponse.createSuccess(SuccessCode.SEARCH_QUESTION_SUCCESS);
+        List<QuestionDto.SearchInfo> responseDto = service.searchQuestion(requestDto);
+        return SuccessResponse.createSuccess(SuccessCode.SEARCH_QUESTION_SUCCESS, responseDto);
     }
 }

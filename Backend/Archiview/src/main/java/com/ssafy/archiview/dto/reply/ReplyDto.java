@@ -7,6 +7,7 @@ import com.ssafy.archiview.dto.question.QuestionDto;
 import com.ssafy.archiview.entity.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,13 +20,15 @@ public class ReplyDto {
         private String script;
         private String videoUrl;
         private String thumbnailUrl;
+        private QuestionDto.DetailInfo question;
         private List<CommentDto.info> comments;
         private int likeCnt;
         @Builder
-        public info(int id, String userId, String script, String videoUrl, String thumbnailUrl, List<CommentDto.info> comments, int likeCnt) {
+        public info(int id, String userId, QuestionDto.DetailInfo question, String script, String videoUrl, String thumbnailUrl, List<CommentDto.info> comments, int likeCnt) {
             this.id = id;
             this.userId = userId;
             this.script = script;
+            this.question = question;
             this.videoUrl = videoUrl;
             this.thumbnailUrl = thumbnailUrl;
             this.comments = comments;
@@ -36,12 +39,10 @@ public class ReplyDto {
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class DetailResponseDto {
         ReplyDto.info reply;
-        QuestionDto.DetailInfo question;
         private boolean isLike;
         @Builder
-        public DetailResponseDto(Reply reply, Question question, boolean isLike) {
+        public DetailResponseDto(Reply reply, boolean isLike) {
             this.reply = reply.toDto();
-            this.question = question.toDetailInfoDto();
             this.isLike = isLike;
         }
     }
@@ -112,17 +113,21 @@ public class ReplyDto {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ModifyRequestDto {
-        private List<String> csList;
-        private List<String> jobList;
-        private int questionId;
+        private int id;
+        private List<String> removeCsList = new ArrayList<>();
+        private List<String> addCsList = new ArrayList<>();
+        private List<String> removeJobList = new ArrayList<>();
+        private List<String> addjobList = new ArrayList<>();
         private String script;
         private String videoUrl;
         private String thumbnailUrl;
         @Builder
-        public ModifyRequestDto(List<String> csList, List<String> jobList, int questionId, String script, String videoUrl, String thumbnailUrl) {
-            this.csList = csList;
-            this.jobList = jobList;
-            this.questionId = questionId;
+        public ModifyRequestDto(int id, List<String> removeCsList, List<String> addCsList, List<String> removeJobList, List<String> addjobList, String script, String videoUrl, String thumbnailUrl) {
+            this.id = id;
+            this.removeCsList = removeCsList;
+            this.addCsList = addCsList;
+            this.removeJobList = removeJobList;
+            this.addjobList = addjobList;
             this.script = script;
             this.videoUrl = videoUrl;
             this.thumbnailUrl = thumbnailUrl;

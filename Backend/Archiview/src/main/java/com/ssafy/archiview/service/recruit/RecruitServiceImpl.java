@@ -3,16 +3,13 @@ package com.ssafy.archiview.service.recruit;
 import com.ssafy.archiview.dto.recruit.RecruitDto;
 import com.ssafy.archiview.entity.Question;
 import com.ssafy.archiview.entity.Recruit;
-import com.ssafy.archiview.repository.QuestionRepository;
+import com.ssafy.archiview.repository.Question.QuestionRepository;
 import com.ssafy.archiview.repository.Recruit.RecruitRepository;
 import com.ssafy.archiview.response.code.ErrorCode;
 import com.ssafy.archiview.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 

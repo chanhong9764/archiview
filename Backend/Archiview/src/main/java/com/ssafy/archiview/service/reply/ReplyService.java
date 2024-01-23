@@ -2,6 +2,7 @@ package com.ssafy.archiview.service.reply;
 
 import com.ssafy.archiview.dto.comment.CommentDto;
 import com.ssafy.archiview.dto.reply.ReplyDto;
+import com.ssafy.archiview.entity.Reply;
 
 import java.util.List;
 

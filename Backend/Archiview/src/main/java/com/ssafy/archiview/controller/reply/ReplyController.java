@@ -2,6 +2,7 @@ package com.ssafy.archiview.controller.reply;
 
 import com.ssafy.archiview.dto.comment.CommentDto;
 import com.ssafy.archiview.dto.reply.ReplyDto;
+import com.ssafy.archiview.entity.Reply;
 import com.ssafy.archiview.response.code.SuccessCode;
 import com.ssafy.archiview.response.structure.SuccessResponse;
 import com.ssafy.archiview.service.reply.ReplyService;

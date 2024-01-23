@@ -2,6 +2,7 @@ package com.####.archiview.service.reply;
 
 import com.####.archiview.dto.comment.CommentDto;
 import com.####.archiview.dto.reply.ReplyDto;
+import com.####.archiview.entity.Reply;
 
 import java.util.List;
 

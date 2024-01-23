@@ -2,6 +2,7 @@ package com.####.archiview.controller.reply;
 
 import com.####.archiview.dto.comment.CommentDto;
 import com.####.archiview.dto.reply.ReplyDto;
+import com.####.archiview.entity.Reply;
 import com.####.archiview.response.code.SuccessCode;
 import com.####.archiview.response.structure.SuccessResponse;
 import com.####.archiview.service.reply.ReplyService;

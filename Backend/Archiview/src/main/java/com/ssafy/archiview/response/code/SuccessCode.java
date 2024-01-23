@@ -17,6 +17,7 @@ public enum SuccessCode implements ResponseCode {
         QUESTION
      */
     DELETE_QUESTION_SUCCESS(HttpStatus.OK, "질문 삭제에 성공했습니다."),
+    SEARCH_QUESTION_SUCCESS(HttpStatus.OK, "질문 검색에 성공했습니다."),
 
     /*
         LIKE

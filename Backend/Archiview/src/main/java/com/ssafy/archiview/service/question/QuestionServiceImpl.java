@@ -1,6 +1,7 @@
 package com.####.archiview.service.question;
 
-import com.####.archiview.repository.QuestionRepository;
+import com.####.archiview.dto.question.QuestionDto;
+import com.####.archiview.repository.Question.QuestionRepository;
 import com.####.archiview.response.code.ErrorCode;
 import com.####.archiview.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
@@ -13,5 +14,10 @@ public class QuestionServiceImpl implements QuestionService {
     public void deleteQuestion(int id) {
         repository.delete(repository.findById(id)
                 .orElseThrow(() -> new RestApiException(ErrorCode.QUESTION_NOT_FOUND)));
+    }
+
+    @Override
+    public void searchQuestion(QuestionDto.SearchRequest requestDto) {
+
     }
 }

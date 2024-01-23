@@ -4,10 +4,12 @@ import com.####.archiview.dto.comment.CommentDto;
 import com.####.archiview.dto.reply.ReplyDto;
 import com.####.archiview.entity.*;
 import com.####.archiview.repository.*;
+import com.####.archiview.repository.Question.QuestionRepository;
 import com.####.archiview.response.code.ErrorCode;
 import com.####.archiview.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,19 +30,13 @@ public class ReplyServiceImpl implements ReplyService {
     private final JobSubQuestionRepository jobSubQuestionRepository;
     @Override
     public ReplyDto.DetailResponseDto replyDetail(ReplyDto.DetailRequestDto requestDto) {
-        // 답변/댓글/추천 조회
         Reply reply = replyRepository.findById(requestDto.getId())
                 .orElseThrow(() -> new RestApiException(ErrorCode.REPLY_NOT_FOUND));
-        // 질문/태그/회사 조회
-        Question question = questionRepository.findById(reply.getQuestionId())
-                .orElseThrow(() -> new RestApiException(ErrorCode.QUESTION_NOT_FOUND));
-
         // 추천 여부 조회
         Optional<Like> isLike = likeRepository.findByReplyIdAndUserId(reply.getId(), requestDto.getUserId());
 
         return ReplyDto.DetailResponseDto.builder()
                 .reply(reply)
-                .question(question)
                 .isLike(isLike.isPresent())
                 .build();
     }
@@ -80,16 +76,56 @@ public class ReplyServiceImpl implements ReplyService {
         }
         User user = userRepository.getById("chanhong9784");
         replyRepository.save(Reply.builder()
-                        .questionId(question.getId())
-                        .script(requestDto.getScript())
-                        .videoUrl(requestDto.getVideoUrl())
-                        .thumbnailUrl(requestDto.getThumbnailUrl())
-                        .user(user).build());
+                .question(question)
+                .script(requestDto.getScript())
+                .videoUrl(requestDto.getVideoUrl())
+                .thumbnailUrl(requestDto.getThumbnailUrl())
+                .user(user).build());
     }
 
     @Override
+    @Transactional
     public void replyModify(ReplyDto.ModifyRequestDto requestDto) {
+        Reply reply = replyRepository.findById(requestDto.getId())
+                .orElseThrow(() -> new RestApiException(ErrorCode.REPLY_NOT_FOUND));
 
+        for(String cs : requestDto.getRemoveCsList()) {
+            CsSub csSub = csSubRepository.findById(cs)
+                    .orElseThrow(() -> new RestApiException(ErrorCode.CSSUB_NOT_FOUND));
+            csSubQuestionRepository.delete(csSubQuestionRepository.findByCsSubAndQuestionId(csSub, reply.getQuestion().getId())
+                    .orElseThrow(() -> new RestApiException(ErrorCode.CSSUB_QUESTION_NOT_FOUND)));
+        }
+
+        for(String job : requestDto.getRemoveJobList()) {
+            JobSub jobSub = jobSubRepository.findById(job)
+                    .orElseThrow(() -> new RestApiException(ErrorCode.JOBSUB_NOT_FOUND));
+            jobSubQuestionRepository.delete(jobSubQuestionRepository.findByJobSubAndQuestionId(jobSub, reply.getQuestion().getId())
+                    .orElseThrow(() -> new RestApiException(ErrorCode.JOBSUB_QUESTION_NOT_FOUND)));
+        }
+
+        for(String cs : requestDto.getAddCsList()) {
+            CsSub csSub = csSubRepository.findById(cs)
+                    .orElseThrow(() -> new RestApiException(ErrorCode.CSSUB_NOT_FOUND));
+            csSubQuestionRepository.findByCsSubAndQuestionId(csSub, reply.getQuestion().getId())
+                            .ifPresent(csq -> { throw new RestApiException(ErrorCode.CSSUB_QUESTION_CONFILT); });
+            csSubQuestionRepository.save(CsSubQuestion.builder()
+                    .question(reply.getQuestion())
+                    .csSub(csSub)
+                    .build());
+        }
+
+        for(String job : requestDto.getAddjobList()) {
+            JobSub jobSub = jobSubRepository.findById(job)
+                    .orElseThrow(() -> new RestApiException(ErrorCode.JOBSUB_NOT_FOUND));
+            jobSubQuestionRepository.findByJobSubAndQuestionId(jobSub, reply.getQuestion().getId())
+                    .ifPresent(csq -> { throw new RestApiException(ErrorCode.JOBSUB_QUESTION_CONFILT); });
+            jobSubQuestionRepository.save(JobSubQuestion.builder()
+                    .question(reply.getQuestion())
+                    .jobSub(jobSub)
+                    .build());
+        }
+
+        reply.updateEntity(requestDto);
     }
 
     @Override

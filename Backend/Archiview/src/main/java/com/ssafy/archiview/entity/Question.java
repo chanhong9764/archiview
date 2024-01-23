@@ -51,7 +51,7 @@ public class Question {
 
     public QuestionDto.DetailInfo toDetailInfoDto() {
         return QuestionDto.DetailInfo.builder()
-                .questionContent(content)
+                .content(content)
                 .companyName(company.getName())
                 .csList(csSubQuestionList.stream()
                         .map(csSubQuestion -> csSubQuestion.getCsSub().getName())
@@ -60,5 +60,10 @@ public class Question {
                         .map(jobSubQuestion -> jobSubQuestion.getJobSub().getName())
                         .collect(Collectors.toList()))
                 .build();
+    }
+
+    public void updateTagList(List<CsSubQuestion> updateCsq, List<JobSubQuestion> updateJsq) {
+        this.csSubQuestionList = updateCsq;
+        this.jobSubQuestionList = updateJsq;
     }
 }

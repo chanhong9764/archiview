@@ -3,16 +3,13 @@ package com.####.archiview.service.recruit;
 import com.####.archiview.dto.recruit.RecruitDto;
 import com.####.archiview.entity.Question;
 import com.####.archiview.entity.Recruit;
-import com.####.archiview.repository.QuestionRepository;
+import com.####.archiview.repository.Question.QuestionRepository;
 import com.####.archiview.repository.Recruit.RecruitRepository;
 import com.####.archiview.response.code.ErrorCode;
 import com.####.archiview.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 

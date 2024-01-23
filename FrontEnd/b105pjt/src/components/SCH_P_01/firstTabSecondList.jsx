@@ -14,20 +14,48 @@ export default function ChipsArray({
   smallTagData,
   smallTagList,
   setSmallTagData,
+  pickTagList,
+  setPickTagList,
 }) {
-  const AllClick = (key) => {
-    setSmallTagData(Object.keys(smallTagList));
+  function changTagData(content) {
+    setTagDataList([
+      ...tagDataList.filter((item) => item.cs !== bigTagData),
+      {
+        cs: bigTagData,
+        smallTagIndex: content,
+      },
+    ]);
+  }
+  function changPcikTagData(content) {
+    setPickTagList([
+      ...pickTagList.filter((item) => item.cs !== bigTagData),
+      { smallTag: content.smallTag, cs: bigTagData, key: content.key },
+    ]);
+  }
+  const AllClick = () => {
+    setSmallTagData([...smallTagList.keys()]);
+    changTagData([...smallTagList.keys()]);
+    changPcikTagData({ smallTag: "전체", key: "ALL" });
   };
 
-  const handleClick = (key) => {
+  const handleClick = (data) => {
     setSmallTagData((prevSelectedChips) => {
       if (smallTagData.length === smallTagList.length) {
-        return [key];
+        changTagData([data.key]);
+        return [data.key];
       } else {
-        if (prevSelectedChips.includes(key)) {
-          return prevSelectedChips.filter((chipKey) => chipKey !== key);
+        if (prevSelectedChips.includes(data.key)) {
+          if (smallTagData.length !== 1) {
+            changTagData(
+              prevSelectedChips.filter((chipKey) => chipKey !== data.key)
+            );
+            return prevSelectedChips.filter((chipKey) => chipKey !== data.key);
+          } else {
+            return [...prevSelectedChips];
+          }
         } else {
-          return [...prevSelectedChips, key];
+          changTagData([...prevSelectedChips, data.key]);
+          return [...prevSelectedChips, data.key];
         }
       }
     });
@@ -65,8 +93,8 @@ export default function ChipsArray({
         return (
           <ListItem key={data.key}>
             <Chip
-              label={data.label}
-              onClick={() => handleClick(data.key)}
+              label={data.smallTag}
+              onClick={() => handleClick(data)}
               variant="outlined"
               color={
                 smallTagData.length !== smallTagList.length &&

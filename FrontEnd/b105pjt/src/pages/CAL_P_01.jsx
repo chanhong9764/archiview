@@ -9,11 +9,24 @@ import { Box } from "@mui/system";
 import CAL_M_01 from "./CAL_M_01";
 import transformEventData from "../utils/transformEventData";
 import { selectImg } from "../api/naverAPI";
+import styled from "styled-components";
 
 const dummyEvent = {
   code: 200,
   message: "채용 공고 리스트를 조회했습니다.",
   data: [
+    {
+      recruit_id: 10,
+      company_name: "네이버",
+      start: "2024-01-16",
+      end: "2024-02-18",
+    },
+    {
+      recruit_id: 11,
+      company_name: "카카오",
+      start: "2024-01-22",
+      end: "2024-02-28",
+    },
     {
       recruit_id: 10,
       company_name: "네이버",
@@ -44,6 +57,86 @@ const style = {
   pb: 3,
   borderRadius: "10px",
 };
+
+const FullCalendarContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+
+  // 캘린더 전체 사이즈 조정
+  .fc {
+    width: 100%;
+  }
+
+  // toolbar container
+  .fc .fc-toolbar.fc-header-toolbar {
+    margin: 0;
+    padding: 0 40px;
+    background-color: #e2e2e2;
+    height: 100px;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 29px;
+    color: #555555;
+    border-radius: 5px;s
+  }
+
+  // toolbar 버튼
+  .fc .fc-button-primary {
+    background-color: transparent;
+    border: none;
+    color: #888888;
+
+    span {
+      font-weight: 500;
+      font-size: 28px;
+    }
+
+    :hover {
+      background-color: transparent;
+    }
+  }
+
+  // 요일 부분
+  .fc-theme-standard th {
+    height: 32px;
+    padding-top: 3.5px;
+    background: #f2f2f2;
+    border: 1px solid #dddee0;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #;
+  }
+
+  // 오늘 날짜 배경색
+  .fc .fc-daygrid-day.fc-day-today {
+    background-color: #fff8bd;
+    color: #356eff;
+  }
+
+  // 날짜별 그리드
+  .fc .fc-daygrid-day-frame {
+    padding: 10px;
+  }
+
+  // 날짜  ex) 2일
+  .fc .fc-daygrid-day-top {
+    flex-direction: row;
+    margin-bottom: 3px;
+  }
+
+  // 각 이벤트 요소
+  .fc-event {
+    cursor: pointer;
+    padding: 5px 8px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 14px;
+  }
+`;
 
 const CAL_P_01 = () => {
   const [open, setOpen] = useState(false);
@@ -94,13 +187,15 @@ const CAL_P_01 = () => {
       <div className="parent-container">
         <SearchSection />
         <div className="calendar-container">
-          <FullCalendar
-            plugins={[dayGridPlugin]}
-            initialView="dayGridMonth"
-            events={events}
-            locale={koLocale}
-            eventClick={handleEventClick}
-          />
+          <FullCalendarContainer>
+            <FullCalendar
+              plugins={[dayGridPlugin]}
+              initialView="dayGridMonth"
+              events={events}
+              locale={koLocale}
+              eventClick={handleEventClick}
+            />
+          </FullCalendarContainer>
         </div>
       </div>
 

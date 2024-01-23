@@ -2,13 +2,14 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import AutoCompleteCompo from "./autoCompleteCompo";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Unstable_Grid2";
 import FirstTabFirstList from "./firstTabFirstList";
 import FirstTabSecondList from "./firstTabSecondList";
+import TagListCompo from "./tagListCompo";
+import { Button } from "@mui/material";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -21,11 +22,7 @@ function CustomTabPanel(props) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ ...other }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box sx={{ ...other }}>{children}</Box>}
     </div>
   );
 }
@@ -44,9 +41,15 @@ function a11yProps(index) {
 }
 
 export default function BasicTabs() {
+  const dumyBigTagList = ["직무", "역량"];
   const [value, setValue] = React.useState(0);
-
-  const [tagData, setTagData] = React.useState([]);
+  const [tagDataList, setTagDataList] = React.useState([]);
+  const [checked, setChecked] = React.useState([]);
+  const [bigTagList, setBigTagList] = React.useState(dumyBigTagList);
+  const [bigTagData, setBigTagData] = React.useState("");
+  const [smallTagData, setSmallTagData] = React.useState([]);
+  const [smallTagList, setSmallTagList] = React.useState([]);
+  const [pickTagList, setPickTagList] = React.useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -78,17 +81,54 @@ export default function BasicTabs() {
         <Divider />
         <Grid container spacing={2}>
           <Grid xs={5} sx={{ pr: "0px" }}>
-            <FirstTabFirstList />
+            <FirstTabFirstList
+              tagDataList={tagDataList}
+              setTagDataList={setTagDataList}
+              bigTagData={bigTagData}
+              setBigTagData={setBigTagData}
+              checked={checked}
+              setChecked={setChecked}
+              smallTagData={smallTagData}
+              setSmallTagData={setSmallTagData}
+              bigTagList={bigTagList}
+              setBigTagList={setBigTagList}
+              smallTagList={smallTagList}
+              setSmallTagList={setSmallTagList}
+              pickTagList={pickTagList}
+              setPickTagList={setPickTagList}
+            />
           </Grid>
           <Divider orientation="vertical" variant="middle" flexItem />
           <Grid>
-            <FirstTabSecondList />
+            <FirstTabSecondList
+              tagDataList={tagDataList}
+              setTagDataList={setTagDataList}
+              bigTagData={bigTagData}
+              smallTagData={smallTagData}
+              setSmallTagData={setSmallTagData}
+              smallTagList={smallTagList}
+              pickTagList={pickTagList}
+              setPickTagList={setPickTagList}
+            />
           </Grid>
         </Grid>
+        <Divider />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         Select 2
       </CustomTabPanel>
+      <Box>빅태그 : {bigTagData}</Box>
+      <Box>태그 데이터 모음 : {JSON.stringify(tagDataList)}</Box>
+      <Box>더미 스몰태그 벨류 리스트 : {JSON.stringify(smallTagList)}</Box>
+      <Box>픽한 스몰테그 데이터 : {JSON.stringify(smallTagData)}</Box>
+      <Box>출력할 픽 데이터 : {JSON.stringify(pickTagList)}</Box>
+      <Divider />
+      <Box>
+        <TagListCompo />
+      </Box>
+      <Box>
+        <Button>Reset</Button>
+      </Box>
     </Box>
   );
 }

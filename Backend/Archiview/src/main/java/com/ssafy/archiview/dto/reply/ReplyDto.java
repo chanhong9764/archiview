@@ -7,6 +7,7 @@ import com.ssafy.archiview.dto.question.QuestionDto;
 import com.ssafy.archiview.entity.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -113,16 +114,20 @@ public class ReplyDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ModifyRequestDto {
         private int id;
-        private List<String> csList;
-        private List<String> jobList;
+        private List<String> removeCsList = new ArrayList<>();
+        private List<String> addCsList = new ArrayList<>();
+        private List<String> removeJobList = new ArrayList<>();
+        private List<String> addjobList = new ArrayList<>();
         private String script;
         private String videoUrl;
         private String thumbnailUrl;
         @Builder
-        public ModifyRequestDto(int id, List<String> csList, List<String> jobList, String script, String videoUrl, String thumbnailUrl) {
+        public ModifyRequestDto(int id, List<String> removeCsList, List<String> addCsList, List<String> removeJobList, List<String> addjobList, String script, String videoUrl, String thumbnailUrl) {
             this.id = id;
-            this.csList = csList;
-            this.jobList = jobList;
+            this.removeCsList = removeCsList;
+            this.addCsList = addCsList;
+            this.removeJobList = removeJobList;
+            this.addjobList = addjobList;
             this.script = script;
             this.videoUrl = videoUrl;
             this.thumbnailUrl = thumbnailUrl;

@@ -38,8 +38,8 @@ public class ReplyController {
 
     @PatchMapping
     public ResponseEntity<Object> replyModify(@RequestBody ReplyDto.ModifyRequestDto requestDto) {
-        Reply reply = service.replyModify(requestDto);
-        return SuccessResponse.createSuccess(SuccessCode.MODIFY_REPLY_SUCCESS, reply);
+        service.replyModify(requestDto);
+        return SuccessResponse.createSuccess(SuccessCode.MODIFY_REPLY_SUCCESS);
     }
 
     @PostMapping("/{id}/like")

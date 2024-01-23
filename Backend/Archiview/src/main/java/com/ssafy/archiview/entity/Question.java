@@ -61,4 +61,9 @@ public class Question {
                         .collect(Collectors.toList()))
                 .build();
     }
+
+    public void updateTagList(List<CsSubQuestion> updateCsq, List<JobSubQuestion> updateJsq) {
+        this.csSubQuestionList = updateCsq;
+        this.jobSubQuestionList = updateJsq;
+    }
 }

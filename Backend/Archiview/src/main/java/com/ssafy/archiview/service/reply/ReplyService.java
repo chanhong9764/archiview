@@ -14,7 +14,7 @@ public interface ReplyService {
     // 질문 / 답변 등록
     void replyAdd(ReplyDto.AddRequestDto requestDto);
     // 답변 수정
-    Reply replyModify(ReplyDto.ModifyRequestDto requestDto);
+    void replyModify(ReplyDto.ModifyRequestDto requestDto);
     // 추천 생성
     ReplyDto.LikeResponseDto replyLike(ReplyDto.LikeRequestDto requestDto);
     // 추천 삭제

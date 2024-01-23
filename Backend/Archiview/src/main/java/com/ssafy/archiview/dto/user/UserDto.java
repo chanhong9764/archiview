@@ -1,5 +1,6 @@
 package com.####.archiview.dto.user;
 
+import com.####.archiview.dto.token.TokenDto;
 import com.####.archiview.entity.Role;
 import com.####.archiview.entity.User;
 import com.####.archiview.validation.user.UserEmail;
@@ -14,7 +15,6 @@ public class UserDto {
     @Getter
     @Setter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    @ToString
     public static class AddRequestDto {
         @UserId
         private String id;
@@ -44,7 +44,6 @@ public class UserDto {
     }
 
     @Getter
-    @ToString
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class loginRequestDto{
         @UserId
@@ -57,16 +56,10 @@ public class UserDto {
             this.id = id;
             this.pw = pw;
         }
-
-        public User toEntity(){
-            return User.builder()
-                    .id(id)
-                    .pw(pw)
-                    .build();
-        }
     }
 
     @Getter
+    @ToString
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class loginResponseDto {
         private String id;
@@ -75,20 +68,24 @@ public class UserDto {
         private String profileUrl;
         private String introduce;
         private Role role;
-        private String jwtToken;
+        private String accessToken;
+        private String refreshToken;
 
         @Builder
-        public loginResponseDto(String id, String name, String email, String profileUrl, String introduce, Role role) {
+        public loginResponseDto(String id, String name, String email, String profileUrl, String introduce, Role role, String accessToken, String refreshToken) {
             this.id = id;
             this.name = name;
             this.email = email;
             this.profileUrl = profileUrl;
             this.introduce = introduce;
             this.role = role;
+            this.accessToken = accessToken;
+            this.refreshToken = refreshToken;
         }
 
-        public void insertToken(String token){
-            this.jwtToken = token;
+        public void insertToken(TokenDto token){
+            this.accessToken = token.getAccessToken();
+            this.refreshToken = token.getRefreshToken();
         }
     }
     @Getter

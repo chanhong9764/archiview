@@ -4,10 +4,12 @@ import com.####.archiview.dto.comment.CommentDto;
 import com.####.archiview.dto.reply.ReplyDto;
 import com.####.archiview.entity.*;
 import com.####.archiview.repository.*;
+import com.####.archiview.repository.Question.QuestionRepository;
 import com.####.archiview.response.code.ErrorCode;
 import com.####.archiview.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -82,9 +84,48 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public Reply replyModify(ReplyDto.ModifyRequestDto requestDto) {
-        return replyRepository.findById(requestDto.getId())
+    @Transactional
+    public void replyModify(ReplyDto.ModifyRequestDto requestDto) {
+        Reply reply = replyRepository.findById(requestDto.getId())
                 .orElseThrow(() -> new RestApiException(ErrorCode.REPLY_NOT_FOUND));
+
+        for(String cs : requestDto.getRemoveCsList()) {
+            CsSub csSub = csSubRepository.findById(cs)
+                    .orElseThrow(() -> new RestApiException(ErrorCode.CSSUB_NOT_FOUND));
+            csSubQuestionRepository.delete(csSubQuestionRepository.findByCsSubAndQuestionId(csSub, reply.getQuestion().getId())
+                    .orElseThrow(() -> new RestApiException(ErrorCode.CSSUB_QUESTION_NOT_FOUND)));
+        }
+
+        for(String job : requestDto.getRemoveJobList()) {
+            JobSub jobSub = jobSubRepository.findById(job)
+                    .orElseThrow(() -> new RestApiException(ErrorCode.JOBSUB_NOT_FOUND));
+            jobSubQuestionRepository.delete(jobSubQuestionRepository.findByJobSubAndQuestionId(jobSub, reply.getQuestion().getId())
+                    .orElseThrow(() -> new RestApiException(ErrorCode.JOBSUB_QUESTION_NOT_FOUND)));
+        }
+
+        for(String cs : requestDto.getAddCsList()) {
+            CsSub csSub = csSubRepository.findById(cs)
+                    .orElseThrow(() -> new RestApiException(ErrorCode.CSSUB_NOT_FOUND));
+            csSubQuestionRepository.findByCsSubAndQuestionId(csSub, reply.getQuestion().getId())
+                            .ifPresent(csq -> { throw new RestApiException(ErrorCode.CSSUB_QUESTION_CONFILT); });
+            csSubQuestionRepository.save(CsSubQuestion.builder()
+                    .question(reply.getQuestion())
+                    .csSub(csSub)
+                    .build());
+        }
+
+        for(String job : requestDto.getAddjobList()) {
+            JobSub jobSub = jobSubRepository.findById(job)
+                    .orElseThrow(() -> new RestApiException(ErrorCode.JOBSUB_NOT_FOUND));
+            jobSubQuestionRepository.findByJobSubAndQuestionId(jobSub, reply.getQuestion().getId())
+                    .ifPresent(csq -> { throw new RestApiException(ErrorCode.JOBSUB_QUESTION_CONFILT); });
+            jobSubQuestionRepository.save(JobSubQuestion.builder()
+                    .question(reply.getQuestion())
+                    .jobSub(jobSub)
+                    .build());
+        }
+
+        reply.updateEntity(requestDto);
     }
 
     @Override

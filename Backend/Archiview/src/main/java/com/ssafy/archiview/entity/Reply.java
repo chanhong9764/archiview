@@ -76,9 +76,9 @@ public class Reply {
                 .build();
     }
 
-    public void updateEntity(String script, String videoUrl, String thumbnailUrl) {
-        this.script = script;
-        this.videoUrl = videoUrl;
-        this.thumbnailUrl = thumbnailUrl;
+    public void updateEntity(ReplyDto.ModifyRequestDto requestDto) {
+        this.script = requestDto.getScript();
+        this.videoUrl = requestDto.getVideoUrl();
+        this.thumbnailUrl = requestDto.getThumbnailUrl();
     }
 }

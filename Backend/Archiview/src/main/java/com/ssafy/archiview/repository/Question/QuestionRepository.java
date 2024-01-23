@@ -1,4 +1,4 @@
-package com.####.archiview.repository;
+package com.####.archiview.repository.Question;
 
 import com.####.archiview.entity.Question;
 import com.####.archiview.entity.Recruit;

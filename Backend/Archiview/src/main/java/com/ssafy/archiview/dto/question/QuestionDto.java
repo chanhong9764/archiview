@@ -35,4 +35,22 @@ public class QuestionDto {
             this.jobList = jobList;
         }
     }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class SearchRequest {
+        private String userId;
+        private String companyName;
+        private List<String> csList;
+        private List<String> jobList;
+        private int pgno;
+        @Builder
+        public SearchRequest(String userId, String companyName, List<String> csList, List<String> jobList, int pgno) {
+            this.userId = userId;
+            this.companyName = companyName;
+            this.csList = csList;
+            this.jobList = jobList;
+            this.pgno = pgno;
+        }
+    }
 }

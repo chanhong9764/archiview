@@ -4,7 +4,6 @@ import { FixedSizeList } from "react-window";
 import Listcompo from "./listCompo";
 
 function renderRow(props) {
-  // const { bigTagData } = props;
   const {
     tagDataList,
     setTagDataList,
@@ -17,6 +16,9 @@ function renderRow(props) {
     setBigTagList,
     smallTagList,
     setSmallTagList,
+    bigTagData,
+    setPickTagList,
+    pickTagList,
   } = props;
   return (
     <Listcompo
@@ -31,6 +33,9 @@ function renderRow(props) {
       setBigTagList={setBigTagList}
       smallTagList={smallTagList}
       setSmallTagList={setSmallTagList}
+      bigTagData={bigTagData}
+      setPickTagList={setPickTagList}
+      pickTagList={pickTagList}
     />
   );
 }
@@ -47,6 +52,9 @@ export default function VirtualizedList({
   setBigTagList,
   smallTagList,
   setSmallTagList,
+  bigTagData,
+  pickTagList,
+  setPickTagList,
 }) {
   return (
     <Box
@@ -70,6 +78,9 @@ export default function VirtualizedList({
             setBigTagList,
             smallTagList,
             setSmallTagList,
+            bigTagData,
+            pickTagList,
+            setPickTagList,
           })
         }
       </FixedSizeList>

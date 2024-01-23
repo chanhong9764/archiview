@@ -26,6 +26,13 @@ public class UserController {
         return SuccessResponse.createSuccess(SuccessCode.JOIN_SUCCESS);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> userDetail(@PathVariable @UserId String id) {
+        System.out.println("userDetail");
+        UserDto.DetailResponseDto responseDto = service.userDetail(id);
+        return SuccessResponse.createSuccess(SuccessCode.USER_DETAIL_SUCCESS, responseDto);
+    }
+
 //    @PostMapping("/login")
 //    public ResponseEntity<Object> userLogin(/* @RequestBody UserDto.loginRequestDto requestDto */) {
 ////        UserDto.loginResponseDto responseDto = service.userLogin(requestDto);
@@ -36,9 +43,4 @@ public class UserController {
 //        System.out.println("login Success");
 //        return SuccessResponse.createSuccess(SuccessCode.LOGIN_SUCCESS, responseDto);
 //    }
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> userDetail(@PathVariable @UserId String id) {
-        UserDto.DetailResponseDto responseDto = service.userDetail(id);
-        return SuccessResponse.createSuccess(SuccessCode.USER_DETAIL_SUCCESS, responseDto);
-    }
 }

@@ -4,10 +4,58 @@ import { FixedSizeList } from "react-window";
 import Listcompo from "./listCompo";
 
 function renderRow(props) {
-  return <Listcompo />;
+  const {
+    tagDataList,
+    setTagDataList,
+    setBigTagData,
+    checked,
+    setChecked,
+    smallTagData,
+    setSmallTagData,
+    bigTagList,
+    setBigTagList,
+    smallTagList,
+    setSmallTagList,
+    bigTagData,
+    setPickTagList,
+    pickTagList,
+  } = props;
+  return (
+    <Listcompo
+      tagDataList={tagDataList}
+      setTagDataList={setTagDataList}
+      setBigTagData={setBigTagData}
+      checked={checked}
+      setChecked={setChecked}
+      smallTagData={smallTagData}
+      setSmallTagData={setSmallTagData}
+      bigTagList={bigTagList}
+      setBigTagList={setBigTagList}
+      smallTagList={smallTagList}
+      setSmallTagList={setSmallTagList}
+      bigTagData={bigTagData}
+      setPickTagList={setPickTagList}
+      pickTagList={pickTagList}
+    />
+  );
 }
 
-export default function VirtualizedList() {
+export default function VirtualizedList({
+  tagDataList,
+  setTagDataList,
+  setBigTagData,
+  checked,
+  setChecked,
+  smallTagData,
+  setSmallTagData,
+  bigTagList,
+  setBigTagList,
+  smallTagList,
+  setSmallTagList,
+  bigTagData,
+  pickTagList,
+  setPickTagList,
+}) {
   return (
     <Box
       sx={{
@@ -17,7 +65,24 @@ export default function VirtualizedList() {
       }}
     >
       <FixedSizeList height={300} itemSize={46} itemCount={1}>
-        {renderRow}
+        {() =>
+          renderRow({
+            tagDataList,
+            setTagDataList,
+            setBigTagData,
+            checked,
+            setChecked,
+            smallTagData,
+            setSmallTagData,
+            bigTagList,
+            setBigTagList,
+            smallTagList,
+            setSmallTagList,
+            bigTagData,
+            pickTagList,
+            setPickTagList,
+          })
+        }
       </FixedSizeList>
     </Box>
   );

@@ -8,25 +8,69 @@ import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 
-export default function CheckboxList() {
-  const [checked, setChecked] = React.useState([]);
-
+export default function CheckboxList({
+  tagDataList,
+  setTagDataList,
+  setBigTagData,
+  checked,
+  setChecked,
+  smallTagData,
+  setSmallTagData,
+  bigTagList,
+  setBigTagList,
+  smallTagList,
+  setSmallTagList,
+  pickTagList,
+  setPickTagList,
+}) {
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+    const dumySmallList = [
+      { key: 0, smallTag: "Angular" },
+      { key: 1, smallTag: "jQuery" },
+      { key: 2, smallTag: "Polymer" },
+      { key: 3, smallTag: "React" },
+      { key: 4, smallTag: "Vue.js" },
+    ];
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
+    function tagPlus(Ojt) {
+      Ojt.cs = value;
+      return Ojt;
     }
-
-    setChecked(newChecked);
+    if (currentIndex === -1) {
+      setChecked([...checked, value]);
+      setBigTagData(value);
+      dumySmallList.map(tagPlus);
+      setSmallTagList(dumySmallList);
+      setSmallTagData(dumySmallList.map((item) => item.key));
+      setTagDataList([
+        ...tagDataList,
+        {
+          cs: value,
+          smallTagIndex: dumySmallList.map((item) => item.key),
+        },
+      ]);
+      setPickTagList([
+        ...pickTagList,
+        { smallTag: "전체", cs: value, key: "ALL" },
+      ]);
+    } else {
+      setBigTagData(value);
+      dumySmallList.map(tagPlus);
+      setSmallTagList(dumySmallList);
+      function smallTagPick(item) {
+        if (item.cs === value) {
+          return item;
+        }
+      }
+      setSmallTagData(tagDataList.filter(smallTagPick)[0].smallTagIndex);
+      //   setChecked(checked.filter((item) => item !== value));
+    }
   };
 
   return (
     <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-      {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) => {
+      {bigTagList.map((value) => {
         const labelId = `checkbox-list-label-${value}`;
         const isChecked = checked.indexOf(value) !== -1;
 
@@ -35,7 +79,7 @@ export default function CheckboxList() {
             key={value}
             secondaryAction={
               <IconButton edge="end" aria-label="comments">
-                <ArrowRightIcon />
+                <ArrowRightIcon onClick={handleToggle(value)} />
               </IconButton>
             }
             disablePadding
@@ -56,7 +100,7 @@ export default function CheckboxList() {
               </ListItemIcon>
               <ListItemText
                 id={labelId}
-                primary={`대분류 ${value + 1}`}
+                primary={`대분류 ${value}`}
                 sx={{
                   color: isChecked ? "blue" : "default",
                 }}

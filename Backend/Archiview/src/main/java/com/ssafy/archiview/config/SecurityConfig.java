@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,11 +30,6 @@ public class SecurityConfig {
     //AuthenticationManager가 인자로 받을 AuthenticationConfiguraion 객체 생성자 주입
     private final AuthenticationConfiguration authenticationConfiguration;
     private final jwtUtil jwtUtil;
-//    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, jwtUtil jwtUtil) {
-//
-//        this.authenticationConfiguration = authenticationConfiguration;
-//        this.jwtUtil = jwtUtil;
-//    }
 
     private final ObjectMapper objectMapper;
     private final UserDetailsService loginService;
@@ -57,14 +53,14 @@ public class SecurityConfig {
                 .formLogin((auth) -> auth.disable())  //From 로그인 방식 disable -> jwt 로그인 사용하기 때문
                 .httpBasic((auth) -> auth.disable())  //http basic 인증 방식 disable
                 .authorizeHttpRequests((auth) -> auth  //경로별 인가 작업
-                        .requestMatchers("/api/**", "/login").permitAll()  // /api/** 모든 요청 허용
+                        .requestMatchers("/login", "/api/users/login").permitAll()  // /api/** 모든
                         .anyRequest().authenticated())
                 .sessionManagement((session) -> session  //세션 설정 -> 세션 stateless 상태로 변경
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 //                .addFilterAt(new loginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                // 필터 추가 LoginFilter()는 인자를 받음 (AuthenticationManager() 메소드에 authenticationConfiguration 객체를 넣어야 함) 따라서 빈 등록 필요
                 .addFilterBefore(jsonUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
-                // 필터 추가 LoginFilter()는 인자를 받음 (AuthenticationManager() 메소드에 authenticationConfiguration 객체를 넣어야 함) 따라서 빈 등록 필요
         return http.build();
     }
 
@@ -78,7 +74,6 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authManager() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-
         provider.setPasswordEncoder(bCryptPasswordEncoder());
         provider.setUserDetailsService(loginService);
 

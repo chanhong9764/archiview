@@ -53,6 +53,7 @@ public class User implements Persistable<String> {
 
     @Column(name = "refresh_token")
     private String refreshToken;
+
     @Builder
     public User(String id, String pw, String name, String email, String profileUrl, String introduce, Role role, LocalDateTime createdAt, String refreshToken) {
         this.id = id;

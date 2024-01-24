@@ -8,11 +8,7 @@ import lombok.Getter;
 @Table(name = "job_sub")
 public class JobSub {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
     @Column(name = "name", length = 64)
-    @NotNull
     private String name;
 
     @ManyToOne

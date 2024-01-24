@@ -125,6 +125,9 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
         user.get().updateRefreshToken(token.getRefreshToken());
         userRepository.save(user.get());  // 발급받은 refreshToken을 DB에 저장
         System.out.println(jwtUtil.getUsername(token.getAccessToken()));
+        System.out.println(jwtUtil.getRole(token.getAccessToken()));
+        System.out.println(jwtUtil.isExpired(token.getAccessToken()));
+        System.out.println(token.getAccessToken());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.OK.value());
         response.getWriter().write(new ObjectMapper().writeValueAsString(responseDto));

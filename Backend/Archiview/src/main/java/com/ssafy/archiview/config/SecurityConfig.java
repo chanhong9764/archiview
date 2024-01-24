@@ -60,6 +60,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST ,"/api/users").permitAll()  // 회원가입 허용
                         .requestMatchers(HttpMethod.POST ,"/api/users/login").permitAll()  // 로그인 허용
                         .requestMatchers(HttpMethod.GET ,"/api/users/{id}").permitAll()  // 회원조회
+                        .requestMatchers(HttpMethod.GET ,"/api/**").permitAll()
                         .anyRequest().authenticated())  // 나머지 요청은 모두 인증 되어야 함
 
 //                .addFilterAt(new loginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class)

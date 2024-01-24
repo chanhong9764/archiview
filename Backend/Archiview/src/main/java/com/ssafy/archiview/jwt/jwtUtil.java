@@ -20,8 +20,8 @@ public class jwtUtil {
     private Long refreshTokenVaildTime = 30 * 60 * 1000L;  // 리프레시 토큰 유효기간 30분
     public TokenDto createJwt(String username, String role) {
         String accessToken = Jwts.builder()
-                .claim("userId", username)
                 .claim("role", role)
+                .claim("userId", username)
                 .issuedAt(new Date(System.currentTimeMillis()))  // 토큰 발행 시간
                 .expiration(new Date(System.currentTimeMillis() + accessTokenVaildTime))  // 토큰 만료 시간
                 .signWith(secretKey)

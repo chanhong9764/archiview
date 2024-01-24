@@ -30,14 +30,19 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> userDetail(@PathVariable @UserId String id) {
-        System.out.println("userDetail");
         UserDto.DetailResponseDto responseDto = service.userDetail(id);
         return SuccessResponse.createSuccess(SuccessCode.USER_DETAIL_SUCCESS, responseDto);
     }
 
-    @DeleteMapping
+    @GetMapping
     public ResponseEntity<Object> userDelete(HttpServletRequest request){
-        System.out.println(request.getHeader("token"));
+        return SuccessResponse.createSuccess(SuccessCode.JOIN_SUCCESS);
+    }
+
+    @GetMapping(path = "/logout", headers = "Authorization")
+    public ResponseEntity<Object> userLogout(@RequestHeader("Authorization") String token){
+        System.out.println("logout");
+        System.out.println(token);
         return SuccessResponse.createSuccess(SuccessCode.JOIN_SUCCESS);
     }
 

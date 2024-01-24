@@ -68,15 +68,15 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
         }
         // json 형태로 데이터를 받음
         LoginDto loginDto = objectMapper.readValue(StreamUtils.copyToString(request.getInputStream(), StandardCharsets.UTF_8), LoginDto.class);
-        String username = loginDto.getId();
-        String password = loginDto.getPw();
-        System.out.println("attemptAuthentication");
 
-        if (username == null || password == null) {
+        String id = loginDto.getId();
+        String pw = loginDto.getPw();
+
+        if (id == null || pw == null) {
             throw new AuthenticationServiceException("DATA IS MISS");
         }
 
-        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
+        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(id, pw);
 
         // PrincipalDetailsService의 loadUserByUsername() 메서드가 실행된 후
         // 정상처리 되면 authentication이 리턴 됨
@@ -92,7 +92,6 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
-        System.out.println("successfulAuthentication");
         System.out.println("login success");
         //UserDetails
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
@@ -103,6 +102,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
         String userRole = auth.getAuthority();  // role 추출
+
         TokenDto token = jwtUtil.createJwt(userId, userRole);  // 토큰 생성
         Role role = null;
         if(userRole.equals("USER")) {
@@ -123,7 +123,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
                 .role(role)
                 .build();
         user.get().updateRefreshToken(token.getRefreshToken());
-        userRepository.save(user.get());
+        userRepository.save(user.get());  // 발급받은 refreshToken을 DB에 저장
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.OK.value());
@@ -137,7 +137,8 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
     }
     @Data
     private static class LoginDto {
-        String id;  // request json key 값
-        String pw;  // request json key 값
+
+        String id;  // request key (username -> id)
+        String pw;  // request key (password -> pw)
     }
 }

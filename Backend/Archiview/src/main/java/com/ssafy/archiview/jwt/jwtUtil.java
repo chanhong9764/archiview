@@ -27,12 +27,12 @@ public class jwtUtil {
                 .signWith(secretKey)
                 .compact();
 
-        String reFreshToken = Jwts.builder()
+        String refreshToken = Jwts.builder()
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + refreshTokenVaildTime))
                 .signWith(secretKey)
                 .compact();
-        return new TokenDto(accessToken, reFreshToken);
+        return new TokenDto(accessToken, refreshToken);
 //        System.out.println("createJwt");
 //        return Jwts.builder()
 //                .claim("userId", username)

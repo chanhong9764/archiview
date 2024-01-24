@@ -49,7 +49,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf((auth) -> auth.disable())  //csrf disable
+                .csrf((auth) -> auth.disable())  // 토큰 방식이므로 csrf disable
                 .formLogin((auth) -> auth.disable())  //From 로그인 방식 disable -> jwt 로그인 사용하기 때문
                 .httpBasic((auth) -> auth.disable())  //http basic 인증 방식 disable
                 .authorizeHttpRequests((auth) -> auth  //경로별 인가 작업

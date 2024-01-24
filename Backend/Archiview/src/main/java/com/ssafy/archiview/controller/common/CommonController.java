@@ -1,5 +1,6 @@
 package com.####.archiview.controller.common;
 
+import com.####.archiview.dto.common.CommonDto;
 import com.####.archiview.dto.company.CompanyDto;
 import com.####.archiview.response.code.SuccessCode;
 import com.####.archiview.response.structure.SuccessResponse;
@@ -20,12 +21,13 @@ public class CommonController {
 
     @GetMapping("/companies")
     public ResponseEntity<Object> companyList() {
-        List<CompanyDto.listInfo> responseDto = commonService.companyList();
+        List<CommonDto.companyResponseDto> responseDto = commonService.companyList();
         return SuccessResponse.createSuccess(SuccessCode.SELECT_COMPANY_LIST_SUCCESS, responseDto);
     }
 
     @GetMapping("/tags")
     public ResponseEntity<Object> tagList() {
-        return SuccessResponse.createSuccess(SuccessCode.SELECT_TAG_LIST_SUCCESS);
+        CommonDto.tagResponseDto responseDto = commonService.tagList();
+        return SuccessResponse.createSuccess(SuccessCode.SELECT_TAG_LIST_SUCCESS, responseDto);
     }
 }

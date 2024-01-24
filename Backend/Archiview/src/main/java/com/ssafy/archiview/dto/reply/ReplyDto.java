@@ -35,6 +35,28 @@ public class ReplyDto {
             this.likeCnt = likeCnt;
         }
     }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class searchDto {
+        private int id;
+        private String userId;
+        private String script;
+        private String videoUrl;
+        private String thumbnailUrl;
+        private List<CommentDto.info> comments;
+        private int likeCnt;
+        @Builder
+        public searchDto(int id, String userId, String script, String videoUrl, String thumbnailUrl, List<CommentDto.info> comments, int likeCnt) {
+            this.id = id;
+            this.userId = userId;
+            this.script = script;
+            this.videoUrl = videoUrl;
+            this.thumbnailUrl = thumbnailUrl;
+            this.comments = comments;
+            this.likeCnt = likeCnt;
+        }
+    }
     @Getter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class DetailResponseDto {
@@ -86,7 +108,7 @@ public class ReplyDto {
         private List<String> csList;
         private List<String> jobList;
 
-        private int questionId;
+        private int questionId = 0;
         private String script;
         private String videoUrl;
         private String thumbnailUrl;

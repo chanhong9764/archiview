@@ -28,7 +28,7 @@ public class QuestionController {
                                                  @RequestParam(value = "job", required = false, defaultValue = "") String job,
                                                  @RequestParam(value = "pgno", required = false, defaultValue = "1") int pgno) {
         QuestionDto.SearchRequest requestDto = QuestionDto.SearchRequest.builder()
-                .userId("chanhong9784")
+                .userId("")
                 .companyName(companyName)
                 .csList(Arrays.stream(cs.split(",")).toList())
                 .jobList(Arrays.stream(job.split(",")).toList())

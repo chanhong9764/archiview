@@ -36,5 +36,10 @@ out/
 ### VS Code ###
 .vscode/
 
+
+###mac###
+.DS_Store
+
 ### query dsl ###
 /src/main/generated/
+>>>>>>> 10d0ad2fc52e67ed3d16d848be3857055ee085a4

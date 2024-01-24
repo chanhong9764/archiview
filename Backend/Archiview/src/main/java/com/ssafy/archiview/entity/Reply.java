@@ -76,6 +76,21 @@ public class Reply {
                 .build();
     }
 
+    public ReplyDto.searchDto toSearchDto() {
+        // 추천 여부를 넣어줘야 할까....??
+        return ReplyDto.searchDto.builder()
+                .id(id)
+                .userId(user.getId())
+                .script(script)
+                .comments(comments.stream()
+                        .map(Comment::toCommentDto)
+                        .collect(Collectors.toList()))
+                .videoUrl(videoUrl)
+                .thumbnailUrl(thumbnailUrl)
+                .likeCnt(likes.size())
+                .build();
+    }
+
     public void updateEntity(ReplyDto.ModifyRequestDto requestDto) {
         this.script = requestDto.getScript();
         this.videoUrl = requestDto.getVideoUrl();

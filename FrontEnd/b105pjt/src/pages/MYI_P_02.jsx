@@ -1,5 +1,8 @@
 import React from "react";
 import MyNavbar from "../components/MYI_P_02/myNavbar";
+import "../assets/css/MYI_P_02.css";
+import InsertForm from "../components/MYI_P_02/insertForm";
+import BtnGroupInsert from "../components/MYI_P_02/btnGroupInsert";
 
 const MYI_P_02 = () => {
   return (
@@ -7,12 +10,11 @@ const MYI_P_02 = () => {
       <MyNavbar></MyNavbar>
 
       {/* insert form */}
-      <div>
-        <div>제목</div>
-        <div>검색창</div>
-        <div>영상</div>
-        <div>스크립트</div>
-        <div>등록</div>
+      <div className="MYI-P-02-Content">
+        <div className="Insert-form">
+          <InsertForm></InsertForm>
+          <BtnGroupInsert></BtnGroupInsert>
+        </div>
       </div>
     </div>
   );

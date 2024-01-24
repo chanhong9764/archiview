@@ -31,6 +31,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
     private final jwtUtil jwtUtil;
@@ -93,6 +94,10 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
         System.out.println("login success");
+        String authoritie = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+        System.out.println(authoritie);
         //UserDetails
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
@@ -124,10 +129,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
                 .build();
         user.get().updateRefreshToken(token.getRefreshToken());
         userRepository.save(user.get());  // 발급받은 refreshToken을 DB에 저장
-        System.out.println(jwtUtil.getUsername(token.getAccessToken()));
-        System.out.println(jwtUtil.getRole(token.getAccessToken()));
-        System.out.println(jwtUtil.isExpired(token.getAccessToken()));
-        System.out.println(token.getAccessToken());
+
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.OK.value());
         response.getWriter().write(new ObjectMapper().writeValueAsString(responseDto));

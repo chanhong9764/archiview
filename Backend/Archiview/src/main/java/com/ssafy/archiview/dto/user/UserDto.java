@@ -59,7 +59,6 @@ public class UserDto {
     }
 
     @Getter
-    @ToString
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class loginResponseDto {
         private String id;
@@ -82,8 +81,8 @@ public class UserDto {
             this.accessToken = accessToken;
             this.refreshToken = refreshToken;
         }
-
     }
+
     @Getter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class DetailResponseDto {

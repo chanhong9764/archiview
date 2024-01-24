@@ -1,9 +1,8 @@
 package com.####.archiview.dto.question;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.####.archiview.dto.reply.ReplyDto;
+import com.####.archiview.entity.Question;
+import lombok.*;
 
 import java.util.List;
 
@@ -52,5 +51,32 @@ public class QuestionDto {
             this.jobList = jobList;
             this.pgno = pgno;
         }
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class SearchInfo {
+        private int id;
+        private String content;
+        private String companyName;
+        private List<String> csList;
+        private List<String> jobList;
+        private List<ReplyDto.searchDto> replies;
+        @Builder
+        public SearchInfo(int id, String content, String companyName, List<String> csList, List<String> jobList, List<ReplyDto.searchDto> replies) {
+            this.id = id;
+            this.content = content;
+            this.companyName = companyName;
+            this.csList = csList;
+            this.jobList = jobList;
+            this.replies = replies;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor
+    public static class SearchResponse {
+        private List<Question> questions;
     }
 }

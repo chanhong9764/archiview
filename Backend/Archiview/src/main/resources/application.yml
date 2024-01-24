@@ -10,10 +10,22 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       # DB를 실행할 때, 기존의 DB를 지우고 새로 생성
-      #ddl-auto: create
+       ddl-auto: update
     properties:
       hibernate:
-        format_sql: true
+        # Hibernate가 실행한 모든 SQL을 출력 
+        show_sql: true
+        # 실행한 SQL의 가독성을 좋게 변환
+        format_sql: ture
+jwt:
+  secret: aaaabbbsdifqbvaesoioegwaaaabbbsdidsfdsfdfsdfsdfsdfsdfsd
+
+server:
+  servlet:
+    encoding:
+      # response UTF-8 인코딩
+      charset: UTF-8
+      force: true
 
 logging:
   level:

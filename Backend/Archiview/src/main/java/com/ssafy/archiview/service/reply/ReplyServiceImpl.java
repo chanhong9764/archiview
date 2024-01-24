@@ -48,31 +48,36 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
+    @Transactional
     public void replyAdd(ReplyDto.AddRequestDto requestDto) {
-        Company company = companyRepository.findById(requestDto.getCompanyId())
+        Question question = null;
+        if(requestDto.getQuestionId() == 0) {
+            Company company = companyRepository.findById(requestDto.getCompanyId())
                     .orElseThrow(() -> new RestApiException(ErrorCode.COMPANY_NOT_FOUND));
+            question = questionRepository.save(requestDto.toQuestionEntity(company));
+            List<CsSub> csSubList = requestDto.getCsList().stream()
+                    .map(s -> csSubRepository.findById(s)
+                            .orElseThrow(() -> new RestApiException(ErrorCode.CSSUB_NOT_FOUND)))
+                    .toList();
+            List<JobSub> jobSubList = requestDto.getJobList().stream()
+                    .map(j -> jobSubRepository.findById(j)
+                            .orElseThrow(() -> new RestApiException(ErrorCode.JOBSUB_NOT_FOUND)))
+                    .toList();
 
-        final Question question = questionRepository.save(requestDto.toQuestionEntity(company));
+            for (CsSub cs : csSubList) {
+                csSubQuestionRepository.save(CsSubQuestion.builder()
+                        .csSub(cs)
+                        .question(question).build());
+            }
 
-        List<CsSub> csSubList = requestDto.getCsList().stream()
-                .map(s -> csSubRepository.findById(s)
-                        .orElseThrow(() -> new RestApiException(ErrorCode.CSSUB_NOT_FOUND)))
-                .toList();
-        List<JobSub> jobSubList = requestDto.getJobList().stream()
-                .map(j -> jobSubRepository.findById(j)
-                        .orElseThrow(() -> new RestApiException(ErrorCode.JOBSUB_NOT_FOUND)))
-                .toList();
-
-        for(CsSub cs : csSubList) {
-            csSubQuestionRepository.save(CsSubQuestion.builder()
-                    .csSub(cs)
-                    .question(question).build());
-        }
-
-        for(JobSub job : jobSubList) {
-            jobSubQuestionRepository.save(JobSubQuestion.builder()
-                    .jobSub(job)
-                    .question(question).build());
+            for (JobSub job : jobSubList) {
+                jobSubQuestionRepository.save(JobSubQuestion.builder()
+                        .jobSub(job)
+                        .question(question).build());
+            }
+        } else {
+            question = questionRepository.findById(requestDto.getQuestionId())
+                    .orElseThrow(() -> new RestApiException(ErrorCode.QUESTION_NOT_FOUND));
         }
         User user = userRepository.getById("chanhong9784");
         replyRepository.save(Reply.builder()

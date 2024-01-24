@@ -53,7 +53,7 @@ public class SecurityConfig {
                 .formLogin((auth) -> auth.disable())  //From 로그인 방식 disable -> jwt 로그인 사용하기 때문
                 .httpBasic((auth) -> auth.disable())  //http basic 인증 방식 disable
                 .authorizeHttpRequests((auth) -> auth  //경로별 인가 작업
-                        .requestMatchers("/login", "/api/users/login").permitAll()  // /api/** 모든
+                        .requestMatchers("/**", "/api/users/login").permitAll()  // /api/** 모든
                         .anyRequest().authenticated())
                 .sessionManagement((session) -> session  //세션 설정 -> 세션 stateless 상태로 변경
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -30,6 +30,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> userDetail(@PathVariable @UserId String id) {
+        System.out.println("userDetail");
         UserDto.DetailResponseDto responseDto = service.userDetail(id);
         return SuccessResponse.createSuccess(SuccessCode.USER_DETAIL_SUCCESS, responseDto);
     }
@@ -51,3 +52,4 @@ public class UserController {
 //        return SuccessResponse.createSuccess(SuccessCode.LOGIN_SUCCESS, responseDto);
 //    }
 }
+

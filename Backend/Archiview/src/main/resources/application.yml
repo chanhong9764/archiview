@@ -18,6 +18,12 @@ spring:
 jwt:
   secret: aaaabbbsdifqbvaesoioegwaaaabbbsdidsfdsfdfsdfsdfsdfsdfsd
 
+server:
+  servlet:
+    encoding:
+      # response UTF-8 인코딩
+      charset: UTF-8
+      force: true
 #  redis:
 #    host: localhost
 #    port: 6379

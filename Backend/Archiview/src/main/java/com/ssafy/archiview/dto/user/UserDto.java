@@ -83,10 +83,6 @@ public class UserDto {
             this.refreshToken = refreshToken;
         }
 
-        public void insertToken(TokenDto token){
-            this.accessToken = token.getAccessToken();
-            this.refreshToken = token.getRefreshToken();
-        }
     }
     @Getter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)

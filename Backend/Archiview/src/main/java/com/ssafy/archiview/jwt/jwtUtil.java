@@ -33,14 +33,6 @@ public class jwtUtil {
                 .signWith(secretKey)
                 .compact();
         return new TokenDto(accessToken, refreshToken);
-//        System.out.println("createJwt");
-//        return Jwts.builder()
-//                .claim("userId", username)
-//                .claim("role", role)
-//                .issuedAt(new Date(System.currentTimeMillis()))  // 토큰 발행 시간
-//                .expiration(new Date(System.currentTimeMillis()))  // 토큰 만료 시간
-//                .signWith(secretKey)
-//                .compact();
     }
 
     public String getUsername(String token) {  // 아이디를 검증하는 메서드

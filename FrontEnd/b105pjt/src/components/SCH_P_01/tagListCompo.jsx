@@ -2,26 +2,71 @@ import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import { Box } from "@mui/material";
-import TagFacesIcon from "@mui/icons-material/TagFaces";
 
 const ListItem = styled("li")(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
 
-export default function ChipsArray() {
-  const [chipData, setChipData] = React.useState([
-    { key: 0, label: "Angular" },
-    { key: 1, label: "jQuery" },
-    { key: 2, label: "Polymer" },
-    { key: 3, label: "React" },
-    { key: 4, label: "Vue.js" },
-  ]);
+export default function ChipsArray({
+  setPickTagList,
+  pickTagList,
+  smallTagData,
+  setSmallTagData,
+  tagDataList,
+  setTagDataList,
+  bigTagData,
+  setChecked,
+  checked,
+}) {
+  function changeTagData(content) {
+    const bigTagFilter = tagDataList.filter(
+      (item) => item.bigTag === content.bigTag
+    );
+    const bigTagFilterData = bigTagFilter[0].smallTagIndex.filter(
+      (item) => item !== content.key
+    );
+    // console.log(bigTagFilterData.length === 0);
+    if (bigTagFilterData.length !== 0) {
+      setTagDataList([
+        ...tagDataList.filter((item) => item.bigTag !== content.bigTag),
+        {
+          bigTag: content.bigTag,
+          smallTagIndex: bigTagFilterData,
+        },
+      ]);
+    } else {
+      setTagDataList([
+        ...tagDataList.filter((item) => item.bigTag !== content.bigTag),
+      ]);
+      setChecked([...checked.filter((item) => item !== content.bigTag)]);
+    }
+    if (bigTagData === content.bigTag) {
+      setSmallTagData(bigTagFilterData);
+    }
+  }
 
   const handleDelete = (chipToDelete) => () => {
-    setChipData((chips) =>
-      chips.filter((chip) => chip.key !== chipToDelete.key)
+    setPickTagList((chips) =>
+      chips.filter(
+        (chip) =>
+          chip.key !== chipToDelete.key || chip.bigTag !== chipToDelete.bigTag
+      )
     );
+    // console.log(chipToDelete);
+    if (chipToDelete.key !== "ALL") {
+      changeTagData(chipToDelete);
+    } else {
+      setChecked([...checked.filter((item) => item !== chipToDelete.bigTag)]);
+      setTagDataList([
+        ...tagDataList.filter((item) => item.bigTag !== chipToDelete.bigTag),
+      ]);
+      if (chipToDelete.bigTag === bigTagData) setSmallTagData([]);
+    }
   };
+
+  function LKcreate(data) {
+    return `${data.bigTag} > ${data.smallTag}`;
+  }
 
   return (
     <Box
@@ -35,20 +80,10 @@ export default function ChipsArray() {
       }}
       component="ul"
     >
-      {chipData.map((data) => {
-        let icon;
-
-        if (data.label === "React") {
-          icon = <TagFacesIcon />;
-        }
-
+      {pickTagList.map((data) => {
         return (
-          <ListItem key={data.key}>
-            <Chip
-              icon={icon}
-              label={data.label}
-              onDelete={data.label === "React" ? undefined : handleDelete(data)}
-            />
+          <ListItem key={LKcreate(data)}>
+            <Chip label={LKcreate(data)} onDelete={handleDelete(data)} />
           </ListItem>
         );
       })}

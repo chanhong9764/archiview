@@ -1,5 +1,7 @@
 package com.####.archiview.entity;
 
+import com.####.archiview.dto.comment.CommentDto;
+import com.####.archiview.dto.reply.ReplyDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -24,4 +26,19 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "reply_id")
     private Reply reply;
+    @Builder
+    public Comment(Integer id, String content, User user, Reply reply) {
+        this.id = id;
+        this.content = content;
+        this.user = user;
+        this.reply = reply;
+    }
+
+    public CommentDto.info toCommentDto() {
+        return CommentDto.info.builder()
+                .id(id)
+                .userId(user.getId())
+                .content(content)
+                .build();
+    }
 }

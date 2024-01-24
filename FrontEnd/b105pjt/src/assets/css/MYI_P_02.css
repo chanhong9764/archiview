@@ -1,0 +1,38 @@
+.MYI-P-02-Content {
+  display: flex;
+  justify-content: center;
+}
+
+.Insert-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 60%;
+  padding: 20px;
+}
+
+.Insert-search {
+  width: 100%;
+  margin: 0 0 0 0;
+}
+
+.Insert-title {
+  width: 100%;
+}
+
+.Insert-script {
+  padding-top: 20px;
+  width: 100%;
+}
+
+.Insert-btn-group {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  padding-top: 10px;
+}
+
+.Insert-btn-group Button {
+  margin-left: 5px;
+}

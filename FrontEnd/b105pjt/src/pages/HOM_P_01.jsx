@@ -3,8 +3,15 @@ import Logo from "../assets/img/mainLogo-removebg-preview.png";
 import { TextField, InputAdornment, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import "../assets/css/HOM_P_01.css";
+import { useNavigate } from "react-router-dom";
 
 const HOM_P_01 = () => {
+  const navigate = useNavigate();
+
+  const handleSearchBtn = () => {
+    navigate("/search", { replace: true });
+  };
+
   return (
     <div className="hompage">
       <div>
@@ -18,7 +25,7 @@ const HOM_P_01 = () => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton>
+                <IconButton onClick={handleSearchBtn}>
                   <SearchIcon />
                 </IconButton>
               </InputAdornment>

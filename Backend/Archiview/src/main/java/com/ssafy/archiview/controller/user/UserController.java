@@ -7,8 +7,10 @@ import com.####.archiview.response.code.SuccessCode;
 import com.####.archiview.response.structure.SuccessResponse;
 import com.####.archiview.service.user.UserService;
 import com.####.archiview.validation.user.UserId;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +28,18 @@ public class UserController {
         return SuccessResponse.createSuccess(SuccessCode.JOIN_SUCCESS);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> userDetail(@PathVariable @UserId String id) {
+        UserDto.DetailResponseDto responseDto = service.userDetail(id);
+        return SuccessResponse.createSuccess(SuccessCode.USER_DETAIL_SUCCESS, responseDto);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Object> userDelete(HttpServletRequest request){
+        System.out.println(request.getHeader("token"));
+        return SuccessResponse.createSuccess(SuccessCode.JOIN_SUCCESS);
+    }
+
 //    @PostMapping("/login")
 //    public ResponseEntity<Object> userLogin(/* @RequestBody UserDto.loginRequestDto requestDto */) {
 ////        UserDto.loginResponseDto responseDto = service.userLogin(requestDto);
@@ -36,9 +50,4 @@ public class UserController {
 //        System.out.println("login Success");
 //        return SuccessResponse.createSuccess(SuccessCode.LOGIN_SUCCESS, responseDto);
 //    }
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> userDetail(@PathVariable @UserId String id) {
-        UserDto.DetailResponseDto responseDto = service.userDetail(id);
-        return SuccessResponse.createSuccess(SuccessCode.USER_DETAIL_SUCCESS, responseDto);
-    }
 }

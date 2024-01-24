@@ -31,7 +31,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Optional;
-@Transactional
+
 public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
     private final jwtUtil jwtUtil;
     @Autowired
@@ -68,8 +68,8 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
         }
         // json 형태로 데이터를 받음
         LoginDto loginDto = objectMapper.readValue(StreamUtils.copyToString(request.getInputStream(), StandardCharsets.UTF_8), LoginDto.class);
-        String username = loginDto.getUsername();
-        String password = loginDto.getPassword();
+        String username = loginDto.getId();
+        String password = loginDto.getPw();
         System.out.println("attemptAuthentication");
 
         if (username == null || password == null) {
@@ -137,7 +137,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
     }
     @Data
     private static class LoginDto {
-        String username;
-        String password;
+        String id;  // request json key 값
+        String pw;  // request json key 값
     }
 }

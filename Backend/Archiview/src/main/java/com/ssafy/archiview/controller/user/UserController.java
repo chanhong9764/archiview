@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.web.bind.annotation.*;
@@ -27,34 +28,22 @@ public class UserController {
         service.userAdd(requestDto);
         return SuccessResponse.createSuccess(SuccessCode.JOIN_SUCCESS);
     }
+    @GetMapping("/logout")
+    public ResponseEntity<Object> userLogout(HttpServletRequest request){
+        String userId = jwtUtil.getUsername(request);
+        System.out.println(userId);
+        service.userLogout(userId);
+        return SuccessResponse.createSuccess(SuccessCode.LOGOUT_SUCCESS);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> userDetail(@PathVariable @UserId String id) {
         UserDto.DetailResponseDto responseDto = service.userDetail(id);
         return SuccessResponse.createSuccess(SuccessCode.USER_DETAIL_SUCCESS, responseDto);
     }
-
-    @GetMapping
-    public ResponseEntity<Object> userDelete(HttpServletRequest request){
-        return SuccessResponse.createSuccess(SuccessCode.JOIN_SUCCESS);
-    }
-
-    @GetMapping(path = "/logout", headers = "Authorization")
-    public ResponseEntity<Object> userLogout(@RequestHeader("Authorization") String token){
-        System.out.println("logout");
-        System.out.println(token);
-        return SuccessResponse.createSuccess(SuccessCode.JOIN_SUCCESS);
-    }
-
-//    @PostMapping("/login")
-//    public ResponseEntity<Object> userLogin(/* @RequestBody UserDto.loginRequestDto requestDto */) {
-////        UserDto.loginResponseDto responseDto = service.userLogin(requestDto);
-////        System.out.println(responseDto.toString());
-//
-//        TokenDto token = jwtUtil.createJwt(responseDto.getId(), responseDto.getRole().toString());
-//        responseDto.insertToken(token);
-//        System.out.println("login Success");
-//        return SuccessResponse.createSuccess(SuccessCode.LOGIN_SUCCESS, responseDto);
+//    @DeleteMapping("/delete")
+//    public ResponseEntity<Object> userDelete(HttpServletRequest request){
+//       return service.userDelete(request);
 //    }
 }
 

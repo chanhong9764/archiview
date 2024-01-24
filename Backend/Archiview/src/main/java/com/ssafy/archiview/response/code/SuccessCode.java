@@ -45,6 +45,16 @@ public enum SuccessCode implements ResponseCode {
 
     SELECT_RECRUIT_LIST_SUCCESS(HttpStatus.OK, "채용 공고 리스트를 조회했습니다."),
     SELECT_RECRUIT_SUCCESS(HttpStatus.OK, "채용 공고를 조회했습니다."),
+
+    /*
+        COMPANY
+     */
+    SELECT_COMPANY_LIST_SUCCESS(HttpStatus.OK, "기업 조회에 성공했습니다."),
+
+    /*
+        TAG
+     */
+    SELECT_TAG_LIST_SUCCESS(HttpStatus.OK, "태그 조회에 성공했습니다."),
     ;
     private final HttpStatus httpStatus;
     private final String message;

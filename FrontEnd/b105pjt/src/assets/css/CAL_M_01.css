@@ -32,4 +32,5 @@
 
 .moreList-content:hover {
   font-weight: bold; /* 호버 시 볼드체 */
+  cursor: pointer;
 }

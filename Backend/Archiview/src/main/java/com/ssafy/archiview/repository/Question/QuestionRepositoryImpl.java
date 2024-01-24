@@ -23,6 +23,9 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom{
         BooleanBuilder andBuilder = new BooleanBuilder();
         BooleanBuilder orBuilder = new BooleanBuilder();
 
+        final int SizeConstant = 10;
+        final int pgno = requestDto.getPgno() * SizeConstant - SizeConstant;
+
         if(StringUtils.hasText(requestDto.getUserId())) {
             andBuilder.and(reply.user.id.eq(requestDto.getUserId()));
         }
@@ -54,6 +57,9 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom{
                 .leftJoin(question.csSubQuestionList, csSubQuestion)
                 .leftJoin(question.jobSubQuestionList, jobSubQuestion)
                 .where(andBuilder.and(orBuilder))
+                .distinct()
+                .offset(pgno)
+                .limit(SizeConstant)
                 .fetch();
     }
 }

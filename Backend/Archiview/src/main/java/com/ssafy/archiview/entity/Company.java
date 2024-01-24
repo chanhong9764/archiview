@@ -26,4 +26,11 @@ public class Company {
                 .url(url)
                 .build();
     }
+
+    public CompanyDto.listInfo toListDto() {
+        return CompanyDto.listInfo.builder()
+                .id(id)
+                .name(name)
+                .build();
+    }
 }

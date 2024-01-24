@@ -17,7 +17,7 @@ public class JobSubQuestion {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "job_sub_name")
+    @JoinColumn(name = "job_sub_id")
     private JobSub jobSub;
 
     @ManyToOne

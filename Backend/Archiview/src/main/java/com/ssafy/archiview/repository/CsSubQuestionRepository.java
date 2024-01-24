@@ -1,9 +1,11 @@
 package com.####.archiview.repository;
 
+import com.####.archiview.entity.CsSub;
 import com.####.archiview.entity.CsSubQuestion;
-import com.####.archiview.entity.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CsSubQuestionRepository extends JpaRepository<CsSubQuestion, Integer> {
+import java.util.Optional;
 
+public interface CsSubQuestionRepository extends JpaRepository<CsSubQuestion, Integer> {
+    Optional<CsSubQuestion> findByCsSubAndQuestionId(CsSub csSub, int questionId);
 }

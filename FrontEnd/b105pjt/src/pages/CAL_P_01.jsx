@@ -10,6 +10,8 @@ import CAL_M_01 from "./CAL_M_01";
 import transformEventData from "../utils/transformEventData";
 import { selectImg } from "../api/naverAPI";
 import styled from "styled-components";
+import NotificationAddOutlinedIcon from "@mui/icons-material/NotificationAddOutlined";
+import NotificationsOffOutlinedIcon from "@mui/icons-material/NotificationsOffOutlined";
 
 const dummyEvent = {
   code: 200,
@@ -29,7 +31,7 @@ const dummyEvent = {
     },
     {
       recruit_id: 10,
-      company_name: "네이버",
+      company_name: "존나길어길어네이버",
       start: "2024-01-16",
       end: "2024-02-18",
     },
@@ -74,12 +76,11 @@ const FullCalendarContainer = styled.div`
     margin: 0;
     padding: 0 40px;
     background-color: #e2e2e2;
-    height: 100px;
+    height: 50px;
     font-weight: 600;
-    font-size: 12px;
-    line-height: 29px;
+    font-size: 16px;
     color: #555555;
-    border-radius: 5px;s
+    border-radius: 5px;
   }
 
   // toolbar 버튼
@@ -112,13 +113,9 @@ const FullCalendarContainer = styled.div`
 
   // 오늘 날짜 배경색
   .fc .fc-daygrid-day.fc-day-today {
-    background-color: #fff8bd;
-    color: #356eff;
-  }
-
-  // 날짜별 그리드
-  .fc .fc-daygrid-day-frame {
-    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #111111;
+    font-weight: bold;
   }
 
   // 날짜  ex) 2일
@@ -130,11 +127,11 @@ const FullCalendarContainer = styled.div`
   // 각 이벤트 요소
   .fc-event {
     cursor: pointer;
-    padding: 5px 8px;
-    margin-bottom: 5px;
+    padding: 4px;
+    margin-bottom: 1px;
     border-radius: 4px;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 12px;
   }
 `;
 
@@ -182,6 +179,29 @@ const CAL_P_01 = () => {
     handleOpen();
   };
 
+  const renderEventContent = (eventInfo) => {
+    // 이벤트의 color에 따라 다른 아이콘을 선택합니다.
+    let Icon;
+    switch (eventInfo.event.backgroundColor) {
+      case "#ED544A": // 빨간색 이벤트
+        Icon = NotificationAddOutlinedIcon;
+        break;
+      case "#929292": // 회색 이벤트
+        Icon = NotificationsOffOutlinedIcon;
+        break;
+      // 추가적인 색상과 아이콘 매핑 가능
+      default:
+        Icon = null; // 기본값, 아이콘이 없는 경우
+    }
+
+    return (
+      <div className="icon">
+        {Icon && <Icon style={{ marginRight: "4px", fontSize: "medium" }} />}
+        <span>{eventInfo.event.title}</span>
+      </div>
+    );
+  };
+
   return (
     <div>
       <div className="parent-container">
@@ -194,6 +214,7 @@ const CAL_P_01 = () => {
               events={events}
               locale={koLocale}
               eventClick={handleEventClick}
+              eventContent={renderEventContent}
             />
           </FullCalendarContainer>
         </div>

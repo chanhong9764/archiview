@@ -13,10 +13,21 @@ public class CompanyDto {
         private final String name;
         private final String url;
         @Builder
-        public info(int id, String name, String url, List<QuestionDto.info> questions) {
+        public info(int id, String name, String url) {
             this.id = id;
             this.name = name;
             this.url = url;
+        }
+    }
+
+    @Getter
+    public static class listInfo {
+        private final int id;
+        private final String name;
+        @Builder
+        public listInfo(int id, String name, String url) {
+            this.id = id;
+            this.name = name;
         }
     }
 }

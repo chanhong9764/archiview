@@ -23,12 +23,14 @@ public class QuestionController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Object> searchQuestion(@RequestParam(value = "company", required = false, defaultValue = "") String companyName,
+    public ResponseEntity<Object> searchQuestion(
+                                                 @RequestParam(value = "userId", required = false, defaultValue = "") String userId,
+                                                 @RequestParam(value = "company", required = false, defaultValue = "") String companyName,
                                                  @RequestParam(value = "cs", required = false, defaultValue = "") String cs,
                                                  @RequestParam(value = "job", required = false, defaultValue = "") String job,
                                                  @RequestParam(value = "pgno", required = false, defaultValue = "1") int pgno) {
         QuestionDto.SearchRequest requestDto = QuestionDto.SearchRequest.builder()
-                .userId("")
+                .userId(userId)
                 .companyName(companyName)
                 .csList(Arrays.stream(cs.split(",")).toList())
                 .jobList(Arrays.stream(job.split(",")).toList())

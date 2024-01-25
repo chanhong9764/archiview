@@ -1,5 +1,6 @@
 package com.####.archiview.entity;
 
+import com.####.archiview.dto.comment.CommentDto;
 import com.####.archiview.dto.reply.ReplyDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -33,8 +34,8 @@ public class Comment {
         this.reply = reply;
     }
 
-    public ReplyDto.CommentResponseDto toCommentDto() {
-        return ReplyDto.CommentResponseDto.builder()
+    public CommentDto.info toCommentDto() {
+        return CommentDto.info.builder()
                 .id(id)
                 .userId(user.getId())
                 .content(content)

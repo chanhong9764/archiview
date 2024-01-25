@@ -42,6 +42,37 @@ public enum ErrorCode implements ResponseCode {
         REPLY
      */
     REPLY_NOT_FOUND(HttpStatus.NOT_FOUND, "답변이 존재하지 않습니다."),
+
+    /*
+        RECRUIT
+     */
+    RECRUIT_NOT_FOUND(HttpStatus.NOT_FOUND, "채용 공고가 존재하지 않습니다."),
+
+    /*
+        COMPANY
+     */
+    COMPANY_NOT_FOUND(HttpStatus.NOT_FOUND, "등록되지 않은 기업입니다."),
+
+    /*
+        CSSUB
+     */
+    CSSUB_NOT_FOUND(HttpStatus.NOT_FOUND, "등록되지 않은 CS 태그입니다."),
+
+    /*
+        JOBSUB
+     */
+    JOBSUB_NOT_FOUND(HttpStatus.NOT_FOUND, "등록되지 않은 JOB 태그입니다."),
+
+    /*
+        JOBSUB_QUESTION
+     */
+    JOBSUB_QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "등록되지 않은 JOB_QUESTION 관계입니다."),
+    JOBSUB_QUESTION_CONFILT(HttpStatus.CONFLICT, "이미 등록되어 있는 JOB_QUESTION 관계입니다."),
+    /*
+        CSSUB_QUESTION
+     */
+    CSSUB_QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "등록되지 않은 CS_QUESTION 관계입니다."),
+    CSSUB_QUESTION_CONFILT(HttpStatus.CONFLICT, "이미 등록되어 있는 CS_QUESTION 관계입니다."),
     ;
     private final HttpStatus httpStatus;
     private final String message;

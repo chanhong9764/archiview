@@ -11,8 +11,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Logo from "../../assets/img/symbolLogo_Slogun-removebg-preview.png";
 import HOM_M_01 from "../../pages/HOM_M_01";
 
-const pages = ["캘린더"];
+const pages = ["채용 공고"];
 const settings = ["로그인"];
+const search = ["상세 검색"]
 
 const style = {
   position: "absolute",
@@ -40,6 +41,12 @@ function NavbarLogin() {
   const handleRefresh = () => {
     // 현재 경로로 다시 이동하여 컴포넌트를 리프레시합니다.
     navigate("/", { replace: true });
+  };
+
+  // 상세 검색 클릭시
+  const handleSearch = () => {
+    // 현재 경로로 다시 이동하여 컴포넌트를 리프레시합니다.
+    navigate("/search", { replace: true });
   };
 
   // 메뉴 클릭시
@@ -87,7 +94,17 @@ function NavbarLogin() {
                   {page}
                 </Button>
               ))}
+              {search.map((search) => (
+                <Button
+                  key={search}
+                  onClick={handleSearch}
+                  sx={{ my: 2, color: "#222222", display: "block" }}
+                >
+                  {search}
+                </Button>
+              ))}
             </Box>
+            
 
             {/* 우측 메뉴 */}
             <Box sx={{ flexGrow: 0 }}>

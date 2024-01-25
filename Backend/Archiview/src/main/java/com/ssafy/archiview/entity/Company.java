@@ -1,8 +1,10 @@
 package com.####.archiview.entity;
 
+import com.####.archiview.dto.company.CompanyDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+
 @Entity // 기업 테이블
 @Getter
 public class Company {
@@ -16,4 +18,12 @@ public class Company {
 
     @Column(name = "url")
     private String url;
+
+    public CompanyDto.info toDto() {
+        return CompanyDto.info.builder()
+                .id(id)
+                .name(name)
+                .url(url)
+                .build();
+    }
 }

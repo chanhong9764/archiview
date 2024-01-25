@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService{
         return SuccessResponse.createSuccess(SuccessCode.DELETE_USER_SUCCESS);
     }
 
-    public UserDto.DetailResponseDto userDetail(String id) {
-        return repository.getById(id).toDetailResponseDto();
+    public UserDto.DetailResponseDto userDetail(String userid) {
+        return repository.getById(userid).toDetailResponseDto();
     }
 }

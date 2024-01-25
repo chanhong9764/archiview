@@ -1,22 +1,29 @@
 package com.ssafy.archiview.service.user;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.archiview.dto.user.UserDto;
 import com.ssafy.archiview.entity.User;
+import com.ssafy.archiview.jwt.jwtUtil;
 import com.ssafy.archiview.repository.UserRepository;
 import com.ssafy.archiview.response.code.ErrorCode;
+import com.ssafy.archiview.response.code.SuccessCode;
 import com.ssafy.archiview.response.exception.RestApiException;
+import com.ssafy.archiview.response.structure.SuccessResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService{
     private final UserRepository repository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final jwtUtil jwtUtil;
+    private final JPAQueryFactory factory;
+
     @Override
     @Transactional
     public void userAdd(UserDto.AddRequestDto requestDto) {
@@ -29,14 +36,29 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserDto.loginResponseDto userLogin(UserDto.loginRequestDto requestDto) {
-        User user = repository.getById(requestDto.getId());
+    public void userLogout(String userId) {
+        User user = repository.findById(userId).orElseThrow();
+        System.out.println("refresh : " + user.getRefreshToken());
+        repository.save(user.builder()
+                .refreshToken(null)
+                .build());
+    }
 
-        // 입력된 비밀번호와 조회된 비밀번호가 일치하지 않으면 에러 발생
-        if(!user.getPw().equals(requestDto.getPw())){
-            throw new RestApiException(ErrorCode.UNAUTHORIZED_REQUEST);
+    @Override
+    @Transactional
+    public ResponseEntity<Object> userDelete(HttpServletRequest request) {
+        // request 에서 액세스토큰 정보 추출
+        String accessToken = request.getHeader("Authorization");
+
+        // 토큰 유효성 검사
+        if(jwtUtil.isExpired(accessToken)){
+            throw new RestApiException(ErrorCode.UNAUTHORIZED_REQUEST);  // 만료된 토큰 에러로 변경해야함
         }
-        return user.toLoginResponseDto();
+        System.out.println("유효한 token");
+        String userId = jwtUtil.getUsername(request);  // 엑세스 토큰에서 userId 추출
+        User user = repository.getById(userId);  // 추출된 userId로 DB 조회
+        repository.delete(user);
+        return SuccessResponse.createSuccess(SuccessCode.DELETE_USER_SUCCESS);
     }
 
     public UserDto.DetailResponseDto userDetail(String userid) {

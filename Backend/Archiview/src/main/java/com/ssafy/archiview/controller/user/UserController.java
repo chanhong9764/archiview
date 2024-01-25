@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +23,17 @@ public class UserController {
     private final UserService service;
     private final jwtUtil jwtUtil;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    @PostMapping
+    @PostMapping  // 회원가입
     public ResponseEntity<Object> userAdd(@RequestBody @Valid UserDto.AddRequestDto requestDto) {
         service.userAdd(requestDto);
         return SuccessResponse.createSuccess(SuccessCode.JOIN_SUCCESS);
+    }
+    @GetMapping("/logout")  // 로그아웃
+    public ResponseEntity<Object> userLogout(HttpServletRequest request){
+        String userId = jwtUtil.getUsername(request);
+        System.out.println(userId);
+        service.userLogout(userId);
+        return SuccessResponse.createSuccess(SuccessCode.LOGOUT_SUCCESS);
     }
 
     @GetMapping
@@ -34,22 +42,9 @@ public class UserController {
         UserDto.DetailResponseDto responseDto = service.userDetail(userId);
         return SuccessResponse.createSuccess(SuccessCode.USER_DETAIL_SUCCESS, responseDto);
     }
-
-    @DeleteMapping
-    public ResponseEntity<Object> userDelete(HttpServletRequest request){
-        System.out.println(request.getHeader("token"));
-        return SuccessResponse.createSuccess(SuccessCode.JOIN_SUCCESS);
+    @DeleteMapping("/delete")  // 회원탈퇴
+    public ResponseEntity<Object> deleteUser(HttpServletRequest request){
+       return service.userDelete(request);
     }
-
-//    @PostMapping("/login")
-//    public ResponseEntity<Object> userLogin(/* @RequestBody UserDto.loginRequestDto requestDto */) {
-////        UserDto.loginResponseDto responseDto = service.userLogin(requestDto);
-////        System.out.println(responseDto.toString());
-//
-//        TokenDto token = jwtUtil.createJwt(responseDto.getId(), responseDto.getRole().toString());
-//        responseDto.insertToken(token);
-//        System.out.println("login Success");
-//        return SuccessResponse.createSuccess(SuccessCode.LOGIN_SUCCESS, responseDto);
-//    }
 }
 

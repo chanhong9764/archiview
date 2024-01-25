@@ -5,6 +5,7 @@ import com.ssafy.archiview.dto.reply.ReplyDto;
 import com.ssafy.archiview.entity.*;
 import com.ssafy.archiview.repository.*;
 import com.ssafy.archiview.repository.Question.QuestionRepository;
+import com.ssafy.archiview.repository.UserRepository;
 import com.ssafy.archiview.response.code.ErrorCode;
 import com.ssafy.archiview.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;

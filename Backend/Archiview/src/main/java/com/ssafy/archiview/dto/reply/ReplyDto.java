@@ -76,6 +76,13 @@ public class ReplyDto {
     }
 
     @Getter
+    @AllArgsConstructor
+    public static class DeleteRequestDto {
+        private final int id;
+        private final String userId;
+    }
+
+    @Getter
     public static class LikeRequestDto {
         private final int id;
         private final String userId;
@@ -101,6 +108,20 @@ public class ReplyDto {
     }
 
     @Getter
+    @AllArgsConstructor
+    public static class LikeDeleteRequest {
+        private final int id;
+        private final String userId;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class CommentDeleteRequest {
+        private final int id;
+        private final String userId;
+    }
+
+    @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class AddRequestDto {
         private int companyId;
@@ -112,6 +133,7 @@ public class ReplyDto {
         private String script;
         private String videoUrl;
         private String thumbnailUrl;
+        private String userId;
         @Builder
         public AddRequestDto(int companyId, String content, List<String> csList, List<String> jobList, int questionId, String script, String videoUrl, String thumbnailUrl) {
             this.companyId = companyId;
@@ -130,6 +152,10 @@ public class ReplyDto {
                     .content(content)
                     .build();
         }
+
+        public void userIdUpdate(String userId) {
+            this.userId = userId;
+        }
     }
 
     @Getter
@@ -143,6 +169,7 @@ public class ReplyDto {
         private String script;
         private String videoUrl;
         private String thumbnailUrl;
+        private String userId;
         @Builder
         public ModifyRequestDto(int id, List<String> removeCsList, List<String> addCsList, List<String> removeJobList, List<String> addjobList, String script, String videoUrl, String thumbnailUrl) {
             this.id = id;
@@ -153,6 +180,9 @@ public class ReplyDto {
             this.script = script;
             this.videoUrl = videoUrl;
             this.thumbnailUrl = thumbnailUrl;
+        }
+        public void userIdUpdate(String userId) {
+            this.userId = userId;
         }
     }
 }

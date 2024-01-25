@@ -5,6 +5,7 @@ import com.####.archiview.dto.reply.ReplyDto;
 import com.####.archiview.entity.*;
 import com.####.archiview.repository.*;
 import com.####.archiview.repository.Question.QuestionRepository;
+import com.####.archiview.repository.UserRepository;
 import com.####.archiview.response.code.ErrorCode;
 import com.####.archiview.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RequiredArgsConstructor
 @Service
@@ -42,9 +45,13 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public void replyDelete(int id) {
-        replyRepository.delete(replyRepository.findById(id)
-                .orElseThrow(() -> new RestApiException(ErrorCode.REPLY_NOT_FOUND)));
+    public void replyDelete(ReplyDto.DeleteRequestDto requestDto) {
+        Reply reply = replyRepository.findById(requestDto.getId())
+                .orElseThrow(() -> new RestApiException(ErrorCode.REPLY_NOT_FOUND));
+        if(!requestDto.getUserId().equals(reply.getUser().getId())) {
+            throw new RestApiException(ErrorCode.UNAUTHORIZED_REQUEST);
+        }
+        replyRepository.delete(reply);
     }
 
     @Override
@@ -79,7 +86,7 @@ public class ReplyServiceImpl implements ReplyService {
             question = questionRepository.findById(requestDto.getQuestionId())
                     .orElseThrow(() -> new RestApiException(ErrorCode.QUESTION_NOT_FOUND));
         }
-        User user = userRepository.getById("chanhong9784");
+        User user = userRepository.getById(requestDto.getUserId());
         replyRepository.save(Reply.builder()
                 .question(question)
                 .script(requestDto.getScript())
@@ -93,6 +100,10 @@ public class ReplyServiceImpl implements ReplyService {
     public void replyModify(ReplyDto.ModifyRequestDto requestDto) {
         Reply reply = replyRepository.findById(requestDto.getId())
                 .orElseThrow(() -> new RestApiException(ErrorCode.REPLY_NOT_FOUND));
+
+        if(!requestDto.getUserId().equals(reply.getUser().getId())) {
+            throw new RestApiException(ErrorCode.UNAUTHORIZED_REQUEST);
+        }
 
         for(String cs : requestDto.getRemoveCsList()) {
             CsSub csSub = csSubRepository.findById(cs)
@@ -151,8 +162,8 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public void replyLikeDelete(int id) {
-        likeRepository.delete(likeRepository.findById(id)
+    public void replyLikeDelete(ReplyDto.LikeDeleteRequest requestDto) {
+        likeRepository.delete(likeRepository.findByReplyIdAndUserId(requestDto.getId(), requestDto.getUserId())
                 .orElseThrow(() -> new RestApiException(ErrorCode.LIKE_NOT_FOUND)));
     }
 
@@ -171,8 +182,8 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public void replyCommentDelete(int id) {
-        commentRepository.delete(commentRepository.findById(id)
+    public void replyCommentDelete(ReplyDto.CommentDeleteRequest requestDto) {
+        commentRepository.delete(commentRepository.findByReplyIdAndUserId(requestDto.getId(), requestDto.getUserId())
                 .orElseThrow(() -> new RestApiException(ErrorCode.COMMENT_NOT_FOUND)));
     }
 }

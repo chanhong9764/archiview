@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import SendIcon from "@mui/icons-material/Send";
 import Logo from "../../assets/img/mainLogo-removebg-preview.png";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -19,7 +20,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const AssignUser = ({ onSwitch }) => {
   const [showSignupFields, setShowSignupFields] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isInputDisabled, setIsInputDisabled] = useState(false);
+  const [isChangeBtnDisabled, setIsChangeBtnDisabled] = useState(true);
 
   // 각 입력 필드에 대한 정규표현식을 나타내는 상태 추가
   const [isNameValid, setIsNameValid] = useState(true);
@@ -38,6 +40,7 @@ const AssignUser = ({ onSwitch }) => {
 
   // '인증하기' 버튼 클릭 시 핸들러 함수
   const handleVerifyClick = () => {
+    setIsInputDisabled(true);
     setShowSignupFields(true); // 회원가입 및 인증번호 필드를 보여줌
   };
 
@@ -62,17 +65,21 @@ const AssignUser = ({ onSwitch }) => {
 
   // '회원가입' 버튼 클릭시 핸들러 함수
   const handleAssignClick = () => {
-    if (password.length < 8 || password !== confirmPassword) {
-      // 비밀번호 조건에 맞지 않으면 진행하지 않음
-      return;
-    }
-
     setOpenSnackbar(true);
 
     setTimeout(() => {
       setOpenSnackbar(false);
       onSwitch("Login");
     }, 1000);
+  };
+
+  // 엔터 입력시
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      if (isEmailValid && !isEmailEmpty) {
+        handleVerifyClick();
+      }
+    }
   };
 
   // 간단한 비밀번호 검증시 사용되는 변수
@@ -97,6 +104,17 @@ const AssignUser = ({ onSwitch }) => {
     setPasswordError(password.length < 8 || password !== newConfirmPassword);
   };
 
+  // 인증번호 관련 이벤트 처리
+  const handleAuthClick = () => {
+    setIsChangeBtnDisabled(false);
+  };
+
+  const handleAuthKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleAuthClick();
+    }
+  };
+
   return (
     <div className="LOG-M-01-Content">
       <Grid container spacing={2}>
@@ -116,10 +134,9 @@ const AssignUser = ({ onSwitch }) => {
             placeholder="홍길동"
             variant="filled"
             onChange={handleNameChange}
+            disabled={isInputDisabled}
             error={!isNameValid}
-            helperText={
-              !isNameValid ? "한글로 2~32자리 이내로 입력하세요." : ""
-            }
+            helperText={!isNameValid ? "한글 2자 이상" : ""}
           />
         </Grid>
 
@@ -133,10 +150,9 @@ const AssignUser = ({ onSwitch }) => {
             placeholder="사용자 ID"
             variant="filled"
             onChange={handleIdChange}
+            disabled={isInputDisabled}
             error={!isIdValid}
-            helperText={
-              !isIdValid ? "영소문자와 숫자로 4~16자리 이내로 입력하세요." : ""
-            }
+            helperText={!isIdValid ? "영소문자, 숫자 4~16자리 이내" : ""}
           />
         </Grid>
 
@@ -151,9 +167,10 @@ const AssignUser = ({ onSwitch }) => {
             variant="filled"
             onChange={handlePasswordChange}
             error={!isPasswordValid}
+            disabled={isInputDisabled}
             helperText={
               !isPasswordValid
-                ? "대문자, 소문자, 특수문자 및 숫자를 포함한 9~16자리로 입력하세요."
+                ? "대소문자, 특수문자, 숫자를 포함한 9~16자리"
                 : ""
             }
           />
@@ -181,6 +198,7 @@ const AssignUser = ({ onSwitch }) => {
                 : ""
             }
             value={confirmPassword}
+            disabled={isInputDisabled}
             onChange={handleConfirmPasswordChange}
           />
         </Grid>
@@ -195,8 +213,10 @@ const AssignUser = ({ onSwitch }) => {
             defaultValue=""
             variant="filled"
             onChange={handleEmailChange}
+            onKeyDown={handleKeyPress}
             error={!isEmailValid}
-            helperText={!isEmailValid ? "유효한 이메일 주소를 입력하세요." : ""}
+            helperText={!isEmailValid ? "이메일 양식 확인" : ""}
+            disabled={isInputDisabled}
           />
         </Grid>
         {/* 이메일 인증하기 버튼 */}
@@ -206,7 +226,7 @@ const AssignUser = ({ onSwitch }) => {
             endIcon={<SendIcon />}
             style={{ height: "56px", width: "100%" }}
             onClick={handleVerifyClick}
-            disabled={!isEmailValid || isEmailEmpty} // 이메일 정규표현식 만족 여부에 따라 버튼 활성화/비활성화
+            disabled={!isEmailValid || isEmailEmpty || isInputDisabled} // 이메일 정규표현식 만족 여부에 따라 버튼 활성화/비활성화
           >
             인증하기
           </Button>
@@ -215,14 +235,27 @@ const AssignUser = ({ onSwitch }) => {
         {/* 이메일 인증번호 & 회원가입 완료 버튼 */}
         {showSignupFields && (
           <>
-            <Grid className="Input-Grid" item xs={12}>
+            <Grid className="Input-Grid" item xs={8}>
               <TextField
                 className="PW-input"
                 required
                 label="인증번호"
                 placeholder="인증번호 입력"
                 variant="filled"
+                onKeyDown={handleAuthKeyPress}
+                disabled={!isChangeBtnDisabled}
               />
+            </Grid>
+            <Grid item xs={4}>
+              <Button
+                variant="contained"
+                endIcon={<TaskAltIcon />}
+                style={{ height: "56px", width: "100%" }}
+                onClick={handleAuthClick} // 버튼 클릭 핸들러
+                disabled={!isChangeBtnDisabled}
+              >
+                인증하기
+              </Button>
             </Grid>
 
             <Grid item xs={12}>
@@ -233,7 +266,7 @@ const AssignUser = ({ onSwitch }) => {
                 color="success"
                 style={{ height: "56px", width: "100%" }}
                 onClick={handleAssignClick}
-                disabled={password.length < 8 || password !== confirmPassword} // 비밀번호 조건에 맞지 않으면 버튼 비활성화
+                disabled={isChangeBtnDisabled} // 비밀번호 조건에 맞지 않으면 버튼 비활성화
               >
                 회원가입 완료
               </Button>

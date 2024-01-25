@@ -12,6 +12,12 @@ const HOM_P_01 = () => {
     navigate("/search", { replace: true });
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearchBtn();
+    }
+  };
+
   return (
     <div className="hompage">
       <div>
@@ -22,6 +28,7 @@ const HOM_P_01 = () => {
           style={{ width: "500px", borderRadius: "50px" }}
           label="회사명으로 면접 질문 검색"
           variant="outlined"
+          onKeyDown={handleKeyPress}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">

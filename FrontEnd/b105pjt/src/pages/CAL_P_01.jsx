@@ -4,7 +4,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import koLocale from "@fullcalendar/core/locales/ko";
 import "../assets/css/CAL_P_01.css";
-import { Modal } from "@mui/material";
+import { IconButton, InputAdornment, Modal, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import CAL_M_01 from "./CAL_M_01";
 import transformEventData from "../utils/transformEventData";
@@ -12,6 +12,7 @@ import { selectImg } from "../api/naverAPI";
 import styled from "styled-components";
 import NotificationAddOutlinedIcon from "@mui/icons-material/NotificationAddOutlined";
 import NotificationsOffOutlinedIcon from "@mui/icons-material/NotificationsOffOutlined";
+import SearchIcon from "@mui/icons-material/Search";
 
 const dummyEvent = {
   code: 200,
@@ -202,10 +203,38 @@ const CAL_P_01 = () => {
     );
   };
 
+  // 검색버튼 동작
+  const handleSearchBtn = () => {
+    console.log(">>검색버튼");
+  };
+
+  // 엔터 입력 시
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearchBtn();
+    }
+  };
+
   return (
     <div>
       <div className="parent-container">
-        <SearchSection />
+        <div style={{ padding: "20px 0 15px 0" }}>
+          <TextField
+            style={{ width: "500px", borderRadius: "50px" }}
+            label="회사명으로 면접 질문 검색"
+            variant="outlined"
+            onKeyDown={handleKeyPress}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleSearchBtn}>
+                    <SearchIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </div>
         <div className="calendar-container">
           <FullCalendarContainer>
             <FullCalendar

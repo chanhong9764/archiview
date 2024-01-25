@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public ResponseEntity<Object> userDelete(HttpServletRequest request) {
+    public void userDelete(HttpServletRequest request) {
         // request 에서 액세스토큰 정보 추출
         String accessToken = request.getHeader("Authorization");
 
@@ -58,7 +58,6 @@ public class UserServiceImpl implements UserService{
         String userId = jwtUtil.getUsername(request);  // 엑세스 토큰에서 userId 추출
         User user = repository.getById(userId);  // 추출된 userId로 DB 조회
         repository.delete(user);
-        return SuccessResponse.createSuccess(SuccessCode.DELETE_USER_SUCCESS);
     }
 
     public UserDto.DetailResponseDto userDetail(String userid) {

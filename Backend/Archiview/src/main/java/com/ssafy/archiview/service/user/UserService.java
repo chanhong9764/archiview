@@ -12,7 +12,7 @@ public interface UserService {
     // 로그아웃
     void userLogout(String userId);
     // 회원탈퇴
-    ResponseEntity<Object> userDelete(HttpServletRequest request);
+    void userDelete(HttpServletRequest request);
     // 회원정보 조회
     UserDto.DetailResponseDto userDetail(String id);
 }

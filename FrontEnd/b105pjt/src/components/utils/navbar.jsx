@@ -55,6 +55,11 @@ function Navbar() {
   const handleCalendar = () => {
     navigate("/cal", { replace: true });
   };
+  
+  // 상세 검색 클릭시
+  const handleSearch = () => {
+    navigate("/search", { replace: true });
+  };
 
   // 면접 관리 클릭시
   const handleMyInterview = () => {
@@ -123,6 +128,11 @@ function Navbar() {
                   </Typography>
                 </MenuItem>
                 <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography onClick={handleSearch} textAlign="center">
+                    상세 검색
+                  </Typography>
+                </MenuItem>
+                <MenuItem onClick={handleCloseNavMenu}>
                   <Typography onClick={handleMyInterview} textAlign="center">
                     내 인터뷰
                   </Typography>
@@ -137,6 +147,12 @@ function Navbar() {
                 sx={{ my: 2, color: "#222222", display: "block" }}
               >
                 취업 캘린더
+              </Button>
+              <Button
+                onClick={handleSearch}
+                sx={{ my: 2, color: "#222222", display: "block" }}
+              >
+                상세 검색
               </Button>
               <Button
                 onClick={handleMyInterview}

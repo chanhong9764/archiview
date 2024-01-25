@@ -81,6 +81,7 @@ export default function BasicTabs() {
         width: "100%",
         border: "2px solid #1769aa",
         marginTop: "10px",
+        marginBottom: "20px",
       }}
     >
       <Box
@@ -198,6 +199,7 @@ export default function BasicTabs() {
         <Box>픽한 스몰테그 데이터 : {JSON.stringify(smallTagData)}</Box>
         <Box>출력할 픽 데이터 : {JSON.stringify(pickTagList)}</Box> */}
         <Button onClick={() => handleReset()}>Reset</Button>
+        <Button>검색하기</Button>
       </Box>
     </Box>
   );

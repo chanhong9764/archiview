@@ -1,6 +1,8 @@
 package com.ssafy.archiview.jwt;
 
 import com.ssafy.archiview.dto.token.TokenDto;
+import com.ssafy.archiview.response.code.ErrorCode;
+import com.ssafy.archiview.response.exception.RestApiException;
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
@@ -104,16 +106,15 @@ public class jwtUtil {
         try {
             Jwts.parser().verifyWith(secretKey).build().parseClaimsJws(token);
             return true;
-        } catch (SecurityException | MalformedJwtException e) {
-//            log.info("Invalid JWT Token", e);
-        } catch (ExpiredJwtException e) {
-//            log.info("Expired JWT Token", e);
-        } catch (UnsupportedJwtException e) {
-//            log.info("Unsupported JWT Token", e);
-        } catch (IllegalArgumentException e) {
-//            log.info("JWT claims string is empty.", e);
+        } catch (SecurityException | MalformedJwtException e) {  // 잘못된 토큰 구조
+            throw new RestApiException(ErrorCode.UNAUTHORIZED_REQUEST);
+        } catch (ExpiredJwtException e) {  // 토큰 만료
+            throw new RestApiException(ErrorCode.EXPIRED_TOKEN);
+        } catch (UnsupportedJwtException e) {  // 토큰이 예상하는 형식과 다른 형식이거나 구성
+            throw new RestApiException(ErrorCode.UNSUPPORTED_TOKEN);
+        } catch (IllegalArgumentException e) {  // 잘못된 토큰
+            throw new RestApiException(ErrorCode.INVALID_TOKEN);
         }
-        return false;
     }
 
     public com.ssafy.archiview.entity.User getUserFromAuthentication() {

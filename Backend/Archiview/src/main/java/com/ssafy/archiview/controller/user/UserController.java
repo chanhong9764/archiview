@@ -30,9 +30,7 @@ public class UserController {
     }
     @GetMapping("/logout")  // 로그아웃
     public ResponseEntity<Object> userLogout(HttpServletRequest request){
-        String userId = jwtUtil.getUsername(request);
-        System.out.println(userId);
-        service.userLogout(userId);
+        service.userLogout(request);
         return SuccessResponse.createSuccess(SuccessCode.LOGOUT_SUCCESS);
     }
 
@@ -42,9 +40,10 @@ public class UserController {
         UserDto.DetailResponseDto responseDto = service.userDetail(userId);
         return SuccessResponse.createSuccess(SuccessCode.USER_DETAIL_SUCCESS, responseDto);
     }
-    @DeleteMapping("/delete")  // 회원탈퇴
+    @DeleteMapping  // 회원탈퇴
     public ResponseEntity<Object> deleteUser(HttpServletRequest request){
-       return service.userDelete(request);
+        service.userDelete(request);
+        return SuccessResponse.createSuccess(SuccessCode.DELETE_USER_SUCCESS);
     }
 }
 

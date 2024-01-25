@@ -14,7 +14,7 @@ public enum SuccessCode implements ResponseCode {
     LOGOUT_SUCCESS(HttpStatus.OK, "로그아웃에 성공했습니다."),
     JOIN_SUCCESS(HttpStatus.CREATED, "회원가입에 성공했습니다."),
     USER_DETAIL_SUCCESS(HttpStatus.OK, "회원정보 조회에 성공했습니다."),
-
+    DELETE_USER_SUCCESS(HttpStatus.OK, "회원탈퇴에 성공했습니다."),
     /*
         QUESTION
      */

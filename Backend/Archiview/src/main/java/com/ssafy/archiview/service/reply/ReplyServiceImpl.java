@@ -5,6 +5,7 @@ import com.####.archiview.dto.reply.ReplyDto;
 import com.####.archiview.entity.*;
 import com.####.archiview.repository.*;
 import com.####.archiview.repository.Question.QuestionRepository;
+import com.####.archiview.repository.UserRepository;
 import com.####.archiview.response.code.ErrorCode;
 import com.####.archiview.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;

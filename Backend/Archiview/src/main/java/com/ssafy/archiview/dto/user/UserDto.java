@@ -85,6 +85,41 @@ public class UserDto {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class logoutDto {
+        private String id;
+        private String name;
+        private String email;
+        private String profileUrl;
+        private String introduce;
+        private Role role;
+        private String refreshToken;
+
+        @Builder
+        public logoutDto(String id, String name, String email, String profileUrl, String introduce, Role role, String refreshToken) {
+            this.id = id;
+            this.name = name;
+            this.email = email;
+            this.profileUrl = profileUrl;
+            this.introduce = introduce;
+            this.role = role;
+            this.refreshToken = refreshToken;
+        }
+
+        public User toEntity() {
+            return User.builder()
+                    .id(id)
+                    .name(name)
+                    .email(email)
+                    .profileUrl(profileUrl)
+                    .introduce(introduce)
+                    .role(role)
+                    .refreshToken(refreshToken)
+                    .build();
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class DetailResponseDto {
         private String id;
         private String name;

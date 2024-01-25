@@ -23,12 +23,12 @@ public class UserController {
     private final UserService service;
     private final jwtUtil jwtUtil;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    @PostMapping
+    @PostMapping  // 회원가입
     public ResponseEntity<Object> userAdd(@RequestBody @Valid UserDto.AddRequestDto requestDto) {
         service.userAdd(requestDto);
         return SuccessResponse.createSuccess(SuccessCode.JOIN_SUCCESS);
     }
-    @GetMapping("/logout")
+    @GetMapping("/logout")  // 로그아웃
     public ResponseEntity<Object> userLogout(HttpServletRequest request){
         String userId = jwtUtil.getUsername(request);
         System.out.println(userId);
@@ -36,14 +36,14 @@ public class UserController {
         return SuccessResponse.createSuccess(SuccessCode.LOGOUT_SUCCESS);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}")  // 회원정보조회
     public ResponseEntity<Object> userDetail(@PathVariable @UserId String id) {
         UserDto.DetailResponseDto responseDto = service.userDetail(id);
         return SuccessResponse.createSuccess(SuccessCode.USER_DETAIL_SUCCESS, responseDto);
     }
-//    @DeleteMapping("/delete")
-//    public ResponseEntity<Object> userDelete(HttpServletRequest request){
-//       return service.userDelete(request);
-//    }
+    @DeleteMapping("/delete")  // 회원탈퇴
+    public ResponseEntity<Object> deleteUser(HttpServletRequest request){
+       return service.userDelete(request);
+    }
 }
 

@@ -3,9 +3,11 @@ package com.####.archiview.controller.reply;
 import com.####.archiview.dto.comment.CommentDto;
 import com.####.archiview.dto.reply.ReplyDto;
 import com.####.archiview.entity.Reply;
+import com.####.archiview.jwt.jwtUtil;
 import com.####.archiview.response.code.SuccessCode;
 import com.####.archiview.response.structure.SuccessResponse;
 import com.####.archiview.service.reply.ReplyService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +19,11 @@ import java.util.List;
 @RequestMapping("/api/replies")
 public class ReplyController {
     private final ReplyService service;
-
+    private final jwtUtil jwtUtil;
     @GetMapping("/{id}")
-    public ResponseEntity<Object> replyDetail(@PathVariable("id") int id) {
-        ReplyDto.DetailResponseDto responseDto = service.replyDetail(new ReplyDto.DetailRequestDto(id, "chanhong9784"));
+    public ResponseEntity<Object> replyDetail(@PathVariable("id") int id, HttpServletRequest request) {
+        String userId = jwtUtil.getUsername(request);
+        ReplyDto.DetailResponseDto responseDto = service.replyDetail(new ReplyDto.DetailRequestDto(id, userId));
         return SuccessResponse.createSuccess(SuccessCode.SELECT_REPLY_SUCCESS, responseDto);
     }
 

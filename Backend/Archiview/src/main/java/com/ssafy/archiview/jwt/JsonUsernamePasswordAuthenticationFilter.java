@@ -7,7 +7,6 @@ import com.####.archiview.dto.user.UserDto;
 import com.####.archiview.entity.Role;
 import com.####.archiview.entity.User;
 import com.####.archiview.repository.UserRepository;
-import jakarta.persistence.EntityManager;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,7 +22,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
@@ -64,7 +62,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
         // PrincipalDetailsService의 loadUserByUsername()가 실행됨
         // 3. PrincipalDetails를 세션에 담고 (권한 관리를 위해서)
         // 4. JWT토큰을 만들어서 응답
-        if (request.getContentType() == null || !request.getContentType().equals(CONTENT_TYPE)) {
+        if (request.getContentType() == null || !request.getContentType().equals(CONTENT_TYPE)) {  // Json 요청이 아니면 에러 발생
             throw new AuthenticationServiceException("Authentication Content-Type not supported: " + request.getContentType());
         }
         // json 형태로 데이터를 받음
@@ -94,10 +92,11 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
         System.out.println("login success");
+        // 유저 권한 추출
         String authoritie = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-        System.out.println(authoritie);
+        System.out.println(authoritie); // -> USER
         //UserDetails
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 

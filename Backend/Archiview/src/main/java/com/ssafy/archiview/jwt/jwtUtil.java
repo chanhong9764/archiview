@@ -30,8 +30,8 @@ public class jwtUtil {
     public jwtUtil(@Value("${jwt.secret}") String secret){
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
     }
-    private Long accessTokenVaildTime = 30 * 60 * 1000L;  // 엑세스 토큰 유효기간 30초
-    private Long refreshTokenVaildTime = 30 * 60 * 1000L;  // 리프레시 토큰 유효기간 30분
+    Long accessTokenVaildTime = 30 * 60 * 1000L;  // 엑세스 토큰 유효기간 30분
+    Long refreshTokenVaildTime = 60 * 60 * 24 * 1000L;  // 리프레시 토큰 유효기간 30분
     public TokenDto createJwt(String username, String role) {
         String accessToken = Jwts.builder()
                 .claim("role", role)
@@ -49,6 +49,16 @@ public class jwtUtil {
         return new TokenDto(accessToken, refreshToken);
     }
 
+    public String createAccessToken(String userId, String role){
+        return Jwts.builder()
+                .claim("role", role)
+                .claim("userId", userId)
+                .issuedAt(new Date(System.currentTimeMillis()))  // 토큰 발행 시간
+                .expiration(new Date(System.currentTimeMillis() + accessTokenVaildTime))  // 토큰 만료 시간
+                .signWith(secretKey)
+                .compact();
+    }
+
     public String getUsername(HttpServletRequest request) {  // 아이디를 검증하는 메서드
         String token = request.getHeader("Authorization");
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId", String.class);
@@ -59,17 +69,17 @@ public class jwtUtil {
     }
 
     public Boolean isExpired(String token) {  // 토큰 만료를 검증하는 메서드
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
+        return Jwts.parser().verifyWith(secretKey).build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getExpiration()
+                .before(new Date());
     }
 
     // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
     public Authentication getAuthentication(String accessToken) {
         // 토큰 복호화
         Claims claims = parseClaims(accessToken);
-
-        if (claims.get("auth") == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
-        }
 
         // 클레임에서 권한 정보 가져오기
         Collection<? extends GrantedAuthority> authorities =
@@ -82,7 +92,7 @@ public class jwtUtil {
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
-    private Claims parseClaims(String accessToken) {
+    private Claims parseClaims(String accessToken) {  // 엑세스 토큰 클레임 추출
         try {
             return (Claims) Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(accessToken);
         } catch (ExpiredJwtException e) {
@@ -93,7 +103,7 @@ public class jwtUtil {
     // 토큰 정보를 검증하는 메서드
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token);
+            Jwts.parser().verifyWith(secretKey).build().parseClaimsJws(token);
             return true;
         } catch (SecurityException | MalformedJwtException e) {
 //            log.info("Invalid JWT Token", e);

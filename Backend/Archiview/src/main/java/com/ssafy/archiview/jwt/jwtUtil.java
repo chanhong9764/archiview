@@ -1,9 +1,7 @@
 package com.ssafy.archiview.jwt;
 
 import com.ssafy.archiview.dto.token.TokenDto;
-//import com.ssafy.archiview.entity.User;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.SecurityException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -64,7 +62,8 @@ public class jwtUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId", String.class);
     }
 
-    public String getRole(String token) {  // role을 검증하는 메서드
+    public String getRole(HttpServletRequest request) {  // role을 검증하는 메서드
+        String token = request.getHeader("Authorization");
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", String.class);
     }
 

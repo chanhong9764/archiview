@@ -1,5 +1,6 @@
 package com.ssafy.archiview.entity;
 
+import com.ssafy.archiview.dto.common.CommonDto;
 import com.ssafy.archiview.dto.company.CompanyDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -27,8 +28,8 @@ public class Company {
                 .build();
     }
 
-    public CompanyDto.listInfo toListDto() {
-        return CompanyDto.listInfo.builder()
+    public CommonDto.companyResponseDto toListDto() {
+        return CommonDto.companyResponseDto.builder()
                 .id(id)
                 .name(name)
                 .build();

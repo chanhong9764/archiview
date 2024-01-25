@@ -2,6 +2,7 @@ package com.####.archiview.jwt;
 
 import com.####.archiview.dto.token.TokenDto;
 import io.jsonwebtoken.Jwts;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,7 @@ public class jwtUtil {
     public jwtUtil(@Value("${jwt.secret}") String secret){
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
     }
-    private Long accessTokenVaildTime = 30 * 1000L;  // 엑세스 토큰 유효기간 30초
+    private Long accessTokenVaildTime = 30 * 60 * 1000L;  // 엑세스 토큰 유효기간 30초
     private Long refreshTokenVaildTime = 30 * 60 * 1000L;  // 리프레시 토큰 유효기간 30분
     public TokenDto createJwt(String username, String role) {
         String accessToken = Jwts.builder()
@@ -43,11 +44,13 @@ public class jwtUtil {
 //                .compact();
     }
 
-    public String getUsername(String token) {  // 아이디를 검증하는 메서드
+    public String getUsername(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId", String.class);
     }
 
-    public String getRole(String token) {  // role을 검증하는 메서드
+    public String getRole(HttpServletRequest request) {  // role을 검증하는 메서드
+        String token = request.getHeader("Authorization");
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", String.class);
     }
 

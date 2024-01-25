@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService{
         return user.toLoginResponseDto();
     }
 
-    public UserDto.DetailResponseDto userDetail(String id) {
-        return repository.getById(id).toDetailResponseDto();
+    public UserDto.DetailResponseDto userDetail(String userid) {
+        return repository.getById(userid).toDetailResponseDto();
     }
 }

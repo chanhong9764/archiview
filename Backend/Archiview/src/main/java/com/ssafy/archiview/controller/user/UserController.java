@@ -28,10 +28,10 @@ public class UserController {
         return SuccessResponse.createSuccess(SuccessCode.JOIN_SUCCESS);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> userDetail(@PathVariable @UserId String id) {
-        System.out.println("userDetail");
-        UserDto.DetailResponseDto responseDto = service.userDetail(id);
+    @GetMapping
+    public ResponseEntity<Object> userDetail(HttpServletRequest request) {
+        String userId = jwtUtil.getUsername(request);
+        UserDto.DetailResponseDto responseDto = service.userDetail(userId);
         return SuccessResponse.createSuccess(SuccessCode.USER_DETAIL_SUCCESS, responseDto);
     }
 

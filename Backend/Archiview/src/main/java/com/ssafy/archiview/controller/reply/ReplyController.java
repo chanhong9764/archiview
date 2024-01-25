@@ -1,6 +1,8 @@
 package com.ssafy.archiview.controller.reply;
 
+import com.ssafy.archiview.dto.comment.CommentDto;
 import com.ssafy.archiview.dto.reply.ReplyDto;
+import com.ssafy.archiview.entity.Reply;
 import com.ssafy.archiview.response.code.SuccessCode;
 import com.ssafy.archiview.response.structure.SuccessResponse;
 import com.ssafy.archiview.service.reply.ReplyService;
@@ -28,6 +30,18 @@ public class ReplyController {
         return SuccessResponse.createSuccess(SuccessCode.DELETE_REPLY_SUCCESS);
     }
 
+    @PostMapping
+    public ResponseEntity<Object> replyAdd(@RequestBody ReplyDto.AddRequestDto requestDto) {
+        service.replyAdd(requestDto);
+        return SuccessResponse.createSuccess(SuccessCode.CREATE_REPLY_SUCCESS);
+    }
+
+    @PatchMapping
+    public ResponseEntity<Object> replyModify(@RequestBody ReplyDto.ModifyRequestDto requestDto) {
+        service.replyModify(requestDto);
+        return SuccessResponse.createSuccess(SuccessCode.MODIFY_REPLY_SUCCESS);
+    }
+
     @PostMapping("/{id}/like")
     public ResponseEntity<Object> replyLike(@PathVariable("id") int id) {
         ReplyDto.LikeResponseDto responseDto = service.replyLike(
@@ -44,8 +58,8 @@ public class ReplyController {
     }
 
     @PostMapping("/{id}/comment")
-    public ResponseEntity<Object> replyComment(@PathVariable("id") int id, @RequestBody ReplyDto.CommentDto requestDto) {
-        List<ReplyDto.CommentResponseDto> responseDto = service.replyComment(ReplyDto.CommentRequestDto.builder()
+    public ResponseEntity<Object> replyComment(@PathVariable("id") int id, @RequestBody CommentDto.request requestDto) {
+        List<CommentDto.info> responseDto = service.replyComment(CommentDto.request.builder()
                 .replyId(id)
                 .content(requestDto.getContent())
                 .userId("chanhong9784").build());

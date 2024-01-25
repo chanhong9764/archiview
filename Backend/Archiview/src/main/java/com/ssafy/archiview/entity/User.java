@@ -77,8 +77,8 @@ public class User implements Persistable<String> {
         return this.createdAt == null;
     }
 
-    public UserDto.loginResponseDto toLoginResponseDto(){
-        return UserDto.loginResponseDto.builder()
+    public UserDto.logoutDto toLogoutDto(){
+        return UserDto.logoutDto.builder()
                 .id(id)
                 .email(email)
                 .name(name)

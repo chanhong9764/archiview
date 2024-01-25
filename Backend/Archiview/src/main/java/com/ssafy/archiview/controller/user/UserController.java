@@ -30,9 +30,7 @@ public class UserController {
     }
     @GetMapping("/logout")  // 로그아웃
     public ResponseEntity<Object> userLogout(HttpServletRequest request){
-        String userId = jwtUtil.getUsername(request);
-        System.out.println(userId);
-        service.userLogout(userId);
+        service.userLogout(request);
         return SuccessResponse.createSuccess(SuccessCode.LOGOUT_SUCCESS);
     }
 

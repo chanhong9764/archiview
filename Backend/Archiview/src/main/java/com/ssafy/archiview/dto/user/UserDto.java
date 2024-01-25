@@ -1,20 +1,19 @@
 package com.####.archiview.dto.user;
 
+import com.####.archiview.dto.token.TokenDto;
 import com.####.archiview.entity.Role;
 import com.####.archiview.entity.User;
 import com.####.archiview.validation.user.UserEmail;
 import com.####.archiview.validation.user.UserId;
 import com.####.archiview.validation.user.UserName;
 import com.####.archiview.validation.user.UserPassword;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 public class UserDto {
     @Getter
+    @Setter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class AddRequestDto {
         @UserId
@@ -25,7 +24,6 @@ public class UserDto {
         private String email;
         @UserName
         private String name;
-
 
         @Builder
         public AddRequestDto(String id, String pw, String email, String name) {
@@ -58,51 +56,33 @@ public class UserDto {
             this.id = id;
             this.pw = pw;
         }
-
-        public User toEntity(){
-            return User.builder()
-                    .id(id)
-                    .pw(pw)
-                    .build();
-        }
     }
 
     @Getter
+    @ToString
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class loginResponseDto {
-        @UserId
         private String id;
-        @UserName
         private String name;
-        @UserEmail
         private String email;
         private String profileUrl;
         private String introduce;
-        private LocalDateTime createdAt;
         private Role role;
+        private String accessToken;
+        private String refreshToken;
 
-
-        public loginResponseDto(String id, String name, String email, String profileUrl, String introduce, LocalDateTime createdAt, Role role) {
+        @Builder
+        public loginResponseDto(String id, String name, String email, String profileUrl, String introduce, Role role, String accessToken, String refreshToken) {
             this.id = id;
             this.name = name;
             this.email = email;
             this.profileUrl = profileUrl;
             this.introduce = introduce;
-            this.createdAt = createdAt;
             this.role = role;
+            this.accessToken = accessToken;
+            this.refreshToken = refreshToken;
         }
 
-        public User toEntity() {
-            return User.builder()
-                    .id(id)
-                    .name(name)
-                    .email(email)
-                    .profileUrl(profileUrl)
-                    .introduce(introduce)
-                    .createdAt(createdAt)
-                    .role(role)
-                    .build();
-        }
     }
     @Getter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -112,14 +92,16 @@ public class UserDto {
         private String email;
         private String introduce;
         private String profileUrl;
+        private Role role;
 
         @Builder
-        public DetailResponseDto(String id, String name, String email, String introduce, String profileUrl) {
+        public DetailResponseDto(String id, String name, String email, String introduce, String profileUrl, Role role) {
             this.id = id;
             this.name = name;
             this.email = email;
             this.introduce = introduce;
             this.profileUrl = profileUrl;
+            this.role = role;
         }
     }
 }

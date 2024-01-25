@@ -10,7 +10,7 @@ public interface UserService {
     // 회원가입
     void userAdd(UserDto.AddRequestDto requestDto);
     // 로그아웃
-    void userLogout(String userId);
+    void userLogout(HttpServletRequest request);
     // 회원탈퇴
     void userDelete(HttpServletRequest request);
     // 회원정보 조회

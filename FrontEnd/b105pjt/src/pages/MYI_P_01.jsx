@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import ProfileSection from '../components/MYI_P_01/profileSection.jsx';
 import Accordion from '../components/MYI_P_01/accordion.jsx';
 import SearchSection from '../components/utils/searchSection.jsx';
-import { createTheme, ThemeProvider, Container, Typography, Button, Card, Grid, CardActions, CardContent, CardMedia } from '@mui/material';
+import { createTheme, ThemeProvider, Container, Typography, Card, Grid, CardContent, CardMedia } from '@mui/material';
+import MyNavbar from '../components/MYI_P_02/myNavbar.jsx';
 
 // 커스텀 테마 정의
 const theme = createTheme({
@@ -28,13 +29,14 @@ const theme = createTheme({
 // 카드 및 미디어 스타일 정의
 const cardStyles = {
   boxShadow: theme.shadows[3],
-  borderRadius: '15px',
+  borderRadius: '5px',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
   maxHeight: 400,
   overflow: 'hidden',
   transition: 'transform 0.3s ease-in-out',
+  cursor: 'pointer', // 커서 포인터 추가
   '&:hover': {
     transform: 'scale(1.05)',
   },
@@ -43,7 +45,7 @@ const cardStyles = {
 const mediaStyles = {
   height: 140,
   objectFit: 'cover',
-  borderRadius: '15px 15px 0 0',
+  borderRadius: '5px 5px 0 0',
 };
 
 // 새로운 dummyQuestions 정의
@@ -77,6 +79,7 @@ const dummyQuestions = [
   // 추가 답변 데이터...
 ];
 
+
 const Page = () => {
   const [questions, setQuestions] = useState([]);
 
@@ -98,6 +101,7 @@ const Page = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      <MyNavbar />
       <Container sx={{ mt: 4, mb: 4 }}>
         <ProfileSection imageUrl="https://via.placeholder.com/180X180">
           <Typography variant="h5" gutterBottom>이름</Typography>
@@ -109,7 +113,7 @@ const Page = () => {
             <Grid container spacing={2}>
               {question.replies.map((reply) => (
                 <Grid item xs={12} sm={6} md={4} key={reply.id}>
-                  <Card sx={cardStyles}>
+                  <Card onClick={() => handleViewDetails(reply.videoUrl)} sx={cardStyles}>
                     <CardMedia
                       component="img"
                       sx={mediaStyles}
@@ -117,19 +121,10 @@ const Page = () => {
                       alt="Thumbnail Image"
                     />
                     <CardContent>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>{reply.userId}</Typography>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>{reply.userId}</Typography>
                       <Typography variant="body2">{reply.script}</Typography>
                       <Typography variant="caption" color="textSecondary">{reply.question.companyName}</Typography>
                     </CardContent>
-                    <CardActions>
-                      <Button
-                        size="small"
-                        color="primary"
-                        onClick={() => handleViewDetails(reply.videoUrl)}
-                      >
-                        상세보기
-                      </Button>
-                    </CardActions>
                   </Card>
                 </Grid>
               ))}

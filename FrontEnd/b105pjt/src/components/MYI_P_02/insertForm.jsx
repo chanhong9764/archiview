@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material";
 import React from "react";
-import SearchSection from "../utils/searchSection";
+import SearchTab from "../SCH_P_01/tabCompo";
 
 const insertForm = () => {
   return (
@@ -13,7 +13,7 @@ const insertForm = () => {
       />
 
       <div className="Insert-search">
-        <SearchSection></SearchSection>
+        <SearchTab></SearchTab>
       </div>
 
       <img width={"100%"} src="http://placehold.it/720X480" alt="영상" />

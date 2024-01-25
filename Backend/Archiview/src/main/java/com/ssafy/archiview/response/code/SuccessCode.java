@@ -14,7 +14,7 @@ public enum SuccessCode implements ResponseCode {
     LOGOUT_SUCCESS(HttpStatus.OK, "로그아웃에 성공했습니다."),
     JOIN_SUCCESS(HttpStatus.CREATED, "회원가입에 성공했습니다."),
     USER_DETAIL_SUCCESS(HttpStatus.OK, "회원정보 조회에 성공했습니다."),
-
+    DELETE_USER_SUCCESS(HttpStatus.OK, "회원탈퇴에 성공했습니다."),
     /*
         QUESTION
      */
@@ -47,6 +47,16 @@ public enum SuccessCode implements ResponseCode {
 
     SELECT_RECRUIT_LIST_SUCCESS(HttpStatus.OK, "채용 공고 리스트를 조회했습니다."),
     SELECT_RECRUIT_SUCCESS(HttpStatus.OK, "채용 공고를 조회했습니다."),
+
+    /*
+        COMPANY
+     */
+    SELECT_COMPANY_LIST_SUCCESS(HttpStatus.OK, "기업 조회에 성공했습니다."),
+
+    /*
+        TAG
+     */
+    SELECT_TAG_LIST_SUCCESS(HttpStatus.OK, "태그 조회에 성공했습니다."),
     ;
     private final HttpStatus httpStatus;
     private final String message;

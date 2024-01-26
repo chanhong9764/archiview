@@ -1,5 +1,6 @@
 package com.####.archiview.controller.common;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.####.archiview.dto.common.CommonDto;
 import com.####.archiview.dto.company.CompanyDto;
 import com.####.archiview.response.code.SuccessCode;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -29,5 +31,11 @@ public class CommonController {
     public ResponseEntity<Object> tagList() {
         CommonDto.tagResponseDto responseDto = commonService.tagList();
         return SuccessResponse.createSuccess(SuccessCode.SELECT_TAG_LIST_SUCCESS, responseDto);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Object> imageSearch(@RequestParam("query") String query){
+        CommonDto.SearchResponseDto responseDto = commonService.searchImage(query);
+        return SuccessResponse.createSuccess(SuccessCode.SEARCH_IMAGE_SUCCESS, responseDto);
     }
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Typography, Box, Divider } from "@mui/material";
 import ActionButton from "../components/MYP_P_01/actionButton";
 import ProfileSection from "../components/MYP_P_01/profileSection";
@@ -17,7 +17,9 @@ const dummyProfileData = {
 };
 
 const ProfilePage = () => {
-  const { name, email, introduce, profile_url } = dummyProfileData.data;
+  const { name, email, profile_url } = dummyProfileData.data;
+  const [introduce, setIntroduce] = useState(dummyProfileData.data.introduce);
+  dummyProfileData.data.introduce = introduce;
 
   const handleSave = () => {
     // 저장 로직
@@ -38,7 +40,12 @@ const ProfilePage = () => {
         maxWidth: "md", // 최대 너비를 medium으로 설정
       }}
     >
-      <ProfileSection imageUrl={profile_url} sx={{ mb: 4, width: "100%" }}>
+      <ProfileSection
+        imageUrl={profile_url}
+        sx={{ mb: 4, width: "100%" }}
+        introduce={introduce}
+        setIntroduce={setIntroduce}
+      >
         <Box sx={{ textAlign: "center", width: "100%" }}>
           <Typography variant="h5" sx={{ mb: 2 }}>
             {name}

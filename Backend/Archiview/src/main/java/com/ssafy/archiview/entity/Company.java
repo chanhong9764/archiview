@@ -1,5 +1,6 @@
 package com.####.archiview.entity;
 
+import com.####.archiview.dto.common.CommonDto;
 import com.####.archiview.dto.company.CompanyDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -24,6 +25,13 @@ public class Company {
                 .id(id)
                 .name(name)
                 .url(url)
+                .build();
+    }
+
+    public CommonDto.companyResponseDto toListDto() {
+        return CommonDto.companyResponseDto.builder()
+                .id(id)
+                .name(name)
                 .build();
     }
 }

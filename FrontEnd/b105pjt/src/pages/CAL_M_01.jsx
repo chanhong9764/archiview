@@ -12,6 +12,7 @@ import { selectImg } from "../api/naverAPI";
 import "../assets/css/CAL_M_01.css";
 import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 import CreateIcon from "@mui/icons-material/Create";
+import { useNavigate } from "react-router-dom";
 
 const dummyData = {
   code: 200,
@@ -50,8 +51,14 @@ const CAL_M_01 = (props) => {
   const [dense, setDense] = useState(false);
   const [secondary, setSecondary] = useState(false);
 
+  const navigate = useNavigate();
+
   // 발생한 이벤트 이름
   const title = props.event.title;
+
+  const handleClickListItem = () => {
+    navigate("/addquestion", { replace: true });
+  };
 
   return (
     <div>
@@ -86,7 +93,11 @@ const CAL_M_01 = (props) => {
                 key={question.id}
                 className="listItem"
                 secondaryAction={
-                  <IconButton edge="end" aria-label="create">
+                  <IconButton
+                    edge="end"
+                    aria-label="create"
+                    onClick={handleClickListItem}
+                  >
                     <CreateIcon />
                   </IconButton>
                 }

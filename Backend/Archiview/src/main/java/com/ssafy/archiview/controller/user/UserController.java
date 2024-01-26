@@ -52,5 +52,12 @@ public class UserController {
         service.validPassword(userId, dto.getPw());
         return SuccessResponse.createSuccess(SuccessCode.PASSWORD_SUCCESS);
     }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<Object> changePassword(@RequestBody UserDto.passwordDto dto, HttpServletRequest request){
+        String userId = jwtUtil.getUsername(request);
+        service.changePassword(userId, dto.getPw());
+        return SuccessResponse.createSuccess(SuccessCode.PASSWORD_CHANGE_SUCCESS);
+    }
 }
 

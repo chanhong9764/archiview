@@ -69,8 +69,17 @@ public class UserServiceImpl implements UserService{
     @Override
     public void validPassword(String userId, String userPw) {
         String password = repository.getById(userId).getPw();
-        if(!bCryptPasswordEncoder.matches(userPw, password)){
+        if(!bCryptPasswordEncoder.matches(userPw, password)){  // 패스워드가 일치하지 않으면 에러
             throw new RestApiException(ErrorCode.INVLAID_PASSWORD);
         }
+    }
+
+    @Override
+    public void changePassword(String userId, String userPw) {
+        User user = repository.getById(userId);
+//        if (bCryptPasswordEncoder.matches(userPw, user.getPw())){  // 기존 패스워드와 같은 패스워드로 변경시 에러 발생 시켜야 함
+//            throw new RestApiException(ErrorCode.DUPLICATED_PASSWORD);
+//        }
+        repository.save(user);
     }
 }

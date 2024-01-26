@@ -14,4 +14,6 @@ public interface UserService {
     UserDto.DetailResponseDto userDetail(String id);
     // 비밀번호 확인
     void validPassword(String userId, String userPw);
+    // 비밀번호 변경
+    void changePassword(String userId, String userPw);
 }

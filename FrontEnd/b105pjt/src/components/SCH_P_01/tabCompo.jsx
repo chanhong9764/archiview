@@ -8,6 +8,8 @@ import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Unstable_Grid2";
 import FirstTabFirstList from "./firstTabFirstList";
 import FirstTabSecondList from "./firstTabSecondList";
+import SecondTabFirstList from "./secondTabFirstList";
+import SecondTabSecondList from "./secondTabSecondList";
 import TagListCompo from "./tagListCompo";
 import { Button } from "@mui/material";
 
@@ -41,11 +43,12 @@ function a11yProps(index) {
 }
 
 export default function BasicTabs() {
-  const dumyBigTagList = ["직무", "역량"];
+  const dumyBigTagList1 = ["직무", "역량"];
+  const dumyBigTagList2 = ["직업1", "직업2"];
   const [value, setValue] = React.useState(0);
   const [tagDataList, setTagDataList] = React.useState([]);
   const [checked, setChecked] = React.useState([]);
-  const [bigTagList, setBigTagList] = React.useState(dumyBigTagList);
+  const [bigTagList, setBigTagList] = React.useState(dumyBigTagList1);
   const [bigTagData, setBigTagData] = React.useState("");
   const [smallTagData, setSmallTagData] = React.useState([]);
   const [smallTagList, setSmallTagList] = React.useState([]);
@@ -55,12 +58,30 @@ export default function BasicTabs() {
     setValue(newValue);
   };
 
+  const handleReset = () => {
+    setSmallTagData([]);
+    setSmallTagList([]);
+    setBigTagData("");
+    setTagDataList([]);
+    setChecked([]);
+    setPickTagList([]);
+  };
+
+  const onClickTab = (value) => {
+    setBigTagData("");
+    setBigTagList(value);
+    setSmallTagList([]);
+    setSmallTagData([]);
+    // setChecked([]);
+  };
+
   return (
     <Box
       sx={{
         width: "100%",
         border: "2px solid #1769aa",
         marginTop: "10px",
+        marginBottom: "20px",
       }}
     >
       <Box
@@ -72,8 +93,16 @@ export default function BasicTabs() {
         }}
       >
         <Tabs value={value} onChange={handleChange} aria-label="기본 탭 예제">
-          <Tab label="Select 1" {...a11yProps(0)} />
-          <Tab label="Select 2" {...a11yProps(1)} />
+          <Tab
+            label="Select 1"
+            {...a11yProps(0)}
+            onClick={() => onClickTab(dumyBigTagList1)}
+          />
+          <Tab
+            label="Select 2"
+            {...a11yProps(1)}
+            onClick={() => onClickTab(dumyBigTagList2)}
+          />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0} padding="0px">
@@ -115,19 +144,62 @@ export default function BasicTabs() {
         <Divider />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        Select 2
+        <Grid container spacing={2}>
+          <Grid xs={5} sx={{ pr: "0px" }}>
+            <SecondTabFirstList
+              tagDataList={tagDataList}
+              setTagDataList={setTagDataList}
+              bigTagData={bigTagData}
+              setBigTagData={setBigTagData}
+              checked={checked}
+              setChecked={setChecked}
+              smallTagData={smallTagData}
+              setSmallTagData={setSmallTagData}
+              bigTagList={bigTagList}
+              setBigTagList={setBigTagList}
+              smallTagList={smallTagList}
+              setSmallTagList={setSmallTagList}
+              pickTagList={pickTagList}
+              setPickTagList={setPickTagList}
+            />
+          </Grid>
+          <Divider orientation="vertical" variant="middle" flexItem />
+          <Grid>
+            <SecondTabSecondList
+              tagDataList={tagDataList}
+              setTagDataList={setTagDataList}
+              bigTagData={bigTagData}
+              smallTagData={smallTagData}
+              setSmallTagData={setSmallTagData}
+              smallTagList={smallTagList}
+              pickTagList={pickTagList}
+              setPickTagList={setPickTagList}
+            />
+          </Grid>
+        </Grid>
       </CustomTabPanel>
-      <Box>빅태그 : {bigTagData}</Box>
-      <Box>태그 데이터 모음 : {JSON.stringify(tagDataList)}</Box>
-      <Box>더미 스몰태그 벨류 리스트 : {JSON.stringify(smallTagList)}</Box>
-      <Box>픽한 스몰테그 데이터 : {JSON.stringify(smallTagData)}</Box>
-      <Box>출력할 픽 데이터 : {JSON.stringify(pickTagList)}</Box>
       <Divider />
       <Box>
-        <TagListCompo />
+        <TagListCompo
+          pickTagList={pickTagList}
+          setPickTagList={setPickTagList}
+          smallTagData={smallTagData}
+          setSmallTagData={setSmallTagData}
+          tagDataList={tagDataList}
+          setTagDataList={setTagDataList}
+          bigTagData={bigTagData}
+          checked={checked}
+          setChecked={setChecked}
+        />
       </Box>
       <Box>
-        <Button>Reset</Button>
+        {/* <Box>빅태그 : {bigTagData}</Box>
+        <Box>태그 데이터 모음 : {JSON.stringify(tagDataList)}</Box>
+        <Box>더미 스몰태그 벨류 리스트 : {JSON.stringify(smallTagList)}</Box>
+        <Box>픽한 스몰테그 데이터 : {JSON.stringify(smallTagData)}</Box>
+        <Box>출력할 픽 데이터 : {JSON.stringify(pickTagList)}</Box> */}
+        <Button onClick={() => handleReset()}>Reset</Button>
+        <Button>검색하기</Button>
       </Box>
     </Box>
   );

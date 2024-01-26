@@ -70,7 +70,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
 
         String id = loginDto.getId();
         String pw = loginDto.getPw();
-
+        System.out.println("login pw :" + pw);
         if (id == null || pw == null) {
             throw new AuthenticationServiceException("DATA IS MISS");
         }
@@ -96,7 +96,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
         String authoritie = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-        System.out.println(authoritie); // -> USER
+
         //UserDetails
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 

@@ -34,7 +34,7 @@ public class UserController {
         return SuccessResponse.createSuccess(SuccessCode.LOGOUT_SUCCESS);
     }
 
-    @GetMapping
+    @GetMapping  // 회원상세조회
     public ResponseEntity<Object> userDetail(HttpServletRequest request) {
         String userId = jwtUtil.getUsername(request);
         UserDto.DetailResponseDto responseDto = service.userDetail(userId);
@@ -44,6 +44,13 @@ public class UserController {
     public ResponseEntity<Object> deleteUser(HttpServletRequest request){
         service.userDelete(request);
         return SuccessResponse.createSuccess(SuccessCode.DELETE_USER_SUCCESS);
+    }
+
+    @PostMapping("/valid-password")  // 비밀번호 확인
+    public ResponseEntity<Object> validPassword(@RequestBody UserDto.passwordDto dto, HttpServletRequest request){
+        String userId = jwtUtil.getUsername(request);
+        service.validPassword(userId, dto.getPw());
+        return SuccessResponse.createSuccess(SuccessCode.PASSWORD_SUCCESS);
     }
 }
 

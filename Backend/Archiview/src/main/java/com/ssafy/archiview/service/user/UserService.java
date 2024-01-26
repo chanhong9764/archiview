@@ -1,10 +1,7 @@
 package com.ssafy.archiview.service.user;
 
 import com.ssafy.archiview.dto.user.UserDto;
-import com.ssafy.archiview.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 public interface UserService {
     // 회원가입
@@ -15,4 +12,6 @@ public interface UserService {
     void userDelete(HttpServletRequest request);
     // 회원정보 조회
     UserDto.DetailResponseDto userDetail(String id);
+    // 비밀번호 확인
+    void validPassword(String userId, String userPw);
 }

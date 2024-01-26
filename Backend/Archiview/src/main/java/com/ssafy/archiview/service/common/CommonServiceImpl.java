@@ -1,5 +1,8 @@
 package com.####.archiview.service.common;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.####.archiview.dto.common.CommonDto;
 import com.####.archiview.dto.company.CompanyDto;
 import com.####.archiview.entity.Company;
@@ -8,10 +11,14 @@ import com.####.archiview.entity.JobMain;
 import com.####.archiview.repository.CompanyRepository;
 import com.####.archiview.repository.CsMainRepository;
 import com.####.archiview.repository.JobMainRepository;
+import com.####.archiview.response.code.ErrorCode;
+import com.####.archiview.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,5 +48,24 @@ public class CommonServiceImpl implements CommonService {
                 .csList(csList)
                 .jsList(jsList)
                 .build();
+    }
+
+    @Override
+    public CommonDto.SearchResponseDto searchImage(String query) {
+        WebClient webClient = WebClient.builder()
+                .baseUrl("https://openapi.naver.com/v1/search/image")
+                .defaultHeader("X-Naver-Client-Id", "vDZwnjUq2L0ecmGLqTDE")
+                .defaultHeader("X-Naver-Client-Secret", "AFfmYdxuEK")
+                .build();
+        CommonDto.SearchResponse response = webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .queryParam("display", 1)
+                        .queryParam("query", query)
+                        .build())
+                .retrieve()
+                .bodyToMono(CommonDto.SearchResponse.class)
+                .block();
+        System.out.println();
+        return new CommonDto.SearchResponseDto(response.getItems().get(0).getThumbnail());
     }
 }

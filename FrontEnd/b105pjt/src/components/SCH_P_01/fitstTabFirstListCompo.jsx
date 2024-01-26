@@ -34,7 +34,7 @@ export default function CheckboxList({
     ];
 
     function tagPlus(Ojt) {
-      Ojt.cs = value;
+      Ojt.bigTag = value;
       return Ojt;
     }
     if (currentIndex === -1) {
@@ -44,22 +44,22 @@ export default function CheckboxList({
       setSmallTagList(dumySmallList);
       setSmallTagData(dumySmallList.map((item) => item.key));
       setTagDataList([
-        ...tagDataList,
+        ...tagDataList.filter((item) => item.bigTag !== value),
         {
-          cs: value,
+          bigTag: value,
           smallTagIndex: dumySmallList.map((item) => item.key),
         },
       ]);
       setPickTagList([
-        ...pickTagList,
-        { smallTag: "전체", cs: value, key: "ALL" },
+        ...pickTagList.filter((item) => item.bigTag !== value),
+        { smallTag: "전체", bigTag: value, key: "ALL" },
       ]);
     } else {
       setBigTagData(value);
       dumySmallList.map(tagPlus);
       setSmallTagList(dumySmallList);
       function smallTagPick(item) {
-        if (item.cs === value) {
+        if (item.bigTag === value) {
           return item;
         }
       }
@@ -78,8 +78,12 @@ export default function CheckboxList({
           <ListItem
             key={value}
             secondaryAction={
-              <IconButton edge="end" aria-label="comments">
-                <ArrowRightIcon onClick={handleToggle(value)} />
+              <IconButton
+                edge="end"
+                aria-label="comments"
+                onClick={handleToggle(value)}
+              >
+                <ArrowRightIcon />
               </IconButton>
             }
             disablePadding

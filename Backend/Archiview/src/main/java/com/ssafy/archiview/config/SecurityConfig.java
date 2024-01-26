@@ -8,6 +8,7 @@ import com.ssafy.archiview.response.structure.SuccessResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -49,14 +50,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf((auth) -> auth.disable())  // 토큰 방식이므로 csrf disable
-                .formLogin((auth) -> auth.disable())  //From 로그인 방식 disable -> jwt 로그인 사용하기 때문
-                .httpBasic((auth) -> auth.disable())  //http basic 인증 방식 disable
-                .authorizeHttpRequests((auth) -> auth  //경로별 인가 작업
-                        .requestMatchers("/**", "/api/users/login").permitAll()  // /api/** 모든
-                        .anyRequest().authenticated())
-                .sessionManagement((session) -> session  //세션 설정 -> 세션 stateless 상태로 변경
+                .csrf((auth) -> auth.disable())  // 토큰 방식이므로 csrf 설정 해제
+                .formLogin((auth) -> auth.disable())  // jwt 로그인 사용하기 때문에 From 로그인 방식 disable
+                .httpBasic((auth) -> auth.disable())  // http basic 인증 방식 disable
+                .sessionManagement((session) -> session   // JWT 사용 위해 기존의 세션 방식 인증 해제
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // URL Mapping
+                .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers(HttpMethod.POST ,"/api/users").permitAll()  // 회원가입 허용
+                        .requestMatchers(HttpMethod.POST ,"/api/users/login").permitAll()  // 로그인 허용
+                        .requestMatchers(HttpMethod.GET ,"/api/users/{id}").permitAll()  // 회원조회
+                        .requestMatchers(HttpMethod.GET ,"/api/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE ,"/api/**").permitAll()
+                        .anyRequest().authenticated())  // 나머지 요청은 모두 인증 되어야 함
+
 //                .addFilterAt(new loginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 // 필터 추가 LoginFilter()는 인자를 받음 (AuthenticationManager() 메소드에 authenticationConfiguration 객체를 넣어야 함) 따라서 빈 등록 필요
                 .addFilterBefore(jsonUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

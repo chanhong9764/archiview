@@ -16,6 +16,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -61,5 +64,13 @@ public class UserServiceImpl implements UserService{
 
     public UserDto.DetailResponseDto userDetail(String userid) {
         return repository.getById(userid).toDetailResponseDto();
+    }
+
+    @Override
+    public void validPassword(String userId, String userPw) {
+        String password = repository.getById(userId).getPw();
+        if(!bCryptPasswordEncoder.matches(userPw, password)){
+            throw new RestApiException(ErrorCode.INVLAID_PASSWORD);
+        }
     }
 }

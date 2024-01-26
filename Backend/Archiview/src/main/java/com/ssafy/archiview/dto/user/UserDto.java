@@ -138,4 +138,15 @@ public class UserDto {
             this.role = role;
         }
     }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class passwordDto {
+        private String pw;
+
+        @Builder
+        public passwordDto(String pw) {
+            this.pw = pw;
+        }
+    }
 }

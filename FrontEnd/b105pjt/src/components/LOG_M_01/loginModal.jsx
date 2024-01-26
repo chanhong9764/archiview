@@ -41,6 +41,12 @@ const LoginModal = ({ onSwitch, close }) => {
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleLogin();
+    }
+  };
+
   return (
     <div className="LOG-M-01-Content">
       <Grid container spacing={2}>
@@ -57,6 +63,7 @@ const LoginModal = ({ onSwitch, close }) => {
             label="ID"
             defaultValue=""
             variant="filled"
+            onKeyDown={handleKeyPress}
             onChange={handleIdChange}
           />
         </Grid>
@@ -69,6 +76,7 @@ const LoginModal = ({ onSwitch, close }) => {
             label="PW"
             defaultValue=""
             variant="filled"
+            onKeyDown={handleKeyPress}
             onChange={handlePwChange}
           />
         </Grid>

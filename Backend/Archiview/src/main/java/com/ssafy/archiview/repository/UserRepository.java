@@ -9,7 +9,4 @@ public interface UserRepository extends JpaRepository<User, String> {
     default User getById(String id) {
         return findById(id).orElseThrow(() -> new RestApiException(ErrorCode.USER_NOT_FOUND));
     }
-
-//    User findByid(String userId);
-//    User findByUserId(String userId);
 }

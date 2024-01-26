@@ -19,6 +19,7 @@ import Logo from "../../assets/img/symbolLogo_Slogun-removebg-preview.png";
 function Navbar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation(); // 현재 경로 정보를 얻어오기 위해 useLocation 사용
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -55,7 +56,7 @@ function Navbar() {
   const handleCalendar = () => {
     navigate("/cal", { replace: true });
   };
-  
+
   // 상세 검색 클릭시
   const handleSearch = () => {
     navigate("/search", { replace: true });
@@ -71,6 +72,10 @@ function Navbar() {
     navigate("/mypage", { replace: true });
   };
 
+  const isCurrentPage = (path) => {
+    return location.pathname === path;
+  };
+
   return (
     <div>
       <AppBar style={{ background: "white" }} position="fixed">
@@ -80,7 +85,11 @@ function Navbar() {
 
             <Box
               onClick={handleRefresh}
-              sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+              sx={{
+                display: { xs: "none", md: "flex" },
+                mr: 1,
+                cursor: "pointer",
+              }}
             >
               <img src={Logo} alt="Logo" style={{ height: "40px" }} />
             </Box>
@@ -88,7 +97,11 @@ function Navbar() {
             {/* 작은 사이즈 logo */}
             <Box
               onClick={handleRefresh}
-              sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
+              sx={{
+                display: { xs: "flex", md: "none" },
+                mr: 1,
+                cursor: "pointer",
+              }}
             >
               <img src={Logo} alt="Logo" style={{ height: "40px" }} />
             </Box>
@@ -144,19 +157,38 @@ function Navbar() {
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               <Button
                 onClick={handleCalendar}
-                sx={{ my: 2, color: "#222222", display: "block" }}
+                sx={{
+                  my: 2,
+                  color: "#222222",
+                  display: "block",
+                  fontWeight: isCurrentPage("/cal") ? "bold" : "normal",
+                }}
               >
                 취업 캘린더
               </Button>
               <Button
                 onClick={handleSearch}
-                sx={{ my: 2, color: "#222222", display: "block" }}
+                sx={{
+                  my: 2,
+                  color: "#222222",
+                  display: "block",
+                  fontWeight: isCurrentPage("/search") ? "bold" : "normal",
+                }}
               >
                 상세 검색
               </Button>
               <Button
                 onClick={handleMyInterview}
-                sx={{ my: 2, color: "#222222", display: "block" }}
+                sx={{
+                  my: 2,
+                  color: "#222222",
+                  display: "block",
+                  fontWeight:
+                    isCurrentPage("/myinterview") ||
+                    isCurrentPage("/addquestion")
+                      ? "bold"
+                      : "normal",
+                }}
               >
                 면접 관리
               </Button>

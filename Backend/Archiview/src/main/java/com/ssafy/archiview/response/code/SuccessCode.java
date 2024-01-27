@@ -18,6 +18,7 @@ public enum SuccessCode implements ResponseCode {
     PASSWORD_SUCCESS(HttpStatus.OK, "비밀번호 확인에 성공했습니다."),
     PASSWORD_CHANGE_SUCCESS(HttpStatus.OK, "비밀번호 변경에 성공했습니다."),
     FIND_ID_SUCCESS(HttpStatus.OK, "아이디 찾기에 성공했습니다."),
+    FIND_PASSWORD_SUCCESS(HttpStatus.OK, "패스워드 찾기에 성공했습니다."),
     /*
         QUESTION
      */

@@ -3,7 +3,10 @@ package com.ssafy.archiview.controller.user;
 import com.ssafy.archiview.dto.token.TokenDto;
 import com.ssafy.archiview.dto.user.UserDto;
 import com.ssafy.archiview.jwt.jwtUtil;
+import com.ssafy.archiview.response.code.ErrorCode;
 import com.ssafy.archiview.response.code.SuccessCode;
+import com.ssafy.archiview.response.exception.RestApiException;
+import com.ssafy.archiview.response.structure.ErrorResponse;
 import com.ssafy.archiview.response.structure.SuccessResponse;
 import com.ssafy.archiview.service.user.UserService;
 import com.ssafy.archiview.validation.user.UserId;
@@ -58,6 +61,15 @@ public class UserController {
         String userId = jwtUtil.getUsername(request);
         service.changePassword(userId, dto.getPw());
         return SuccessResponse.createSuccess(SuccessCode.PASSWORD_CHANGE_SUCCESS);
+    }
+
+    @GetMapping("/find-password")
+    public ResponseEntity<Object> findPassword(@RequestParam String id, @RequestParam String email){
+        int cnt = service.findPassword(id, email);
+        if (cnt == 0){
+            throw new RestApiException(ErrorCode.USER_NOT_FOUND);
+        }
+        return SuccessResponse.createSuccess(SuccessCode.FIND_PASSWORD_SUCCESS);
     }
 }
 

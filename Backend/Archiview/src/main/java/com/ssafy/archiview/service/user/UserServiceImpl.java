@@ -6,19 +6,12 @@ import com.ssafy.archiview.entity.User;
 import com.ssafy.archiview.jwt.jwtUtil;
 import com.ssafy.archiview.repository.UserRepository;
 import com.ssafy.archiview.response.code.ErrorCode;
-import com.ssafy.archiview.response.code.SuccessCode;
 import com.ssafy.archiview.response.exception.RestApiException;
-import com.ssafy.archiview.response.structure.SuccessResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -81,5 +74,10 @@ public class UserServiceImpl implements UserService{
 //            throw new RestApiException(ErrorCode.DUPLICATED_PASSWORD);
 //        }
         repository.save(user);
+    }
+
+    @Override
+    public int findPassword(String userId, String email) {
+        return repository.countByIdAndEmail(userId, email);
     }
 }

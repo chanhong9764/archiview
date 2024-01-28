@@ -3,8 +3,6 @@ package com.####.archiview.service.user;
 import com.####.archiview.dto.user.UserDto;
 import com.####.archiview.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 public interface UserService {
     // 회원가입
@@ -15,4 +13,13 @@ public interface UserService {
     void userDelete(HttpServletRequest request);
     // 회원정보 조회
     UserDto.DetailResponseDto userDetail(String id);
+    // 패스워드 확인
+    void validPassword(String userId, String userPw);
+    // 패스워드 변경
+    void updatePassword(String userId, String userPw);
+    // 아이디 찾기
+    int findId(String name, String email);
+    // 패스워드 찾기
+    int findPassword(String userId, String email);
+    void updateProfile(String profileUrl);
 }

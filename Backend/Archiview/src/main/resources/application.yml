@@ -14,7 +14,7 @@ spring:
     properties:
       hibernate:
         # 실행한 SQL의 가독성을 좋게 변환
-        format_sql: true
+#        format_sql: true
 
 jwt:
   secret: aaaabbbsdifqbvaesoioegwaaaabbbsdidsfdsfdfsdfsdfsdfsdfsd

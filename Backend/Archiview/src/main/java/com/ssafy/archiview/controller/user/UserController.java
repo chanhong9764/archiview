@@ -73,14 +73,14 @@ public class UserController {
     public ResponseEntity<Object> updatePassword(@RequestBody UserDto.passwordDto dto, HttpServletRequest request){
         String userId = jwtUtil.getUsername(request);
         service.updatePassword(userId, dto.getPw());
-        return SuccessResponse.createSuccess(SuccessCode.PASSWORD_CHANGE_SUCCESS);
+        return SuccessResponse.createSuccess(SuccessCode.PASSWORD_UPDATE_SUCCESS);
     }
 
-    @PatchMapping("/update-profile")  // 패스워드 변경
-    public ResponseEntity<Object> updateProfile(@RequestBody UserDto.passwordDto dto, HttpServletRequest request){
+    @PatchMapping("/update-profile")  // 프로필 변경
+    public ResponseEntity<Object> updateProfile(@RequestBody UserDto.profileDto dto, HttpServletRequest request){
         String userId = jwtUtil.getUsername(request);
-
-        return SuccessResponse.createSuccess(SuccessCode.PASSWORD_CHANGE_SUCCESS);
+        service.updateProfile(dto.getProfileUrl(), userId);
+        return SuccessResponse.createSuccess(SuccessCode.PROFILE_UPDATE_SUCCESS);
     }
 }
 

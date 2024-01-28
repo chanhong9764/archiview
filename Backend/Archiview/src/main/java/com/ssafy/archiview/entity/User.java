@@ -74,6 +74,9 @@ public class User implements Persistable<String> {
     public void updatePassword(String pw){
         this.pw = pw;
     }
+    public void updateProfile(String profileUrl){
+        this.profileUrl = profileUrl;
+    }
 
     @Override
     public boolean isNew() {

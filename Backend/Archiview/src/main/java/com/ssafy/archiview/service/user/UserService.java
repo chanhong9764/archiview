@@ -21,5 +21,5 @@ public interface UserService {
     int findId(String name, String email);
     // 패스워드 찾기
     int findPassword(String userId, String email);
-    void updateProfile(String profileUrl);
+    void updateProfile(String profileUrl, String id);
 }

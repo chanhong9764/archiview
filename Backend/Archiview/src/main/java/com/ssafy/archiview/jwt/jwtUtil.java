@@ -30,20 +30,20 @@ public class jwtUtil {
     public jwtUtil(@Value("${jwt.secret}") String secret){
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
     }
-    Long accessTokenVaildTime = 30 * 60 * 1000L;  // 엑세스 토큰 유효기간 30분
-    Long refreshTokenVaildTime = 60 * 60 * 24 * 1000L;  // 리프레시 토큰 유효기간 30분
+    Long accessTokenValidTime = 30 * 60 * 1000L;  // 엑세스 토큰 유효기간 30분
+    Long refreshTokenValidTime = 60 * 60 * 24 * 1000L;  // 리프레시 토큰 유효기간 30분
     public TokenDto createJwt(String username, String role) {
         String accessToken = Jwts.builder()
                 .claim("role", role)
                 .claim("userId", username)
                 .issuedAt(new Date(System.currentTimeMillis()))  // 토큰 발행 시간
-                .expiration(new Date(System.currentTimeMillis() + accessTokenVaildTime))  // 토큰 만료 시간
+                .expiration(new Date(System.currentTimeMillis() + accessTokenValidTime))  // 토큰 만료 시간
                 .signWith(secretKey)
                 .compact();
 
         String refreshToken = Jwts.builder()
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + refreshTokenVaildTime))
+                .expiration(new Date(System.currentTimeMillis() + refreshTokenValidTime))
                 .signWith(secretKey)
                 .compact();
         return new TokenDto(accessToken, refreshToken);
@@ -54,18 +54,20 @@ public class jwtUtil {
                 .claim("role", role)
                 .claim("userId", userId)
                 .issuedAt(new Date(System.currentTimeMillis()))  // 토큰 발행 시간
-                .expiration(new Date(System.currentTimeMillis() + accessTokenVaildTime))  // 토큰 만료 시간
+                .expiration(new Date(System.currentTimeMillis() + accessTokenValidTime))  // 토큰 만료 시간
                 .signWith(secretKey)
                 .compact();
     }
 
     public String getUsername(HttpServletRequest request) {  // 아이디를 검증하는 메서드
         String token = request.getHeader("Authorization");
+        validateToken(token);  // 토큰 검증
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId", String.class);
     }
 
     public String getRole(HttpServletRequest request) {  // role을 검증하는 메서드
         String token = request.getHeader("Authorization");
+        validateToken(token);  // 토큰 검증
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", String.class);
     }
 
@@ -115,14 +117,5 @@ public class jwtUtil {
         } catch (IllegalArgumentException e) {  // 잘못된 토큰
             throw new RestApiException(ErrorCode.INVALID_TOKEN);
         }
-    }
-
-    public com.####.archiview.entity.User getUserFromAuthentication() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || AnonymousAuthenticationToken.class.
-                isAssignableFrom(authentication.getClass())) {
-            return null;
-        }
-        return (com.####.archiview.entity.User) authentication.getPrincipal();
     }
 }

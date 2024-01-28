@@ -6,13 +6,9 @@ import com.ssafy.archiview.entity.User;
 import com.ssafy.archiview.jwt.jwtUtil;
 import com.ssafy.archiview.repository.UserRepository;
 import com.ssafy.archiview.response.code.ErrorCode;
-import com.ssafy.archiview.response.code.SuccessCode;
 import com.ssafy.archiview.response.exception.RestApiException;
-import com.ssafy.archiview.response.structure.SuccessResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,5 +57,37 @@ public class UserServiceImpl implements UserService{
 
     public UserDto.DetailResponseDto userDetail(String userid) {
         return repository.getById(userid).toDetailResponseDto();
+    }
+
+    @Override
+    public void validPassword(String userId, String userPw) {
+        String password = repository.getById(userId).getPw();
+        if(!bCryptPasswordEncoder.matches(userPw, password)){  // 패스워드가 일치하지 않으면 에러
+            throw new RestApiException(ErrorCode.INVLAID_PASSWORD);
+        }
+    }
+
+    @Override
+    public void updatePassword(String userId, String userPw) {
+        User user = repository.getById(userId);
+//        if (bCryptPasswordEncoder.matches(userPw, user.getPw())){  // 기존 패스워드와 같은 패스워드로 변경시 에러 발생 시켜야 함
+//            throw new RestApiException(ErrorCode.DUPLICATED_PASSWORD);
+//        }
+        repository.save(user);
+    }
+
+    @Override
+    public int findId(String name, String email) {
+        return repository.countByNameAndEmail(name, email);
+    }
+
+    @Override
+    public int findPassword(String userId, String email) {
+        return repository.countByIdAndEmail(userId, email);
+    }
+
+    @Override
+    public void updateProfile(String profileUrl) {
+
     }
 }

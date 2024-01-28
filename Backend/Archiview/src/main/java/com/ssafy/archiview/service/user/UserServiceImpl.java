@@ -73,6 +73,7 @@ public class UserServiceImpl implements UserService{
 //        if (bCryptPasswordEncoder.matches(userPw, user.getPw())){  // 기존 패스워드와 같은 패스워드로 변경시 에러 발생 시켜야 함
 //            throw new RestApiException(ErrorCode.DUPLICATED_PASSWORD);
 //        }
+        user.updatePassword(userPw);
         repository.save(user);
     }
 
@@ -87,7 +88,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void updateProfile(String profileUrl) {
-
+    public void updateProfile(String profileUrl, String id) {
+        User user = repository.getById(id);
+        user.updateProfile(profileUrl);
+        repository.save(user);
     }
 }

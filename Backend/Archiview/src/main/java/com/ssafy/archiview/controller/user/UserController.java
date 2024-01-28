@@ -1,20 +1,15 @@
 package com.ssafy.archiview.controller.user;
 
-import com.ssafy.archiview.dto.token.TokenDto;
 import com.ssafy.archiview.dto.user.UserDto;
 import com.ssafy.archiview.jwt.jwtUtil;
 import com.ssafy.archiview.response.code.ErrorCode;
 import com.ssafy.archiview.response.code.SuccessCode;
 import com.ssafy.archiview.response.exception.RestApiException;
-import com.ssafy.archiview.response.structure.ErrorResponse;
 import com.ssafy.archiview.response.structure.SuccessResponse;
 import com.ssafy.archiview.service.user.UserService;
-import com.ssafy.archiview.validation.user.UserId;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.web.bind.annotation.*;
@@ -49,27 +44,43 @@ public class UserController {
         return SuccessResponse.createSuccess(SuccessCode.DELETE_USER_SUCCESS);
     }
 
-    @PostMapping("/valid-password")  // 비밀번호 확인
-    public ResponseEntity<Object> validPassword(@RequestBody UserDto.passwordDto dto, HttpServletRequest request){
-        String userId = jwtUtil.getUsername(request);
-        service.validPassword(userId, dto.getPw());
-        return SuccessResponse.createSuccess(SuccessCode.PASSWORD_SUCCESS);
+    @GetMapping("/find-id")  // 아이디 찾기
+    public ResponseEntity<Object> findId(@RequestParam String name, @RequestParam String email){
+        int cnt = service.findId(name, email);
+        if (cnt == 0){
+            throw new RestApiException(ErrorCode.USER_NOT_FOUND);
+        }
+        return SuccessResponse.createSuccess(SuccessCode.FIND_ID_SUCCESS);
     }
 
-    @PostMapping("/change-password")
-    public ResponseEntity<Object> changePassword(@RequestBody UserDto.passwordDto dto, HttpServletRequest request){
-        String userId = jwtUtil.getUsername(request);
-        service.changePassword(userId, dto.getPw());
-        return SuccessResponse.createSuccess(SuccessCode.PASSWORD_CHANGE_SUCCESS);
-    }
-
-    @GetMapping("/find-password")
+    @GetMapping("/find-password")  // 패스워드 찾기
     public ResponseEntity<Object> findPassword(@RequestParam String id, @RequestParam String email){
         int cnt = service.findPassword(id, email);
         if (cnt == 0){
             throw new RestApiException(ErrorCode.USER_NOT_FOUND);
         }
         return SuccessResponse.createSuccess(SuccessCode.FIND_PASSWORD_SUCCESS);
+    }
+
+    @PostMapping("/valid-password")  // 패스워드 확인
+    public ResponseEntity<Object> validPassword(@RequestBody UserDto.passwordDto dto, HttpServletRequest request){
+        String userId = jwtUtil.getUsername(request);
+        service.validPassword(userId, dto.getPw());
+        return SuccessResponse.createSuccess(SuccessCode.PASSWORD_SUCCESS);
+    }
+
+    @PatchMapping("/update-password")  // 패스워드 변경
+    public ResponseEntity<Object> updatePassword(@RequestBody UserDto.passwordDto dto, HttpServletRequest request){
+        String userId = jwtUtil.getUsername(request);
+        service.updatePassword(userId, dto.getPw());
+        return SuccessResponse.createSuccess(SuccessCode.PASSWORD_CHANGE_SUCCESS);
+    }
+
+    @PatchMapping("/update-profile")  // 패스워드 변경
+    public ResponseEntity<Object> updateProfile(@RequestBody UserDto.passwordDto dto, HttpServletRequest request){
+        String userId = jwtUtil.getUsername(request);
+
+        return SuccessResponse.createSuccess(SuccessCode.PASSWORD_CHANGE_SUCCESS);
     }
 }
 

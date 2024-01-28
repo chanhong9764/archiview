@@ -14,8 +14,19 @@ spring:
     properties:
       hibernate:
         # 실행한 SQL의 가독성을 좋게 변환
-#        format_sql: true
-
+        # format_sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: jisk101614@gmail.com
+    password: ####
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
 jwt:
   secret: aaaabbbsdifqbvaesoioegwaaaabbbsdidsfdsfdfsdfsdfsdfsdfsd
 
@@ -34,3 +45,4 @@ logging:
         type:
           descriptor:
             sql: trace
+

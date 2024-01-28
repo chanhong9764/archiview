@@ -149,4 +149,15 @@ public class UserDto {
             this.pw = pw;
         }
     }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class profileDto {
+        private String profileUrl;
+
+        @Builder
+        public profileDto(String profileUrl) {
+            this.profileUrl = profileUrl;
+        }
+    }
 }

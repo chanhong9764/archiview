@@ -22,6 +22,7 @@ let session;
 const InsertForm = () => {
   const videoRef = useRef(null); // 비디오 요소 참조를 위한 ref
   const [recordingURL, setRecordingURL] = useState("");
+  const [isRecording, setIsRecording] = useState(false);
 
   useEffect(() => {
     const OV = new OpenVidu();
@@ -34,7 +35,7 @@ const InsertForm = () => {
     });
 
     getToken(
-      { sessionName: "yourSessionName" }, // API 요청을 위한 매개변수
+      { sessionName: "yourSessionName" + Date.now() }, // API 요청을 위한 매개변수
       (resp) => {
         console.log("토큰 받기 성공:", resp.data[0]);
 
@@ -43,14 +44,14 @@ const InsertForm = () => {
           .connect(token, { clientData: "example" })
           .then(() => {
             const publisher = OV.initPublisher(videoRef.current, {
-              audioSource: undefined, // The source of audio. If undefined default microphone
-              videoSource: undefined, // The source of video. If undefined default webcam
-              publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-              publishVideo: true, // Whether you want to start publishing with your video enabled or not
-              resolution: "640X480", // The resolution of your video
-              frameRate: 30, // The frame rate of your video
-              insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
-              mirror: false, // Whether to mirror your local video or not
+              audioSource: undefined,
+              videoSource: undefined,
+              publishAudio: true,
+              publishVideo: true,
+              resolution: "640X480",
+              frameRate: 30,
+              insertMode: "APPEND",
+              mirror: false,
             });
 
             session.publish(publisher);
@@ -81,6 +82,7 @@ const InsertForm = () => {
       },
       (resp) => {
         console.log("녹화 시작: ", resp);
+        setIsRecording(true);
       },
       (error) => {
         console.log("에러 발생: ", error);
@@ -104,6 +106,7 @@ const InsertForm = () => {
             ".mp4"
         );
         console.log(recordingURL);
+        setIsRecording(false);
       },
       (error) => {
         console.log("에러 발생: ", error);
@@ -136,6 +139,7 @@ const InsertForm = () => {
           endIcon={<CheckCircleIcon />}
           color="primary"
           onClick={handleRecordStart}
+          disabled={isRecording} // 녹화 중에는 버튼 비활성화
         >
           등록
         </Button>
@@ -144,6 +148,7 @@ const InsertForm = () => {
           endIcon={<CheckCircleIcon />}
           color="primary"
           onClick={handleRecordStop}
+          disabled={!isRecording} // 녹화 중이 아니면 버튼 비활성화
         >
           취소
         </Button>

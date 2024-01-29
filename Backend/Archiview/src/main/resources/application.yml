@@ -10,7 +10,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       # DB를 실행할 때, 기존의 DB를 지우고 새로 생성
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         # 실행한 SQL의 가독성을 좋게 변환

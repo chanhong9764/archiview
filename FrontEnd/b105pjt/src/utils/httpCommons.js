@@ -5,6 +5,10 @@ const VITE_NAVER_CLIENT_PW = "AFfmYdxuEK";
 
 const VITE_NAVER_SEARCH_URL = "https://openapi.naver.com/v1/search/";
 
+const instance = axios.create({
+  baseURL: "https://i10b105.p.####.io:11443",
+});
+
 // Naver API용 axios 인스턴스 생성
 function naverImgAxios() {
   const instance = axios.create({
@@ -19,4 +23,4 @@ function naverImgAxios() {
   return instance;
 }
 
-export { naverImgAxios };
+export { naverImgAxios, instance };

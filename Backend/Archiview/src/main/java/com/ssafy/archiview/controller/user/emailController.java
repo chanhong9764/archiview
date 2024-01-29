@@ -1,5 +1,7 @@
 package com.ssafy.archiview.controller.user;
 
+import com.ssafy.archiview.dto.token.EmailTokenDto;
+import com.ssafy.archiview.jwt.jwtUtil;
 import com.ssafy.archiview.response.code.SuccessCode;
 import com.ssafy.archiview.response.structure.SuccessResponse;
 import com.ssafy.archiview.service.user.MailService;
@@ -12,14 +14,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/email")
 public class emailController {
-
+    private final jwtUtil jwtUtil;
     private final MailService mailService;
-   
+
     @GetMapping
     public ResponseEntity<Object> MailSend(@RequestParam("email") String email){
-    	System.out.println(email);
-        int number = mailService.sendMail(email);
-        System.out.println(number);
-		return SuccessResponse.createSuccess(SuccessCode.JOIN_SUCCESS);
+        int auth_number = mailService.sendMail(email);
+        EmailTokenDto dto = jwtUtil.createEmailToken(email, auth_number);
+		return SuccessResponse.createSuccess(SuccessCode.EMAIL_SUCCESS, dto);
     }
 }

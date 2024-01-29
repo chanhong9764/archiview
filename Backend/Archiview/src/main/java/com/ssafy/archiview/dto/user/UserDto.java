@@ -152,12 +152,14 @@ public class UserDto {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class profileDto {
+    public static class userDetailDto {
         private String profileUrl;
+        private String introduce;
 
         @Builder
-        public profileDto(String profileUrl) {
+        public userDetailDto(String profileUrl, String introduce) {
             this.profileUrl = profileUrl;
+            this.introduce = introduce;
         }
     }
 }

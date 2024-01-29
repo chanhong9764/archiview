@@ -1,5 +1,5 @@
 import { Button, TextField } from "@mui/material";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SearchTab from "../SCH_P_01/tabCompo";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { OpenVidu } from "openvidu-browser";
@@ -18,10 +18,10 @@ import {
 } from "../../api/openViduAPI";
 
 let session;
-let forceRecordingId;
 
 const InsertForm = () => {
   const videoRef = useRef(null); // 비디오 요소 참조를 위한 ref
+  const [recordingURL, setRecordingURL] = useState("");
 
   useEffect(() => {
     const OV = new OpenVidu();
@@ -89,12 +89,21 @@ const InsertForm = () => {
   };
 
   const handleRecordStop = () => {
+    let urlSession = session.sessionId;
     stopRecording(
       {
         recording: session.sessionId,
       },
       (resp) => {
         console.log("녹화 종료: ", resp);
+        setRecordingURL(
+          "https://i10b105.p.####.io/openvidu/recordings/" +
+            urlSession +
+            "/" +
+            urlSession +
+            ".mp4"
+        );
+        console.log(recordingURL);
       },
       (error) => {
         console.log("에러 발생: ", error);
@@ -117,6 +126,11 @@ const InsertForm = () => {
 
       <div>
         <div ref={videoRef} autoPlay={true} />
+        {recordingURL && (
+          <div>
+            <video controls src={recordingURL} width="640" height="480"></video>
+          </div>
+        )}
         <Button
           variant="contained"
           endIcon={<CheckCircleIcon />}

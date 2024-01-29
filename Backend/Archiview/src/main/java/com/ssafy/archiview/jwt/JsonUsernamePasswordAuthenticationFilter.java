@@ -7,6 +7,9 @@ import com.####.archiview.dto.user.UserDto;
 import com.####.archiview.entity.Role;
 import com.####.archiview.entity.User;
 import com.####.archiview.repository.UserRepository;
+import com.####.archiview.response.code.SuccessCode;
+import com.####.archiview.response.exception.RestApiException;
+import com.####.archiview.response.structure.SuccessResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -101,7 +104,6 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
         String userId = customUserDetails.getUsername();  // userId 추출
-
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
@@ -132,6 +134,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.OK.value());
         response.getWriter().write(new ObjectMapper().writeValueAsString(responseDto));
+//        response.getWriter().write(new ObjectMapper().writeValueAsString(SuccessResponse.createSuccess(SuccessCode.LOGIN_SUCCESS, responseDto)));
     }
 
     @Override

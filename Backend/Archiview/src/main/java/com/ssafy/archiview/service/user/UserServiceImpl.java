@@ -68,18 +68,23 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void updatePassword(String userId, String userPw) {
-        User user = repository.getById(userId);
-//        if (bCryptPasswordEncoder.matches(userPw, user.getPw())){  // 기존 패스워드와 같은 패스워드로 변경시 에러 발생 시켜야 함
-//            throw new RestApiException(ErrorCode.DUPLICATED_PASSWORD);
-//        }
-        user.updatePassword(userPw);
+    public void updatePassword(String userInfo, String userPw) {
+        User user = repository.findById(userInfo).orElseGet(() ->
+                repository.findByEmail(userInfo).orElseThrow(
+                        () -> new RestApiException(ErrorCode.USER_NOT_FOUND)));
+
+        if (bCryptPasswordEncoder.matches(userPw, user.getPw())){  // 기존 패스워드와 같은 패스워드로 변경시 에러 발생 시켜야 함
+            throw new RestApiException(ErrorCode.DUPLICATED_PASSWORD);
+        }
+
+        user.updatePassword(bCryptPasswordEncoder.encode(userPw));
         repository.save(user);
     }
 
     @Override
-    public int findId(String name, String email) {
-        return repository.countByNameAndEmail(name, email);
+    public User findId(String name, String email) {
+        return repository.findByNameAndEmail(name, email)
+                .orElseThrow(()-> new RestApiException(ErrorCode.USER_NOT_FOUND));
     }
 
     @Override
@@ -88,9 +93,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void updateProfile(String profileUrl, String id) {
+    public void updateUserDetail(String profileUrl, String introduce, String id) {
         User user = repository.getById(id);
-        user.updateProfile(profileUrl);
+        user.updateUserDetail(profileUrl, introduce);
         repository.save(user);
     }
 }

@@ -12,6 +12,7 @@ import MYP_P_02 from "./pages/MYP_P_02";
 import SCH_P_01 from "./pages/SCH_P_01";
 import Navbar from "./components/utils/navbar";
 import "./assets/css/App.css";
+import Footer from "./components/utils/footer";
 
 const initialState = {
   isLoggedIn: false,
@@ -36,8 +37,9 @@ const store = createStore(authReducer);
 function App() {
   return (
     <Provider store={store}>
+       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <NavbarComponent />
-      <div className="App">
+      <div className="App" style={{ flex : 1 }}>
         <Routes>
           <Route path="/" element={<HOM_P_01 />}></Route>
           <Route path="/cal" element={<CAL_P_01 />}></Route>
@@ -48,6 +50,8 @@ function App() {
 
           <Route path="/search" element={<SCH_P_01 />}></Route>
         </Routes>
+        </div>
+        <Footer />
       </div>
     </Provider>
   );

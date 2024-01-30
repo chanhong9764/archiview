@@ -34,7 +34,7 @@ public class jwtUtil {
     Long accessTokenValidTime = 30 * 60 * 1000L;  // 엑세스 토큰 유효기간 30분
     Long refreshTokenValidTime = 60 * 60 * 24 * 1000L;  // 리프레시 토큰 유효기간 30분
     Long emailTokenValidTime = 60 * 60 * 1000L;  // 유효기간 3분
-    public TokenDto createJwt(String username, String role) {
+    public TokenDto.createTokenDto createJwt(String username, String role) {
         String accessToken = Jwts.builder()
                 .claim("role", role)
                 .claim("userId", username)
@@ -48,7 +48,7 @@ public class jwtUtil {
                 .expiration(new Date(System.currentTimeMillis() + refreshTokenValidTime))
                 .signWith(secretKey)
                 .compact();
-        return new TokenDto(accessToken, refreshToken);
+        return new TokenDto.createTokenDto(accessToken, refreshToken);
     }
 
     public String createAccessToken(String userId, String role){
@@ -87,6 +87,10 @@ public class jwtUtil {
         String token = request.getHeader("Authorization");
         validateToken(token);  // 토큰 검증
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", String.class);
+    }
+
+    public String getName(String token) {  // 엑세스 토큰 재발급 요청시 user-name 반환 메서드 (token 유효성 검증 안함)
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId", String.class);
     }
 
     public Boolean isExpired(String token) {  // 토큰 만료를 검증하는 메서드
@@ -137,13 +141,14 @@ public class jwtUtil {
         }
     }
 
+    // 이메일 토큰인지, 로그인 토큰인지 확인하는 메서드
     public boolean checkClaims(String token) {
         try {
             String payload = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId", String.class);
-            if(!(payload == null)){
+            if(!(payload == null)){  // 로그인 토큰이면 true
                 return true;
             } else{
-                return false;
+                return false;  // 이메일 토큰이면 false
             }
         } catch (SecurityException | MalformedJwtException e) {  // 잘못된 토큰 구조
             throw new RestApiException(ErrorCode.UNAUTHORIZED_REQUEST);

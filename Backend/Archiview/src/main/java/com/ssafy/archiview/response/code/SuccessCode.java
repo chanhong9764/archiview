@@ -63,6 +63,11 @@ public enum SuccessCode implements ResponseCode {
         TAG
      */
     SELECT_TAG_LIST_SUCCESS(HttpStatus.OK, "태그 조회에 성공했습니다."),
+
+    /*
+        TOKEN
+     */
+    UPDATE_TOKEN_SUCCESS(HttpStatus.OK, "토큰 재발급에 성공했습니다."),
     ;
     private final HttpStatus httpStatus;
     private final String message;

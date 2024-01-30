@@ -57,10 +57,7 @@ public class UserController {
 
     @GetMapping("/find-password")  // 패스워드 찾기
     public ResponseEntity<Object> findPassword(@RequestParam String id, @RequestParam String email){
-        int cnt = service.findPassword(id, email);
-        if (cnt == 0){
-            throw new RestApiException(ErrorCode.USER_NOT_FOUND);
-        }
+        service.findPassword(id, email);
         return SuccessResponse.createSuccess(SuccessCode.FIND_PASSWORD_SUCCESS);
     }
 

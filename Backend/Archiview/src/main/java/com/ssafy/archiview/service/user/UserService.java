@@ -20,6 +20,6 @@ public interface UserService {
     // 아이디 찾기
     User findId(String name, String email);
     // 패스워드 찾기
-    int findPassword(String userId, String email);
+    User findPassword(String userId, String email);
     void updateUserDetail(String profileUrl, String introduce, String id);
 }

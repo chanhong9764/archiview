@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/api/recording")
 public class RecordingController {
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -35,8 +34,7 @@ public class RecordingController {
     // 이 옵션을 사용하는 부분은 튜토리얼 코드에 존재하지 않는다.
     // 24.01.19(금) 까지는 없어도 무방한 코드로 보인다.
     // 사용 결정 시 sessionRecordings 가 참조된 3줄의 코드를 주석 해제 할 것.
-
-    // private final Map<String, Boolean> sessionRecordings = new ConcurrentHashMap<>();
+    private final Map<String, Boolean> sessionRecordings = new ConcurrentHashMap<>();
 
     @PostConstruct
     public void init() {
@@ -121,18 +119,26 @@ public class RecordingController {
     }
 
     @DeleteMapping("/close-session")
-    public ResponseEntity<JsonObject> closeSession(@RequestBody Map<String, Object> sessionName) throws Exception {
-        logger.info("RecordingController -> closeSession | {sessionName}=" + sessionName);
+    public ResponseEntity<JsonObject> closeSession(@RequestParam("sessionName") String sessionName) throws Exception {
+        logger.info("RecordingController -> closeSession | " + sessionName);
 
-        String session = (String) sessionName.get("sessionName");
+        //String session = (String) sessionName.get("sessionName");
 
         // 세션 존재
-        if (this.mapSessions.get(session) != null && this.mapSessionNamesTokens.get(session) != null) {
-            Session s = this.mapSessions.get(session);
+//        if (this.mapSessions.get(session) != null && this.mapSessionNamesTokens.get(session) != null) {
+//            Session s = this.mapSessions.get(session);
+//            s.close();
+//            this.mapSessions.remove(session);
+//            this.mapSessionNamesTokens.remove(session);
+//            this.sessionRecordings.remove(s.getSessionId());
+//            return new ResponseEntity<>(HttpStatus.OK);
+//        }
+        if (this.mapSessions.get(sessionName) != null && this.mapSessionNamesTokens.get(sessionName) != null) {
+            Session s = this.mapSessions.get(sessionName);
             s.close();
-            this.mapSessions.remove(session);
-            this.mapSessionNamesTokens.remove(session);
-            // this.sessionRecordings.remove(s.getSessionId());
+            this.mapSessions.remove(sessionName);
+            this.mapSessionNamesTokens.remove(sessionName);
+            this.sessionRecordings.remove(s.getSessionId());
             return new ResponseEntity<>(HttpStatus.OK);
         }
         // 세션 없음
@@ -244,7 +250,7 @@ public class RecordingController {
 
         try {
             Recording recording = this.openVidu.startRecording(sessionId, properties);
-            // this.sessionRecordings.put(sessionId, true);
+            this.sessionRecordings.put(sessionId, true);
             return new ResponseEntity<>(recording, HttpStatus.OK);
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -259,7 +265,7 @@ public class RecordingController {
 
         try {
             Recording recording = this.openVidu.stopRecording(recordingId);
-            // this.sessionRecordings.remove(recording.getSessionId());
+            this.sessionRecordings.remove(recording.getSessionId());
             return new ResponseEntity<>(recording, HttpStatus.OK);
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

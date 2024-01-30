@@ -11,6 +11,7 @@ const style = {
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
+  borderRadius: "10px",
 };
 
 // currentPassword는 현재 사용자가 입력한 비밀번호를 저장하는 상태
@@ -52,6 +53,12 @@ const PasswordCheckModal = ({ open, onClose }) => {
       setError("비밀번호가 틀렸습니다.");
     }
   };
+  // 키보드 이벤트 핸들러
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSubmit(); // Enter 키를 누르면 handleSubmit 호출
+    }
+  };
 
   return (
     <Modal
@@ -72,6 +79,7 @@ const PasswordCheckModal = ({ open, onClose }) => {
           type="password"
           value={currentPassword}
           onChange={handleCurrentPasswordChange}
+          onKeyPress={handleKeyPress}
           error={!!error}
           helperText={error}
           sx={{ mt: 2 }}

@@ -12,9 +12,11 @@ import MYP_P_02 from "./pages/MYP_P_02";
 import SCH_P_01 from "./pages/SCH_P_01";
 import Navbar from "./components/utils/navbar";
 import "./assets/css/App.css";
+import { CircularProgress } from "@mui/material";
 
 const initialState = {
   isLoggedIn: false,
+  isLoading: false,
 };
 
 // 리듀서
@@ -24,6 +26,10 @@ function authReducer(state = initialState, action) {
       return { ...state, isLoggedIn: true };
     case "LOGOUT":
       return { ...state, isLoggedIn: false };
+    case "SET_LOADING":
+      return { ...state, isLoading: true };
+    case "UNSET_LOADING":
+      return { ...state, isLoading: false };
     default:
       return state;
   }
@@ -36,6 +42,7 @@ const store = createStore(authReducer);
 function App() {
   return (
     <Provider store={store}>
+      <LoadingComponent />
       <NavbarComponent />
       <div className="App">
         <Routes>
@@ -50,6 +57,33 @@ function App() {
         </Routes>
       </div>
     </Provider>
+  );
+}
+
+function LoadingComponent() {
+  const isLoading = useSelector((state) => state.isLoading);
+
+  return (
+    <div>
+      {isLoading && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "rgba(255, 255, 255, 0.3)",
+            zIndex: 2000,
+          }}
+        >
+          <CircularProgress />
+        </div>
+      )}
+    </div>
   );
 }
 

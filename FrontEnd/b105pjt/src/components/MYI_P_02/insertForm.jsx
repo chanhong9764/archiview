@@ -16,11 +16,16 @@ import {
   getRecording,
   listRecordings,
 } from "../../api/openViduAPI";
+import { useDispatch } from "react-redux";
+import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
+import VideocamOffIcon from "@mui/icons-material/VideocamOff";
+import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
 
 let session;
 let publisher;
+let sessionName;
 
-const MakeSession = (videoRef) => {
+const MakeSession = async (videoRef) => {
   const OV = new OpenVidu();
   session = OV.initSession();
 
@@ -30,82 +35,68 @@ const MakeSession = (videoRef) => {
     subscriber.addVideoElement(videoRef.current);
   });
 
-  getToken(
-    { sessionName: "yourSessionName" + Date.now() }, // API 요청을 위한 매개변수
-    (resp) => {
-      console.log("토큰 받기 성공:", resp.data[0]);
+  sessionName = "yourSessionName" + Date.now();
 
-      let token = resp.data[0];
-      session
-        .connect(token, { clientData: "example" })
-        .then(() => {
-          publisher = OV.initPublisher(videoRef.current, {
-            audioSource: undefined,
-            videoSource: undefined,
-            publishAudio: true,
-            publishVideo: true,
-            resolution: "640X480",
-            frameRate: 30,
-            insertMode: "APPEND",
-            mirror: false,
-          });
+  try {
+    const resp = await getToken({ sessionName: sessionName });
+    console.log("토큰 받기 성공:", resp.data[0]);
 
-          session.publish(publisher);
-        })
-        .catch((error) => {
-          console.log("세션 연결 실패:", error);
-        });
-    },
-    (error) => {
-      console.error("토큰 받기 실패:", error);
-    }
-  );
+    let token = resp.data[0];
+    await session.connect(token, { clientData: "example" });
+
+    publisher = OV.initPublisher(videoRef.current, {
+      audioSource: undefined,
+      videoSource: undefined,
+      publishAudio: true,
+      publishVideo: true,
+      resolution: "1000X562",
+      frameRate: 30,
+      insertMode: "APPEND",
+      mirror: false,
+    });
+
+    session.publish(publisher);
+  } catch (error) {
+    console.error("세션 설정 중 오류 발생:", error);
+  }
 };
 
 const InsertForm = () => {
   const videoRef = useRef(null); // 비디오 요소 참조를 위한 ref
   const [recordingURL, setRecordingURL] = useState("");
   const [isRecording, setIsRecording] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // 컴포넌트 정리
-    MakeSession(videoRef);
+    dispatch({ type: "SET_LOADING" });
+    MakeSession(videoRef)
+      .then(() => {
+        console.log("MakeSession 성공");
+        dispatch({ type: "UNSET_LOADING" });
+      })
+      .catch((error) => {
+        console.error("MakeSession 오류:", error);
+        dispatch({ type: "UNSET_LOADING" });
+      });
 
     return () => {
       if (session) {
-        // 현재 사용자의 연결 해제
+        // 세션 및, 퍼블리셔 종료 로직
+        if (publisher) {
+          publisher = null;
+        }
 
-        console.log("종료하는 세션ID", session.sessionId);
-        console.log("종료하는 세션ID", session.connection.connectionId);
-        forceDisconnect(
-          {
-            sessionName: session.sessionId,
-            connectionId: session.connection.connectionId,
-          },
-          (resp) => {
-            console.log("forceDisconect success: ", resp);
-          },
-          (err) => {
-            console.log("forceDisconect err: ", err);
-          }
-        );
-
-        // 세션 닫기
-        closeSession(
-          { sessionName: session.sessionId },
-          (resp) => {
-            console.log("closeSession success: ", resp);
-          },
-          (err) => {
-            console.log("closeSession err: ", err);
-          }
-        );
+        console.log("세션 종료:", session.sessionId);
+        // 세션 연결 해제
+        session.disconnect();
       }
     };
   }, []);
 
   const handleRecordStart = () => {
     console.log("sessionId: ", session.sessionId);
+    dispatch({ type: "SET_LOADING" });
     startRecording(
       {
         session: session.sessionId,
@@ -116,14 +107,17 @@ const InsertForm = () => {
       (resp) => {
         console.log("녹화 시작: ", resp);
         setIsRecording(true);
+        dispatch({ type: "UNSET_LOADING" });
       },
       (error) => {
         console.log("에러 발생: ", error);
+        dispatch({ type: "UNSET_LOADING" });
       }
     );
   };
 
   const handleRecordStop = () => {
+    dispatch({ type: "SET_LOADING" });
     let urlSession = session.sessionId;
     stopRecording(
       {
@@ -132,7 +126,7 @@ const InsertForm = () => {
       (resp) => {
         console.log("녹화 종료: ", resp);
         setRecordingURL(
-          "https://i10b105.p.####.io/openvidu/recordings/" + urlSession + "/" + urlSession + ".mp4"
+          "https://i10b105.p.####.io/api/files/recording/" + urlSession
         );
         console.log(recordingURL);
         setIsRecording(false);
@@ -145,21 +139,30 @@ const InsertForm = () => {
           session.unpublish(publisher);
         }
         session.disconnect();
+        dispatch({ type: "UNSET_LOADING" });
       },
       (error) => {
         console.log("에러 발생: ", error);
+        dispatch({ type: "UNSET_LOADING" });
       }
     );
   };
 
   const handleRestartRecording = () => {
+    dispatch({ type: "SET_LOADING" });
     MakeSession(videoRef);
     setRecordingURL("");
+    dispatch({ type: "UNSET_LOADING" });
   };
 
   return (
     <div>
-      <TextField className="Insert-title" id="filled-basic" label="제목" variant="filled" />
+      <TextField
+        className="Insert-title"
+        id="filled-basic"
+        label="제목"
+        variant="filled"
+      />
 
       <div className="Insert-search">
         <SearchTab></SearchTab>
@@ -169,11 +172,18 @@ const InsertForm = () => {
         {recordingURL && (
           <div>
             <div>
-              <video controls src={recordingURL} width="640" height="480"></video>
+              <video controls src={recordingURL} width="1000"></video>
             </div>
-            <Button variant="contained" color="primary" onClick={handleRestartRecording}>
-              다시 녹화하기
-            </Button>
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              <Button
+                variant="contained"
+                color="success"
+                onClick={handleRestartRecording}
+                endIcon={<RefreshRoundedIcon />}
+              >
+                다시 녹화하기
+              </Button>
+            </div>
           </div>
         )}
         {!recordingURL && (
@@ -182,7 +192,7 @@ const InsertForm = () => {
             <div>
               <Button
                 variant="contained"
-                endIcon={<CheckCircleIcon />}
+                endIcon={<VideoCameraFrontIcon />}
                 color="primary"
                 onClick={handleRecordStart}
                 disabled={isRecording} // 녹화 중에는 버튼 비활성화
@@ -191,10 +201,11 @@ const InsertForm = () => {
               </Button>
               <Button
                 variant="contained"
-                endIcon={<CheckCircleIcon />}
+                endIcon={<VideocamOffIcon />}
                 color="primary"
                 onClick={handleRecordStop}
                 disabled={!isRecording} // 녹화 중이 아니면 버튼 비활성화
+                style={{ marginLeft: "5px" }}
               >
                 녹화 종료
               </Button>
@@ -211,6 +222,7 @@ const InsertForm = () => {
         rows={4}
         defaultValue=""
         variant="filled"
+        style={{ paddingTop: "5px" }}
       />
     </div>
   );

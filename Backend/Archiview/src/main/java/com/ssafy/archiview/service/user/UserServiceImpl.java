@@ -33,12 +33,13 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void userLogout(HttpServletRequest request) {
-        if(jwtUtil.validateToken(request.getHeader("Authorization"))){
-            String userId = jwtUtil.getUsername(request);
-            User user = repository.getById(userId);
-            user.updateRefreshToken(null);  // refreshToken 삭제
-            repository.save(user);
-        }
+    String accessToken = request.getHeader("Authorization");
+
+    jwtUtil.validateToken(accessToken);
+    String userId = jwtUtil.getUsername(request);
+    User user = repository.getById(userId);
+    user.updateRefreshToken(null);  // refreshToken 삭제
+    repository.save(user);
     }
 
     @Override
@@ -48,11 +49,10 @@ public class UserServiceImpl implements UserService{
         String accessToken = request.getHeader("Authorization");
 
         // 토큰 유효성 검사
-        if(jwtUtil.validateToken(accessToken)){
-            String userId = jwtUtil.getUsername(request);  // 엑세스 토큰에서 userId 추출
-            User user = repository.getById(userId);  // 추출된 userId로 DB 조회
-            repository.delete(user);
-        }
+        jwtUtil.validateToken(accessToken);
+        String userId = jwtUtil.getUsername(request);  // 엑세스 토큰에서 userId 추출
+        User user = repository.getById(userId);  // 추출된 userId로 DB 조회
+        repository.delete(user);
     }
 
     public UserDto.DetailResponseDto userDetail(String userid) {
@@ -88,8 +88,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public int findPassword(String userId, String email) {
-        return repository.countByIdAndEmail(userId, email);
+    public User findPassword(String userId, String email) {
+        return repository.findByIdAndEmail(userId, email)
+                .orElseThrow(()-> new RestApiException(ErrorCode.USER_NOT_FOUND));
     }
 
     @Override

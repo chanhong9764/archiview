@@ -7,9 +7,6 @@ import com.ssafy.archiview.dto.user.UserDto;
 import com.ssafy.archiview.entity.Role;
 import com.ssafy.archiview.entity.User;
 import com.ssafy.archiview.repository.UserRepository;
-import com.ssafy.archiview.response.code.SuccessCode;
-import com.ssafy.archiview.response.exception.RestApiException;
-import com.ssafy.archiview.response.structure.SuccessResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -109,7 +106,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
         GrantedAuthority auth = iterator.next();
         String userRole = auth.getAuthority();  // role 추출
 
-        TokenDto token = jwtUtil.createJwt(userId, userRole);  // 토큰 생성
+        TokenDto.createTokenDto token = jwtUtil.createJwt(userId, userRole);  // 토큰 생성
         Role role = null;
         if(userRole.equals("USER")) {
             role = Role.USER;
@@ -126,6 +123,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
                 .name(user.get().getName())
                 .email(user.get().getEmail())
                 .profileUrl(user.get().getProfileUrl())
+                .introduce((user.get().getIntroduce()))
                 .role(role)
                 .build();
         user.get().updateRefreshToken(token.getRefreshToken());

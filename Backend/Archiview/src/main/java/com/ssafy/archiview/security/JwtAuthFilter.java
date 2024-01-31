@@ -28,9 +28,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {  // OncePerRequestFilt
             System.out.println("헤더에 토큰이 존재합니다.");
           // 토큰 검증
             if (refreshToken != null && jwtUtil.validateToken(refreshToken)){
-//                setAuthentication(refreshToken, request);
+                setAuthentication(refreshToken, request);
             } else if (jwtUtil.validateToken(accessToken)) {
-//                setAuthentication(accessToken, request);
+                setAuthentication(accessToken, request);
             }
         }
         filterChain.doFilter(request, response);  // 다음 필터로 넘김
@@ -38,8 +38,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {  // OncePerRequestFilt
 
     public void setAuthentication(String token, HttpServletRequest request){
         String userId = jwtUtil.getUsername(request);
+        if(userId == null){  // 이메일 인증 토큰이면 return
+            return;
+        }
         // 유저와 토큰 일치 시 userDetail 생성
         UserDetails userDetails = customuserDetailsService.loadUserByUsername(userId);
+        System.out.println("3");
         if (userDetails != null){
             // UserDetails, Password, Role -> 접근권한 인증 Token 생성
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =

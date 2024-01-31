@@ -20,6 +20,7 @@ import { useDispatch } from "react-redux";
 import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
+import BtnGroupInsert from "./btnGroupInsert";
 
 let session;
 let publisher;
@@ -213,6 +214,7 @@ const InsertForm = () => {
           </div>
         )}
       </div>
+      <br />
 
       <TextField
         className="Insert-script"
@@ -224,6 +226,7 @@ const InsertForm = () => {
         variant="filled"
         style={{ paddingTop: "5px" }}
       />
+      <BtnGroupInsert />
     </div>
   );
 };

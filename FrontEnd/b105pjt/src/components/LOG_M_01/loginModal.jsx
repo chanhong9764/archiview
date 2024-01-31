@@ -25,6 +25,7 @@ const LoginModal = ({ onSwitch, close }) => {
 
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
+  const [foundId, setFoundId] = useState(null);
 
   const handleClickFindID = () => {
     onSwitch("FindID");

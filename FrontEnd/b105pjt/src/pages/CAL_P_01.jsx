@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import SearchSection from "../components/utils/searchSection";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import koLocale from "@fullcalendar/core/locales/ko";
@@ -45,6 +44,10 @@ const dummyEvent = {
   ],
 };
 
+const PageContainer = styled.div`
+  margin-bottom: 30px;
+`;
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -59,103 +62,95 @@ const style = {
   px: 4,
   pb: 3,
   borderRadius: "10px",
+ 
 };
 
 const FullCalendarContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
+  max-width: 70%;
+  margin: 0 auto;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
-  // 캘린더 전체 사이즈 조정
   .fc {
-    width: 100%;
+    max-width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
   }
 
-  // toolbar container
   .fc .fc-toolbar.fc-header-toolbar {
-    margin: 0;
-    padding: 0 40px;
-    background-color: #e2e2e2;
-    height: 50px;
-    font-weight: 600;
-    font-size: 16px;
-    color: #555555;
-    border-radius: 5px;
+    padding: 10px 40px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #ddd;
   }
 
-  // toolbar 버튼
   .fc .fc-button-primary {
-    background-color: transparent;
+    color: #5a5a5a;
+    font-size: 16px;
     border: none;
-    color: #888888;
-
-    span {
-      font-weight: 500;
-      font-size: 28px;
-    }
+    background-color: transparent;
 
     :hover {
-      background-color: transparent;
+      background-color: #eaeaea;
+    }
+
+    :disabled {
+      color: #ccc;
     }
   }
 
-  // 요일 부분
   .fc-theme-standard th {
-    height: 32px;
-    padding-top: 3.5px;
-    background: #f2f2f2;
-    border: 1px solid #dddee0;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 19px;
-    color: #;
+    background: #f9f9f9;
+    font-weight: 600;
+    color: #333;
   }
 
-  // 오늘 날짜 배경색
   .fc .fc-daygrid-day.fc-day-today {
-    background-color: rgba(0, 0, 0, 0.05);
-    color: #111111;
-    font-weight: bold;
+    background-color: #e3f2fd;
+    color: #111;
   }
 
-  // 날짜  ex) 2일
   .fc .fc-daygrid-day-top {
-    flex-direction: row;
-    margin-bottom: 3px;
+    padding: 5px;
   }
 
-  // 각 이벤트 요소
   .fc-event {
-    cursor: pointer;
-    padding: 4px;
-    margin-bottom: 1px;
-    border-radius: 4px;
-    font-weight: 500;
-    font-size: 12px;
+    font-size: 14px;
   }
+
+  .fc .fc-col-header-cell {
+    padding-top: 10px; /* 더 많은 공간을 주거나 줄입니다 */
+    padding-bottom: 10px; /* 더 많은 공간을 주거나 줄입니다 */
+  }
+  
+  .fc .fc-daygrid-day {
+    height: 100px !important; /* 셀의 높이 조정 */
+    border: 1px solid #ddd !important; /* 셀의 테두리 조정 */
 `;
+
+const SearchContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  padding: 0px 0 15px 0;
+`;
+
+
 
 const CAL_P_01 = () => {
   const [open, setOpen] = useState(false);
   const [events, setEvents] = useState([]);
-  const [selectedEvent, setSelectedEvent] = useState(null); // 선택된 이벤트 상태 추가
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
 
-  const [imageUrl, setImageUrl] = useState(""); // 이미지 URL 상태
-
-  // 이미지 검색 함수
   const fetchImage = async (title) => {
     try {
-      // 이미지 검색 API 요청
       await selectImg(
-        { query: title }, // 검색어
+        { query: title },
         (response) => {
-          // 성공 콜백: 첫 번째 이미지의 URL을 설정
           const firstImage = response.data.items[0].link;
           setImageUrl(firstImage);
         },
         (error) => {
-          // 실패 콜백
           console.error("이미지 검색 실패:", error);
         }
       );
@@ -172,27 +167,24 @@ const CAL_P_01 = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  // 이벤트 클릭시 동작 수정
   const handleEventClick = (clickInfo) => {
     console.log("Event clicked:", clickInfo.event.title);
-    setSelectedEvent(clickInfo.event); // 선택된 이벤트 저장
+    setSelectedEvent(clickInfo.event);
     fetchImage(clickInfo.event.title);
     handleOpen();
   };
 
   const renderEventContent = (eventInfo) => {
-    // 이벤트의 color에 따라 다른 아이콘을 선택합니다.
     let Icon;
     switch (eventInfo.event.backgroundColor) {
-      case "#ED544A": // 빨간색 이벤트
+      case "#ED544A":
         Icon = NotificationAddOutlinedIcon;
         break;
-      case "#929292": // 회색 이벤트
+      case "#929292":
         Icon = NotificationsOffOutlinedIcon;
         break;
-      // 추가적인 색상과 아이콘 매핑 가능
       default:
-        Icon = null; // 기본값, 아이콘이 없는 경우
+        Icon = null;
     }
 
     return (
@@ -203,12 +195,10 @@ const CAL_P_01 = () => {
     );
   };
 
-  // 검색버튼 동작
   const handleSearchBtn = () => {
     console.log(">>검색버튼");
   };
 
-  // 엔터 입력 시
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       handleSearchBtn();
@@ -216,50 +206,53 @@ const CAL_P_01 = () => {
   };
 
   return (
-    <div>
-      <div className="parent-container">
-        <div style={{ padding: "20px 0 15px 0" }}>
-          <TextField
-            style={{ width: "500px", borderRadius: "50px" }}
-            label="회사명으로 면접 질문 검색"
-            variant="outlined"
-            onKeyDown={handleKeyPress}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={handleSearchBtn}>
-                    <SearchIcon />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-        </div>
-        <div className="calendar-container">
-          <FullCalendarContainer>
-            <FullCalendar
-              plugins={[dayGridPlugin]}
-              initialView="dayGridMonth"
-              events={events}
-              locale={koLocale}
-              eventClick={handleEventClick}
-              eventContent={renderEventContent}
+    <PageContainer>
+      <div style={{ marginBottom: '20px' }}>
+        <div className="parent-container">
+        <FullCalendarContainer>
+          <SearchContainer>
+            <TextField
+              style={{ width: "500px", borderRadius: "50px" }}
+              label="회사명으로 면접 질문 검색"
+              variant="outlined"
+              onKeyDown={handleKeyPress}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleSearchBtn}>
+                      <SearchIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
-          </FullCalendarContainer>
+          </SearchContainer>
+          
+            
+              <FullCalendar
+                plugins={[dayGridPlugin]}
+                initialView="dayGridMonth"
+                events={events}
+                locale={koLocale}
+                eventClick={handleEventClick}
+                eventContent={renderEventContent}
+              />
+            </FullCalendarContainer>
+          
         </div>
-      </div>
 
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="parent-modal-title"
-        aria-describedby="parent-modal-description"
-      >
-        <Box sx={{ ...style, width: 600 }}>
-          <CAL_M_01 event={selectedEvent}></CAL_M_01>
-        </Box>
-      </Modal>
-    </div>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="parent-modal-title"
+          aria-describedby="parent-modal-description"
+        >
+          <Box sx={{ ...style, width: 600 }}>
+            <CAL_M_01 event={selectedEvent} imageUrl={imageUrl} onClose={handleClose} />
+          </Box>
+        </Modal>
+      </div>
+    </PageContainer>
   );
 };
 

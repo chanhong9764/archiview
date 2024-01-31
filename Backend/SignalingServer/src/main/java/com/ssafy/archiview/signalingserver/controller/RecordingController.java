@@ -33,7 +33,6 @@ public class RecordingController {
     // sessionRecordings 는 녹화 세션에 관련된 옵션을 저장하고 있으나,
     // 이 옵션을 사용하는 부분은 튜토리얼 코드에 존재하지 않는다.
     // 24.01.19(금) 까지는 없어도 무방한 코드로 보인다.
-    // 사용 결정 시 sessionRecordings 가 참조된 3줄의 코드를 주석 해제 할 것.
     private final Map<String, Boolean> sessionRecordings = new ConcurrentHashMap<>();
 
     @PostConstruct

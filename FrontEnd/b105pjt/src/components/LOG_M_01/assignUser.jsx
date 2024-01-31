@@ -35,7 +35,7 @@ const AssignUser = ({ onSwitch }) => {
 
   // API 관리 변수들 추가
   const navigate = useNavigate();
-  const initialState = {
+  const initialState_signup = {
     id: "", // varchar(16) 유저의 아이디
     pw: "", // 최소 9자, 최대 16자, 영문+숫자+특수문자 조합
     email: "", // 유저 이메일
@@ -43,7 +43,7 @@ const AssignUser = ({ onSwitch }) => {
   };
 
   const [form, handleFormChange, handleFileChange, resetForm] =
-    useForm(initialState);
+    useForm(initialState_signup);
   // const { email, pw, name, id } = form;
 
   // 이름 입력 필드의 값이 변경 시 호출되는 함수
@@ -83,15 +83,7 @@ const AssignUser = ({ onSwitch }) => {
 
   const handleSignupAxios = async () => {
     try {
-      await signupAxios(
-        form,
-        (response) => {
-          console.log("데이터 전송 성공:", response);
-        },
-        (error) => {
-          console.error("데이터 전송 실패:", error);
-        }
-      );
+      const { data } = await signupAxios(form);
     } catch (error) {
       console.error("데이터 전송 오류:", error);
     }

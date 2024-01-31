@@ -2,7 +2,8 @@ import axios from "axios";
 
 const signupAxios = async (payload) => {
   try {
-    await axios.post("/api/users", { ...payload });
+    const { data } = await axios.post("/api/users", payload);
+    return data;
     // 회원가입 성공시 자동으로 로그인 되게 하는 로직 추가
   } catch (error) {
     const errorMessage = error.response.data.errorMessage;
@@ -24,11 +25,11 @@ const sendEmailAxios = async (email) => {
 
 const loginAxios = async (payload) => {
   try {
-    const { data } = await axios.post("/api/auth/login", payload);
+    const { data } = await axios.post("/api/users/login", payload);
     return data;
   } catch (error) {
-    const errorMessage = error.response.data.errorMessage;
-    alert(errorMessage);
+    // const errorMessage = error.response.data.errorMessage;
+    // alert(errorMessage);
     throw error;
   }
 };

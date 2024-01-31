@@ -143,6 +143,7 @@ import CreateIcon from "@mui/icons-material/Create";
 import LoginModal from "../components/LOG_M_01/loginModal";
 import "../assets/css/CAL_M_01.css";
 import { selectImg } from "../api/naverAPI";
+import CloseIcon from "@mui/icons-material/Close"; // 닫기 아이콘 추가
 import AlertModal from '../components/utils/alertModal'; // AlertModal 컴포넌트 임포트
 
 const dummyData = {
@@ -171,6 +172,7 @@ const dummyData = {
 };
 
 const CAL_M_01 = (props) => {
+  const { onClose } = props;
   const [dense, setDense] = useState(false);
   const [secondary, setSecondary] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -197,6 +199,7 @@ const CAL_M_01 = (props) => {
     setShowAlertModal(false);
     setShowLoginModal(true);
   };
+  
 
   return (
     <div>
@@ -275,10 +278,24 @@ const CAL_M_01 = (props) => {
           bgcolor: 'background.paper',
           boxShadow: 24,
           p: 4,
+          borderRadius: 2,
         }}>
-          <LoginModal close={handleCloseLoginModal} />
-        </Box>
-      </Modal>
+        
+        <LoginModal close={handleCloseLoginModal} />
+      </Box>
+    </Modal>
+    <IconButton
+        aria-label="close"
+        onClick={onClose} // 여기서 onClose 함수를 사용하여 모달 닫기
+        style={{
+          position: 'absolute',
+          right: 8,
+          top: 8,
+          color: 'gray',
+        }}
+      >
+        <CloseIcon />
+      </IconButton>
     </div>
   );
 };

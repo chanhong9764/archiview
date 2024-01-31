@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Box, Modal, TextField, Button, Typography } from "@mui/material";
+import { Box, Modal, TextField, Button, Typography, IconButton } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
+import CloseIcon from "@mui/icons-material/Close"; // 닫기 아이콘을 위한 임포트
 
 const style = {
   position: "absolute",
@@ -68,6 +69,18 @@ const PasswordCheckModal = ({ open, onClose }) => {
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
         <Typography id="modal-modal-title" variant="h6" component="h2">
           비밀번호 확인
         </Typography>

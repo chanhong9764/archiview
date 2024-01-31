@@ -11,6 +11,7 @@ public interface UserRepository extends JpaRepository<User, String> {
     default User getById(String id) {
         return findById(id).orElseThrow(() -> new RestApiException(ErrorCode.USER_NOT_FOUND));
     }
-    int countByIdAndEmail(String id, String email);
-    int countByNameAndEmail(String name, String email);
+    Optional<User> findByIdAndEmail(String id, String email);
+    Optional<User> findByNameAndEmail(String name, String email);
+    Optional<User> findByEmail(String userInfo);
 }

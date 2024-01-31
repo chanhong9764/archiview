@@ -13,7 +13,6 @@ import {
   CardContent,
   CardMedia,
 } from "@mui/material";
-import "../assets/css/SCH_P_01.css";
 
 // 커스텀 테마 정의
 const theme = createTheme({

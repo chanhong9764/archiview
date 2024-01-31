@@ -1,135 +1,115 @@
 import React, { useState, useEffect } from "react";
 import ProfileSection from "../components/MYI_P_01/profileSection.jsx";
 import Accordion from "../components/MYI_P_01/accordion.jsx";
-import SearchSection from "../components/utils/searchSection.jsx";
+import SearchTab from "../components/SCH_P_01/tabCompo.jsx";
 import {
+  createTheme,
+  ThemeProvider,
   Container,
   Typography,
-  Button,
   Card,
   Grid,
-  CardActions,
   CardContent,
   CardMedia,
-  useTheme,
-  Modal,
-  Box,
 } from "@mui/material";
 import MyNavbar from "../components/MYI_P_02/myNavbar.jsx";
-import { useLocation, useNavigate } from "react-router-dom";
-import MYI_P_02_MODIFY from "./MYI_P_02_Modify.jsx";
 
-// dummyQuestions 직접 정의
+// 커스텀 테마 정의
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#556cd6",
+    },
+    secondary: {
+      main: "#19857b",
+    },
+  },
+  typography: {
+    fontFamily: "Arial, sans-serif",
+    h5: {
+      fontWeight: 700,
+    },
+    subtitle1: {
+      fontWeight: 500,
+    },
+  },
+});
+
+// 카드 및 미디어 스타일 정의
+const cardStyles = {
+  boxShadow: theme.shadows[3],
+  borderRadius: "5px",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+  maxHeight: 400,
+  overflow: "hidden",
+  transition: "transform 0.3s ease-in-out",
+  cursor: "pointer", // 커서 포인터 추가
+  "&:hover": {
+    transform: "scale(1.05)",
+  },
+};
+
+const mediaStyles = {
+  height: 140,
+  objectFit: "cover",
+  borderRadius: "5px 5px 0 0",
+};
+
+// 새로운 dummyQuestions 정의
 const dummyQuestions = [
+  // 데이터 구조 변경으로 예시 데이터 추가
   {
-    id: 10,
-    content: "1분 자기소개",
-    replies: [
-      {
-        id: 32,
-        user_id: "kim",
-        script: "안녕하십니까...",
-        created_at: "2024-01-01 12:23:34",
+    code: "SELECT_REPLY_SUCCESS",
+    message: "답변 조회에 성공했습니다.",
+    data: {
+      reply: {
+        id: 1,
+        userId: "chan9784",
+        script: "나는 박찬홍이다",
+        videoUrl: "https://example.com/video",
+        thumbnailUrl: "https://via.placeholder.com/240X240",
+        question: {
+          content: "1분 자기소개",
+          companyName: "삼성전자",
+          csList: ["자기소개"],
+          jobList: ["프론트엔드", "백엔드"],
+        },
+        comments: [
+          { id: 1, userId: "user1", content: "멋진 소개입니다!" },
+          { id: 2, userId: "user2", content: "정말 인상적이네요!" },
+        ],
+        likeCnt: 1,
       },
-      {
-        id: 33,
-        user_id: "park",
-        script: "행복한 세상을 만들고픈 ...",
-        created_at: "2024-01-02 11:12:43",
-      },
-      {
-        id: 34,
-        user_id: "park",
-        script: "행복한 세상을 만들고픈 ...",
-        created_at: "2024-01-02 11:12:43",
-      },
-      {
-        id: 35,
-        user_id: "park",
-        script: "행복한 세상을 만들고픈 ...",
-        created_at: "2024-01-02 11:12:43",
-      },
-    ],
+      like: false,
+    },
   },
-  {
-    id: 20,
-    content: "프론트엔드란 무엇인가",
-    replies: [
-      {
-        id: 36,
-        user_id: "kim",
-        script: "안녕하십니까...",
-        created_at: "2024-01-01 12:23:34",
-      },
-      {
-        id: 37,
-        user_id: "park",
-        script: "행복한 세상을 만들고픈 ...",
-        created_at: "2024-01-02 11:12:43",
-      },
-    ],
-  },
+  // 추가 답변 데이터...
 ];
 
 const Page = () => {
   const [questions, setQuestions] = useState([]);
-  const theme = useTheme();
-  const navigate = useNavigate();
-
-  const [openModal, setOpenModal] = useState(false);
-  const [selectedReply, setSelectedReply] = useState(null);
-
-  const handleOpenModal = (reply) => {
-    setSelectedReply(reply);
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
-
-  const handleViewDetails = (replyId) => {
-    handleOpenModal(replyId);
-    console.log("Viewing details of reply:", replyId);
-  };
-
-  const modalStyle = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    maxHeight: 600,
-    overflowY: "auto",
-    bgcolor: "white",
-    border: "2px solid #000",
-    boxShadow: 24,
-    pt: 2,
-    px: 4,
-    pb: 3,
-    borderRadius: "10px",
-  };
 
   useEffect(() => {
-    setQuestions(dummyQuestions);
+    const formattedQuestions = dummyQuestions.map((item) => {
+      const replyData = item.data.reply;
+      return {
+        id: replyData.id,
+        content: replyData.question.content,
+        replies: [replyData],
+      };
+    });
+    setQuestions(formattedQuestions);
   }, []);
 
-  const cardStyles = {
-    boxShadow: theme.shadows[1],
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between", // 컨텐츠 간격 균등 조정
-    maxHeight: 400, // 카드 최대 높이 설정
-    overflow: "hidden", // 내용이 넘칠 경우 숨김
-  };
-
-  const mediaStyles = {
-    height: 140,
-    objectFit: "cover", // 이미지 비율 유지
+  const handleViewDetails = (videoUrl) => {
+    window.open(videoUrl, "_blank");
   };
 
   return (
-    <div>
-      <MyNavbar></MyNavbar>
+    <ThemeProvider theme={theme}>
+      <MyNavbar />
       <Container sx={{ mt: 4, mb: 4 }}>
         <ProfileSection imageUrl="https://via.placeholder.com/180X180">
           <Typography variant="h5" gutterBottom>
@@ -139,17 +119,12 @@ const Page = () => {
             이곳에 추가적인 프로필 정보를 표시합니다.
           </Typography>
         </ProfileSection>
-        <SearchSection />
+        <SearchTab />
         {questions.map((question, index) => (
           <Accordion
             key={index}
             title={
-              <Typography
-                variant="h6"
-                component="h6"
-                color="primary"
-                gutterBottom
-              >
+              <Typography variant="h6" color="primary" gutterBottom>
                 {question.content}
               </Typography>
             }
@@ -157,53 +132,36 @@ const Page = () => {
             <Grid container spacing={2}>
               {question.replies.map((reply) => (
                 <Grid item xs={12} sm={6} md={4} key={reply.id}>
-                  <Card sx={cardStyles}>
+                  <Card
+                    onClick={() => handleViewDetails(reply.videoUrl)}
+                    sx={cardStyles}
+                  >
                     <CardMedia
                       component="img"
                       sx={mediaStyles}
-                      image="https://via.placeholder.com/300x300"
-                      alt="Media Content"
+                      image={reply.thumbnailUrl}
+                      alt="Thumbnail Image"
                     />
                     <CardContent>
                       <Typography
                         variant="subtitle1"
                         sx={{ fontWeight: "bold" }}
                       >
-                        {reply.user_id}
+                        {reply.userId}
                       </Typography>
                       <Typography variant="body2">{reply.script}</Typography>
                       <Typography variant="caption" color="textSecondary">
-                        {reply.created_at}
+                        {reply.question.companyName}
                       </Typography>
                     </CardContent>
-                    <CardActions>
-                      <Button
-                        size="small"
-                        color="primary"
-                        onClick={() => handleViewDetails(reply.id)}
-                      >
-                        상세보기
-                      </Button>
-                    </CardActions>
                   </Card>
                 </Grid>
               ))}
             </Grid>
           </Accordion>
         ))}
-        <Modal
-          open={openModal}
-          onClose={handleCloseModal}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-          className="custom-modal"
-        >
-          <Box sx={{ ...modalStyle, width: 600 }}>
-            <MYI_P_02_MODIFY></MYI_P_02_MODIFY>
-          </Box>
-        </Modal>
       </Container>
-    </div>
+    </ThemeProvider>
   );
 };
 

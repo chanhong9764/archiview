@@ -5,9 +5,13 @@
   width: 100%;
 }
 
-/* If the parent of calendar-container doesn't have a height, set it here */
 .parent-container {
   padding: 0 24px 0 24px;
   margin: 0 auto;
-  height: 500px; /* Example height, adjust as needed */
+  height: 800px; /* Example height, adjust as needed */
+}
+
+.icon {
+  display: flex;
+  align-items: center;
 }

@@ -22,6 +22,11 @@ function MyNavbar() {
     navigate("/addquestion", { replace: true });
   };
 
+  //버튼 굵게
+  const isCurrentPage = (path) => {
+    return location.pathname === path;
+  };
+
   return (
     <div>
       <AppBar
@@ -48,6 +53,7 @@ function MyNavbar() {
                   height: 40,
                   minHeight: 40,
                   padding: "0 8px",
+                  fontWeight: isCurrentPage("/addquestion") ? "bold" : "normal", // 현재 페이지인지 확인
                 }}
               >
                 질문 등록
@@ -60,6 +66,7 @@ function MyNavbar() {
                   height: 40,
                   minHeight: 40,
                   padding: "0 8px",
+                  fontWeight: isCurrentPage("/myinterview") ? "bold" : "normal", // 현재 페이지인지 확인
                 }}
               >
                 내 질문들

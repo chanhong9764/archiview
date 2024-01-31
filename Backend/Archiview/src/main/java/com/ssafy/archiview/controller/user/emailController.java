@@ -20,7 +20,7 @@ public class emailController {
     @GetMapping
     public ResponseEntity<Object> MailSend(@RequestParam("email") String email){
         int auth_number = mailService.sendMail(email);
-        EmailTokenDto dto = jwtUtil.createEmailToken(email, auth_number);
+        EmailTokenDto.findEmailResponseDto dto = jwtUtil.createEmailToken(email, auth_number);
 		return SuccessResponse.createSuccess(SuccessCode.EMAIL_SUCCESS, dto);
     }
 }

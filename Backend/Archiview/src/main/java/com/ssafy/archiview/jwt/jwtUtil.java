@@ -61,19 +61,19 @@ public class jwtUtil {
                 .compact();
     }
 
-    public EmailTokenDto createEmailToken(String email, int auth_number) {
+    public EmailTokenDto.findEmailResponseDto createEmailToken(String email, int auth_number) {
         String emailToken = Jwts.builder()
                 .claim("email", email)
                 .issuedAt(new Date(System.currentTimeMillis()))  // 토큰 발행 시간
                 .expiration(new Date(System.currentTimeMillis() + emailTokenValidTime))  // 토큰 만료 시간
                 .signWith(secretKey)
                 .compact();
-        return new EmailTokenDto(emailToken, auth_number);
+        return new EmailTokenDto.findEmailResponseDto(emailToken, auth_number);
     }
 
     public String getUsername(HttpServletRequest request) {  // 아이디를 검증하는 메서드
         String token = request.getHeader("Authorization");
-        validateToken(token);  // 토큰 검증
+        validateToken(token);  // 토큰 검증 (필터 추가하면 없애야 됨)
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId", String.class);
     }
 

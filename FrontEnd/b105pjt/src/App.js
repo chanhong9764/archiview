@@ -4,6 +4,7 @@ import { Provider, useSelector, useDispatch } from "react-redux";
 import NavbarLogin from "./components/utils/navbarLogin";
 import { Route, Routes } from "react-router-dom";
 import HOM_P_01 from "./pages/HOM_P_01";
+import MYI_P_02_Modify from "./pages/MYI_P_02_Modify";
 import CAL_P_01 from "./pages/CAL_P_01";
 import MYI_P_01 from "./pages/MYI_P_01";
 import MYI_P_02 from "./pages/MYI_P_02";
@@ -54,6 +55,7 @@ function App() {
             <Route path="/cal" element={<CAL_P_01 />}></Route>
             <Route path="/myinterview" element={<MYI_P_01 />}></Route>
             <Route path="/addquestion" element={<MYI_P_02 />}></Route>
+            <Route path="/revise" element={<MYI_P_02_Modify />}></Route>
             <Route path="/mypage" element={<MYP_P_01 />}></Route>
             <Route path="/modify" element={<MYP_P_02 />}></Route>
 

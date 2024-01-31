@@ -14,9 +14,13 @@ import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { logoutAxios } from "../../api/userAPI";
 import Logo from "../../assets/img/symbolLogo_Slogun-removebg-preview.png";
+import { setCookie, getCookie, removeCookie } from "../../utils/cookie";
+import { useSelector } from "react-redux";
 
 function Navbar() {
+  const accessToken = useSelector((state) => state.accessToken);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation(); // 현재 경로 정보를 얻어오기 위해 useLocation 사용
@@ -43,7 +47,13 @@ function Navbar() {
 
   // 로그아웃 클릭시
   const handleLogout = () => {
-    dispatch({ type: "LOGOUT" });
+    logoutAxios({
+      headers: {
+        Authorization: accessToken,
+      },
+    });
+    dispatch({ type: "LOGOUT", accessToken: "" });
+    removeCookie("refreshToken");
     navigate("/", { replace: true });
   };
 

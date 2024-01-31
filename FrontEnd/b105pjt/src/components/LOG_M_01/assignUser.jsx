@@ -58,6 +58,7 @@ const AssignUser = ({ onSwitch }) => {
   const handleVerifyClick = () => {
     setIsInputDisabled(true);
     setShowSignupFields(true); // 회원가입 및 인증번호 필드를 보여줌
+    sendEmailAxios(form.email);
   };
 
   // ID 입력 필드의 값이 변경 시 호출되는 함수

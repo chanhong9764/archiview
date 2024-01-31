@@ -1,6 +1,5 @@
 package com.ssafy.archiview.dto.user;
 
-import com.ssafy.archiview.dto.token.TokenDto;
 import com.ssafy.archiview.entity.Role;
 import com.ssafy.archiview.entity.User;
 import com.ssafy.archiview.validation.user.UserEmail;
@@ -8,8 +7,6 @@ import com.ssafy.archiview.validation.user.UserId;
 import com.ssafy.archiview.validation.user.UserName;
 import com.ssafy.archiview.validation.user.UserPassword;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 public class UserDto {
     @Getter
@@ -136,6 +133,30 @@ public class UserDto {
             this.introduce = introduce;
             this.profileUrl = profileUrl;
             this.role = role;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class passwordDto {
+        private String pw;
+
+        @Builder
+        public passwordDto(String pw) {
+            this.pw = pw;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class userDetailDto {
+        private String profileUrl;
+        private String introduce;
+
+        @Builder
+        public userDetailDto(String profileUrl, String introduce) {
+            this.profileUrl = profileUrl;
+            this.introduce = introduce;
         }
     }
 }

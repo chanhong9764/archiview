@@ -71,6 +71,13 @@ public class User implements Persistable<String> {
         this.refreshToken = refreshToken;
     }
 
+    public void updatePassword(String pw){
+        this.pw = pw;
+    }
+    public void updateUserDetail(String profileUrl, String introduce){
+        this.profileUrl = profileUrl;
+        this.introduce = introduce;
+    }
 
     @Override
     public boolean isNew() {

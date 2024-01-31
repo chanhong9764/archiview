@@ -70,7 +70,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
 
         String id = loginDto.getId();
         String pw = loginDto.getPw();
-
+        System.out.println("login pw :" + pw);
         if (id == null || pw == null) {
             throw new AuthenticationServiceException("DATA IS MISS");
         }
@@ -96,18 +96,17 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
         String authoritie = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-        System.out.println(authoritie); // -> USER
+
         //UserDetails
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
         String userId = customUserDetails.getUsername();  // userId 추출
-
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
         String userRole = auth.getAuthority();  // role 추출
 
-        TokenDto token = jwtUtil.createJwt(userId, userRole);  // 토큰 생성
+        TokenDto.createTokenDto token = jwtUtil.createJwt(userId, userRole);  // 토큰 생성
         Role role = null;
         if(userRole.equals("USER")) {
             role = Role.USER;
@@ -124,6 +123,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
                 .name(user.get().getName())
                 .email(user.get().getEmail())
                 .profileUrl(user.get().getProfileUrl())
+                .introduce((user.get().getIntroduce()))
                 .role(role)
                 .build();
         user.get().updateRefreshToken(token.getRefreshToken());
@@ -132,6 +132,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.OK.value());
         response.getWriter().write(new ObjectMapper().writeValueAsString(responseDto));
+//        response.getWriter().write(new ObjectMapper().writeValueAsString(SuccessResponse.createSuccess(SuccessCode.LOGIN_SUCCESS, responseDto)));
     }
 
     @Override

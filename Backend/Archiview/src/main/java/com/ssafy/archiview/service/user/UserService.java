@@ -16,10 +16,10 @@ public interface UserService {
     // 패스워드 확인
     void validPassword(String userId, String userPw);
     // 패스워드 변경
-    void updatePassword(String userId, String userPw);
+    void updatePassword(String userInfo, String userPw);
     // 아이디 찾기
-    int findId(String name, String email);
+    User findId(String name, String email);
     // 패스워드 찾기
-    int findPassword(String userId, String email);
-    void updateProfile(String profileUrl, String id);
+    User findPassword(String userId, String email);
+    void updateUserDetail(String profileUrl, String introduce, String id);
 }

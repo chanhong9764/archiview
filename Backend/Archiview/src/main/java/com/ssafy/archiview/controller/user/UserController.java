@@ -1,18 +1,22 @@
 package com.####.archiview.controller.user;
 
 import com.####.archiview.dto.user.UserDto;
+import com.####.archiview.entity.User;
 import com.####.archiview.jwt.jwtUtil;
 import com.####.archiview.response.code.ErrorCode;
 import com.####.archiview.response.code.SuccessCode;
 import com.####.archiview.response.exception.RestApiException;
 import com.####.archiview.response.structure.SuccessResponse;
 import com.####.archiview.service.user.UserService;
+import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 
 @RequiredArgsConstructor
 @RestController
@@ -45,20 +49,15 @@ public class UserController {
     }
 
     @GetMapping("/find-id")  // 아이디 찾기
-    public ResponseEntity<Object> findId(@RequestParam String name, @RequestParam String email){
-        int cnt = service.findId(name, email);
-        if (cnt == 0){
-            throw new RestApiException(ErrorCode.USER_NOT_FOUND);
-        }
-        return SuccessResponse.createSuccess(SuccessCode.FIND_ID_SUCCESS);
+    public ResponseEntity<Object> findId(@RequestParam String name, HttpServletRequest request){
+        String email = jwtUtil.getUserEmail(request);
+        User user = service.findId(name, email);
+        return SuccessResponse.createSuccess(SuccessCode.FIND_ID_SUCCESS, user.getId());
     }
 
     @GetMapping("/find-password")  // 패스워드 찾기
     public ResponseEntity<Object> findPassword(@RequestParam String id, @RequestParam String email){
-        int cnt = service.findPassword(id, email);
-        if (cnt == 0){
-            throw new RestApiException(ErrorCode.USER_NOT_FOUND);
-        }
+        service.findPassword(id, email);
         return SuccessResponse.createSuccess(SuccessCode.FIND_PASSWORD_SUCCESS);
     }
 
@@ -71,15 +70,21 @@ public class UserController {
 
     @PatchMapping("/update-password")  // 패스워드 변경
     public ResponseEntity<Object> updatePassword(@RequestBody UserDto.passwordDto dto, HttpServletRequest request){
-        String userId = jwtUtil.getUsername(request);
-        service.updatePassword(userId, dto.getPw());
+        String userInfo;
+        if(jwtUtil.checkClaims(request.getHeader("Authorization"))){
+            userInfo = jwtUtil.getUsername(request);
+        }else{
+            userInfo = jwtUtil.getUserEmail(request);
+        }
+        System.out.println(userInfo);
+        service.updatePassword(userInfo, dto.getPw());
         return SuccessResponse.createSuccess(SuccessCode.PASSWORD_UPDATE_SUCCESS);
     }
 
-    @PatchMapping("/update-profile")  // 프로필 변경
-    public ResponseEntity<Object> updateProfile(@RequestBody UserDto.profileDto dto, HttpServletRequest request){
+    @PatchMapping  // 프로필, 자기소개 변경
+    public ResponseEntity<Object> updateUserDetail(@RequestBody UserDto.userDetailDto dto, HttpServletRequest request){
         String userId = jwtUtil.getUsername(request);
-        service.updateProfile(dto.getProfileUrl(), userId);
+        service.updateUserDetail(dto.getProfileUrl(), dto.getIntroduce(), userId);
         return SuccessResponse.createSuccess(SuccessCode.PROFILE_UPDATE_SUCCESS);
     }
 }

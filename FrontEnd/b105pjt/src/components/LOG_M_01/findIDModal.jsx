@@ -217,6 +217,7 @@ import SendIcon from "@mui/icons-material/Send";
 import Logo from "../../assets/img/mainLogo-removebg-preview.png";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import FindIDResult from './findIDResult'; // FindIDResult 컴포넌트 import
+import FoundIDResult from "./findIDResult";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -229,7 +230,11 @@ const FindIDModal = ({ onSwitch }) => {
   const [isNameValid, setIsNameValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isEmailEmpty, setIsEmailEmpty] = useState(true);
-  const [foundId, setFoundId] = useState(null);
+  const [foundId, setFoundId] = useState("");
+  if (foundId) {
+    // 찾은 아이디가 있을 경우 FoundIDDisplay 컴포넌트를 렌더링
+    return <FoundIDResult foundId={foundId} onSwitch={onSwitch} />;
+  }
 
   const handleEmailChange = (event) => {
     const newEmail = event.target.value;
@@ -275,6 +280,12 @@ const FindIDModal = ({ onSwitch }) => {
     const newName = event.target.value;
     setIsNameValid(/^[가-힣]{2,32}$/.test(newName));
   };
+
+  const handleCloseResultModal = () => {
+    setFoundId(null); // 찾은 아이디 상태 초기화
+    onSwitch("Login"); // 로그인 모달로 전환
+  };
+  
 
   return (
     <div className="LOG-M-01-Content">
@@ -377,7 +388,8 @@ const FindIDModal = ({ onSwitch }) => {
       </Grid>
 
       {/* 아이디 찾기 결과 모달 */}
-      <FindIDResult id={foundId} onClose={handleClose} />
+      {/* <FindIDResult id={foundId} onClose={handleClose} />
+      {foundId && <FindIDResult id={foundId} onClose={handleCloseResultModal} />} */}
     </div>
   );
 };

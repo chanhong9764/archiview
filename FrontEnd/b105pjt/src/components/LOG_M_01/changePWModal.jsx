@@ -45,6 +45,13 @@ const ChangPWModal = ({ onSwitch }) => {
     setPasswordError(password !== event.target.value);
   };
 
+  // 엔터 입력시
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleAssignClick();
+    }
+  };
+
   return (
     <div className="LOG-M-01-Content">
       <Grid container spacing={2}>
@@ -63,6 +70,7 @@ const ChangPWModal = ({ onSwitch }) => {
             type="password"
             variant="filled"
             onChange={handlePasswordChange}
+            onKeyDown={handleKeyPress}
             value={password}
             error={passwordError && password.length < 8}
             helperText={
@@ -81,6 +89,7 @@ const ChangPWModal = ({ onSwitch }) => {
             placeholder="비밀번호 확인"
             type="password"
             variant="filled"
+            onKeyDown={handleKeyPress}
             error={
               passwordError &&
               confirmPassword.length > 0 &&

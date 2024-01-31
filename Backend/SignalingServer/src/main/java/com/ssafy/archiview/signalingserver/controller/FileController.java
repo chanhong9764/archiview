@@ -19,14 +19,14 @@ public class FileController {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
-     *  Name               streamVideo
-     *  Method             GET
-     *  End-Point          /api/files/recording/{sessionId}
+     *  @Name              streamVideo
+     *  @Method            GET
+     *  @End-Point         /api/files/recording/{sessionId}
      *  @param sessionId   ses_FPOx25ZwAA 와 같이 세션의 ID 값을 PathVariable 로 전달받는다.
      *  @return Resource   해당하는 영상을 Resource 형태로 반환한다.
      *
-     *  파일 경로 예시       /opt/openvidu/recordings/ses_FPOx25ZwAA/ses_FPOx25ZwAA.mp4
-     *  API 요청 예시       https://i10b105.p.####.io/api/files/recording/ses_FPOx25ZwAA
+     *  @Directory         /opt/openvidu/recordings/ses_FPOx25ZwAA/ses_FPOx25ZwAA.mp4
+     *  @Request           https://i10b105.p.####.io/api/files/recording/ses_FPOx25ZwAA
      **/
     @GetMapping(path = "/recording/{sessionId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public Resource streamVideo(@PathVariable String sessionId) throws IOException {
@@ -38,14 +38,14 @@ public class FileController {
     }
 
     /**
-     *  Name               downloadThumbnailImage
-     *  Method             GET
-     *  End-Point          /api/files/thumbnail/{sessionId}
+     *  @Name              downloadThumbnailImage
+     *  @Method            GET
+     *  @End-Point         /api/files/thumbnail/{sessionId}
      *  @param sessionId   ses_FPOx25ZwAA 와 같이 세션의 ID 값을 PathVariable 로 전달받는다.
      *  @return Resource   해당하는 영상의 썸네일을 Resource 형태로 반환한다.
      *
-     *  파일 경로 예시       /opt/openvidu/recordings/ses_FPOx25ZwAA/ses_FPOx25ZwAA.jpg
-     *  API 요청 예시       https://i10b105.p.####.io/api/files/thumbnail/ses_FPOx25ZwAA
+     *  @Directory         /opt/openvidu/recordings/ses_FPOx25ZwAA/ses_FPOx25ZwAA.jpg
+     *  @Request           https://i10b105.p.####.io/api/files/thumbnail/ses_FPOx25ZwAA
      **/
     @GetMapping(path = "/thumbnail/{sessionId}")
     public Resource downloadThumbnailImage(@PathVariable String sessionId) throws IOException {
@@ -57,15 +57,15 @@ public class FileController {
     }
 
     /**
-     *  Name               uploadProfileImage
-     *  Method             POST
-     *  End-Point          /api/files/profile/{userId}
+     *  @Name              uploadProfileImage
+     *  @Method            POST
+     *  @End-Point         /api/files/profile/{userId}
      *  @param userId      user 의 id 값을 전달받는다. 이는 저장될 파일의 이름으로 사용된다.
      *  @param img         저장하고자 하는 이미지 파일을 MultipartFile 형태로 전달받는다.
      *  @return Response   프로필 이미지 업로드의 성공, 실패 여부를 메시지와 함께 반환한다.
      *
-     *  파일 경로 예시       /opt/openvidu/profiles/charles.png
-     *  API 요청 예시       https://i10b105.p.####.io/api/files/profile/charles
+     *  @Directory         /opt/openvidu/profiles/charles.png
+     *  @Request           https://i10b105.p.####.io/api/files/profile/charles
      **/
     @PostMapping("/profile/{userId}")
     public ResponseEntity<?> uploadProfileImage(@PathVariable String userId, @RequestParam("img") MultipartFile img ) throws IOException {
@@ -81,19 +81,19 @@ public class FileController {
     }
 
     /**
-     *  Name               downloadThumbnailImage
-     *  Method             GET
-     *  End-Point          /api/files/profile/{userId}
+     *  @Name              downloadThumbnailImage
+     *  @Method            GET
+     *  @End-Point         /api/files/profile/{userId}
      *  @param  userId     user 의 id 값을 전달받는다. 이는 저장된 파일을 탐색하기 위해 사용된다.
      *  @return Resource   해당하는 user 의 프로필 이미지를 Resource 형태로 반환한다.
      *
-     *  파일 경로 예시       /opt/openvidu/profiles/charles.png
-     *  API 요청 예시       https://i10b105.p.####.io/api/files/profile/charles
+     *  @Directory         /opt/openvidu/profiles/charles.png
+     *  @Request           https://i10b105.p.####.io/api/files/profile/charles
      **/
     @GetMapping(path = "/profile/{userId}")
     public Resource downloadProfileImage(@PathVariable String userId) throws IOException {
         logger.info("FileController -> downloadProfileImage | userId: " + userId);
-        
+
         return new ByteArrayResource((FileCopyUtils.copyToByteArray(new FileInputStream(
              "/opt/openvidu/profiles/" + userId
         ))));

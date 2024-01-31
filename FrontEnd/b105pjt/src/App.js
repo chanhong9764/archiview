@@ -4,6 +4,7 @@ import { Provider, useSelector, useDispatch } from "react-redux";
 import NavbarLogin from "./components/utils/navbarLogin";
 import { Route, Routes } from "react-router-dom";
 import HOM_P_01 from "./pages/HOM_P_01";
+import MYI_P_02_Modify from "./pages/MYI_P_02_Modify";
 import CAL_P_01 from "./pages/CAL_P_01";
 import MYI_P_01 from "./pages/MYI_P_01";
 import MYI_P_02 from "./pages/MYI_P_02";
@@ -12,44 +13,91 @@ import MYP_P_02 from "./pages/MYP_P_02";
 import SCH_P_01 from "./pages/SCH_P_01";
 import Navbar from "./components/utils/navbar";
 import "./assets/css/App.css";
+import { CircularProgress } from "@mui/material";
+import Footer from "./components/utils/footer";
+
+const devTools = window.__REDUX_DEVTOOLS_EXTENSION__;
 
 const initialState = {
   isLoggedIn: false,
+  isLoading: false,
+  accessToken: "",
 };
 
 // 리듀서
 function authReducer(state = initialState, action) {
   switch (action.type) {
+    //Login
     case "LOGIN":
-      return { ...state, isLoggedIn: true };
+      return { ...state, isLoggedIn: true, accessToken: action.accessToken };
     case "LOGOUT":
-      return { ...state, isLoggedIn: false };
+      return { ...state, isLoggedIn: false, accessToken: "" };
+
+    //Loading
+    case "SET_LOADING":
+      return { ...state, isLoading: true };
+    case "UNSET_LOADING":
+      return { ...state, isLoading: false };
     default:
       return state;
   }
 }
 
 // 스토어 생성
-const store = createStore(authReducer);
+const store = createStore(authReducer, devTools && devTools());
 
 // 애플리케이션의 루트 컴포넌트
 function App() {
   return (
     <Provider store={store}>
-      <NavbarComponent />
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<HOM_P_01 />}></Route>
-          <Route path="/cal" element={<CAL_P_01 />}></Route>
-          <Route path="/myinterview" element={<MYI_P_01 />}></Route>
-          <Route path="/addquestion" element={<MYI_P_02 />}></Route>
-          <Route path="/mypage" element={<MYP_P_01 />}></Route>
-          <Route path="/modify" element={<MYP_P_02 />}></Route>
+      <LoadingComponent />
+      <div
+        style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
+      >
+        <NavbarComponent />
+        <div className="App" style={{ flex: 1 }}>
+          <Routes>
+            <Route path="/" element={<HOM_P_01 />}></Route>
+            <Route path="/cal" element={<CAL_P_01 />}></Route>
+            <Route path="/myinterview" element={<MYI_P_01 />}></Route>
+            <Route path="/addquestion" element={<MYI_P_02 />}></Route>
+            <Route path="/revise" element={<MYI_P_02_Modify />}></Route>
+            <Route path="/mypage" element={<MYP_P_01 />}></Route>
+            <Route path="/modify" element={<MYP_P_02 />}></Route>
 
-          <Route path="/search" element={<SCH_P_01 />}></Route>
-        </Routes>
+            <Route path="/search" element={<SCH_P_01 />}></Route>
+          </Routes>
+        </div>
+        <Footer />
       </div>
     </Provider>
+  );
+}
+
+function LoadingComponent() {
+  const isLoading = useSelector((state) => state.isLoading);
+
+  return (
+    <div>
+      {isLoading && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "rgba(255, 255, 255, 0.3)",
+            zIndex: 2000,
+          }}
+        >
+          <CircularProgress />
+        </div>
+      )}
+    </div>
   );
 }
 

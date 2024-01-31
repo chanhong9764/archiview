@@ -1,15 +1,18 @@
 import React from "react";
 import "../assets/css/MYI_P_02.css";
-import InsertForm from "../components/MYI_P_02/insertForm";
-import BtnGroupModify from "../components/MYI_P_02/btnGroupModify";
+import ModifyForm from "../components/MYI_P_02/modifyForm";
+import MyNavbar from "../components/MYI_P_02/myNavbar";
 
 const MYI_P_02 = () => {
   return (
-    <div style={{ p: "20", marginTop: "20px" }}>
+    <div>
+      <MyNavbar></MyNavbar>
+
       {/* insert form */}
-      <div>
-        <InsertForm></InsertForm>
-        <BtnGroupModify></BtnGroupModify>
+      <div className="MYI-P-02-Content">
+        <div className="Insert-form">
+          <ModifyForm></ModifyForm>
+        </div>
       </div>
     </div>
   );

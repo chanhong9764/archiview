@@ -1,0 +1,25 @@
+version: '3.1'
+
+services:
+    archiview:
+        build:
+            context: ./Backend/Archiview
+        restart: on-failure
+        container_name: archiview-server
+        ports:
+            - 11443:11443
+
+    signaling-server:
+        build:
+            context: ./Backend/SignalingServer
+        container_name: signaling-server
+        restart: on-failure
+        ports:
+            - 8080:8080
+            - 8443:8443
+        environment:
+            TZ: "Asia/Seoul"
+            OPENVIDU_URL: http://i10b105.p.####.io:5443
+        volumes:
+            - /opt/openvidu/recordings:/opt/openvidu/recordings
+            - /opt/openvidu/profiles:/opt/openvidu/profiles

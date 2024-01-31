@@ -13,7 +13,7 @@ import HOM_M_01 from "../../pages/HOM_M_01";
 
 const pages = ["채용 공고"];
 const settings = ["로그인"];
-const search = ["상세 검색"]
+const search = ["상세 검색"];
 
 const style = {
   position: "absolute",
@@ -39,25 +39,23 @@ function NavbarLogin() {
 
   // LOGO 클릭시
   const handleRefresh = () => {
-    // 현재 경로로 다시 이동하여 컴포넌트를 리프레시합니다.
     navigate("/", { replace: true });
   };
 
   // 상세 검색 클릭시
   const handleSearch = () => {
-    // 현재 경로로 다시 이동하여 컴포넌트를 리프레시합니다.
     navigate("/search", { replace: true });
   };
 
   // 메뉴 클릭시
   const handleCalendar = () => {
-    // 현재 경로로 다시 이동하여 컴포넌트를 리프레시합니다.
     navigate("/cal", { replace: true });
   };
 
   const handleOpen = () => {
     setOpen(true);
   };
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -70,7 +68,11 @@ function NavbarLogin() {
             {/* 큰 사이즈 logo */}
             <Box
               onClick={handleRefresh}
-              sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+              sx={{
+                display: { xs: "none", md: "flex" },
+                mr: 1,
+                cursor: "pointer",
+              }}
             >
               <img src={Logo} alt="Logo" style={{ height: "40px" }} />
             </Box>
@@ -78,7 +80,11 @@ function NavbarLogin() {
             {/* 작은 사이즈 logo */}
             <Box
               onClick={handleRefresh}
-              sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
+              sx={{
+                display: { xs: "flex", md: "none" },
+                mr: 1,
+                cursor: "pointer",
+              }}
             >
               <img src={Logo} alt="Logo" style={{ height: "40px" }} />
             </Box>
@@ -89,7 +95,13 @@ function NavbarLogin() {
                 <Button
                   key={page}
                   onClick={handleCalendar}
-                  sx={{ my: 2, color: "#222222", display: "block" }}
+                  sx={{
+                    my: 2,
+                    color: "#222222",
+                    display: "block",
+                    fontWeight:
+                      location.pathname === "/cal" ? "bold" : "normal",
+                  }}
                 >
                   {page}
                 </Button>
@@ -98,13 +110,18 @@ function NavbarLogin() {
                 <Button
                   key={search}
                   onClick={handleSearch}
-                  sx={{ my: 2, color: "#222222", display: "block" }}
+                  sx={{
+                    my: 2,
+                    color: "#222222",
+                    display: "block",
+                    fontWeight:
+                      location.pathname === "/search" ? "bold" : "normal",
+                  }}
                 >
                   {search}
                 </Button>
               ))}
             </Box>
-            
 
             {/* 우측 메뉴 */}
             <Box sx={{ flexGrow: 0 }}>
@@ -113,7 +130,11 @@ function NavbarLogin() {
                   <Button
                     key={setting}
                     onClick={handleOpen}
-                    sx={{ my: 2, color: "#222222", display: "block" }}
+                    sx={{
+                      my: 2,
+                      color: "#222222",
+                      display: "block",
+                    }}
                   >
                     {setting}
                   </Button>

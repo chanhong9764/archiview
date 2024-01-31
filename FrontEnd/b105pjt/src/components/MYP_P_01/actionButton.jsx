@@ -10,7 +10,8 @@ import {
   useTheme,
 } from "@mui/material";
 import PasswordChangeModal from "./passwordModal";
-import { useLocation, useNavigate } from "react-router-dom";
+import PasswordCheckModal from "./passwordCheck"; // 비밀번호 확인 모달 import
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 // 확인 다이얼로그 컴포넌트
@@ -42,6 +43,7 @@ const ActionButton = ({ onDelete }) => {
   const theme = useTheme();
   const [openModal, setOpenModal] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const [openPasswordCheckModal, setOpenPasswordCheckModal] = useState(false);
 
   // 비밀번호 변경 모달 여는거 닫는거
   const handleOpenModal = () => {
@@ -62,9 +64,13 @@ const ActionButton = ({ onDelete }) => {
   };
 
   const handleConfirmDelete = () => {
+    setOpenPasswordCheckModal(true);
+  };
+
+  const handlePasswordVerified = () => {
     onDelete();
     handleCloseConfirmDialog();
-
+    setOpenPasswordCheckModal(false);
     dispatch({ type: "LOGOUT" });
     navigate("/", { replace: true });
   };
@@ -110,6 +116,11 @@ const ActionButton = ({ onDelete }) => {
         open={openConfirmDialog}
         onClose={handleCloseConfirmDialog}
         onConfirm={handleConfirmDelete}
+      />
+      <PasswordCheckModal
+        open={openPasswordCheckModal}
+        onClose={() => setOpenPasswordCheckModal(false)}
+        onPasswordVerified={handlePasswordVerified}
       />
     </>
   );

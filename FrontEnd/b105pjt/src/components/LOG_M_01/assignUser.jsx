@@ -12,6 +12,9 @@ import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import SendIcon from "@mui/icons-material/Send";
 import Logo from "../../assets/img/mainLogo-removebg-preview.png";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
+import { useForm } from "../../hooks/useForm";
+import { useNavigate } from "react-router-dom";
+import { signupAxios, sendEmailAxios } from "../../api/userAPI";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -30,11 +33,24 @@ const AssignUser = ({ onSwitch }) => {
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isEmailEmpty, setIsEmailEmpty] = useState(true); // 이메일이 비어있는지 여부를 저장하는 상태 추가
 
+  // API 관리 변수들 추가
+  const navigate = useNavigate();
+  const initialState_signup = {
+    id: "", // varchar(16) 유저의 아이디
+    pw: "", // 최소 9자, 최대 16자, 영문+숫자+특수문자 조합
+    email: "", // 유저 이메일
+    name: "", // 유저 이름
+  };
+
+  const [form, handleFormChange, handleFileChange, resetForm] =
+    useForm(initialState_signup);
+  // const { email, pw, name, id } = form;
+
   // 이름 입력 필드의 값이 변경 시 호출되는 함수
   const handleNameChange = (event) => {
     const newName = event.target.value;
     setIsNameValid(/^[가-힣]{2,32}$/.test(newName));
-
+    handleFormChange(event);
     // 나머지 코드 유지
   };
 
@@ -48,6 +64,7 @@ const AssignUser = ({ onSwitch }) => {
   const handleIdChange = (event) => {
     const newId = event.target.value;
     setIsIdValid(/^[a-z0-9]{4,16}$/.test(newId));
+    handleFormChange(event);
     // 나머지 코드 유지
   };
 
@@ -59,13 +76,24 @@ const AssignUser = ({ onSwitch }) => {
         newEmail
       )
     );
+    handleFormChange(event);
     setIsEmailEmpty(newEmail.trim() === ""); // 이메일이 비어있는지 여부를 검사하여 상태 업데이트
     // 나머지 코드 유지
+  };
+
+  const handleSignupAxios = async () => {
+    try {
+      const { data } = await signupAxios(form);
+    } catch (error) {
+      console.error("데이터 전송 오류:", error);
+    }
   };
 
   // '회원가입' 버튼 클릭시 핸들러 함수
   const handleAssignClick = () => {
     setOpenSnackbar(true);
+    handleSignupAxios();
+    resetForm();
 
     setTimeout(() => {
       setOpenSnackbar(false);
@@ -90,6 +118,7 @@ const AssignUser = ({ onSwitch }) => {
   // 패스워드 입력 필드의 값이 변경 시 호출되는 함수
   const handlePasswordChange = (event) => {
     const newPassword = event.target.value;
+    handleFormChange(event);
     setIsPasswordValid(
       /^(?=.*[a-zA-Z])(?=.*[!@#$%^+=-])(?=.*[0-9]).{9,16}$/.test(newPassword)
     );
@@ -129,6 +158,7 @@ const AssignUser = ({ onSwitch }) => {
           <TextField
             className="ID-input"
             style={{ width: "100%" }}
+            name="name"
             required
             label="이름"
             placeholder="홍길동"
@@ -145,6 +175,7 @@ const AssignUser = ({ onSwitch }) => {
           <TextField
             className="ID-input"
             style={{ width: "100%" }}
+            name="id"
             required
             label="ID"
             placeholder="사용자 ID"
@@ -161,6 +192,7 @@ const AssignUser = ({ onSwitch }) => {
           <TextField
             className="PW-input"
             label="PW"
+            name="pw"
             required
             placeholder="비밀번호"
             type="password"
@@ -208,6 +240,7 @@ const AssignUser = ({ onSwitch }) => {
           <TextField
             className="PW-input"
             required
+            name="email"
             label="이메일"
             placeholder="example@mail.com"
             defaultValue=""

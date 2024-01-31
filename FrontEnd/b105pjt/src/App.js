@@ -12,10 +12,12 @@ import MYP_P_02 from "./pages/MYP_P_02";
 import SCH_P_01 from "./pages/SCH_P_01";
 import Navbar from "./components/utils/navbar";
 import "./assets/css/App.css";
+import { CircularProgress } from "@mui/material";
 import Footer from "./components/utils/footer";
 
 const initialState = {
   isLoggedIn: false,
+  isLoading: false,
   accessToken: "",
 };
 
@@ -26,6 +28,10 @@ function authReducer(state = initialState, action) {
       return { ...state, isLoggedIn: true, accessToken: action.accessToken };
     case "LOGOUT":
       return { ...state, isLoggedIn: false, accessToken: "" };
+    case "SET_LOADING":
+      return { ...state, isLoading: true };
+    case "UNSET_LOADING":
+      return { ...state, isLoading: false };
     default:
       return state;
   }
@@ -38,6 +44,7 @@ const store = createStore(authReducer);
 function App() {
   return (
     <Provider store={store}>
+      <LoadingComponent />
       <div
         style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
       >
@@ -57,6 +64,33 @@ function App() {
         <Footer />
       </div>
     </Provider>
+  );
+}
+
+function LoadingComponent() {
+  const isLoading = useSelector((state) => state.isLoading);
+
+  return (
+    <div>
+      {isLoading && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "rgba(255, 255, 255, 0.3)",
+            zIndex: 2000,
+          }}
+        >
+          <CircularProgress />
+        </div>
+      )}
+    </div>
   );
 }
 

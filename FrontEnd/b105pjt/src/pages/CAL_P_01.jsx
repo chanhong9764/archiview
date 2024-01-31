@@ -62,6 +62,7 @@ const style = {
   px: 4,
   pb: 3,
   borderRadius: "10px",
+ 
 };
 
 const FullCalendarContainer = styled.div`
@@ -130,7 +131,7 @@ const FullCalendarContainer = styled.div`
 const SearchContainer = styled.div`
   display: flex;
   justify-content: flex-start;
-  padding: 20px 0 15px 0;
+  padding: 0px 0 15px 0;
 `;
 
 
@@ -247,7 +248,7 @@ const CAL_P_01 = () => {
           aria-describedby="parent-modal-description"
         >
           <Box sx={{ ...style, width: 600 }}>
-            <CAL_M_01 event={selectedEvent} imageUrl={imageUrl}></CAL_M_01>
+            <CAL_M_01 event={selectedEvent} imageUrl={imageUrl} onClose={handleClose} />
           </Box>
         </Modal>
       </div>

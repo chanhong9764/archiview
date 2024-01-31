@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import LoginIcon from "@mui/icons-material/Login";
 import "../../assets/css/LOG_M_01_login.css";
 import Logo from "../../assets/img/mainLogo-removebg-preview.png";
+import FoundIDResult from "./findIDResult";
 import { loginAxios } from "../../api/userAPI";
 import { useForm } from "../../hooks/useForm";
 import { useNavigate } from "react-router-dom";
@@ -64,6 +65,11 @@ const LoginModal = ({ onSwitch, close }) => {
   const handlePwChange = (event) => {
     handleFormChange(event);
     setPw(event.target.value);
+  };
+
+  const handleCloseResult = () => {
+    setFoundId(null); // 찾은 아이디 상태 초기화
+    close(); // 로그인 모달 닫기
   };
 
   // 로그인 버튼 클릭 시 (로그인 동작)
@@ -159,6 +165,7 @@ const LoginModal = ({ onSwitch, close }) => {
           </div>
         </Grid>
       </Grid>
+      {foundId && <indIDResult id={foundId} onClose={handleCloseResult} />}
     </div>
   );
 };

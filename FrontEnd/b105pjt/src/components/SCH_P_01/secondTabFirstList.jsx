@@ -60,7 +60,7 @@ export default function VirtualizedList({
     <Box
       sx={{
         width: "100%",
-        height: 300,
+        height: 200,
         bgcolor: "background.paper",
       }}
     >

@@ -92,6 +92,9 @@ public class FileController {
      **/
     @GetMapping(path = "/profile/{userId}")
     public Resource downloadProfileImage(@PathVariable String userId) throws IOException {
+        // 파일이 존재하지 않을 시 기본 이미지를 출력할 수 있도록 설정.
+        // 파일이 존재하지 않으면 FileNotFoundException 이  throw 된다.
+        // catch 해서 default 로 설정할 이미지를 return 해주면 됨.
         logger.info("FileController -> downloadProfileImage | userId: " + userId);
 
         return new ByteArrayResource((FileCopyUtils.copyToByteArray(new FileInputStream(

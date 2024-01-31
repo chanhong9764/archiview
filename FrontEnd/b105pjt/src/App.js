@@ -19,15 +19,16 @@ import Footer from "./components/utils/footer";
 const initialState = {
   isLoggedIn: false,
   isLoading: false,
+  accessToken: "",
 };
 
 // 리듀서
 function authReducer(state = initialState, action) {
   switch (action.type) {
     case "LOGIN":
-      return { ...state, isLoggedIn: true };
+      return { ...state, isLoggedIn: true, accessToken: action.accessToken };
     case "LOGOUT":
-      return { ...state, isLoggedIn: false };
+      return { ...state, isLoggedIn: false, accessToken: "" };
     case "SET_LOADING":
       return { ...state, isLoading: true };
     case "UNSET_LOADING":

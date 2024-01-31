@@ -1,8 +1,7 @@
 package com.####.archiview.dto.common;
 
 import com.####.archiview.entity.CsSub;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.List;
 
@@ -16,6 +15,12 @@ public class CommonDto {
             this.id = id;
             this.name = name;
         }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class SearchResponseDto {
+        private final String imageUrl;
     }
 
     @Getter
@@ -47,6 +52,28 @@ public class CommonDto {
         public jobMainDto(String name, List<String> jobSubList) {
             this.name = name;
             this.jobSubList = jobSubList;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PACKAGE)
+    @AllArgsConstructor
+    public static class SearchResponse {
+        private String lastBuildDate;
+        private int total;
+        private int start;
+        private int display;
+        private List<Item> items;
+
+        @NoArgsConstructor(access = AccessLevel.PACKAGE)
+        @AllArgsConstructor
+        @Getter
+        public static class Item {
+            private String title;
+            private String link;
+            private String thumbnail;
+            private String sizeheight;
+            private String sizewidth;
         }
     }
 

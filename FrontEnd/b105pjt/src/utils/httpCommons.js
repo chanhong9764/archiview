@@ -33,4 +33,4 @@ function openViduAxios() {
   return instance;
 }
 
-export { naverImgAxios, openViduAxios };
+export { naverImgAxios, openViduAxios, instance };

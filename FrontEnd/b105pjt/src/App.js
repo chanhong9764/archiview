@@ -15,6 +15,8 @@ import "./assets/css/App.css";
 import { CircularProgress } from "@mui/material";
 import Footer from "./components/utils/footer";
 
+const devTools = window.__REDUX_DEVTOOLS_EXTENSION__;
+
 const initialState = {
   isLoggedIn: false,
   isLoading: false,
@@ -24,10 +26,13 @@ const initialState = {
 // 리듀서
 function authReducer(state = initialState, action) {
   switch (action.type) {
+    //Login
     case "LOGIN":
       return { ...state, isLoggedIn: true, accessToken: action.accessToken };
     case "LOGOUT":
       return { ...state, isLoggedIn: false, accessToken: "" };
+
+    //Loading
     case "SET_LOADING":
       return { ...state, isLoading: true };
     case "UNSET_LOADING":
@@ -38,7 +43,7 @@ function authReducer(state = initialState, action) {
 }
 
 // 스토어 생성
-const store = createStore(authReducer);
+const store = createStore(authReducer, devTools && devTools());
 
 // 애플리케이션의 루트 컴포넌트
 function App() {

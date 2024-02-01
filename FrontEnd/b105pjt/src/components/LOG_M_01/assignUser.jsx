@@ -12,7 +12,7 @@ import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import SendIcon from "@mui/icons-material/Send";
 import Logo from "../../assets/img/mainLogo-removebg-preview.png";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
-import { useForm } from "../../hooks/useForm";
+import { useForm } from "../../utils/useForm";
 import { useNavigate } from "react-router-dom";
 import { signupAxios, sendEmailAxios } from "../../api/userAPI";
 

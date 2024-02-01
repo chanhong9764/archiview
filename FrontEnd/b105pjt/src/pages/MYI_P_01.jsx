@@ -13,6 +13,7 @@ import {
   CardMedia,
 } from "@mui/material";
 import MyNavbar from "../components/MYI_P_02/myNavbar.jsx";
+import { useNavigate } from "react-router-dom";
 
 // 커스텀 테마 정의
 const theme = createTheme({
@@ -38,7 +39,7 @@ const theme = createTheme({
 // 카드 및 미디어 스타일 정의
 const cardStyles = {
   boxShadow: theme.shadows[3],
-  borderRadius: "5px",
+  borderRadius: "15px",
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
@@ -54,7 +55,19 @@ const cardStyles = {
 const mediaStyles = {
   height: 140,
   objectFit: "cover",
-  borderRadius: "5px 5px 0 0",
+  borderRadius: "15px 15px 0 0",
+};
+
+const dummyProfileData = {
+  code: 200,
+  message: "회원정보 조회에 성공했습니다.",
+  data: {
+    id: "ssafy123",
+    name: "김싸피",
+    email: "ssafy@naver.com",
+    introduce: "안녕하세요",
+    profile_url: "https://via.placeholder.com/150",
+  },
 };
 
 // 새로운 dummyQuestions 정의
@@ -90,6 +103,7 @@ const dummyQuestions = [
 
 const Page = () => {
   const [questions, setQuestions] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const formattedQuestions = dummyQuestions.map((item) => {
@@ -103,20 +117,21 @@ const Page = () => {
     setQuestions(formattedQuestions);
   }, []);
 
-  const handleViewDetails = (videoUrl) => {
-    window.open(videoUrl, "_blank");
+  const handleViewDetails = () => {
+    // window.open(videoUrl, "_blank");
+    navigate("/revise");
   };
 
   return (
     <ThemeProvider theme={theme}>
       <MyNavbar />
       <Container sx={{ mt: 4, mb: 4 }}>
-        <ProfileSection imageUrl="https://via.placeholder.com/180X180">
+        <ProfileSection imageUrl={dummyProfileData.data.profile_url}>
           <Typography variant="h5" gutterBottom>
-            이름
+            {dummyProfileData.data.name}
           </Typography>
           <Typography variant="body1">
-            이곳에 추가적인 프로필 정보를 표시합니다.
+            {dummyProfileData.data.introduce}
           </Typography>
         </ProfileSection>
         <SearchTab />

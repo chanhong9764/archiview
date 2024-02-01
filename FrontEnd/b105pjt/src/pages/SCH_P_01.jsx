@@ -13,6 +13,7 @@ import {
   CardContent,
   CardMedia,
 } from "@mui/material";
+import "../assets/css/SCH_P_01.css";
 
 // 커스텀 테마 정의
 const theme = createTheme({
@@ -44,6 +45,7 @@ const cardStyles = {
   maxHeight: 400,
   overflow: "hidden",
   transition: "transform 0.3s ease-in-out",
+  cursor: "pointer", // 커서 포인터 추가
   "&:hover": {
     transform: "scale(1.05)",
   },
@@ -106,52 +108,51 @@ function Test() {
   };
 
   return (
-    <Container>
-      <Tabcompo />
-      {questions.map((question, index) => (
-        <Accordion
-          key={index}
-          title={
-            <Typography variant="h6" color="primary" gutterBottom>
-              {question.content}
-            </Typography>
-          }
-        >
-          <Grid container spacing={2}>
-            {question.replies.map((reply) => (
-              <Grid item xs={12} sm={6} md={4} key={reply.id}>
-                <Card sx={cardStyles}>
-                  <CardMedia
-                    component="img"
-                    sx={mediaStyles}
-                    image={reply.thumbnailUrl}
-                    alt="Thumbnail Image"
-                  />
-                  <CardContent>
-                    <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-                      {reply.userId}
-                    </Typography>
-                    <Typography variant="body2">{reply.script}</Typography>
-                    <Typography variant="caption" color="textSecondary">
-                      {reply.question.companyName}
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button
-                      size="small"
-                      color="primary"
-                      onClick={() => handleViewDetails(reply.videoUrl)}
-                    >
-                      상세보기
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Accordion>
-      ))}
-    </Container>
+    <ThemeProvider theme={theme}>
+      <Container sx={{ mt: 4, mb: 4 }}>
+        <Tabcompo />
+        {questions.map((question, index) => (
+          <Accordion
+            key={index}
+            title={
+              <Typography variant="h6" color="primary" gutterBottom>
+                {question.content}
+              </Typography>
+            }
+          >
+            <Grid container spacing={2}>
+              {question.replies.map((reply) => (
+                <Grid item xs={12} sm={6} md={4} key={reply.id}>
+                  <Card
+                    onClick={() => handleViewDetails(reply.videoUrl)}
+                    sx={cardStyles}
+                  >
+                    <CardMedia
+                      component="img"
+                      sx={mediaStyles}
+                      image={reply.thumbnailUrl}
+                      alt="Thumbnail Image"
+                    />
+                    <CardContent>
+                      <Typography
+                        variant="subtitle1"
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        {reply.userId}
+                      </Typography>
+                      <Typography variant="body2">{reply.script}</Typography>
+                      <Typography variant="caption" color="textSecondary">
+                        {reply.question.companyName}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          </Accordion>
+        ))}
+      </Container>
+    </ThemeProvider>
   );
 }
 

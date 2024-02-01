@@ -20,7 +20,7 @@ import { useDispatch } from "react-redux";
 import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
-import BtnGroupInsert from "./btnGroupInsert";
+import BtnGroupModify from "./btnGroupModify";
 
 let session;
 let publisher;
@@ -62,7 +62,7 @@ const MakeSession = async (videoRef) => {
   }
 };
 
-const InsertForm = () => {
+const ModifyForm = () => {
   const videoRef = useRef(null); // 비디오 요소 참조를 위한 ref
   const [recordingURL, setRecordingURL] = useState("");
   const [isRecording, setIsRecording] = useState(false);
@@ -226,9 +226,9 @@ const InsertForm = () => {
         variant="filled"
         style={{ paddingTop: "5px" }}
       />
-      <BtnGroupInsert />
+      <BtnGroupModify />
     </div>
   );
 };
 
-export default InsertForm;
+export default ModifyForm;

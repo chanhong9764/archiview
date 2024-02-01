@@ -6,7 +6,7 @@ import "../../assets/css/LOG_M_01_login.css";
 import Logo from "../../assets/img/mainLogo-removebg-preview.png";
 import FoundIDResult from "./findIDResult";
 import { loginAxios } from "../../api/userAPI";
-import { useForm } from "../../hooks/useForm";
+import { useForm } from "../../utils/useForm";
 import { useNavigate } from "react-router-dom";
 import { setCookie, getCookie, removeCookie } from "../../utils/cookie";
 

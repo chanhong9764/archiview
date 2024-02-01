@@ -62,7 +62,6 @@ const style = {
   px: 4,
   pb: 3,
   borderRadius: "10px",
- 
 };
 
 const FullCalendarContainer = styled.div`
@@ -134,8 +133,6 @@ const SearchContainer = styled.div`
   padding: 0px 0 15px 0;
 `;
 
-
-
 const CAL_P_01 = () => {
   const [open, setOpen] = useState(false);
   const [events, setEvents] = useState([]);
@@ -143,20 +140,16 @@ const CAL_P_01 = () => {
   const [imageUrl, setImageUrl] = useState("");
 
   const fetchImage = async (title) => {
-    try {
-      await selectImg(
-        { query: title },
-        (response) => {
-          const firstImage = response.data.items[0].link;
-          setImageUrl(firstImage);
-        },
-        (error) => {
-          console.error("이미지 검색 실패:", error);
-        }
-      );
-    } catch (error) {
-      console.error("이미지 검색 오류:", error);
-    }
+    await selectImg(
+      { query: title },
+      (response) => {
+        const firstImage = response.data.items[0].link;
+        setImageUrl(firstImage);
+      },
+      (error) => {
+        console.error("이미지 검색 실패:", error);
+      }
+    );
   };
 
   useEffect(() => {
@@ -207,38 +200,36 @@ const CAL_P_01 = () => {
 
   return (
     <PageContainer>
-      <div style={{ marginBottom: '20px' }}>
+      <div style={{ marginBottom: "20px" }}>
         <div className="parent-container">
-        <FullCalendarContainer>
-          <SearchContainer>
-            <TextField
-              style={{ width: "500px", borderRadius: "50px" }}
-              label="회사명으로 면접 질문 검색"
-              variant="outlined"
-              onKeyDown={handleKeyPress}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={handleSearchBtn}>
-                      <SearchIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </SearchContainer>
-          
-            
-              <FullCalendar
-                plugins={[dayGridPlugin]}
-                initialView="dayGridMonth"
-                events={events}
-                locale={koLocale}
-                eventClick={handleEventClick}
-                eventContent={renderEventContent}
+          <FullCalendarContainer>
+            <SearchContainer>
+              <TextField
+                style={{ width: "500px", borderRadius: "50px" }}
+                label="회사명으로 면접 질문 검색"
+                variant="outlined"
+                onKeyDown={handleKeyPress}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleSearchBtn}>
+                        <SearchIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
-            </FullCalendarContainer>
-          
+            </SearchContainer>
+
+            <FullCalendar
+              plugins={[dayGridPlugin]}
+              initialView="dayGridMonth"
+              events={events}
+              locale={koLocale}
+              eventClick={handleEventClick}
+              eventContent={renderEventContent}
+            />
+          </FullCalendarContainer>
         </div>
 
         <Modal
@@ -248,7 +239,11 @@ const CAL_P_01 = () => {
           aria-describedby="parent-modal-description"
         >
           <Box sx={{ ...style, width: 600 }}>
-            <CAL_M_01 event={selectedEvent} imageUrl={imageUrl} onClose={handleClose} />
+            <CAL_M_01
+              event={selectedEvent}
+              imageUrl={imageUrl}
+              onClose={handleClose}
+            />
           </Box>
         </Modal>
       </div>

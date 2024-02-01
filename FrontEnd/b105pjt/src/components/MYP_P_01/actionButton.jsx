@@ -13,7 +13,7 @@ import PasswordChangeModal from "./passwordModal";
 import PasswordCheckModal from "./passwordCheck"; // 비밀번호 확인 모달 import
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { signoutAxios } from "../../api/userAPI";
+import { signout } from "../../api/userAPI";
 import { useSelector } from "react-redux";
 
 // 확인 다이얼로그 컴포넌트
@@ -60,11 +60,19 @@ const ActionButton = ({ onDelete }) => {
   // 회원탈퇴를 확인하고 , onDelete 함수를 호출하는 함수 -> '예'를 누르면 이 함수 호출
   const handleOpenConfirmDialog = () => {
     setOpenConfirmDialog(true);
-    signoutAxios({
-      headers: {
-        Authorization: accessToken,
+    signout(
+      {
+        headers: {
+          Authorization: accessToken,
+        },
       },
-    });
+      (resp) => {
+        console.log(resp);
+      },
+      (error) => {
+        console.log("에러 발생: ", error);
+      }
+    );
   };
 
   const handleCloseConfirmDialog = () => {

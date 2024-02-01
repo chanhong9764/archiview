@@ -6,11 +6,7 @@ import Logo from "../../assets/img/mainLogo-removebg-preview.png";
 import CheckIcon from "@mui/icons-material/Check";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import { Tune } from "@mui/icons-material";
-import {
-  findpwAxios,
-  changepwAxios,
-  sendFindEmailAxios,
-} from "../../api/userAPI";
+import { sendFindEmail } from "../../api/userAPI";
 
 const FindPWModal = ({ onSwitch }) => {
   const [showSignupFields, setShowSignupFields] = useState(false);
@@ -45,7 +41,16 @@ const FindPWModal = ({ onSwitch }) => {
   const handleVerifyClick = () => {
     setIsInputDisabled(true); // 버튼을 비활성화 시킴
     setShowSignupFields(true); // 인증번호 필드를 보여줌
-    sendFindEmailAxios(emailValue);
+    sendFindEmail(
+      { email: emailValue },
+      (resp) => {
+        console.log(resp);
+      },
+      (error) => {
+        console.log("에러 발생: ", error);
+      },
+      emailValue
+    );
   };
 
   const handleAuthClick = () => {

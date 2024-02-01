@@ -42,6 +42,12 @@ public class UserController {
         UserDto.DetailResponseDto responseDto = service.userDetail(userId);
         return SuccessResponse.createSuccess(SuccessCode.USER_DETAIL_SUCCESS, responseDto);
     }
+
+    @GetMapping("/{userid}")  // 회원상세조회(관리자)
+    public ResponseEntity<Object> userDetails(@PathVariable("userid") String userId) {
+        UserDto.DetailResponseDto responseDto = service.userDetail(userId);
+        return SuccessResponse.createSuccess(SuccessCode.USER_DETAIL_SUCCESS, responseDto);
+    }
     @DeleteMapping  // 회원탈퇴
     public ResponseEntity<Object> deleteUser(HttpServletRequest request){
         service.userDelete(request);

@@ -44,7 +44,7 @@ function a11yProps(index) {
 
 export default function BasicTabs() {
   const dumyBigTagList1 = ["직무", "역량"];
-  const dumyBigTagList2 = ["직업1", "직업2"];
+  const dumyBigTagList2 = ["직업1", "직업2", "직업3", "직업4", "직업5"];
   const [value, setValue] = React.useState(0);
   const [tagDataList, setTagDataList] = React.useState([]);
   const [checked, setChecked] = React.useState([]);
@@ -53,6 +53,7 @@ export default function BasicTabs() {
   const [smallTagData, setSmallTagData] = React.useState([]);
   const [smallTagList, setSmallTagList] = React.useState([]);
   const [pickTagList, setPickTagList] = React.useState([]);
+  const [tagSearchOpen, setTagSearchOpen] = React.useState(true);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -65,6 +66,14 @@ export default function BasicTabs() {
     setTagDataList([]);
     setChecked([]);
     setPickTagList([]);
+  };
+
+  const handleOpenSearchBar = () => {
+    setTagSearchOpen(false);
+  };
+
+  const handleCloseSearchBar = () => {
+    setTagSearchOpen(true);
   };
 
   const onClickTab = (value) => {
@@ -81,14 +90,16 @@ export default function BasicTabs() {
         width: "100%",
         border: "2px solid #1769aa",
         marginTop: "10px",
+        borderRadius: "10px",
         marginBottom: "20px",
       }}
     >
+      {/* SELECT1, SELECT2 nav Box */}
       <Box
         sx={{
           borderBottom: 1,
           borderColor: "divider",
-          padding: "10px",
+          padding: "5px",
           paddingBottom: "0",
         }}
       >
@@ -97,88 +108,119 @@ export default function BasicTabs() {
             label="Select 1"
             {...a11yProps(0)}
             onClick={() => onClickTab(dumyBigTagList1)}
+            sx={{ padding: "5px 10px" }} // 탭의 패딩 감소
           />
           <Tab
             label="Select 2"
             {...a11yProps(1)}
             onClick={() => onClickTab(dumyBigTagList2)}
+            sx={{ padding: "5px 10px" }} // 탭의 패딩 감소
           />
         </Tabs>
       </Box>
-      <CustomTabPanel value={value} index={0} padding="0px">
+
+      {/* 회사명(자동완성 기능) */}
+      <div style={{ display: "flex" }}>
         <AutoCompleteCompo />
-        <Divider />
-        <Grid container spacing={2}>
-          <Grid xs={5} sx={{ pr: "0px" }}>
-            <FirstTabFirstList
-              tagDataList={tagDataList}
-              setTagDataList={setTagDataList}
-              bigTagData={bigTagData}
-              setBigTagData={setBigTagData}
-              checked={checked}
-              setChecked={setChecked}
-              smallTagData={smallTagData}
-              setSmallTagData={setSmallTagData}
-              bigTagList={bigTagList}
-              setBigTagList={setBigTagList}
-              smallTagList={smallTagList}
-              setSmallTagList={setSmallTagList}
-              pickTagList={pickTagList}
-              setPickTagList={setPickTagList}
-            />
-          </Grid>
-          <Divider orientation="vertical" variant="middle" flexItem />
-          <Grid>
-            <FirstTabSecondList
-              tagDataList={tagDataList}
-              setTagDataList={setTagDataList}
-              bigTagData={bigTagData}
-              smallTagData={smallTagData}
-              setSmallTagData={setSmallTagData}
-              smallTagList={smallTagList}
-              pickTagList={pickTagList}
-              setPickTagList={setPickTagList}
-            />
-          </Grid>
-        </Grid>
-        <Divider />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        <Grid container spacing={2}>
-          <Grid xs={5} sx={{ pr: "0px" }}>
-            <SecondTabFirstList
-              tagDataList={tagDataList}
-              setTagDataList={setTagDataList}
-              bigTagData={bigTagData}
-              setBigTagData={setBigTagData}
-              checked={checked}
-              setChecked={setChecked}
-              smallTagData={smallTagData}
-              setSmallTagData={setSmallTagData}
-              bigTagList={bigTagList}
-              setBigTagList={setBigTagList}
-              smallTagList={smallTagList}
-              setSmallTagList={setSmallTagList}
-              pickTagList={pickTagList}
-              setPickTagList={setPickTagList}
-            />
-          </Grid>
-          <Divider orientation="vertical" variant="middle" flexItem />
-          <Grid>
-            <SecondTabSecondList
-              tagDataList={tagDataList}
-              setTagDataList={setTagDataList}
-              bigTagData={bigTagData}
-              smallTagData={smallTagData}
-              setSmallTagData={setSmallTagData}
-              smallTagList={smallTagList}
-              pickTagList={pickTagList}
-              setPickTagList={setPickTagList}
-            />
-          </Grid>
-        </Grid>
-      </CustomTabPanel>
+        {tagSearchOpen ? (
+          <Button onClick={handleOpenSearchBar}>펼치기</Button>
+        ) : (
+          <Button onClick={handleCloseSearchBar}>닫기</Button>
+        )}
+      </div>
       <Divider />
+
+      {!tagSearchOpen && (
+        <div>
+          {/* SELECT1 패널 */}
+          {/* 대분류, 소분류까지 */}
+          <CustomTabPanel value={value} index={0} padding="0px">
+            <Grid container spacing={2}>
+              {/* 대분류 */}
+              <Grid xs={5} sx={{ pr: "0px" }}>
+                <FirstTabFirstList
+                  tagDataList={tagDataList}
+                  setTagDataList={setTagDataList}
+                  bigTagData={bigTagData}
+                  setBigTagData={setBigTagData}
+                  checked={checked}
+                  setChecked={setChecked}
+                  smallTagData={smallTagData}
+                  setSmallTagData={setSmallTagData}
+                  bigTagList={bigTagList}
+                  setBigTagList={setBigTagList}
+                  smallTagList={smallTagList}
+                  setSmallTagList={setSmallTagList}
+                  pickTagList={pickTagList}
+                  setPickTagList={setPickTagList}
+                />
+              </Grid>
+
+              <Divider orientation="vertical" variant="middle" flexItem />
+
+              {/* 소분류 */}
+              <Grid>
+                <FirstTabSecondList
+                  tagDataList={tagDataList}
+                  setTagDataList={setTagDataList}
+                  bigTagData={bigTagData}
+                  smallTagData={smallTagData}
+                  setSmallTagData={setSmallTagData}
+                  smallTagList={smallTagList}
+                  pickTagList={pickTagList}
+                  setPickTagList={setPickTagList}
+                />
+              </Grid>
+            </Grid>
+            <Divider />
+          </CustomTabPanel>
+
+          {/* SELECT2 패널 */}
+          {/* 대분류, 소분류까지 */}
+          <CustomTabPanel value={value} index={1}>
+            <Grid container spacing={2}>
+              {/* 대분류 */}
+              <Grid xs={5} sx={{ pr: "0px" }}>
+                <SecondTabFirstList
+                  tagDataList={tagDataList}
+                  setTagDataList={setTagDataList}
+                  bigTagData={bigTagData}
+                  setBigTagData={setBigTagData}
+                  checked={checked}
+                  setChecked={setChecked}
+                  smallTagData={smallTagData}
+                  setSmallTagData={setSmallTagData}
+                  bigTagList={bigTagList}
+                  setBigTagList={setBigTagList}
+                  smallTagList={smallTagList}
+                  setSmallTagList={setSmallTagList}
+                  pickTagList={pickTagList}
+                  setPickTagList={setPickTagList}
+                />
+              </Grid>
+              <Divider orientation="vertical" variant="middle" flexItem />
+
+              {/* 소분류 */}
+              <Grid>
+                <SecondTabSecondList
+                  tagDataList={tagDataList}
+                  setTagDataList={setTagDataList}
+                  bigTagData={bigTagData}
+                  smallTagData={smallTagData}
+                  setSmallTagData={setSmallTagData}
+                  smallTagList={smallTagList}
+                  pickTagList={pickTagList}
+                  setPickTagList={setPickTagList}
+                />
+              </Grid>
+            </Grid>
+          </CustomTabPanel>
+        </div>
+      )}
+
+      <Divider />
+
+      {/* 태그 모음 */}
       <Box>
         <TagListCompo
           pickTagList={pickTagList}
@@ -192,14 +234,24 @@ export default function BasicTabs() {
           setChecked={setChecked}
         />
       </Box>
-      <Box>
+
+      {/* 검색 버튼 */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end", // 오른쪽 정렬
+          alignItems: "center",
+          marginTop: "5px",
+          marginBottom: "5px",
+        }}
+      >
         {/* <Box>빅태그 : {bigTagData}</Box>
         <Box>태그 데이터 모음 : {JSON.stringify(tagDataList)}</Box>
         <Box>더미 스몰태그 벨류 리스트 : {JSON.stringify(smallTagList)}</Box>
         <Box>픽한 스몰테그 데이터 : {JSON.stringify(smallTagData)}</Box>
         <Box>출력할 픽 데이터 : {JSON.stringify(pickTagList)}</Box> */}
-        <Button onClick={() => handleReset()}>Reset</Button>
-        <Button>검색하기</Button>
+        <Button onClick={() => handleReset()}>초기화</Button>
+        <Button color="primary">검색하기</Button>
       </Box>
     </Box>
   );

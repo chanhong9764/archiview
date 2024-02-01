@@ -193,4 +193,11 @@ public class ReplyServiceImpl implements ReplyService {
         commentRepository.delete(commentRepository.findByReplyIdAndUserId(requestDto.getId(), requestDto.getUserId())
                 .orElseThrow(() -> new RestApiException(ErrorCode.COMMENT_NOT_FOUND)));
     }
+
+    @Override
+    public void replyCommentDeleteByAdmin(int commentId) {
+        commentRepository.findById(commentId)
+                        .orElseThrow(() -> new RestApiException(ErrorCode.COMMENT_NOT_FOUND));
+        commentRepository.deleteById(commentId);
+    }
 }

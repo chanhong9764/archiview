@@ -8,6 +8,7 @@
     "@fontsource/roboto": "^5.0.8",
     "@fullcalendar/core": "^6.1.10",
     "@fullcalendar/daygrid": "^6.1.10",
+    "@fullcalendar/interaction": "^6.1.10",
     "@fullcalendar/react": "^6.1.10",
     "@mui/icons-material": "^5.15.4",
     "@mui/material": "^5.15.4",

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import koLocale from "@fullcalendar/core/locales/ko";
@@ -12,37 +12,8 @@ import styled from "styled-components";
 import NotificationAddOutlinedIcon from "@mui/icons-material/NotificationAddOutlined";
 import NotificationsOffOutlinedIcon from "@mui/icons-material/NotificationsOffOutlined";
 import SearchIcon from "@mui/icons-material/Search";
-
-const dummyEvent = {
-  code: 200,
-  message: "채용 공고 리스트를 조회했습니다.",
-  data: [
-    {
-      recruit_id: 10,
-      company_name: "네이버",
-      start: "2024-01-16",
-      end: "2024-02-18",
-    },
-    {
-      recruit_id: 11,
-      company_name: "카카오",
-      start: "2024-01-22",
-      end: "2024-02-28",
-    },
-    {
-      recruit_id: 10,
-      company_name: "존나길어길어네이버",
-      start: "2024-01-16",
-      end: "2024-02-18",
-    },
-    {
-      recruit_id: 11,
-      company_name: "카카오",
-      start: "2024-01-22",
-      end: "2024-02-28",
-    },
-  ],
-};
+import { selectAllRecruits, selectCompanyRecruits } from "../api/calendarAPI";
+import interactionPlugin from "@fullcalendar/interaction";
 
 const PageContainer = styled.div`
   margin-bottom: 30px;
@@ -138,6 +109,16 @@ const CAL_P_01 = () => {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
+  const [recruitEvent, setRecruitEvent] = useState(null);
+
+  const handleDatesSet = (arg) => {
+    const currentStart = arg.view.currentStart;
+    const year = currentStart.getFullYear();
+    const month = currentStart.getMonth() + 1; // 월은 0부터 시작하므로 1을 더함
+
+    const formattedMonth = month < 10 ? `0${month}` : `${month}`;
+    console.log(`Current View: ${year}-${formattedMonth}`);
+  };
 
   const fetchImage = async (title) => {
     await selectImg(
@@ -153,8 +134,15 @@ const CAL_P_01 = () => {
   };
 
   useEffect(() => {
-    const newEvents = transformEventData(dummyEvent);
-    setEvents(newEvents);
+    selectAllRecruits(
+      {},
+      (resp) => {
+        console.log("selectAllRecruits: ", resp);
+        const newEvents = transformEventData(resp);
+        setEvents(newEvents);
+      },
+      (error) => {}
+    );
   }, []);
 
   const handleOpen = () => setOpen(true);
@@ -222,8 +210,9 @@ const CAL_P_01 = () => {
             </SearchContainer>
 
             <FullCalendar
-              plugins={[dayGridPlugin]}
+              plugins={[dayGridPlugin, interactionPlugin]}
               initialView="dayGridMonth"
+              datesSet={handleDatesSet}
               events={events}
               locale={koLocale}
               eventClick={handleEventClick}

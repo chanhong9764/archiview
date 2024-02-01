@@ -2,6 +2,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://i10b105.p.####.io:3306/archiview?serverTimezone=Asia/Seoul
+#    url: jdbc:mysql://localhost:3306/archiview?serverTimezone=Asia/Seoul
     username: archiview
     password: ####
   jpa:
@@ -36,12 +37,12 @@ server:
       # response UTF-8 인코딩
       charset: UTF-8
       force: true
-  port: 11443
-  ssl:
-    enabled: true
-    key-store: classpath:/ssl/keystore.p12
-    key-store-type: PKCS12
-    key-store-password: ####
+#  port: 11443
+#  ssl:
+#    enabled: true
+#    key-store: classpath:/ssl/keystore.p12
+#    key-store-type: PKCS12
+#    key-store-password: ####
 
 logging:
   level:

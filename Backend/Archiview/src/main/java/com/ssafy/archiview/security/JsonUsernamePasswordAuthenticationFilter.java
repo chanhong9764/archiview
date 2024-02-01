@@ -1,4 +1,4 @@
-package com.####.archiview.jwt;
+package com.####.archiview.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.####.archiview.dto.token.TokenDto;
@@ -6,6 +6,7 @@ import com.####.archiview.dto.user.CustomUserDetails;
 import com.####.archiview.dto.user.UserDto;
 import com.####.archiview.entity.Role;
 import com.####.archiview.entity.User;
+import com.####.archiview.jwt.jwtUtil;
 import com.####.archiview.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,7 +33,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
-    private final jwtUtil jwtUtil;
+    private final com.####.archiview.jwt.jwtUtil jwtUtil;
     @Autowired
     private UserRepository userRepository;
     private static final String DEFAULT_LOGIN_REQUEST_URL = "/api/users/login";  // /api/users/login으로 오는 요청을 처리
@@ -62,6 +63,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
         // PrincipalDetailsService의 loadUserByUsername()가 실행됨
         // 3. PrincipalDetails를 세션에 담고 (권한 관리를 위해서)
         // 4. JWT토큰을 만들어서 응답
+        System.out.println("로그인 필터입니다.");
         if (request.getContentType() == null || !request.getContentType().equals(CONTENT_TYPE)) {  // Json 요청이 아니면 에러 발생
             throw new AuthenticationServiceException("Authentication Content-Type not supported: " + request.getContentType());
         }

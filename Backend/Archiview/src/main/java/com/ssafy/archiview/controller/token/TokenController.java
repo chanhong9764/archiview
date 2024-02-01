@@ -1,4 +1,4 @@
-package com.####.archiview.controller;
+package com.####.archiview.controller.token;
 
 import com.####.archiview.dto.token.TokenDto;
 import com.####.archiview.response.code.SuccessCode;

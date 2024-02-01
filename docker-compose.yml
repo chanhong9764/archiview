@@ -26,4 +26,4 @@ services:
 networks:
     default:
         external:
-            name: openvidu-default
+            name: openvidu_default

@@ -217,7 +217,7 @@ import Logo from "../../assets/img/mainLogo-removebg-preview.png";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import FindIDResult from "./findIDResult"; // FindIDResult 컴포넌트 import
 import FoundIDResult from "./findIDResult";
-import { findidAxios, sendFindEmailAxios } from "../../api/userAPI";
+import { findID, sendFindEmail } from "../../api/userAPI";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -259,18 +259,26 @@ const FindIDModal = ({ onSwitch }) => {
     setIsInputDisabled(true);
     setShowSignupFields(true);
     console.log(emailValue);
-    setFindAccessToken(sendFindEmailAxios(emailValue));
+    sendFindEmail(
+      { email: emailValue },
+      (resp) => {
+        console.log(resp);
+        setFindAccessToken(resp);
+      },
+      (error) => {
+        console.log("에러 발생: ", error);
+      },
+      emailValue
+    );
   };
 
   const handleAssignClick = () => {
-    const finded_id = findidAxios(
+    findID(
       { name: nameValue, headers: { Authorization: findAccessToken } },
-      emailValue
+      (resp) => {
+        console.log(resp);
+      }
     );
-    console.log({
-      name: nameValue,
-      headers: { Authorization: findAccessToken },
-    });
     setFoundId("SSAFY"); // 아이디 찾기 결과 설정
   };
 

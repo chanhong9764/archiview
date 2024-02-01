@@ -15,6 +15,12 @@ public enum SuccessCode implements ResponseCode {
     JOIN_SUCCESS(HttpStatus.CREATED, "회원가입에 성공했습니다."),
     USER_DETAIL_SUCCESS(HttpStatus.OK, "회원정보 조회에 성공했습니다."),
     DELETE_USER_SUCCESS(HttpStatus.OK, "회원탈퇴에 성공했습니다."),
+    PASSWORD_SUCCESS(HttpStatus.OK, "비밀번호 확인에 성공했습니다."),
+    PASSWORD_UPDATE_SUCCESS(HttpStatus.OK, "비밀번호 변경에 성공했습니다."),
+    FIND_ID_SUCCESS(HttpStatus.OK, "아이디 찾기에 성공했습니다."),
+    FIND_PASSWORD_SUCCESS(HttpStatus.OK, "패스워드 찾기에 성공했습니다."),
+    PROFILE_UPDATE_SUCCESS(HttpStatus.OK, "프로필 이미지 변경에 성공했습니다."),
+    EMAIL_SUCCESS(HttpStatus.OK, "인증번호 발송에 성공했습니다."),
     /*
         QUESTION
      */
@@ -57,6 +63,15 @@ public enum SuccessCode implements ResponseCode {
         TAG
      */
     SELECT_TAG_LIST_SUCCESS(HttpStatus.OK, "태그 조회에 성공했습니다."),
+
+    /*
+        TOKEN
+     */
+    UPDATE_TOKEN_SUCCESS(HttpStatus.OK, "토큰 재발급에 성공했습니다."),
+    /*
+        COMMONT
+    */
+    SEARCH_IMAGE_SUCCESS(HttpStatus.OK, "이미지 검색에 성공했습니다."),
     ;
     private final HttpStatus httpStatus;
     private final String message;

@@ -2,8 +2,8 @@ package com.####.archiview.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.####.archiview.jwt.*;
-import com.####.archiview.security.JsonUsernamePasswordAuthenticationFilter;
-import com.####.archiview.security.JwtAuthFilter;
+import com.####.archiview.filter.JsonUsernamePasswordAuthenticationFilter;
+import com.####.archiview.filter.JwtAuthFilter;
 import com.####.archiview.service.user.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -61,11 +61,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET ,"/api/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE ,"/api/**").permitAll()
                         .requestMatchers("/**").permitAll()
-                        .anyRequest().authenticated())  // 나머지 요청은 모두 인증 되어야 함
-                
-                // 필터 추가 LoginFilter()는 인자를 받음 (AuthenticationManager() 메소드에 authenticationConfiguration 객체를 넣어야 함) 따라서 빈 등록 필요
-                .addFilterBefore(new JwtAuthFilter(customUserDetailsService, jwtUtil), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jsonUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                        .anyRequest().authenticated())  // 나머지 요청은 모두 인증 되어야 함.
+//                .addFilterBefore(new JwtAuthFilter(customUserDetailsService, jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jsonUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthFilter(customUserDetailsService, jwtUtil), JsonUsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

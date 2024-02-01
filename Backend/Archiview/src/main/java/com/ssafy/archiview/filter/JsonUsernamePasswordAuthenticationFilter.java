@@ -1,4 +1,4 @@
-package com.####.archiview.security;
+package com.####.archiview.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.####.archiview.dto.token.TokenDto;
@@ -8,6 +8,10 @@ import com.####.archiview.entity.Role;
 import com.####.archiview.entity.User;
 import com.####.archiview.jwt.jwtUtil;
 import com.####.archiview.repository.UserRepository;
+import com.####.archiview.response.code.ErrorCode;
+import com.####.archiview.response.code.ResponseCode;
+import com.####.archiview.response.exception.RestApiException;
+import com.####.archiview.response.structure.ErrorResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -33,7 +37,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
-    private final com.####.archiview.jwt.jwtUtil jwtUtil;
+    private final jwtUtil jwtUtil;
     @Autowired
     private UserRepository userRepository;
     private static final String DEFAULT_LOGIN_REQUEST_URL = "/api/users/login";  // /api/users/login으로 오는 요청을 처리
@@ -138,9 +142,11 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
     }
 
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
         System.out.println("login failed");
-        response.setStatus(401);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setStatus(ErrorCode.USER_NOT_FOUND.getHttpStatus().value());
+        response.getWriter().write(new ObjectMapper().writeValueAsString(ErrorCode.USER_NOT_FOUND.getMessage()));
     }
     @Data
     private static class LoginDto {

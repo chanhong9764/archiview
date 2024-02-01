@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public interface UserService {
     // 회원가입
-    void userAdd(UserDto.AddRequestDto requestDto);
+    void userAdd(UserDto.AddRequestDto requestDto, HttpServletRequest request);
     // 로그아웃
     void userLogout(HttpServletRequest request);
     // 회원탈퇴

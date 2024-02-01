@@ -20,6 +20,7 @@ import { setCookie, getCookie, removeCookie } from "../../utils/cookie";
 import { useSelector } from "react-redux";
 
 function Navbar() {
+  const isAdmin = useSelector((state) => state.isAdmin);
   const accessToken = useSelector((state) => state.accessToken);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -77,9 +78,13 @@ function Navbar() {
     navigate("/myinterview", { replace: true });
   };
 
-  // 면접 관리 클릭시
+  // 마이페이지 클릭시
   const handleMypage = () => {
     navigate("/mypage", { replace: true });
+  };
+
+  const handleAdminpage = () => {
+    navigate("/admin", { replace: true });
   };
 
   const isCurrentPage = (path) => {
@@ -237,6 +242,13 @@ function Navbar() {
                     마이페이지
                   </Typography>
                 </MenuItem>
+                {isAdmin && (
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography onClick={handleAdminpage} textAlign="center">
+                      관리페이지
+                    </Typography>
+                  </MenuItem>
+                )}
               </Menu>
             </Box>
           </Toolbar>

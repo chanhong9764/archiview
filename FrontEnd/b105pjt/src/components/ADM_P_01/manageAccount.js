@@ -16,12 +16,13 @@ import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
+// 데이터 포맷 변환
 function createData(id, name, calories, fat, carbs, protein) {
   return {
     id,
@@ -33,6 +34,7 @@ function createData(id, name, calories, fat, carbs, protein) {
   };
 }
 
+// sample 데이터
 const rows = [
   createData(1, "Cupcake", 305, 3.7, 67, 4.3),
   createData(2, "Donut", 452, 25.0, 51, 4.9),
@@ -46,9 +48,49 @@ const rows = [
   createData(10, "Lollipop", 392, 0.2, 98, 0.0),
   createData(11, "Marshmallow", 318, 0, 81, 2.0),
   createData(12, "Nougat", 360, 19.0, 9, 37.0),
-  createData(13, "Oreo", 437, 18.0, 63, 4.0),
+  createData(13, "Lemonade", 155, 12.1, 48, 8.8),
+  createData(14, "Brownie", 565, 14.5, 96, 9.1),
+  createData(15, "Zucchini Bread", 195, 7.9, 96, 6.1),
+  createData(16, "Sushi", 401, 7.5, 87, 7.1),
+  createData(17, "Flan", 502, 14.4, 62, 9.2),
+  createData(18, "Hotdog", 319, 18.4, 54, 2.9),
+  createData(19, "Dumpling", 474, 28.5, 9, 7.2),
+  createData(20, "Kebab", 593, 2.7, 24, 8.4),
+  createData(21, "Jam", 262, 11.9, 33, 3.7),
+  createData(22, "Nachos", 401, 14.2, 61, 5.3),
+  createData(23, "Brownie", 338, 5.3, 23, 4.2),
+  createData(24, "Ramen", 500, 21.4, 95, 8.7),
+  createData(25, "Quiche", 362, 11.5, 36, 2.2),
+  createData(26, "Ice Pop", 597, 22.0, 74, 4.8),
+  createData(27, "Hotdog", 146, 26.9, 4, 1.9),
+  createData(28, "Udon", 261, 16.5, 39, 0.7),
+  createData(29, "Yogurt", 413, 25.3, 100, 5.1),
+  createData(30, "Taco", 190, 29.5, 11, 0.5),
+  createData(31, "Nachos", 497, 3.6, 21, 6.4),
+  createData(32, "Lemonade", 354, 18.6, 78, 1.8),
+  createData(33, "Quiche", 250, 0.3, 86, 3.1),
+  createData(34, "Empanada", 550, 13.0, 59, 8.5),
+  createData(35, "Ramen", 379, 4.9, 5, 7.6),
+  createData(36, "Kebab", 318, 15.2, 40, 9.9),
+  createData(37, "Omelette", 558, 17.8, 53, 3.8),
+  createData(38, "Cheesecake", 204, 6.4, 29, 1.3),
+  createData(39, "Udon", 441, 20.1, 67, 2.5),
+  createData(40, "Brownie", 423, 7.7, 47, 6.9),
+  createData(41, "Vada", 192, 27.2, 88, 0.1),
+  createData(42, "Pancake", 118, 10.6, 15, 7.0),
+  createData(43, "Jam", 434, 9.4, 77, 9.7),
+  createData(44, "Sushi", 363, 14.9, 32, 4.5),
+  createData(45, "Flan", 196, 16.3, 50, 8.3),
+  createData(46, "Brownie", 153, 5.1, 20, 6.7),
+  createData(47, "Nachos", 411, 28.7, 70, 7.4),
+  createData(48, "Ice Pop", 107, 23.6, 82, 1.4),
+  createData(49, "Kebab", 400, 20.5, 30, 3.0),
+  createData(50, "Jam", 308, 10.3, 17, 9.5),
+  createData(51, "Bagel", 451, 11.7, 68, 4.6),
+  createData(52, "Vada", 213, 29.0, 2, 2.7),
 ];
 
+// 내림차순 정렬 Comparator
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -59,16 +101,14 @@ function descendingComparator(a, b, orderBy) {
   return 0;
 }
 
+// 내림차순인지, 오름차순인지 선택
 function getComparator(order, orderBy) {
   return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
-// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
-// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
-// with exampleArray.slice().sort(exampleComparator)
+// 정렬 알고리즘 (stable sort)
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -81,6 +121,7 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
+// Column명 관리
 const headCells = [
   {
     id: "name",
@@ -114,6 +155,7 @@ const headCells = [
   },
 ];
 
+// Column명 표시해주는 row
 function EnhancedTableHead(props) {
   const {
     onSelectAllClick,
@@ -167,6 +209,7 @@ function EnhancedTableHead(props) {
   );
 }
 
+// 데이터 타입 정의
 EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
@@ -209,7 +252,7 @@ function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
         >
-          Nutrition
+          회원관리
         </Typography>
       )}
 
@@ -239,8 +282,9 @@ const ManageAccount = () => {
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [dense, setDense] = React.useState(true);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const navigate = useNavigate();
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -285,8 +329,10 @@ const ManageAccount = () => {
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
+  // 상세버튼 클릭 시 동작
+  const handleOpenDetail = (event) => {
+    console.log("선택된 row: ", event);
+    navigate("/myinterview", { state: { event: event }, replace: true });
   };
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
@@ -322,6 +368,8 @@ const ManageAccount = () => {
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
             />
+
+            {/* Row 출력 */}
             <TableBody>
               {visibleRows.map((row, index) => {
                 const isItemSelected = isSelected(row.id);
@@ -353,6 +401,14 @@ const ManageAccount = () => {
                       scope="row"
                       padding="none"
                     >
+                      <Button
+                        onClick={(event) => {
+                          event.stopPropagation(); // 상위 요소로의 이벤트 전파를 막음
+                          handleOpenDetail(row); // 여기서 row는 현재 행의 데이터를 나타냄
+                        }}
+                      >
+                        상세
+                      </Button>
                       {row.name}
                     </TableCell>
                     <TableCell align="right">{row.calories}</TableCell>
@@ -375,7 +431,7 @@ const ManageAccount = () => {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[10, 25, 50]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}
@@ -384,10 +440,6 @@ const ManageAccount = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
     </Box>
   );
 };

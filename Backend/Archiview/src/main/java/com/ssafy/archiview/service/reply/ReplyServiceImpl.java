@@ -55,6 +55,13 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
+    public void replyDeleteByAdmin(int replyId) {
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(() -> new RestApiException(ErrorCode.REPLY_NOT_FOUND));
+        replyRepository.delete(reply);
+    }
+
+    @Override
     @Transactional
     public void replyAdd(ReplyDto.AddRequestDto requestDto) {
         Question question = null;

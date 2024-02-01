@@ -11,7 +11,7 @@ public enum Role {
         MEMBER: 공유 회원
      */
     USER("USER"),
-    MEMBER("MEMBER");
-
+    MEMBER("MEMBER"),
+    ADMIN("ADMIN");
     final String role;
 }

@@ -8,10 +8,6 @@ services:
         container_name: archiview-server
         ports:
             - 11443:11443
-        networks:
-            default:
-                external:
-                    name: openvidu
 
     signaling-server:
         build:
@@ -27,7 +23,7 @@ services:
         volumes:
             - /opt/openvidu/recordings:/opt/openvidu/recordings
             - /opt/openvidu/profiles:/opt/openvidu/profiles
-        networks:
-            default:
-                external:
-                    name: openvidu
+networks:
+    default:
+        external:
+            name: openvidu-default

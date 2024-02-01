@@ -11,6 +11,8 @@ public interface ReplyService {
     ReplyDto.DetailResponseDto replyDetail(ReplyDto.DetailRequestDto requestDto);
     // 답변 삭제
     void replyDelete(ReplyDto.DeleteRequestDto requestDto);
+    // 답변 삭제
+    void replyDeleteByAdmin(int replyId);
     // 질문 / 답변 등록
     void replyAdd(ReplyDto.AddRequestDto requestDto);
     // 답변 수정

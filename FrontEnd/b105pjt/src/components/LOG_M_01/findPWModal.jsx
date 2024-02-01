@@ -6,6 +6,11 @@ import Logo from "../../assets/img/mainLogo-removebg-preview.png";
 import CheckIcon from "@mui/icons-material/Check";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import { Tune } from "@mui/icons-material";
+import {
+  findpwAxios,
+  changepwAxios,
+  sendFindEmailAxios,
+} from "../../api/userAPI";
 
 const FindPWModal = ({ onSwitch }) => {
   const [showSignupFields, setShowSignupFields] = useState(false);
@@ -15,6 +20,7 @@ const FindPWModal = ({ onSwitch }) => {
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isEmailEmpty, setIsEmailEmpty] = useState(true);
   const [isInputDisabled, setIsInputDisabled] = useState(false);
+  const [emailValue, setEmailValue] = useState("");
 
   // ID 입력 필드의 값이 변경 시 호출되는 함수
   const handleIdChange = (event) => {
@@ -31,6 +37,7 @@ const FindPWModal = ({ onSwitch }) => {
         newEmail
       )
     );
+    setEmailValue(newEmail);
     setIsEmailEmpty(newEmail.trim() === ""); // 이메일이 비어있는지 여부를 검사하여 상태 업데이트
     // 나머지 코드 유지
   };
@@ -38,6 +45,7 @@ const FindPWModal = ({ onSwitch }) => {
   const handleVerifyClick = () => {
     setIsInputDisabled(true); // 버튼을 비활성화 시킴
     setShowSignupFields(true); // 인증번호 필드를 보여줌
+    sendFindEmailAxios(emailValue);
   };
 
   const handleAuthClick = () => {
@@ -139,7 +147,7 @@ const FindPWModal = ({ onSwitch }) => {
                 onClick={handleAuthClick} // 버튼 클릭 핸들러
                 disabled={!isChangeBtnDisabled}
               >
-                인증하기
+                인증확인
               </Button>
             </Grid>
 

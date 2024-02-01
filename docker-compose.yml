@@ -17,8 +17,8 @@ services:
         container_name: signaling-server
         restart: on-failure
         ports:
-            - 8080:8080
-            - 8443:8443
+            - 12080:12080
+            - 12443:12443
         environment:
             TZ: "Asia/Seoul"
             OPENVIDU_URL: http://i10b105.p.####.io:5443

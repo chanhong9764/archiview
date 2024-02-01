@@ -19,10 +19,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/admin")
 public class AdminController {
-    private final UserService userService;
     private final QuestionService questionService;
     private final ReplyService replyService;
-    private final jwtUtil jwtUtil;
 
     @DeleteMapping("/questions/{questionId}")
     public ResponseEntity<Object> questionDelete(@PathVariable("questionId") int questionId) {
@@ -31,8 +29,14 @@ public class AdminController {
     }
 
     @DeleteMapping("/replies/{replyId}")
-    public ResponseEntity<Object> replyDelete(@PathVariable("replyId") int replyId, HttpServletRequest request) {
+    public ResponseEntity<Object> replyDelete(@PathVariable("replyId") int replyId) {
         replyService.replyDeleteByAdmin(replyId);
+        return SuccessResponse.createSuccess(SuccessCode.DELETE_QUESTION_SUCCESS);
+    }
+
+    @DeleteMapping("/comments/{commentId}")
+    public ResponseEntity<Object> commentDelete(@PathVariable("commentId") int commentId) {
+        replyService.replyCommentDeleteByAdmin(commentId);
         return SuccessResponse.createSuccess(SuccessCode.DELETE_QUESTION_SUCCESS);
     }
 }

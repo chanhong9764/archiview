@@ -20,16 +20,6 @@ import java.util.List;
 @RequestMapping("/api/questions")
 public class QuestionController {
     private final QuestionService service;
-    private final jwtUtil jwtUtil;
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteQuestion(@PathVariable("id") int id, HttpServletRequest request) {
-        if(!jwtUtil.getRole(request).equals("ADMIN")) {
-            throw new RestApiException(ErrorCode.UNAUTHORIZED_REQUEST);
-        }
-        service.deleteQuestion(id);
-        return SuccessResponse.createSuccess(SuccessCode.DELETE_QUESTION_SUCCESS);
-    }
-
     @GetMapping("/search")
     public ResponseEntity<Object> searchQuestion(
                                                  @RequestParam(value = "userId", required = false, defaultValue = "") String userId,

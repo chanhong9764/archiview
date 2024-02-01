@@ -1,4 +1,4 @@
-package com.ssafy.archiview.security;
+package com.ssafy.archiview.filter;
 
 import com.ssafy.archiview.jwt.jwtUtil;
 import com.ssafy.archiview.service.user.CustomUserDetailsService;
@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {  // OncePerRequestFilter : 한번 실행 보장
@@ -30,6 +31,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {  // OncePerRequestFilt
             if (refreshToken != null && jwtUtil.validateToken(refreshToken)){
                 setAuthentication(refreshToken, request);
             } else if (jwtUtil.validateToken(accessToken)) {
+                System.out.println("검증된 토큰입니다.");
                 setAuthentication(accessToken, request);
             }
         }
@@ -38,16 +40,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {  // OncePerRequestFilt
 
     public void setAuthentication(String token, HttpServletRequest request){
         String userId = jwtUtil.getUsername(request);
-        if(userId == null){  // 이메일 인증 토큰이면 return
+        if(userId == null) {  // 이메일 인증 토큰이면 return
             return;
         }
         // 유저와 토큰 일치 시 userDetail 생성
         UserDetails userDetails = customuserDetailsService.loadUserByUsername(userId);
-        System.out.println("3");
         if (userDetails != null){
             // UserDetails, Password, Role -> 접근권한 인증 Token 생성
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            System.out.println(userDetails.getAuthorities());
             // 현재 Request의 Security Context에 접근권한 설정
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         }

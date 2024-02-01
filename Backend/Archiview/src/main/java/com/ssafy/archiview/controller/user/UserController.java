@@ -30,8 +30,8 @@ public class UserController {
     private final jwtUtil jwtUtil;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     @PostMapping  // 회원가입
-    public ResponseEntity<Object> userAdd(@RequestBody @Valid UserDto.AddRequestDto requestDto) {
-        service.userAdd(requestDto);
+    public ResponseEntity<Object> userAdd(@RequestBody @Valid UserDto.AddRequestDto requestDto, HttpServletRequest request) {
+        service.userAdd(requestDto, request);
         return SuccessResponse.createSuccess(SuccessCode.JOIN_SUCCESS);
     }
     @GetMapping("/logout")  // 로그아웃

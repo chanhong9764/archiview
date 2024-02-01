@@ -9,7 +9,9 @@ services:
         ports:
             - 11443:11443
         networks:
-            - openvidu_default
+            default:
+                external:
+                    name: openvidu
 
     signaling-server:
         build:
@@ -26,4 +28,6 @@ services:
             - /opt/openvidu/recordings:/opt/openvidu/recordings
             - /opt/openvidu/profiles:/opt/openvidu/profiles
         networks:
-            - openvidu_default
+            default:
+                external:
+                    name: openvidu

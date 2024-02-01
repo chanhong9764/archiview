@@ -1,7 +1,5 @@
-import { Button, TextField } from "@mui/material";
+import { Button } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
-import SearchTab from "../SCH_P_01/tabCompo";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { OpenVidu } from "openvidu-browser";
 import {
   getToken,
@@ -20,13 +18,12 @@ import { useDispatch } from "react-redux";
 import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
-import BtnGroupInsert from "./btnGroupInsert";
 
 let session;
 let publisher;
 let sessionName;
 
-const MakeSession = async (videoRef) => {
+const MakeSession = async (videoRef, dispatch) => {
   const OV = new OpenVidu();
   session = OV.initSession();
 
@@ -45,24 +42,34 @@ const MakeSession = async (videoRef) => {
     let token = resp.data[0];
     await session.connect(token, { clientData: "example" });
 
-    publisher = OV.initPublisher(videoRef.current, {
-      audioSource: undefined,
-      videoSource: undefined,
-      publishAudio: true,
-      publishVideo: true,
-      resolution: "1000X562",
-      frameRate: 30,
-      insertMode: "APPEND",
-      mirror: false,
-    });
-
-    session.publish(publisher);
+    publisher = OV.initPublisher(
+      videoRef.current,
+      {
+        audioSource: undefined, // 오디오 소스
+        videoSource: undefined, // 비디오 소스
+        publishAudio: true, // 오디오 발행 여부
+        publishVideo: true, // 비디오 발행 여부
+        resolution: "1000X562", // 해상도
+        frameRate: 30, // 프레임레이트
+        insertMode: "APPEND", // 삽입 모드
+        mirror: false, // 미러 모드
+      },
+      () => {
+        session.publish(publisher);
+        dispatch({ type: "UNSET_LOADING" });
+      },
+      (error) => {
+        console.error(error);
+        dispatch({ type: "UNSET_LOADING" }); // 여기서도 로딩을 해제할 수 있지만, 오류를 적절히 처리하는 것이 중요합니다.
+      }
+    );
   } catch (error) {
     console.error("세션 설정 중 오류 발생:", error);
+    dispatch({ type: "UNSET_LOADING" });
   }
 };
 
-const InsertForm = () => {
+const OpenVideo = () => {
   const videoRef = useRef(null); // 비디오 요소 참조를 위한 ref
   const [recordingURL, setRecordingURL] = useState("");
   const [isRecording, setIsRecording] = useState(false);
@@ -71,10 +78,10 @@ const InsertForm = () => {
   useEffect(() => {
     // 컴포넌트 정리
     dispatch({ type: "SET_LOADING" });
-    MakeSession(videoRef)
+
+    MakeSession(videoRef, dispatch)
       .then(() => {
         console.log("MakeSession 성공");
-        dispatch({ type: "UNSET_LOADING" });
       })
       .catch((error) => {
         console.error("MakeSession 오류:", error);
@@ -158,17 +165,6 @@ const InsertForm = () => {
 
   return (
     <div>
-      <TextField
-        className="Insert-title"
-        id="filled-basic"
-        label="제목"
-        variant="filled"
-      />
-
-      <div className="Insert-search">
-        <SearchTab></SearchTab>
-      </div>
-
       <div>
         {recordingURL && (
           <div>
@@ -214,21 +210,8 @@ const InsertForm = () => {
           </div>
         )}
       </div>
-      <br />
-
-      <TextField
-        className="Insert-script"
-        id="filled-multiline-static"
-        label="스크립트"
-        multiline
-        rows={4}
-        defaultValue=""
-        variant="filled"
-        style={{ paddingTop: "5px" }}
-      />
-      <BtnGroupInsert />
     </div>
   );
 };
 
-export default InsertForm;
+export default OpenVideo;

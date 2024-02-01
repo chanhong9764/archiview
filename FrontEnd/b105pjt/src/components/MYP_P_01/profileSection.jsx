@@ -10,6 +10,7 @@ import {
   TextField,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import CloseIcon from "@mui/icons-material/Close"; // 닫기 아이콘을 위한 임포트
 
 const ProfileEditModal = ({
   open,
@@ -53,6 +54,18 @@ const ProfileEditModal = ({
           alignItems: "center",
         }}
       >
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
         <Typography variant="h6" sx={{ mb: 2, color: "primary.main" }}>
           프로필 편집
         </Typography>

@@ -14,7 +14,7 @@ import Logo from "../../assets/img/mainLogo-removebg-preview.png";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import { useForm } from "../../utils/useForm";
 import { useNavigate } from "react-router-dom";
-import { signupAxios, sendEmailAxios } from "../../api/userAPI";
+import { signup, sendEmail } from "../../api/userAPI";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -56,9 +56,19 @@ const AssignUser = ({ onSwitch }) => {
 
   // '인증하기' 버튼 클릭 시 핸들러 함수
   const handleVerifyClick = () => {
+    sendEmail(
+      { email: form.email },
+      (response) => {
+        const return_email_data = response;
+        console.log(return_email_data);
+      },
+      (error) => {
+        console.error("데이터 전송 실패");
+      },
+      form.email
+    );
     setIsInputDisabled(true);
     setShowSignupFields(true); // 회원가입 및 인증번호 필드를 보여줌
-    sendEmailAxios(form.email);
   };
 
   // ID 입력 필드의 값이 변경 시 호출되는 함수
@@ -84,7 +94,16 @@ const AssignUser = ({ onSwitch }) => {
 
   const handleSignupAxios = async () => {
     try {
-      const { data } = await signupAxios(form);
+      await signup(
+        form,
+        (response) => {
+          const data = response;
+          console.log(data);
+        },
+        (error) => {
+          console.error("데이터 전송 실패");
+        }
+      );
     } catch (error) {
       console.error("데이터 전송 오류:", error);
     }

@@ -52,4 +52,10 @@ public class AdminController {
         userService.userUpgrade(userId);
         return SuccessResponse.createSuccess(SuccessCode.USER_UPGRADE_SUCCESS);
     }
+
+    @PatchMapping ("/users/block")
+    public ResponseEntity<Object> userBlock(@RequestParam("userId") String userId) {
+        userService.userBlock(userId);
+        return SuccessResponse.createSuccess(SuccessCode.USER_BLOCK_SUCCESS);
+    }
 }

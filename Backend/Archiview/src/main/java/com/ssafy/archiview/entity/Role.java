@@ -9,9 +9,13 @@ public enum Role {
     /*
         USER: 회원
         MEMBER: 공유 회원
+        BLOCK: 회원정지
+        ADMIN: 관리자
      */
     USER("USER"),
     MEMBER("MEMBER"),
-    ADMIN("ADMIN");
+    ADMIN("ADMIN"),
+    BLOCK("BLOCK");
+
     final String role;
 }

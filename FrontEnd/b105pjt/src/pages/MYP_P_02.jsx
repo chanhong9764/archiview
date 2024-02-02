@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Typography } from "@mui/material";
+import { Container, Typography, Box } from "@mui/material";
 import ProfileSection from "../components/MYP_P_02/profileSection";
 import InfoSection from "../components/MYP_P_02/infoSection";
 import SaveButton from "../components/MYP_P_02/saveButton";
@@ -13,11 +13,19 @@ const Page = () => {
   };
 
   return (
-    <Container>
-      <ProfileSection imageUrl="https://via.placeholder.com/160x160">
+    <Container
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      {/* <ProfileSection imageUrl="https://via.placeholder.com/160x160">
         <Typography variant="h5">이름</Typography>
         <Typography>내 프로필 정보</Typography>
-      </ProfileSection>
+      </ProfileSection> */}
       <InfoSection />
       <SaveButton onSave={handleSave} />
     </Container>

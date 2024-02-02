@@ -112,6 +112,6 @@ public class UserController {
         String userId = jwtUtil.getUsername(request);
         service.userApplyUpgrade(userId);
         return SuccessResponse.createSuccess(SuccessCode.USER_APPLY_UPGRADE_SUCCESS);
-    } 
+    }
 }
 

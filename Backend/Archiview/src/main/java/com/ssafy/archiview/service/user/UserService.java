@@ -30,4 +30,6 @@ public interface UserService {
     void userUpgrade(String userId);
     // 유저 정지
     void userBlock(String userId);
+    // 유저 등업 신청
+    void userApplyUpgrade(String userId);
 }

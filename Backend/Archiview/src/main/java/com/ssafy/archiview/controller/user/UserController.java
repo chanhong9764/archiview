@@ -46,6 +46,7 @@ public class UserController {
         UserDto.DetailResponseDto responseDto = service.userDetail(userId);
         return SuccessResponse.createSuccess(SuccessCode.USER_DETAIL_SUCCESS, responseDto);
     }
+
     @DeleteMapping  // 회원탈퇴
     public ResponseEntity<Object> deleteUser(HttpServletRequest request){
         service.userDelete(request);
@@ -100,10 +101,17 @@ public class UserController {
     }
 
     @GetMapping("/find-email")  // 아이디, 패스워드 찾기용 이메일 인증 요청
-    public ResponseEntity<Object> findMailSend(@RequestParam("email") String email){
+    public ResponseEntity<Object> findMailSend(@RequestParam("email") String email) {
         int auth_number = mailService.findSendMail(email);
         EmailTokenDto.findEmailResponseDto dto = jwtUtil.createEmailToken(email, auth_number);
         return SuccessResponse.createSuccess(SuccessCode.EMAIL_SUCCESS, dto);
     }
+
+    @PatchMapping("/upgrade")
+    public ResponseEntity<Object> applyUserUpgrade(HttpServletRequest request){
+        String userId = jwtUtil.getUsername(request);
+        service.userApplyUpgrade(userId);
+        return SuccessResponse.createSuccess(SuccessCode.USER_APPLY_UPGRADE_SUCCESS);
+    } 
 }
 

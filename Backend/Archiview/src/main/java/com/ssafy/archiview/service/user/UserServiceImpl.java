@@ -2,6 +2,7 @@ package com.ssafy.archiview.service.user;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.archiview.dto.user.UserDto;
+import com.ssafy.archiview.entity.Role;
 import com.ssafy.archiview.entity.User;
 import com.ssafy.archiview.jwt.jwtUtil;
 import com.ssafy.archiview.repository.UserRepository;
@@ -12,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -58,6 +62,13 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public List<UserDto.DetailResponseDto> userDetailList() {
+        return repository.findAll().stream()
+                .map(User::toDetailResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void validPassword(String userId, String userPw) {
         String password = repository.getById(userId).getPw();
         if(!bCryptPasswordEncoder.matches(userPw, password)){  // 패스워드가 일치하지 않으면 에러
@@ -96,5 +107,37 @@ public class UserServiceImpl implements UserService{
         User user = repository.getById(id);
         user.updateUserDetail(profileUrl, introduce);
         repository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void userUpgrade(String userId) {
+        User user = repository.getById(userId);
+        if(user.getRole().equals(Role.MEMBER) || !user.isAuth()) {
+            throw new RestApiException(ErrorCode.UPGRADE_NOT_ALLOWED);
+        }
+        user.updateUserRole(Role.MEMBER);
+        user.updateUserAuth(false);
+    }
+
+    @Override
+    @Transactional
+    public void userBlock(String userId) {
+        User user = repository.getById(userId);
+        if(user.getRole().equals(Role.BLOCK)) {
+            throw new RestApiException(ErrorCode.BLOCK_NOT_ALLOWED);
+        }
+        user.updateUserRole(Role.BLOCK);
+        user.updateUserAuth(false);
+    }
+
+    @Override
+    @Transactional
+    public void userApplyUpgrade(String userId) {
+        User user = repository.getById(userId);
+        if(!user.getRole().equals(Role.USER) || user.isAuth()) {
+            throw new RestApiException(ErrorCode.UPGRADE_NOT_ACCEPTED);
+        }
+        user.updateUserAuth(true);
     }
 }

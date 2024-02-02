@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import koLocale from "@fullcalendar/core/locales/ko";
@@ -12,14 +12,37 @@ import styled from "styled-components";
 import NotificationAddOutlinedIcon from "@mui/icons-material/NotificationAddOutlined";
 import NotificationsOffOutlinedIcon from "@mui/icons-material/NotificationsOffOutlined";
 import SearchIcon from "@mui/icons-material/Search";
-import { selectAllRecruits, selectCompanyRecruits } from "../api/calendarAPI";
-import interactionPlugin from "@fullcalendar/interaction";
 
-let today = new Date();
-let year = today.getFullYear(); // 년도
-let month = today.getMonth() + 1; // 월
-let formattedMonth = month < 10 ? `0${month}` : `${month}`;
-let date = year + "-" + formattedMonth + "-01";
+const dummyEvent = {
+  code: 200,
+  message: "채용 공고 리스트를 조회했습니다.",
+  data: [
+    {
+      recruit_id: 10,
+      company_name: "네이버",
+      start: "2024-01-16",
+      end: "2024-02-18",
+    },
+    {
+      recruit_id: 11,
+      company_name: "카카오",
+      start: "2024-01-22",
+      end: "2024-02-28",
+    },
+    {
+      recruit_id: 10,
+      company_name: "존나길어길어네이버",
+      start: "2024-01-16",
+      end: "2024-02-18",
+    },
+    {
+      recruit_id: 11,
+      company_name: "카카오",
+      start: "2024-01-22",
+      end: "2024-02-28",
+    },
+  ],
+};
 
 const PageContainer = styled.div`
   margin-bottom: 30px;
@@ -41,7 +64,6 @@ const style = {
   borderRadius: "10px",
 };
 
-// 캘린더 스타일
 const FullCalendarContainer = styled.div`
   max-width: 70%;
   margin: 0 auto;
@@ -117,29 +139,6 @@ const CAL_P_01 = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
 
-  const selectRecruit = () => {
-    selectAllRecruits(
-      date,
-      (resp) => {
-        const newEvents = transformEventData(resp.data);
-        setEvents(newEvents);
-      },
-      (error) => {}
-    );
-  };
-
-  // 달력 페이지 전환 시 API 호출
-  const handleDatesSet = (arg) => {
-    const currentStart = arg.view.currentStart;
-    year = currentStart.getFullYear();
-    month = currentStart.getMonth() + 1; // 월은 0부터 시작하므로 1을 더함
-
-    formattedMonth = month < 10 ? `0${month}` : `${month}`;
-    date = year + "-" + formattedMonth + "-01";
-
-    selectRecruit();
-  };
-
   const fetchImage = async (title) => {
     await selectImg(
       { query: title },
@@ -154,7 +153,8 @@ const CAL_P_01 = () => {
   };
 
   useEffect(() => {
-    selectRecruit();
+    const newEvents = transformEventData(dummyEvent);
+    setEvents(newEvents);
   }, []);
 
   const handleOpen = () => setOpen(true);
@@ -183,7 +183,7 @@ const CAL_P_01 = () => {
     return (
       <div className="icon">
         {Icon && <Icon style={{ marginRight: "4px", fontSize: "medium" }} />}
-        <span>{eventInfo.event.title}</span>
+        <span className="event-title">{eventInfo.event.title}</span>
       </div>
     );
   };
@@ -203,10 +203,27 @@ const CAL_P_01 = () => {
       <div style={{ marginBottom: "20px" }}>
         <div className="parent-container">
           <FullCalendarContainer>
+            <SearchContainer>
+              <TextField
+                style={{ width: "500px", borderRadius: "50px" }}
+                label="회사명으로 면접 질문 검색"
+                variant="outlined"
+                onKeyDown={handleKeyPress}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleSearchBtn}>
+                        <SearchIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </SearchContainer>
+
             <FullCalendar
-              plugins={[dayGridPlugin, interactionPlugin]}
+              plugins={[dayGridPlugin]}
               initialView="dayGridMonth"
-              datesSet={handleDatesSet}
               events={events}
               locale={koLocale}
               eventClick={handleEventClick}

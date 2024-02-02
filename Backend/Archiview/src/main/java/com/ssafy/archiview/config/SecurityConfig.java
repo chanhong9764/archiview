@@ -1,6 +1,7 @@
 package com.####.archiview.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.####.archiview.filter.TokenExceptionHandlerFilter;
 import com.####.archiview.jwt.*;
 import com.####.archiview.filter.JsonUsernamePasswordAuthenticationFilter;
 import com.####.archiview.filter.JwtAuthFilter;
@@ -64,8 +65,8 @@ public class SecurityConfig {
                         .anyRequest().authenticated())  // 나머지 요청은 모두 인증 되어야 함.
 //                .addFilterBefore(new JwtAuthFilter(customUserDetailsService, jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jsonUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JwtAuthFilter(customUserDetailsService, jwtUtil), JsonUsernamePasswordAuthenticationFilter.class);
-
+                .addFilterBefore(new JwtAuthFilter(customUserDetailsService, jwtUtil), JsonUsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new TokenExceptionHandlerFilter(), JwtAuthFilter.class);
         return http.build();
     }
 

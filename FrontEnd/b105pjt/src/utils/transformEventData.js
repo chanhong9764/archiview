@@ -1,18 +1,19 @@
 const transformEventData = (dummyData) => {
   const transformedData = dummyData.data.flatMap((event) => [
     {
-      title: event.company_name,
+      // 순서를 예쁘게 출력하기위한 가라 데이터..
+      title: "\n" + event.companyName,
       date: event.start,
-      color: "#ED544A",
+      color: "#ED544A", // 예시 색상
     },
     {
-      title: event.company_name,
+      title: event.companyName,
       date: event.end,
-      color: "#929292",
+      color: "#929292", // 예시 색상
     },
   ]);
 
-  //   console.log(transformedData);
+  console.log(transformedData);
   return transformedData;
 };
 

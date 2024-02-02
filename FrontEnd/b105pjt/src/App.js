@@ -11,16 +11,18 @@ import MYI_P_02 from "./pages/MYI_P_02";
 import MYP_P_01 from "./pages/MYP_P_01";
 import MYP_P_02 from "./pages/MYP_P_02";
 import SCH_P_01 from "./pages/SCH_P_01";
-import Navbar from "./components/utils/navbar";
+import ADM_P_01 from "./pages/ADM_P_01";
 import "./assets/css/App.css";
-import { CircularProgress } from "@mui/material";
 import Footer from "./components/utils/footer";
+import Loading from "./components/utils/loading";
+import NavbarComponent from "./components/utils/navbarComponent";
 
 const devTools = window.__REDUX_DEVTOOLS_EXTENSION__;
 
 const initialState = {
   isLoggedIn: false,
   isLoading: false,
+  isAdmin: true,
   accessToken: "",
 };
 
@@ -36,9 +38,18 @@ function authReducer(state = initialState, action) {
 
     //Loading
     case "SET_LOADING":
+      console.log("loading");
       return { ...state, isLoading: true };
     case "UNSET_LOADING":
+      console.log("loading end");
       return { ...state, isLoading: false };
+
+    //Admin
+    case "ADMIN_LOGIN":
+      return { ...state, isAdmin: true };
+    case "ADMIN_LOGOUT":
+      return { ...state, isAdmin: false };
+
     default:
       return state;
   }
@@ -51,7 +62,7 @@ const store = createStore(authReducer, devTools && devTools());
 function App() {
   return (
     <Provider store={store}>
-      <LoadingComponent />
+      <Loading />
       <div
         style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
       >
@@ -65,47 +76,14 @@ function App() {
             <Route path="/revise" element={<MYI_P_02_Modify />}></Route>
             <Route path="/mypage" element={<MYP_P_01 />}></Route>
             <Route path="/modify" element={<MYP_P_02 />}></Route>
-
             <Route path="/search" element={<SCH_P_01 />}></Route>
+            <Route path="/admin" element={<ADM_P_01 />}></Route>
           </Routes>
         </div>
         <Footer />
       </div>
     </Provider>
   );
-}
-
-function LoadingComponent() {
-  const isLoading = useSelector((state) => state.isLoading);
-
-  return (
-    <div>
-      {isLoading && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: "rgba(255, 255, 255, 0.3)",
-            zIndex: 2000,
-          }}
-        >
-          <CircularProgress />
-        </div>
-      )}
-    </div>
-  );
-}
-
-// 로그인 상태에 따라 Navbar 또는 NavbarLogin 렌더링
-function NavbarComponent() {
-  const isLoggedIn = useSelector((state) => state.isLoggedIn);
-  return <div>{isLoggedIn ? <Navbar /> : <NavbarLogin />}</div>;
 }
 
 export default App;

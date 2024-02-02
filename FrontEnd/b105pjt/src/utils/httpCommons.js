@@ -29,6 +29,8 @@ function openViduAxios() {
   return instance;
 }
 
+const BASE_SERVER_URL = "https://i10b105.p.ssafy.io/api/";
+
 function baseAxios() {
   const instance = axios.create({
     baseURL: BASE_SERVER_URL,

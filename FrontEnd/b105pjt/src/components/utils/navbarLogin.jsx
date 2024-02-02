@@ -9,7 +9,6 @@ import { Modal } from "@mui/material";
 import LOG_M_01 from "../../pages/LOG_M_01";
 import { useLocation, useNavigate } from "react-router-dom";
 import Logo from "../../assets/img/symbolLogo_Slogun-removebg-preview.png";
-import HOM_M_01 from "../../pages/HOM_M_01";
 
 const pages = ["채용 공고"];
 const settings = ["로그인"];

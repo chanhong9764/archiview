@@ -125,6 +125,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
                 .profileUrl(user.get().getProfileUrl())
                 .introduce((user.get().getIntroduce()))
                 .role(role)
+                .isAuth(user.get().isAuth())
                 .build();
         user.get().updateRefreshToken(token.getRefreshToken());
         userRepository.save(user.get());  // 발급받은 refreshToken을 DB에 저장

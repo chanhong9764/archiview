@@ -45,10 +45,9 @@ const LoginModal = ({ onSwitch, close }) => {
     login(
       form,
       (resp) => {
-        console.log(resp);
         data = resp;
 
-        setCookie("refreshToken", data.refreshToken, {
+        setCookie("refreshToken", data.data.refreshToken, {
           path: "/",
           secure: true,
           httpOnly: true,
@@ -57,7 +56,7 @@ const LoginModal = ({ onSwitch, close }) => {
           maxAge: 60 * 60 * 24 * 7,
         });
 
-        dispatch({ type: "LOGIN", accessToken: data.accessToken });
+        dispatch({ type: "LOGIN", accessToken: data.data.accessToken });
         close();
       },
       (error) => {

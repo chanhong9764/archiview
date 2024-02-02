@@ -50,7 +50,8 @@ public class MailService {
     }
 
     public int findSendMail(String email){
-        repository.findByEmail(email);
+        repository.findByEmail(email).orElseThrow(
+                () -> new RestApiException(ErrorCode.USER_NOT_FOUND));
         return sendMail(email);
     }
 

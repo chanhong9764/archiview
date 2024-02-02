@@ -22,8 +22,11 @@ public enum ErrorCode implements ResponseCode {
      */
     DUPLICATED_USER(HttpStatus.CONFLICT, "이미 가입된 유저 정보입니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저의 정보를 찾을 수 없습니다."),
-    INVLAID_PASSWORD(HttpStatus.UNAUTHORIZED, "잘못된 패스워드입니다."),
+    INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "잘못된 패스워드입니다."),
     DUPLICATED_PASSWORD(HttpStatus.CONFLICT, "현재 패스워드와 같습니다 ."),
+    UPGRADE_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "이미 승인된 사용자입니다."),
+    BLOCK_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "이미 정지된 사용자입니다."),
+    UPGRADE_NOT_ACCEPTED(HttpStatus.BAD_REQUEST, "등업 신청에 실패했습니다."),
 
     /*
         QUESTION

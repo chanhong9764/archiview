@@ -5,6 +5,9 @@ spring:
 #    url: jdbc:mysql://localhost:3306/archiview?serverTimezone=Asia/Seoul
     username: archiview
     password: ssafyb105
+#    url: jdbc:mysql://localhost:3306/archiview?serverTimezone=Asia/Seoul
+#    username: ssafy
+#    password: ssafy
   jpa:
     # Hibernate가 실행한 모든 SQL을 출력
     show-sql: true
@@ -37,12 +40,12 @@ server:
       # response UTF-8 인코딩
       charset: UTF-8
       force: true
-#  port: 11443
-#  ssl:
-#    enabled: true
-#    key-store: classpath:/ssl/keystore.p12
-#    key-store-type: PKCS12
-#    key-store-password: ssafyb105
+  port: 11443
+  ssl:
+    enabled: true
+    key-store: classpath:/ssl/keystore.p12
+    key-store-type: PKCS12
+    key-store-password: ssafyb105
 
 logging:
   level:

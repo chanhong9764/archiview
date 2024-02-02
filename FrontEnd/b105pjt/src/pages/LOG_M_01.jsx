@@ -8,9 +8,16 @@ import AssignUser from "../components/LOG_M_01/assignUser";
 import ChangPWModal from "../components/LOG_M_01/changePWModal";
 const LOG_M_01 = ({ close }) => {
   const [currentComponent, setCurrentComponent] = useState("Login");
+  const [data, setData] = useState(null);
 
   const switchComponent = (componentName) => {
     setCurrentComponent(componentName);
+    // console.log(currentComponent);
+  };
+
+  const setToken = (token) => {
+    setData(token);
+    // console.log(data);
   };
 
   const renderComponent = () => {
@@ -20,26 +27,38 @@ const LOG_M_01 = ({ close }) => {
       case "FindID":
         return <FindIDModal onSwitch={switchComponent} />;
       case "FindPW":
-        return <FindPWModal onSwitch={switchComponent} />;
+        return (
+          <FindPWModal
+            setToken={setToken}
+            data={data}
+            onSwitch={switchComponent}
+          />
+        );
       case "Assign":
         return <AssignUser onSwitch={switchComponent} />;
       case "ChangePW":
-        return <ChangPWModal onSwitch={switchComponent} />;
+        return (
+          <ChangPWModal
+            currentComponent={currentComponent}
+            data={data}
+            onSwitch={switchComponent}
+          />
+        );
       default:
         return null;
     }
   };
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: "relative" }}>
       {/* 닫기 버튼 */}
       <IconButton
         aria-label="close"
         onClick={close}
         style={{
-          position: 'absolute',
+          position: "absolute",
           right: 0,
           top: 0,
-          color: 'gray',
+          color: "gray",
         }}
       >
         <CloseIcon />

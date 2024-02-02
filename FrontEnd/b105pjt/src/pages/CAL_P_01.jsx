@@ -15,6 +15,12 @@ import SearchIcon from "@mui/icons-material/Search";
 import { selectAllRecruits, selectCompanyRecruits } from "../api/calendarAPI";
 import interactionPlugin from "@fullcalendar/interaction";
 
+let today = new Date();
+let year = today.getFullYear(); // 년도
+let month = today.getMonth() + 1; // 월
+let formattedMonth = month < 10 ? `0${month}` : `${month}`;
+let date = year + "-" + formattedMonth + "-01";
+
 const PageContainer = styled.div`
   margin-bottom: 30px;
 `;
@@ -35,6 +41,7 @@ const style = {
   borderRadius: "10px",
 };
 
+// 캘린더 스타일
 const FullCalendarContainer = styled.div`
   max-width: 70%;
   margin: 0 auto;
@@ -109,15 +116,28 @@ const CAL_P_01 = () => {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
-  const [recruitEvent, setRecruitEvent] = useState(null);
 
+  const selectRecruit = () => {
+    selectAllRecruits(
+      date,
+      (resp) => {
+        const newEvents = transformEventData(resp.data);
+        setEvents(newEvents);
+      },
+      (error) => {}
+    );
+  };
+
+  // 달력 페이지 전환 시 API 호출
   const handleDatesSet = (arg) => {
     const currentStart = arg.view.currentStart;
-    const year = currentStart.getFullYear();
-    const month = currentStart.getMonth() + 1; // 월은 0부터 시작하므로 1을 더함
+    year = currentStart.getFullYear();
+    month = currentStart.getMonth() + 1; // 월은 0부터 시작하므로 1을 더함
 
-    const formattedMonth = month < 10 ? `0${month}` : `${month}`;
-    console.log(`Current View: ${year}-${formattedMonth}`);
+    formattedMonth = month < 10 ? `0${month}` : `${month}`;
+    date = year + "-" + formattedMonth + "-01";
+
+    selectRecruit();
   };
 
   const fetchImage = async (title) => {
@@ -134,15 +154,7 @@ const CAL_P_01 = () => {
   };
 
   useEffect(() => {
-    selectAllRecruits(
-      {},
-      (resp) => {
-        console.log("selectAllRecruits: ", resp);
-        const newEvents = transformEventData(resp);
-        setEvents(newEvents);
-      },
-      (error) => {}
-    );
+    selectRecruit();
   }, []);
 
   const handleOpen = () => setOpen(true);
@@ -191,24 +203,6 @@ const CAL_P_01 = () => {
       <div style={{ marginBottom: "20px" }}>
         <div className="parent-container">
           <FullCalendarContainer>
-            <SearchContainer>
-              <TextField
-                style={{ width: "500px", borderRadius: "50px" }}
-                label="회사명으로 면접 질문 검색"
-                variant="outlined"
-                onKeyDown={handleKeyPress}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={handleSearchBtn}>
-                        <SearchIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </SearchContainer>
-
             <FullCalendar
               plugins={[dayGridPlugin, interactionPlugin]}
               initialView="dayGridMonth"

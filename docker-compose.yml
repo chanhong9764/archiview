@@ -8,8 +8,6 @@ services:
         container_name: archiview-server
         ports:
             - 11443:11443
-        networks:
-            - openvidu_default
 
     signaling-server:
         build:
@@ -21,9 +19,11 @@ services:
             - 12443:12443
         environment:
             TZ: "Asia/Seoul"
-            OPENVIDU_URL: http://i10b105.p.ssafy.io:5443
+            OPENVIDU_URL: https://i10b105.p.ssafy.io:5443
         volumes:
             - /opt/openvidu/recordings:/opt/openvidu/recordings
             - /opt/openvidu/profiles:/opt/openvidu/profiles
-        networks:
-            - openvidu_default
+networks:
+    default:
+        external:
+            name: openvidu_default

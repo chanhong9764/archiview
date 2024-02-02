@@ -4,6 +4,8 @@ import com.ssafy.archiview.dto.user.UserDto;
 import com.ssafy.archiview.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.util.List;
+
 public interface UserService {
     // 회원가입
     void userAdd(UserDto.AddRequestDto requestDto);
@@ -13,6 +15,8 @@ public interface UserService {
     void userDelete(HttpServletRequest request);
     // 회원정보 조회
     UserDto.DetailResponseDto userDetail(String id);
+    // 회원 리스트 조회
+    List<UserDto.DetailResponseDto> userDetailList();
     // 패스워드 확인
     void validPassword(String userId, String userPw);
     // 패스워드 변경

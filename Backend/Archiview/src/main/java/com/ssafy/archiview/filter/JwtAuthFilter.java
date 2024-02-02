@@ -1,20 +1,30 @@
 package com.ssafy.archiview.filter;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.archiview.jwt.jwtUtil;
+import com.ssafy.archiview.response.code.ErrorCode;
+import com.ssafy.archiview.response.structure.ErrorResponse;
 import com.ssafy.archiview.service.user.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.lang.model.type.ErrorType;
 import java.io.IOException;
 import java.util.Arrays;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {  // OncePerRequestFilter : 한번 실행 보장
     private final CustomUserDetailsService customuserDetailsService;
@@ -28,11 +38,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {  // OncePerRequestFilt
         if(accessToken != null){
             System.out.println("헤더에 토큰이 존재합니다.");
           // 토큰 검증
-            if (refreshToken != null && jwtUtil.validateToken(refreshToken)){
-                setAuthentication(refreshToken, request);
-            } else if (jwtUtil.validateToken(accessToken)) {
-                System.out.println("검증된 토큰입니다.");
-                setAuthentication(accessToken, request);
+            if(refreshToken != null){  // 리프레시 토큰이 존재 (엑세스 토큰 재발급 요청)
+                if(jwtUtil.validateToken(refreshToken)){
+                    System.out.println("검증된 리프레시 토큰입니다.");
+                    setAuthentication(refreshToken, request);
+                }
+            }
+            else {  // 재발급 요청 외 모든 요청
+                if(jwtUtil.validateToken(accessToken)) {
+                    System.out.println("검증된 엑세스 토큰입니다.");
+                    setAuthentication(accessToken, request);
+                }
             }
         }
         filterChain.doFilter(request, response);  // 다음 필터로 넘김

@@ -17,7 +17,7 @@ function naverImgAxios() {
   return instance;
 }
 
-const APPLICATION_SERVER_URL = "https://i10b105.p.ssafy.io/api";
+const APPLICATION_SERVER_URL = "https://i10b105.p.ssafy.io/";
 
 // openVidu API용 axios 인스턴스 생성
 function openViduAxios() {
@@ -28,9 +28,11 @@ function openViduAxios() {
   return instance;
 }
 
+const BASE_SERVER_URL = "https://i10b105.p.ssafy.io/api/";
+
 function baseAxios() {
   const instance = axios.create({
-    baseURL: APPLICATION_SERVER_URL,
+    baseURL: BASE_SERVER_URL,
     headers: {},
   });
   return instance;

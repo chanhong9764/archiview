@@ -155,54 +155,51 @@ const baseURL = baseAxios();
 // };
 
 async function signup(param, success, fail) {
-  await baseURL.post("/api/users", param).then(success).catch(fail);
+  await baseURL.post("api/users", param).then(success).catch(fail);
 }
 
 async function signout(param, success, fail) {
-  await baseURL.delete("/api/users", param).then(success).catch(fail);
+  await baseURL.delete("api/users", param).then(success).catch(fail);
 }
 
 async function findID(param, success, fail, email) {
   await baseURL
-    .get(`/api/users/find-id?email=${email}`, param)
+    .get(`api/users/find-id?email=${email}`, param)
     .then(success)
     .catch(fail);
 }
 
 async function findPW(param, success, fail) {
-  await baseURL
-    .get("/api/users/find-password", param)
-    .then(success)
-    .catch(fail);
+  await baseURL.get("api/users/find-password", param).then(success).catch(fail);
 }
 
 async function changePW(param, success, fail) {
   await baseURL
-    .patch("/api/users/find-password", param)
+    .patch("api/users/find-password", param)
     .then(success)
     .catch(fail);
 }
 
 async function sendEmail(param, success, fail, email) {
   await baseURL
-    .get(`/api/email?email=${email}`, param)
+    .get(`api/email?email=${email}`, param)
     .then(success)
     .catch(fail);
 }
 
 async function sendFindEmail(param, success, fail, email) {
   await baseURL
-    .get(`/api/find-email?email=${email}`, param)
+    .get(`api/find-email?email=${email}`, param)
     .then(success)
     .catch(fail);
 }
 
 async function login(param, success, fail) {
-  await baseURL.post("/api/users/login", param).then(success).catch(fail);
+  await baseURL.post("api/users/login", param).then(success).catch(fail);
 }
 
 async function logout(param, success, fail) {
-  await baseURL.post("/api/users/logout", param).then(success).catch(fail);
+  await baseURL.post("api/users/logout", param).then(success).catch(fail);
 }
 
 export {

@@ -23,6 +23,7 @@ public enum SuccessCode implements ResponseCode {
     PROFILE_UPDATE_SUCCESS(HttpStatus.OK, "프로필 이미지 변경에 성공했습니다."),
     EMAIL_SUCCESS(HttpStatus.OK, "인증번호 발송에 성공했습니다."),
     USER_UPGRADE_SUCCESS(HttpStatus.OK, "유저 등업에 성공했습니다."),
+    USER_BLOCK_SUCCESS(HttpStatus.OK, "유저 정지에 성공했습니다."),
     /*
         QUESTION
      */

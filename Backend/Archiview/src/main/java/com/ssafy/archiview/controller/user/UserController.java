@@ -88,5 +88,12 @@ public class UserController {
         service.updateUserDetail(dto.getProfileUrl(), dto.getIntroduce(), userId);
         return SuccessResponse.createSuccess(SuccessCode.PROFILE_UPDATE_SUCCESS);
     }
+
+    @PatchMapping("/upgrade")
+    public ResponseEntity<Object> applyUserUpgrade(HttpServletRequest request){
+        String userId = jwtUtil.getUsername(request);
+        service.userApplyUpgrade(userId);
+        return SuccessResponse.createSuccess(SuccessCode.USER_APPLY_UPGRADE_SUCCESS);
+    }
 }
 

@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public void userApplyUpgrade(String userId) {
         User user = repository.getById(userId);
-        if(user.getRole().equals(Role.MEMBER) || user.isAuth()) {
+        if(!user.getRole().equals(Role.USER) || user.isAuth()) {
             throw new RestApiException(ErrorCode.UPGRADE_NOT_ACCEPTED);
         }
         user.updateUserAuth(true);

@@ -47,6 +47,10 @@ public class User implements Persistable<String> {
     @Enumerated(EnumType.STRING)
     private Role role;  // 권한
 
+    @Column(name = "isAuth")
+    @ColumnDefault("0")
+    private boolean isAuth;
+
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;  // 생성 날짜
@@ -104,6 +108,7 @@ public class User implements Persistable<String> {
                 .introduce(introduce)
                 .profileUrl(profileUrl)
                 .role(role)
+                .isAuth(isAuth)
                 .build();
     }
 }

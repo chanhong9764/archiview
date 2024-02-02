@@ -2,6 +2,7 @@ package com.####.archiview.service.user;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.####.archiview.dto.user.UserDto;
+import com.####.archiview.entity.Role;
 import com.####.archiview.entity.User;
 import com.####.archiview.jwt.jwtUtil;
 import com.####.archiview.repository.UserRepository;
@@ -114,13 +115,31 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public void userUpgrade(String userId) {
         User user = repository.getById(userId);
-        user.updateUserAuth();
+        if(user.getRole().equals(Role.MEMBER) || !user.isAuth()) {
+            throw new RestApiException(ErrorCode.UPGRADE_NOT_ALLOWED);
+        }
+        user.updateUserRole(Role.MEMBER);
+        user.updateUserAuth(false);
     }
 
     @Override
     @Transactional
     public void userBlock(String userId) {
         User user = repository.getById(userId);
-        user.blockUser();
+        if(user.getRole().equals(Role.BLOCK)) {
+            throw new RestApiException(ErrorCode.BLOCK_NOT_ALLOWED);
+        }
+        user.updateUserRole(Role.BLOCK);
+        user.updateUserAuth(false);
+    }
+
+    @Override
+    @Transactional
+    public void userApplyUpgrade(String userId) {
+        User user = repository.getById(userId);
+        if(user.getRole().equals(Role.MEMBER) || user.isAuth()) {
+            throw new RestApiException(ErrorCode.UPGRADE_NOT_ACCEPTED);
+        }
+        user.updateUserAuth(true);
     }
 }

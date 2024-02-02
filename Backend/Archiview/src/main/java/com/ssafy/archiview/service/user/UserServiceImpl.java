@@ -13,6 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService{
@@ -57,6 +60,13 @@ public class UserServiceImpl implements UserService{
 
     public UserDto.DetailResponseDto userDetail(String userid) {
         return repository.getById(userid).toDetailResponseDto();
+    }
+
+    @Override
+    public List<UserDto.DetailResponseDto> userDetailList() {
+        return repository.findAll().stream()
+                .map(User::toDetailResponseDto)
+                .collect(Collectors.toList());
     }
 
     @Override

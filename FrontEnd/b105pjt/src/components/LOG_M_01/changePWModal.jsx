@@ -10,22 +10,40 @@ import {
 import React, { useState } from "react";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import Logo from "../../assets/img/mainLogo-removebg-preview.png";
+import { changePW } from "../../api/userAPI";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const ChangPWModal = ({ onSwitch }) => {
+const ChangPWModal = ({ currentComponent, data, onSwitch }) => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  // '회원가입' 버튼 클릭시 핸들러 함수
   const handleAssignClick = () => {
-    setOpenSnackbar(true);
+    // setOpenSnackbar(true);
+    const form = {
+      pw: password,
+    };
+    const headers = {
+      Authorization: data,
+    };
+    console.log(form);
+    console.log(headers);
+    changePW(
+      form,
+      headers,
+      (resp) => {
+        console.log(resp);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
 
-    setTimeout(() => {
-      setOpenSnackbar(false);
-      onSwitch("Login");
-    }, 1000);
+    // setTimeout(() => {
+    //   setOpenSnackbar(false);
+    //   onSwitch("Login");
+    // }, 1000);
   };
 
   // 간단한 비밀번호 검증시 사용되는 변수

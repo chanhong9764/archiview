@@ -18,6 +18,9 @@ import { logout } from "../../api/userAPI";
 import Logo from "../../assets/img/symbolLogo_Slogun-removebg-preview.png";
 import { setCookie, getCookie, removeCookie } from "../../utils/cookie";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { userDetail } from "../../api/mypageAPI"
+import { Image } from "@mui/icons-material";
 
 function Navbar() {
   const accessToken = useSelector((state) => state.accessToken);
@@ -27,6 +30,23 @@ function Navbar() {
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const [profileUrl, setProfileUrl] = React.useState(null);
+  useEffect(() => {
+    userDetail(
+      {
+        headers: {
+          Authorization: accessToken,
+        },
+      },
+      (resp) => {
+        setProfileUrl("https://i10b105.p.####.io/api/files/profile/" + resp.data.data.id);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }, []);
 
   // 메뉴 여닫기
   const handleOpenNavMenu = (event) => {
@@ -214,10 +234,12 @@ function Navbar() {
 
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Button onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   {/* 프로필 이미지 */}
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                </IconButton>
+                  <div>
+                    <Avatar src={profileUrl} alt="Logo" style={{ height: "50px" }} />
+                  </div>
+                </Button>
               </Tooltip>
               <Menu
                 sx={{ mt: "45px" }}

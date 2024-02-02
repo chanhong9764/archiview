@@ -116,4 +116,11 @@ public class UserServiceImpl implements UserService{
         User user = repository.getById(userId);
         user.updateUserAuth();
     }
+
+    @Override
+    @Transactional
+    public void userBlock(String userId) {
+        User user = repository.getById(userId);
+        user.blockUser();
+    }
 }

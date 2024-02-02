@@ -87,6 +87,10 @@ public class User implements Persistable<String> {
         this.isAuth = !isAuth;
     }
 
+    public void blockUser() {
+        this.role = Role.BLOCK;
+    }
+
     @Override
     public boolean isNew() {
         return this.createdAt == null;

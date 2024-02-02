@@ -8,32 +8,37 @@ import {
   Typography,
   Button,
   TextField,
+  Divider,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close"; // 닫기 아이콘을 위한 임포트
+import ActionButton from "../../components/MYP_P_01/actionButton";
+import { useSelector } from "react-redux";
+import { userDetail } from "../../api/mypageAPI";
+import { useEffect } from "react";
 
 const ProfileEditModal = ({
   open,
   onClose,
-  imageUrl,
+  profileUrl,
   onImageChange,
   introduce,
   onIntroduceChange,
 }) => {
-  const [newImageUrl, setNewImageUrl] = useState(imageUrl);
-  const [newIntroduce, setNewIntroduce] = useState(introduce);
-
+  if (introduce == null) {
+    introduce = "";
+  }
   const handleFileChange = (event) => {
     if (event.target.files && event.target.files[0]) {
-      const newImageFile = event.target.files[0];
-      setNewImageUrl(URL.createObjectURL(newImageFile));
-      onImageChange(newImageFile);
+      // const newImageFile = event.target.files[0];
+      // setNewImageUrl(URL.createObjectURL(newImageFile));
+      // onImageChange(newImageFile);
     }
   };
 
   const handleIntroduceChange = (event) => {
-    setNewIntroduce(event.target.value);
-    onIntroduceChange(event.target.value);
+    // setNewIntroduce(event.target.value);
+    // onIntroduceChange(event.target.value);
   };
 
   return (
@@ -76,7 +81,7 @@ const ProfileEditModal = ({
           style={{ display: "block", margin: "10px 0" }}
         />
         <Avatar
-          src={newImageUrl}
+          src={profileUrl}
           alt="New Profile"
           sx={{ width: 150, height: 150, borderRadius: "50%", mb: 2 }}
         />
@@ -86,7 +91,7 @@ const ProfileEditModal = ({
           multiline
           rows={3}
           fullWidth
-          value={newIntroduce}
+          value={introduce}
           onChange={handleIntroduceChange}
           sx={{ mt: 2, mb: 2 }}
         />
@@ -103,10 +108,34 @@ const ProfileEditModal = ({
   );
 };
 
-const ProfileSection = ({ children, imageUrl, introduce, setIntroduce }) => {
+const ProfileSection = () => {
   const [openModal, setOpenModal] = useState(false);
-  const [currentImageUrl, setCurrentImageUrl] = useState(imageUrl);
-  const [currentIntroduce, setCurrentIntroduce] = useState(introduce);
+
+  const accessToken = useSelector((state) => state.accessToken);
+  const [ name, setName ] = useState();
+  const [ email, setEmail ] = useState();
+  const [ introduce, setIntroduce ] = useState();
+  const [ profileUrl, setProfileUrl ] = useState();
+
+  useEffect(() => {
+    userDetail(
+      {
+        headers: {
+          Authorization: accessToken,
+        },
+      },
+      (resp) => {
+        setName(resp.data.data.name);
+        setEmail(resp.data.data.email);
+        setIntroduce(resp.data.data.introduce);
+        setProfileUrl("https://i10b105.p.ssafy.io/api/files/profile/" + resp.data.data.id);
+        console.log(name + " " + email + " " + introduce + " " + profileUrl);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }, []);
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -117,12 +146,20 @@ const ProfileSection = ({ children, imageUrl, introduce, setIntroduce }) => {
   };
 
   const handleImageChange = (newImageFile) => {
-    setCurrentImageUrl(URL.createObjectURL(newImageFile));
+    //setCurrentImageUrl(URL.createObjectURL(newImageFile));
   };
 
   const handleIntroduceChange = (newIntroduce) => {
-    setCurrentIntroduce(newIntroduce);
-    setIntroduce(newIntroduce);
+    //setCurrentIntroduce(newIntroduce);
+    //setIntroduce(newIntroduce);
+  };
+
+  const handleSave = () => {
+    // 저장 로직
+  };
+
+  const handleDelete = () => {
+    // 회원탈퇴 로직
   };
 
   return (
@@ -145,7 +182,7 @@ const ProfileSection = ({ children, imageUrl, introduce, setIntroduce }) => {
 
       <Box sx={{ position: "relative", mb: 2 }}>
         <Avatar
-          src={currentImageUrl}
+          src={profileUrl}
           alt="Profile"
           sx={{ width: 150, height: 150, borderRadius: "50%" }}
         />
@@ -165,13 +202,23 @@ const ProfileSection = ({ children, imageUrl, introduce, setIntroduce }) => {
           <EditIcon />
         </IconButton>
       </Box>
-      {children}
+      <Box sx={{ textAlign: "center", width: "100%" }}>
+        <Typography variant="h5" sx={{ mb: 2 }}>
+          {name}
+        </Typography>
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          {email}
+        </Typography>
+        <Typography sx={{ mb: 3 }}>{introduce}</Typography>
+        <Divider sx={{ width: "100%", my: 2 }} />
+        <ActionButton onSave={handleSave} onDelete={handleDelete} />
+      </Box>
       <ProfileEditModal
         open={openModal}
         onClose={handleCloseModal}
-        imageUrl={currentImageUrl}
+        profileUrl={profileUrl}
         onImageChange={handleImageChange}
-        introduce={currentIntroduce}
+        introduce={introduce}
         onIntroduceChange={handleIntroduceChange}
       />
     </Paper>

@@ -1,33 +1,24 @@
 import React, { useState } from "react";
-import { Container, Typography, Box, Divider } from "@mui/material";
-import ActionButton from "../components/MYP_P_01/actionButton";
+import { Container } from "@mui/material";
 import ProfileSection from "../components/MYP_P_01/profileSection";
 
 // dummyProfileData 직접 정의
-const dummyProfileData = {
-  code: 200,
-  message: "회원정보 조회에 성공했습니다.",
-  data: {
-    id: "ssafy123",
-    name: "김싸피",
-    email: "ssafy@naver.com",
-    introduce: "안녕하세요",
-    profile_url: "https://via.placeholder.com/150",
-  },
-};
+// const dummyProfileData = {
+//   code: 200,
+//   message: "회원정보 조회에 성공했습니다.",
+//   data: {
+//     id: "charles",
+//     name: "오철수",
+//     email: "ssafy@naver.com",
+//     introduce: "안녕하세요",
+//   },
+// };
+
 
 const ProfilePage = () => {
-  const { name, email, profile_url } = dummyProfileData.data;
-  const [introduce, setIntroduce] = useState(dummyProfileData.data.introduce);
-  dummyProfileData.data.introduce = introduce;
-
-  const handleSave = () => {
-    // 저장 로직
-  };
-
-  const handleDelete = () => {
-    // 회원탈퇴 로직
-  };
+  // const { id, name, email } = dummyProfileData.data;
+  // const [introduce, setIntroduce] = useState(dummyProfileData.data.introduce);
+  // dummyProfileData.data.introduce = introduce;
 
   return (
     <Container
@@ -40,24 +31,7 @@ const ProfilePage = () => {
         maxWidth: "md", // 최대 너비를 medium으로 설정
       }}
     >
-      <ProfileSection
-        imageUrl={profile_url}
-        sx={{ mb: 4, width: "100%" }}
-        introduce={introduce}
-        setIntroduce={setIntroduce}
-      >
-        <Box sx={{ textAlign: "center", width: "100%" }}>
-          <Typography variant="h5" sx={{ mb: 2 }}>
-            {name}
-          </Typography>
-          <Typography variant="h6" sx={{ mb: 2 }}>
-            {email}
-          </Typography>
-          <Typography sx={{ mb: 3 }}>{introduce}</Typography>
-          <Divider sx={{ width: "100%", my: 2 }} />
-          <ActionButton onSave={handleSave} onDelete={handleDelete} />
-        </Box>
-      </ProfileSection>
+      <ProfileSection sx={{ mb: 4, width: "100%" }} />
     </Container>
   );
 };

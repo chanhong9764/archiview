@@ -1,10 +1,8 @@
 package com.####.archiview.controller.admin;
 
 
-import com.####.archiview.dto.reply.ReplyDto;
+
 import com.####.archiview.dto.user.UserDto;
-import com.####.archiview.entity.Reply;
-import com.####.archiview.jwt.jwtUtil;
 import com.####.archiview.response.code.SuccessCode;
 import com.####.archiview.response.structure.SuccessResponse;
 import com.####.archiview.service.question.QuestionService;
@@ -15,12 +13,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin")
 public class AdminController {
     private final QuestionService questionService;
     private final ReplyService replyService;
+    private final UserService userService;
 
     @DeleteMapping("/questions/{questionId}")
     public ResponseEntity<Object> questionDelete(@PathVariable("questionId") int questionId) {
@@ -38,5 +39,11 @@ public class AdminController {
     public ResponseEntity<Object> commentDelete(@PathVariable("commentId") int commentId) {
         replyService.replyCommentDeleteByAdmin(commentId);
         return SuccessResponse.createSuccess(SuccessCode.DELETE_QUESTION_SUCCESS);
+    }
+
+    @GetMapping ("/users")
+    public ResponseEntity<Object> userDetailList() {
+        List<UserDto.DetailResponseDto> responseDto = userService.userDetailList();
+        return SuccessResponse.createSuccess(SuccessCode.USER_DETAIL_LIST_SUCCESS, responseDto);
     }
 }

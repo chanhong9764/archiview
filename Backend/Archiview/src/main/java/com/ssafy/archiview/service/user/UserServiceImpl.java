@@ -109,4 +109,11 @@ public class UserServiceImpl implements UserService{
         user.updateUserDetail(profileUrl, introduce);
         repository.save(user);
     }
+
+    @Override
+    @Transactional
+    public void userUpgrade(String userId) {
+        User user = repository.getById(userId);
+        user.updateUserAuth();
+    }
 }

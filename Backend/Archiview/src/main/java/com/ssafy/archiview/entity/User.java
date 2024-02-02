@@ -83,6 +83,10 @@ public class User implements Persistable<String> {
         this.introduce = introduce;
     }
 
+    public void updateUserAuth() {
+        this.isAuth = !isAuth;
+    }
+
     @Override
     public boolean isNew() {
         return this.createdAt == null;

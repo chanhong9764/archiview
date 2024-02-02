@@ -46,4 +46,10 @@ public class AdminController {
         List<UserDto.DetailResponseDto> responseDto = userService.userDetailList();
         return SuccessResponse.createSuccess(SuccessCode.USER_DETAIL_LIST_SUCCESS, responseDto);
     }
+
+    @PatchMapping ("/users/upgrade")
+    public ResponseEntity<Object> userUpgrade(@RequestParam("userId") String userId) {
+        userService.userUpgrade(userId);
+        return SuccessResponse.createSuccess(SuccessCode.USER_UPGRADE_SUCCESS);
+    }
 }

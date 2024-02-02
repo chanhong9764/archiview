@@ -236,9 +236,7 @@ function Navbar() {
               <Tooltip title="Open settings">
                 <Button onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   {/* 프로필 이미지 */}
-                  <div>
                     <Avatar src={profileUrl} alt="Logo" style={{ height: "50px" }} />
-                  </div>
                 </Button>
               </Tooltip>
               <Menu

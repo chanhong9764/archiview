@@ -1,5 +1,6 @@
 package com.ssafy.archiview.controller.user;
 
+import com.ssafy.archiview.dto.token.EmailTokenDto;
 import com.ssafy.archiview.dto.user.UserDto;
 import com.ssafy.archiview.entity.User;
 import com.ssafy.archiview.jwt.jwtUtil;
@@ -7,6 +8,7 @@ import com.ssafy.archiview.response.code.ErrorCode;
 import com.ssafy.archiview.response.code.SuccessCode;
 import com.ssafy.archiview.response.exception.RestApiException;
 import com.ssafy.archiview.response.structure.SuccessResponse;
+import com.ssafy.archiview.service.user.MailService;
 import com.ssafy.archiview.service.user.UserService;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,16 +20,18 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 
+@CrossOrigin("*")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
     private final UserService service;
+    private final MailService mailService;
     private final jwtUtil jwtUtil;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     @PostMapping  // 회원가입
-    public ResponseEntity<Object> userAdd(@RequestBody @Valid UserDto.AddRequestDto requestDto) {
-        service.userAdd(requestDto);
+    public ResponseEntity<Object> userAdd(@RequestBody @Valid UserDto.AddRequestDto requestDto, HttpServletRequest request) {
+        service.userAdd(requestDto, request);
         return SuccessResponse.createSuccess(SuccessCode.JOIN_SUCCESS);
     }
     @GetMapping("/logout")  // 로그아웃
@@ -87,6 +91,20 @@ public class UserController {
         String userId = jwtUtil.getUsername(request);
         service.updateUserDetail(dto.getProfileUrl(), dto.getIntroduce(), userId);
         return SuccessResponse.createSuccess(SuccessCode.PROFILE_UPDATE_SUCCESS);
+    }
+
+    @GetMapping("/join-email")  // 회원가입용 이메일 인증 요청
+    public ResponseEntity<Object> mailSend(@RequestParam("email") String email){
+        int auth_number = mailService.joinSendMail(email);
+        EmailTokenDto.joinEmailResponseDto dto = new EmailTokenDto.joinEmailResponseDto(auth_number);
+        return SuccessResponse.createSuccess(SuccessCode.EMAIL_SUCCESS, dto);
+    }
+
+    @GetMapping("/find-email")  // 아이디, 패스워드 찾기용 이메일 인증 요청
+    public ResponseEntity<Object> findMailSend(@RequestParam("email") String email) {
+        int auth_number = mailService.findSendMail(email);
+        EmailTokenDto.findEmailResponseDto dto = jwtUtil.createEmailToken(email, auth_number);
+        return SuccessResponse.createSuccess(SuccessCode.EMAIL_SUCCESS, dto);
     }
 
     @PatchMapping("/upgrade")

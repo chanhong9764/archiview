@@ -1,5 +1,8 @@
 package com.ssafy.archiview.service.user;
 
+import com.ssafy.archiview.repository.UserRepository;
+import com.ssafy.archiview.response.code.ErrorCode;
+import com.ssafy.archiview.response.exception.RestApiException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class MailService {
 
     private final JavaMailSender javaMailSender;
-
+    private final UserRepository repository;
     @Value("spring.mail.username")
     private String senderEmail;
     private static int number;
@@ -40,9 +43,22 @@ public class MailService {
         return message;
     }
     
-    public int sendMail(String mail){
-        MimeMessage message = CreateMail(mail);
+    public int sendMail(String email){
+        MimeMessage message = CreateMail(email);
         javaMailSender.send(message);
         return number;
+    }
+
+    public int findSendMail(String email){
+        repository.findByEmail(email).orElseThrow(
+                () -> new RestApiException(ErrorCode.USER_NOT_FOUND));
+        return sendMail(email);
+    }
+
+    public int joinSendMail(String email){
+        repository.findByEmail(email).ifPresent(user -> {
+            throw new RestApiException(ErrorCode.DUPLICATED_USER);
+        });
+        return sendMail(email);
     }
 }

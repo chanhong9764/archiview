@@ -57,6 +57,7 @@ const LoginModal = ({ onSwitch, close }) => {
         });
 
         dispatch({ type: "LOGIN", accessToken: data.data.accessToken });
+        resetForm();
         close();
       },
       (error) => {

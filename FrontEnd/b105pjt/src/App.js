@@ -31,6 +31,7 @@ function authReducer(state = initialState, action) {
   switch (action.type) {
     //Login
     case "LOGIN":
+      console.log(action);
       return { ...state, isLoggedIn: true, accessToken: action.accessToken };
     case "LOGOUT":
       return { ...state, isLoggedIn: false, accessToken: "" };

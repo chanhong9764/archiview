@@ -146,7 +146,7 @@ const OpenVideo = () => {
 
   const handleRestartRecording = () => {
     dispatch({ type: "SET_LOADING" });
-    MakeSession(videoRef);
+    MakeSession(videoRef, dispatch);
     setRecordingURL("");
     dispatch({ type: "UNSET_LOADING" });
   };

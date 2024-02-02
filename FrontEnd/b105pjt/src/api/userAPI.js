@@ -209,6 +209,14 @@ async function logout(param, success, fail) {
   await baseURL.post("users/logout", param).then(success).catch(fail);
 }
 
+async function whoAmI(headers, success, fail) {
+  const config = {
+    headers: headers,
+  };
+
+  await baseURL.get("users", config).then(success).catch(fail);
+}
+
 export {
   // signupAxios,
   // sendEmailAxios,
@@ -228,4 +236,5 @@ export {
   findPW,
   sendFindEmail,
   changePW,
+  whoAmI,
 };

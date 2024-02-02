@@ -16,6 +16,8 @@ import {
 import MyNavbar from "../components/MYI_P_02/myNavbar.jsx";
 import { useNavigate, useLocation } from "react-router-dom";
 import AdminButton from "../components/MYP_P_01/adminButton.jsx";
+import { useSelector } from "react-redux";
+import { whoAmI } from "../api/userAPI.js";
 
 // 커스텀 테마 정의
 const theme = createTheme({
@@ -109,11 +111,20 @@ const Page = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const token = useSelector((state) => state.accessToken);
+
   useEffect(() => {
     // 관리자 페이지에서 보낸 데이터
     const eventData = location.state?.event;
 
     if (!eventData) {
+      whoAmI(
+        token,
+        (resp) => {
+          console.log(resp);
+        },
+        (error) => {}
+      );
       // 데이터가 없는경우 (일반 사용자)
     } else {
       setAdminBtn(true);

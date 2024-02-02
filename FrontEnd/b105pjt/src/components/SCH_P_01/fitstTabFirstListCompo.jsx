@@ -69,7 +69,13 @@ export default function CheckboxList({
   };
 
   return (
-    <List sx={{ width: "100%", bgcolor: "background.paper", overflow: "auto" }}>
+    <List
+      sx={{
+        width: "100%",
+        bgcolor: "background.paper",
+        overflow: "auto",
+      }}
+    >
       {bigTagList.map((value) => {
         const labelId = `checkbox-list-label-${value}`;
         const isChecked = checked.indexOf(value) !== -1;

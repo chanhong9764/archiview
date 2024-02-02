@@ -26,4 +26,6 @@ public interface UserService {
     // 패스워드 찾기
     User findPassword(String userId, String email);
     void updateUserDetail(String profileUrl, String introduce, String id);
+    // 유저 등업 승인
+    void userUpgrade(String userId);
 }

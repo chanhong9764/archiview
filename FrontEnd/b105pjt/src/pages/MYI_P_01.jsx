@@ -11,9 +11,11 @@ import {
   Grid,
   CardContent,
   CardMedia,
+  Button,
 } from "@mui/material";
 import MyNavbar from "../components/MYI_P_02/myNavbar.jsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import AdminButton from "../components/MYP_P_01/adminButton.jsx";
 
 // 커스텀 테마 정의
 const theme = createTheme({
@@ -103,9 +105,21 @@ const dummyQuestions = [
 
 const Page = () => {
   const [questions, setQuestions] = useState([]);
+  const [adminBtn, setAdminBtn] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
+    // 관리자 페이지에서 보낸 데이터
+    const eventData = location.state?.event;
+
+    if (!eventData) {
+      // 데이터가 없는경우 (일반 사용자)
+    } else {
+      setAdminBtn(true);
+      // 데이터가 있는경우 (admin)
+    }
+
     const formattedQuestions = dummyQuestions.map((item) => {
       const replyData = item.data.reply;
       return {
@@ -125,7 +139,8 @@ const Page = () => {
   return (
     <ThemeProvider theme={theme}>
       <MyNavbar />
-      <Container sx={{ mt: 4, mb: 4 }}>
+      <Container>
+        {adminBtn && <AdminButton></AdminButton>}
         <ProfileSection imageUrl={dummyProfileData.data.profile_url}>
           <Typography variant="h5" gutterBottom>
             {dummyProfileData.data.name}

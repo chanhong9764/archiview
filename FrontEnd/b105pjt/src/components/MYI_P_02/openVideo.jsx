@@ -1,19 +1,7 @@
 import { Button } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { OpenVidu } from "openvidu-browser";
-import {
-  getToken,
-  startRecording,
-  stopRecording,
-  closeSession,
-  deleteRecording,
-  fetchAll,
-  fetchInfo,
-  forceDisconnect,
-  forceUnpublish,
-  getRecording,
-  listRecordings,
-} from "../../api/openViduAPI";
+import { getToken, startRecording, stopRecording } from "../../api/openViduAPI";
 import { useDispatch } from "react-redux";
 import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 import VideocamOffIcon from "@mui/icons-material/VideocamOff";

@@ -83,8 +83,12 @@ public class User implements Persistable<String> {
         this.introduce = introduce;
     }
 
-    public void updateUserAuth() {
-        this.isAuth = !isAuth;
+    public void updateUserAuth(boolean isAuth) {
+        this.isAuth = isAuth;
+    }
+
+    public void updateUserRole(Role role) {
+        this.role = role;
     }
 
     public void blockUser() {

@@ -2,19 +2,13 @@ import React from "react";
 import { Button } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { useNavigate } from "react-router-dom";
 
-const BtnGroupInsert = (clickEvent) => {
-  const navigate = useNavigate();
-
+const BtnGroupInsert = ({ onClickApply, onClickCancle }) => {
   const handleClickCancel = (event) => {
-    clickEvent = "cancel";
-    navigate("/myinterview");
+    onClickCancle(event);
   };
-
   const handleClickApply = (event) => {
-    clickEvent = "apply";
-    navigate("/myinterview");
+    onClickApply(event);
   };
 
   return (
@@ -23,6 +17,7 @@ const BtnGroupInsert = (clickEvent) => {
         variant="outlined"
         startIcon={<CancelIcon />}
         onClick={handleClickCancel}
+        value="취소"
       >
         취소
       </Button>
@@ -31,6 +26,7 @@ const BtnGroupInsert = (clickEvent) => {
         endIcon={<CheckCircleIcon />}
         color="primary"
         onClick={handleClickApply}
+        value="등록"
       >
         등록
       </Button>

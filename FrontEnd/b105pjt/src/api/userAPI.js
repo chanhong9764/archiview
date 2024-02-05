@@ -209,11 +209,14 @@ async function logout(param, success, fail) {
   await baseURL.post("users/logout", param).then(success).catch(fail);
 }
 
-async function whoAmI(headers, success, fail) {
+async function whoAmI(token, success, fail) {
   const config = {
-    headers: headers,
+    headers: {
+      Authorization: token,
+    },
   };
 
+  console.log(config);
   await baseURL.get("users", config).then(success).catch(fail);
 }
 

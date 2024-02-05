@@ -16,6 +16,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import SearchIcon from "@mui/icons-material/Search";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import { questionSearch } from "../../api/questionAPI";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -46,7 +47,7 @@ function a11yProps(index) {
   };
 }
 
-export default function BasicTabs() {
+export default function BasicTabs({ setQuestions }) {
   const dumyBigTagList1 = ["직무", "역량"];
   const dumyBigTagList2 = ["직업1", "직업2", "직업3", "직업4", "직업5"];
   const [value, setValue] = React.useState(0);
@@ -58,6 +59,7 @@ export default function BasicTabs() {
   const [smallTagList, setSmallTagList] = React.useState([]);
   const [pickTagList, setPickTagList] = React.useState([]);
   const [tagSearchOpen, setTagSearchOpen] = React.useState(true);
+  const [pgno, setPgno] = React.useState(1);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -87,6 +89,28 @@ export default function BasicTabs() {
     setSmallTagData([]);
     // setChecked([]);
   };
+
+  const onClickSearch = async () => {
+    const data = {
+      userId: "",
+      company: "",
+      cs: "",
+      job: "",
+      pgno: pgno,
+    }
+    await questionSearch(data).then(res => {
+      const formattedQuestions = res.data.data.map((item) => {
+        return {
+          id: item.id,
+          content: item.content,
+          replies: item.replies,
+        };
+      });
+      setQuestions(formattedQuestions)
+    }).catch(err => {
+      console.log(err)
+    }) 
+  }
 
   return (
     <Box
@@ -273,7 +297,12 @@ export default function BasicTabs() {
           onClick={() => handleReset()}
           startIcon={<RestartAltIcon />}
         ></Button>
-        <Button color="primary" startIcon={<SearchIcon />}></Button>
+        <Button 
+          color="primary" 
+          startIcon={<SearchIcon />}
+          onClick={onClickSearch}
+        >
+        </Button>
       </Box>
     </Box>
   );

@@ -8,16 +8,9 @@ import AssignUser from "../components/LOG_M_01/assignUser";
 import ChangPWModal from "../components/LOG_M_01/changePWModal";
 const LOG_M_01 = ({ close }) => {
   const [currentComponent, setCurrentComponent] = useState("Login");
-  const [data, setData] = useState(null);
 
   const switchComponent = (componentName) => {
     setCurrentComponent(componentName);
-    // console.log(currentComponent);
-  };
-
-  const setToken = (token) => {
-    setData(token);
-    // console.log(data);
   };
 
   const renderComponent = () => {
@@ -27,23 +20,11 @@ const LOG_M_01 = ({ close }) => {
       case "FindID":
         return <FindIDModal onSwitch={switchComponent} />;
       case "FindPW":
-        return (
-          <FindPWModal
-            setToken={setToken}
-            data={data}
-            onSwitch={switchComponent}
-          />
-        );
+        return <FindPWModal onSwitch={switchComponent} />;
       case "Assign":
         return <AssignUser onSwitch={switchComponent} />;
       case "ChangePW":
-        return (
-          <ChangPWModal
-            currentComponent={currentComponent}
-            data={data}
-            onSwitch={switchComponent}
-          />
-        );
+        return <ChangPWModal onSwitch={switchComponent} />;
       default:
         return null;
     }
@@ -56,8 +37,8 @@ const LOG_M_01 = ({ close }) => {
         onClick={close}
         style={{
           position: "absolute",
-          right: 0,
-          top: 0,
+          right: -32,
+          top: -5,
           color: "gray",
         }}
       >

@@ -55,6 +55,13 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
+    public void replyDeleteByAdmin(int replyId) {
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(() -> new RestApiException(ErrorCode.REPLY_NOT_FOUND));
+        replyRepository.delete(reply);
+    }
+
+    @Override
     @Transactional
     public void replyAdd(ReplyDto.AddRequestDto requestDto) {
         Question question = null;
@@ -185,5 +192,12 @@ public class ReplyServiceImpl implements ReplyService {
     public void replyCommentDelete(ReplyDto.CommentDeleteRequest requestDto) {
         commentRepository.delete(commentRepository.findByReplyIdAndUserId(requestDto.getId(), requestDto.getUserId())
                 .orElseThrow(() -> new RestApiException(ErrorCode.COMMENT_NOT_FOUND)));
+    }
+
+    @Override
+    public void replyCommentDeleteByAdmin(int commentId) {
+        commentRepository.findById(commentId)
+                        .orElseThrow(() -> new RestApiException(ErrorCode.COMMENT_NOT_FOUND));
+        commentRepository.deleteById(commentId);
     }
 }

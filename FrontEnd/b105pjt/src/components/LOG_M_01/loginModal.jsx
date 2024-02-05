@@ -47,7 +47,7 @@ const LoginModal = ({ onSwitch, close }) => {
       (resp) => {
         data = resp;
 
-        setCookie("refreshToken", data.data.refreshToken, {
+        setCookie("refreshToken", data.data.data.refreshToken, {
           path: "/",
           secure: true,
           httpOnly: true,
@@ -56,12 +56,13 @@ const LoginModal = ({ onSwitch, close }) => {
           maxAge: 60 * 60 * 24 * 7,
         });
 
-        dispatch({ type: "LOGIN", accessToken: data.data.accessToken });
+        dispatch({ type: "LOGIN", accessToken: data.data.data.accessToken });
+        console.log(data.data.data.accessToken);
         resetForm();
         close();
       },
       (error) => {
-        console.error("데이터 전송 오류:", error);
+        // console.error("데이터 전송 오류:", error);
         alert("로그인 실패");
       }
     );

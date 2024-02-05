@@ -31,12 +31,14 @@ export default function ChipsArray({
     }
   }
 
-  function changeTagData(content) {
+  function changeTagData(indexList, contentList) {
     setTagDataList([
       ...tagDataList.filter((item) => item.bigTag !== bigTagData),
       {
         bigTag: bigTagData,
-        smallTagIndex: content,
+        smallTagIndex: indexList,
+        tab: "csList",
+        smallTag: contentList,
       },
     ]);
   }
@@ -44,7 +46,11 @@ export default function ChipsArray({
   function changePickTagData(content) {
     setPickTagList([
       ...pickTagList.filter((item) => item.bigTag !== bigTagData),
-      { smallTag: content.smallTag, bigTag: bigTagData, key: content.key },
+      {
+        smallTag: content.smallTag,
+        bigTag: bigTagData,
+        key: content.key,
+      },
     ]);
   }
 
@@ -54,7 +60,12 @@ export default function ChipsArray({
     } else {
       setPickTagList([
         ...pickTagList,
-        { smallTag: content.smallTag, bigTag: bigTagData, key: content.key },
+        {
+          smallTag: content.smallTag,
+          bigTag: bigTagData,
+          key: content.key,
+          small: content.smallTag,
+        },
       ]);
     }
   }
@@ -69,7 +80,10 @@ export default function ChipsArray({
 
   const AllClick = () => {
     setSmallTagData([...smallTagList.keys()]);
-    changeTagData([...smallTagList.keys()]);
+    changeTagData(
+      [...smallTagList.keys()],
+      [...smallTagList].map((item) => item.smallTag)
+    );
     if (checkTagData("ALL")) {
       changePickTagData({ smallTag: "전체", key: "ALL" });
     }
@@ -81,14 +95,17 @@ export default function ChipsArray({
     // }
     setSmallTagData((prevSelectedChips) => {
       if (smallTagData.length === smallTagList.length) {
-        changeTagData([data.key]);
+        changeTagData([data.key], [data.smallTag]);
         changePickTagData(data);
         return [data.key];
       } else {
         if (prevSelectedChips.includes(data.key)) {
           if (smallTagData.length !== 1) {
             changeTagData(
-              prevSelectedChips.filter((chipKey) => chipKey !== data.key)
+              prevSelectedChips.filter((chipKey) => chipKey !== data.key),
+              tagDataList
+                .filter((item) => item.bigTag === bigTagData)[0]
+                .smallTag.filter((item) => item !== data.smallTag)
             );
             delPickTagData(data);
             return prevSelectedChips.filter((chipKey) => chipKey !== data.key);
@@ -96,7 +113,14 @@ export default function ChipsArray({
             return [...prevSelectedChips];
           }
         } else {
-          changeTagData([...prevSelectedChips, data.key]);
+          changeTagData(
+            [...prevSelectedChips, data.key],
+            [
+              ...tagDataList.filter((item) => item.bigTag === bigTagData)[0]
+                .smallTag,
+              data.smallTag,
+            ]
+          );
           plusPickTagData(data);
           return [...prevSelectedChips, data.key];
         }

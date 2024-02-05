@@ -22,16 +22,22 @@ export default function CheckboxList({
   setSmallTagList,
   pickTagList,
   setPickTagList,
+  dumyData,
 }) {
+  function smallTagFilter(arr, pickTag) {
+    return arr.filter((el) => el.name === pickTag);
+  }
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
-    const dumySmallList = [
-      { key: 0, smallTag: "Angular" },
-      { key: 1, smallTag: "jQuery" },
-      { key: 2, smallTag: "Polymer" },
-      { key: 3, smallTag: "React" },
-      { key: 4, smallTag: "Vue.js" },
-    ];
+    let num = 0;
+    const dumySmallList = smallTagFilter(dumyData, value)[0].jobSubList.map(
+      function (obj) {
+        const rObj = {};
+        rObj["key"] = num++;
+        rObj["smallTag"] = obj;
+        return rObj;
+      }
+    );
 
     function tagPlus(Ojt) {
       Ojt.bigTag = value;
@@ -48,11 +54,13 @@ export default function CheckboxList({
         {
           bigTag: value,
           smallTagIndex: dumySmallList.map((item) => item.key),
+          smallTag: dumySmallList.map((item) => item.smallTag),
+          tab: "jsList",
         },
       ]);
       setPickTagList([
         ...pickTagList.filter((item) => item.bigTag !== value),
-        { smallTag: "전체", bigTag: value, key: "ALL" },
+        { smallTag: "전체", bigTag: value, key: "ALL", tab: "jsList" },
       ]);
     } else {
       setBigTagData(value);
@@ -69,7 +77,13 @@ export default function CheckboxList({
   };
 
   return (
-    <List sx={{ width: "100%", bgcolor: "background.paper", overflow: "auto" }}>
+    <List
+      sx={{
+        width: "100%",
+        bgcolor: "background.paper",
+        overflow: "auto",
+      }}
+    >
       {bigTagList.map((value) => {
         const labelId = `checkbox-list-label-${value}`;
         const isChecked = checked.indexOf(value) !== -1;
@@ -93,18 +107,9 @@ export default function CheckboxList({
               onClick={handleToggle(value)}
               dense
             >
-              <ListItemIcon>
-                <Checkbox
-                  edge="start"
-                  checked={isChecked}
-                  tabIndex={-1}
-                  disableRipple
-                  inputProps={{ "aria-labelledby": labelId }}
-                />
-              </ListItemIcon>
               <ListItemText
                 id={labelId}
-                primary={`대분류 ${value}`}
+                primary={`${value}`}
                 sx={{
                   color: isChecked ? "blue" : "default",
                 }}

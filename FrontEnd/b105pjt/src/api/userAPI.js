@@ -216,8 +216,20 @@ async function whoAmI(token, success, fail) {
     },
   };
 
-  console.log(config);
   await baseURL.get("users", config).then(success).catch(fail);
+}
+
+async function validPW(token, param, success, fail) {
+  const config = {
+    headers: {
+      Authorization: token,
+    },
+  };
+
+  await baseURL
+    .post("users/valid-password", param, config)
+    .then(success)
+    .catch(fail);
 }
 
 export {
@@ -240,4 +252,5 @@ export {
   sendFindEmail,
   changePW,
   whoAmI,
+  validPW,
 };

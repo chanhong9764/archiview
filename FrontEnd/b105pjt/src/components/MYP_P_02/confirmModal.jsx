@@ -1,11 +1,17 @@
-import React from 'react';
-import { Dialog, DialogActions, DialogContent, DialogContentText, Button } from "@mui/material";
+import React from "react";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  Button,
+} from "@mui/material";
 
 const ConfirmModal = ({ open, onConfirm, onCancel }) => {
   return (
     <Dialog open={open} onClose={onCancel}>
       <DialogContent>
-        <DialogContentText>저장을 정말 변경하시겠습니까?</DialogContentText>
+        <DialogContentText>정말 변경하시겠습니까?</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={onConfirm}>예</Button>

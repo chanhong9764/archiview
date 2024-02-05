@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import ConfirmModal from "./comfirmModal"; // ConfirmModal 컴포넌트를 임포트합니다.
+import ConfirmModal from "./confirmModal";
 
 const BtnGroupInsert = () => {
   const [openConfirm, setOpenConfirm] = useState(false);

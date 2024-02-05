@@ -34,6 +34,7 @@ function Navbar() {
 
   const [profileUrl, setProfileUrl] = React.useState(null);
   useEffect(() => {
+    console.log(accessToken);
     userDetail(
       {
         headers: {
@@ -41,6 +42,7 @@ function Navbar() {
         },
       },
       (resp) => {
+        console.log("회원정보 조회 성공");
         setProfileUrl("https://i10b105.p.####.io/api/files/profile/" + resp.data.data.id);
       },
       (error) => {

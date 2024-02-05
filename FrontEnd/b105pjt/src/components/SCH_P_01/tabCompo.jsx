@@ -334,41 +334,12 @@ export default function BasicTabs({ setCompanyId, setCsList, setJobList }) {
           marginBottom: "5px",
         }}
       >
-        {/* <Box>빅태그 : {bigTagData}</Box>
-        <Box>태그 데이터 모음 : {JSON.stringify(tagDataList)}</Box>
-        <Box>더미 스몰태그 벨류 리스트 : {JSON.stringify(smallTagList)}</Box>
-        <Box>픽한 스몰테그 데이터 : {JSON.stringify(smallTagData)}</Box>
-        <Box>출력할 픽 데이터 : {JSON.stringify(pickTagList)}</Box> */}
         <Button
           onClick={() => handleReset()}
           startIcon={<RestartAltIcon />}
         ></Button>
         <Button color="primary" startIcon={<SearchIcon />}></Button>
       </Box>
-      {/* <Box>빅태그 : {bigTagData}</Box> */}
-      {/* <Box>태그 데이터 모음 : {JSON.stringify(tagDataList)}</Box> */}
-      <Box>
-        csList 잘 구워졌나 확인 :
-        {JSON.stringify(
-          tagDataList
-            .filter((item) => item.tab === "csList")
-            .map((item) => item.smallTag)
-            .flat()
-        )}
-      </Box>
-      <Box>
-        JsList 잘 구워졌나 확인 :
-        {JSON.stringify(
-          tagDataList
-            .filter((item) => item.tab === "jsList")
-            .map((item) => item.smallTag)
-            .flat()
-        )}
-      </Box>
-      {/* <Box>더미 스몰태그 벨류 리스트 : {JSON.stringify(smallTagList)}</Box>
-      <Box>픽한 스몰테그 데이터 : {JSON.stringify(smallTagData)}</Box>
-      <Box>출력할 픽 데이터 : {JSON.stringify(pickTagList)}</Box>
-      <Box>백에 보내줄 데이터 : {JSON.stringify(payLoadData)}</Box> */}
     </Box>
   );
 }

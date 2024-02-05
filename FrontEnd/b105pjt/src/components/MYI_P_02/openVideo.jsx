@@ -6,6 +6,8 @@ import { useDispatch } from "react-redux";
 import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
+import { createReply, modifyReply, deleteReply, selectReply } from "../../api/replyAPI";
+import { useSelector } from "react-redux";
 
 let session;
 let publisher;
@@ -57,7 +59,7 @@ const MakeSession = async (videoRef, dispatch) => {
   }
 };
 
-const OpenVideo = () => {
+const OpenVideo = (sessionUrl) => {
   const videoRef = useRef(null); // 비디오 요소 참조를 위한 ref
   const [recordingURL, setRecordingURL] = useState("");
   const [isRecording, setIsRecording] = useState(false);
@@ -115,11 +117,13 @@ const OpenVideo = () => {
   const handleRecordStop = () => {
     dispatch({ type: "SET_LOADING" });
     let urlSession = session.sessionId;
+    sessionUrl = session.sessionId;
     stopRecording(
       {
         recording: session.sessionId,
       },
       (resp) => {
+        // Start - Signaling Server API
         console.log("녹화 종료: ", resp);
         setRecordingURL(
           "https://i10b105.p.####.io/api/files/recording/" + urlSession
@@ -129,12 +133,11 @@ const OpenVideo = () => {
 
         // 세션 및, 퍼블리셔 종료 로직
         if (publisher) {
-          publisher.stream
-            .getVideoElement()
-            .parentNode.removeChild(publisher.stream.getVideoElement());
-          session.unpublish(publisher);
+          publisher = null;
         }
         session.disconnect();
+        // End - Signaling Server API
+
         dispatch({ type: "UNSET_LOADING" });
       },
       (error) => {

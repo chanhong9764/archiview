@@ -14,7 +14,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close"; // 닫기 아이콘을 위한 임포트
 import ActionButton from "../../components/MYP_P_01/actionButton";
 import { useSelector } from "react-redux";
-import { userDetail, uploadProfileImage } from "../../api/mypageAPI";
+import { userDetail, uploadProfileImage, updateUserDetail } from "../../api/mypageAPI";
 import { useEffect } from "react";
 
 const ProfileSection = () => {
@@ -80,9 +80,6 @@ const ProfileSection = () => {
   };
 
   const handleSave = () => {
-    // 프로필 사진 변경
-
-    console.log("프로필 변경 지점 진입");
     const formData = new FormData();
     formData.append("img", uploadedImage);
     uploadProfileImage(id, formData,
@@ -94,8 +91,23 @@ const ProfileSection = () => {
       }
     );
 
-    // TODO 자기소개 변경
-
+    updateUserDetail(
+      {
+        headers: {
+          Authorization: accessToken,
+        }
+      },
+      {
+        introduce: newIntroduce,
+        profileUrl: newProfileUrl,
+      },
+      (resp) => {
+        console.log("profileSection -> uploadUserDetail | 회원정보 변경 성공");
+      },
+      (error) => {
+        console.log("profileSection -> uploadUserDetail | 회원정보 변경 실패");
+      }
+    );      
   };
 
   const handleDelete = () => {

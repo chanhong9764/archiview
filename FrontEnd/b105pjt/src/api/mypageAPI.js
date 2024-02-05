@@ -1,5 +1,4 @@
 import { baseAxios } from "../utils/httpCommons";
-import { openViduAxios } from "../utils/httpCommons";
 
 const baseURL = baseAxios();
 
@@ -14,4 +13,13 @@ async function uploadProfileImage(id, formData, success, fail) {
     .catch(fail);
 }
 
-export { userDetail, uploadProfileImage };
+async function updateUserDetail(config, param, success, fail) {
+  await baseURL
+    .patch("users", param, {
+      headers: config,
+    })
+    .then(success)
+    .catch(fail);
+}
+
+export { userDetail, uploadProfileImage, updateUserDetail };

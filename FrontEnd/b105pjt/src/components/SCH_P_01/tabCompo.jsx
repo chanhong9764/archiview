@@ -105,7 +105,7 @@ export default function BasicTabs({ setCompanyId, setCsList, setJobList }) {
     // tagDataList
     //   .filter((item) => item.tab === "jsList")
     //   .map((item) => item.smallTag)
-    //   .flat();
+    //   .flat()
     // );
     // setCompanyId();
     console.log(

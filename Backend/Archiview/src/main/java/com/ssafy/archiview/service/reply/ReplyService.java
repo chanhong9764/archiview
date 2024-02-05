@@ -11,6 +11,8 @@ public interface ReplyService {
     ReplyDto.DetailResponseDto replyDetail(ReplyDto.DetailRequestDto requestDto);
     // 답변 삭제
     void replyDelete(ReplyDto.DeleteRequestDto requestDto);
+    // 답변 삭제 (관리자)
+    void replyDeleteByAdmin(int replyId);
     // 질문 / 답변 등록
     void replyAdd(ReplyDto.AddRequestDto requestDto);
     // 답변 수정
@@ -23,4 +25,6 @@ public interface ReplyService {
     List<CommentDto.info> replyComment(CommentDto.request requestDto);
     // 댓글 삭제
     void replyCommentDelete(ReplyDto.CommentDeleteRequest requestDto);
+    // 댓글 삭제 (관리자)
+    void replyCommentDeleteByAdmin(int commentId);
 }

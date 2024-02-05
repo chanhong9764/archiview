@@ -73,19 +73,19 @@ public class jwtUtil {
 
     public String getUsername(HttpServletRequest request) {  // 아이디를 검증하는 메서드
         String token = request.getHeader("Authorization");
-        validateToken(token);  // 토큰 검증 (필터 추가하면 없애야 됨)
+//        validateToken(token);  // 토큰 검증 (필터 추가하면 없애야 됨)
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId", String.class);
     }
 
     public String getUserEmail(HttpServletRequest request) {  // 이메일을 검증하는 메서드
         String token = request.getHeader("Authorization");
-        validateToken(token);  // 토큰 검증
+//        validateToken(token);  // 토큰 검증
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("email", String.class);
     }
 
     public String getRole(HttpServletRequest request) {  // role을 검증하는 메서드
         String token = request.getHeader("Authorization");
-        validateToken(token);  // 토큰 검증
+//        validateToken(token);  // 토큰 검증
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", String.class);
     }
 
@@ -126,38 +126,16 @@ public class jwtUtil {
     }
 
     // 토큰 정보를 검증하는 메서드
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
-            return true;
-        } catch (SecurityException | MalformedJwtException e) {  // 잘못된 토큰 구조
-            throw new RestApiException(ErrorCode.UNAUTHORIZED_REQUEST);
-        } catch (ExpiredJwtException e) {  // 토큰 만료
-            throw new RestApiException(ErrorCode.EXPIRED_TOKEN);
-        } catch (UnsupportedJwtException e) {  // 토큰이 예상하는 형식과 다른 형식이거나 구성
-            throw new RestApiException(ErrorCode.UNSUPPORTED_TOKEN);
-        } catch (IllegalArgumentException e) {  // 잘못된 토큰
-            throw new RestApiException(ErrorCode.INVALID_TOKEN);
-        }
+    public boolean validateToken(String token) throws JwtException {
+        Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
+        return true;
     }
 
     // 이메일 토큰인지, 로그인 토큰인지 확인하는 메서드
     public boolean checkClaims(String token) {
-        try {
-            String payload = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId", String.class);
-            if(!(payload == null)){  // 로그인 토큰이면 true
-                return true;
-            } else{
-                return false;  // 이메일 토큰이면 false
-            }
-        } catch (SecurityException | MalformedJwtException e) {  // 잘못된 토큰 구조
-            throw new RestApiException(ErrorCode.UNAUTHORIZED_REQUEST);
-        } catch (ExpiredJwtException e) {  // 토큰 만료
-            throw new RestApiException(ErrorCode.EXPIRED_TOKEN);
-        } catch (UnsupportedJwtException e) {  // 토큰이 예상하는 형식과 다른 형식이거나 구성
-            throw new RestApiException(ErrorCode.UNSUPPORTED_TOKEN);
-        } catch (IllegalArgumentException e) {  // 잘못된 토큰
-            throw new RestApiException(ErrorCode.INVALID_TOKEN);
-        }
+        String payload = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId", String.class);
+        // 로그인 토큰이면 true
+        // 이메일 토큰이면 false
+        return !(payload == null);
     }
 }

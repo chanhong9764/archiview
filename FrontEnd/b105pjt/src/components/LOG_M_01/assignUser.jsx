@@ -25,6 +25,7 @@ const AssignUser = ({ onSwitch }) => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [isInputDisabled, setIsInputDisabled] = useState(false);
   const [isChangeBtnDisabled, setIsChangeBtnDisabled] = useState(true);
+  const [emailToken, setEmailToken] = useState("");
 
   // 각 입력 필드에 대한 정규표현식을 나타내는 상태 추가
   const [isNameValid, setIsNameValid] = useState(true);
@@ -44,8 +45,7 @@ const AssignUser = ({ onSwitch }) => {
     name: "", // 유저 이름
   };
 
-  const [form, handleFormChange, handleFileChange, resetForm] =
-    useForm(initialState_signup);
+  const [form, handleFormChange, handleFileChange, resetForm] = useForm(initialState_signup);
   // const { email, pw, name, id } = form;
 
   // 이름 입력 필드의 값이 변경 시 호출되는 함수
@@ -62,6 +62,8 @@ const AssignUser = ({ onSwitch }) => {
     sendEmail(
       { email: form.email },
       (response) => {
+        console.log(response.data.data.emailToken);
+        setEmailToken(response.data.data.emailToken);
         console.log(response.data.data.authNumber);
         setAuthNumber(response.data.data.authNumber);
         setShowSignupFields(true);
@@ -85,11 +87,7 @@ const AssignUser = ({ onSwitch }) => {
   // 이메일 입력 필드의 값이 변경 시 호출되는 함수
   const handleEmailChange = (event) => {
     const newEmail = event.target.value;
-    setIsEmailValid(
-      /[0-9a-zA-Z][-_￦.]*[0-9a-zA-Z]*\@[0-9a-zA-Z]*\.[a-zA-Z]{2,3}$/.test(
-        newEmail
-      )
-    );
+    setIsEmailValid(/[0-9a-zA-Z][-_￦.]*[0-9a-zA-Z]*\@[0-9a-zA-Z]*\.[a-zA-Z]{2,3}$/.test(newEmail));
     handleFormChange(event);
     setIsEmailEmpty(newEmail.trim() === ""); // 이메일이 비어있는지 여부를 검사하여 상태 업데이트
     // 나머지 코드 유지
@@ -99,6 +97,7 @@ const AssignUser = ({ onSwitch }) => {
     try {
       await signup(
         form,
+        emailToken,
         (response) => {
           const data = response;
           // console.log(data);
@@ -153,9 +152,7 @@ const AssignUser = ({ onSwitch }) => {
   const handlePasswordChange = (event) => {
     const newPassword = event.target.value;
     handleFormChange(event);
-    setIsPasswordValid(
-      /^(?=.*[a-zA-Z])(?=.*[!@#$%^+=-])(?=.*[0-9]).{9,16}$/.test(newPassword)
-    );
+    setIsPasswordValid(/^(?=.*[a-zA-Z])(?=.*[!@#$%^+=-])(?=.*[0-9]).{9,16}$/.test(newPassword));
     setPassword(newPassword);
     // 나머지 코드 유지
   };
@@ -243,11 +240,7 @@ const AssignUser = ({ onSwitch }) => {
             variant="filled"
             onChange={handlePasswordChange}
             error={!isPasswordValid}
-            helperText={
-              !isPasswordValid
-                ? "대소문자, 특수문자, 숫자를 포함한 9~16자리"
-                : ""
-            }
+            helperText={!isPasswordValid ? "대소문자, 특수문자, 숫자를 포함한 9~16자리" : ""}
             disabled={isInputDisabled}
           />
         </Grid>
@@ -261,15 +254,9 @@ const AssignUser = ({ onSwitch }) => {
             placeholder="비밀번호 확인"
             type="password"
             variant="filled"
-            error={
-              passwordError &&
-              confirmPassword.length > 0 &&
-              password !== confirmPassword
-            }
+            error={passwordError && confirmPassword.length > 0 && password !== confirmPassword}
             helperText={
-              passwordError &&
-              confirmPassword.length > 0 &&
-              password !== confirmPassword
+              passwordError && confirmPassword.length > 0 && password !== confirmPassword
                 ? "비밀번호가 일치하지 않습니다."
                 : ""
             }

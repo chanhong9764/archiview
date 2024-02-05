@@ -3,8 +3,24 @@ import React from "react";
 import SearchTab from "../SCH_P_01/tabCompo";
 import BtnGroupInsert from "./btnGroupInsert";
 import OpenVideo from "../MYI_P_02/openVideo";
+import { useState } from "react";
 
 const InsertForm = () => {
+  const [clickEvent, setClickEvent] = useState();
+  const [content, setContent] = useState();
+  const [script, setScript] = useState();
+  const [company, setCompany] = useState();
+  const [csList, setCsList] = useState();
+  const [jobList, setJobList] = useState();
+  const [sessionUrl, setSessionUrl] = useState();
+
+  function handlerContent(event) {
+    setContent(event.target.value);
+  }
+  function handlerScript(event) {
+    setScript(event.target.value);
+  }
+
   return (
     <div>
       <TextField
@@ -12,13 +28,20 @@ const InsertForm = () => {
         id="filled-basic"
         label="제목"
         variant="filled"
+        onChange={handlerContent}
       />
 
       <div className="Insert-search">
-        <SearchTab></SearchTab>
+        <SearchTab
+          company={company}
+          csList={csList}
+          jobList={jobList}
+        ></SearchTab>
       </div>
 
-      <OpenVideo></OpenVideo>
+      <OpenVideo
+        sessionUrl={sessionUrl}
+      ></OpenVideo>
       <br />
 
       <TextField
@@ -30,8 +53,11 @@ const InsertForm = () => {
         defaultValue=""
         variant="filled"
         style={{ paddingTop: "5px" }}
+        onChange={handlerScript}
       />
-      <BtnGroupInsert />
+      <BtnGroupInsert
+        setClickEvent={setClickEvent}   
+      />
     </div>
   );
 };

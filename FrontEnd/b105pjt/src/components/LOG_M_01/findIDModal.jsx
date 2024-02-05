@@ -262,13 +262,13 @@ const FindIDModal = ({ onSwitch }) => {
     sendFindEmail(
       { email: emailValue },
       (resp) => {
-        setFindAccessToken(resp.data.data.emailToken);
         setShowSignupFields(true);
+        setFindAccessToken(resp.data.data.emailToken);
         setAuthNum(resp.data.data.authNumber);
         // console.log(resp.data.data.authNumber);
       },
       (error) => {
-        console.log("에러 발생: ", error);
+        // console.log("에러 발생: ", error);
         setIsInputDisabled(false);
       }
     );
@@ -282,7 +282,7 @@ const FindIDModal = ({ onSwitch }) => {
     findID(
       form,
       (resp) => {
-        alert(resp.data.message);
+        // alert(resp.data.message);
         setFoundId(resp.data.data); // 아이디 찾기 결과 설정
       },
       (error) => {

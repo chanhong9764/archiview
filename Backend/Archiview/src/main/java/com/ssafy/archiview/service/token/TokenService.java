@@ -15,7 +15,7 @@ public class TokenService {
     private final UserRepository repository;
     private final jwtUtil jwtUtil;
     public TokenDto.updateTokenDto updateAccessToken(String accessToken, String refreshToken){
-        jwtUtil.validateToken(refreshToken);  // RefreshToken 유효성 검사 (만료시 재로그인 해야함)
+//        jwtUtil.validateToken(refreshToken);  // RefreshToken 유효성 검사 (만료시 재로그인 해야함)
 
         String userId = jwtUtil.getName(accessToken);
         User user = repository.getById(userId);

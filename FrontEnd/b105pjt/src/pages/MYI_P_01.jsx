@@ -118,6 +118,7 @@ const Page = () => {
     const eventData = location.state?.event;
 
     if (!eventData) {
+      console.log(token);
       whoAmI(
         token,
         (resp) => {

@@ -1,6 +1,7 @@
 package com.####.archiview.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.####.archiview.entity.Role;
 import com.####.archiview.filter.TokenExceptionHandlerFilter;
 import com.####.archiview.jwt.*;
 import com.####.archiview.filter.JsonUsernamePasswordAuthenticationFilter;
@@ -56,14 +57,14 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // URL Mapping
                 .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("api/admin/**").hasRole("ADMIN")  // ADMIN 접근 가능
+                        .requestMatchers(HttpMethod.GET, "api/replies/**").hasAnyRole("MEMBER", "ADMIN")  // 질문상세조회
+                        .requestMatchers(HttpMethod.POST, "api/replies/**").hasAnyRole("MEMBER", "ADMIN")  // 댓글작성, 좋아요
+                        .requestMatchers(HttpMethod.DELETE, "api/replies/**").hasAnyRole("MEMBER", "ADMIN")  // 댓글삭제, 좋아요 취소
                         .requestMatchers(HttpMethod.POST ,"/api/users").permitAll()  // 회원가입 허용
                         .requestMatchers(HttpMethod.POST ,"/api/users/login").permitAll()  // 로그인 허용
-                        .requestMatchers(HttpMethod.GET ,"/api/users/{id}").permitAll()  // 회원조회
-                        .requestMatchers(HttpMethod.GET ,"/api/**").permitAll()
-                        .requestMatchers(HttpMethod.DELETE ,"/api/**").permitAll()
-                        .requestMatchers("/**").permitAll()
+                        .requestMatchers("api/questions/**", "api/recruits/**", "api/commons/**").permitAll() // ~ 허용
                         .anyRequest().authenticated())  // 나머지 요청은 모두 인증 되어야 함.
-//                .addFilterBefore(new JwtAuthFilter(customUserDetailsService, jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jsonUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtAuthFilter(customUserDetailsService, jwtUtil), JsonUsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new TokenExceptionHandlerFilter(), JwtAuthFilter.class);

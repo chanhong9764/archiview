@@ -112,11 +112,12 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public void userUpgrade(String userId) {
+        System.out.println(Role.ROLE_MEMBER);
         User user = repository.getById(userId);
-        if(user.getRole().equals(Role.MEMBER) || !user.isAuth()) {
+        if(user.getRole().equals(Role.ROLE_MEMBER) || !user.isAuth()) {
             throw new RestApiException(ErrorCode.UPGRADE_NOT_ALLOWED);
         }
-        user.updateUserRole(Role.MEMBER);
+        user.updateUserRole(Role.ROLE_MEMBER);
         user.updateUserAuth(false);
     }
 
@@ -124,10 +125,10 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public void userBlock(String userId) {
         User user = repository.getById(userId);
-        if(user.getRole().equals(Role.BLOCK)) {
+        if(user.getRole().equals(Role.ROLE_BLOCK)) {
             throw new RestApiException(ErrorCode.BLOCK_NOT_ALLOWED);
         }
-        user.updateUserRole(Role.BLOCK);
+        user.updateUserRole(Role.ROLE_BLOCK);
         user.updateUserAuth(false);
     }
 
@@ -135,7 +136,7 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public void userApplyUpgrade(String userId) {
         User user = repository.getById(userId);
-        if(!user.getRole().equals(Role.USER) || user.isAuth()) {
+        if(!user.getRole().equals(Role.ROLE_USER) || user.isAuth()) {
             throw new RestApiException(ErrorCode.UPGRADE_NOT_ACCEPTED);
         }
         user.updateUserAuth(true);

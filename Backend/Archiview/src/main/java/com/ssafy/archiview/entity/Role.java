@@ -12,10 +12,10 @@ public enum Role {
         BLOCK: 회원정지
         ADMIN: 관리자
      */
-    USER("USER"),
-    MEMBER("MEMBER"),
-    ADMIN("ADMIN"),
-    BLOCK("BLOCK");
+    ROLE_USER("USER"),
+    ROLE_MEMBER("MEMBER"),
+    ROLE_ADMIN("ADMIN"),
+    ROLE_BLOCK("BLOCK");
 
     final String role;
 }

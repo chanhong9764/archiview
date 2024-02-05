@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpServerErrorException;
@@ -110,6 +111,7 @@ public class UserController {
     @PatchMapping("/upgrade")
     public ResponseEntity<Object> applyUserUpgrade(HttpServletRequest request){
         String userId = jwtUtil.getUsername(request);
+        System.out.println(userId);
         service.userApplyUpgrade(userId);
         return SuccessResponse.createSuccess(SuccessCode.USER_APPLY_UPGRADE_SUCCESS);
     }

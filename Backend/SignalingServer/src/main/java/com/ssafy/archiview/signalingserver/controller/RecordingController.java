@@ -37,6 +37,7 @@ public class RecordingController {
 
     @PostConstruct
     public void init() {
+        logger.warn("OPENVIDU_URL: " + OPENVIDU_URL);
         this.openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
     }
 

@@ -5,6 +5,9 @@ spring:
 #    url: jdbc:mysql://localhost:3306/archiview?serverTimezone=Asia/Seoul
     username: archiview
     password: ssafyb105
+#    url: jdbc:mysql://localhost:3306/archiview?serverTimezone=Asia/Seoul
+#    username: ssafy
+#    password: ssafy
   jpa:
     # Hibernate가 실행한 모든 SQL을 출력
     show-sql: true

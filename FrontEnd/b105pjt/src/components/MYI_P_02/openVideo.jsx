@@ -6,8 +6,6 @@ import { useDispatch } from "react-redux";
 import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
-import { createReply, modifyReply, deleteReply, selectReply } from "../../api/replyAPI";
-import { useSelector } from "react-redux";
 
 let session;
 let publisher;
@@ -59,7 +57,7 @@ const MakeSession = async (videoRef, dispatch) => {
   }
 };
 
-const OpenVideo = (sessionUrl) => {
+const OpenVideo = ({ setSessionUrl }) => {
   const videoRef = useRef(null); // 비디오 요소 참조를 위한 ref
   const [recordingURL, setRecordingURL] = useState("");
   const [isRecording, setIsRecording] = useState(false);
@@ -117,7 +115,7 @@ const OpenVideo = (sessionUrl) => {
   const handleRecordStop = () => {
     dispatch({ type: "SET_LOADING" });
     let urlSession = session.sessionId;
-    sessionUrl = session.sessionId;
+    setSessionUrl(session.sessionId);
     stopRecording(
       {
         recording: session.sessionId,

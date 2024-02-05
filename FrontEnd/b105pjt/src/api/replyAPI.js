@@ -19,7 +19,12 @@ async function deleteReply(id, success, fail) {
 }
 
 async function modifyReply(config, param, success, fail) {
-  await baseURL.patch("replies", config, param).then(success).catch(fail);
+  await baseURL
+    .patch("replies", param, {
+      headers: config,
+    })
+    .then(success)
+    .catch(fail);
 }
 
 async function selectReply(id, success, fail) {

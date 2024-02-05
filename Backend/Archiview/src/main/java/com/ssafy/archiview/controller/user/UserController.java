@@ -82,7 +82,6 @@ public class UserController {
         }else{
             userInfo = jwtUtil.getUserEmail(request);
         }
-        System.out.println(userInfo);
         service.updatePassword(userInfo, dto.getPw());
         return SuccessResponse.createSuccess(SuccessCode.PASSWORD_UPDATE_SUCCESS);
     }

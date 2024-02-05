@@ -63,6 +63,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "api/replies/**").hasAnyRole("MEMBER", "ADMIN")  // 댓글삭제, 좋아요 취소
                         .requestMatchers(HttpMethod.POST ,"/api/users").permitAll()  // 회원가입 허용
                         .requestMatchers(HttpMethod.POST ,"/api/users/login").permitAll()  // 로그인 허용
+                        .requestMatchers("api/users/find-id", "api/users/find-password").permitAll()  // 아이디 찾기, 패스워드 찾기 허용
+                        .requestMatchers("api/users/find-email", "api/users/join-email").permitAll()  // 이메일 인증 요청 허용
                         .requestMatchers("api/questions/**", "api/recruits/**", "api/commons/**").permitAll() // ~ 허용
                         .anyRequest().authenticated())  // 나머지 요청은 모두 인증 되어야 함.
                 .addFilterBefore(jsonUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)

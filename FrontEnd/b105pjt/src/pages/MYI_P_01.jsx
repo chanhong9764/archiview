@@ -106,17 +106,20 @@ const Page = () => {
     const eventData = location.state?.event;
 
     if (!eventData) {
-      console.log(token);
+      console.log("token >> ", token);
       whoAmI(
         token,
         (resp) => {
-          setProfileData(resp.data);
-          console.log(profileData);
+          console.log("resp >> ", resp.data.data);
+          setProfileData(resp.data.data);
+          console.log("profile >> ", profileData);
         },
         (error) => {
           console.log(error);
         }
       );
+
+      console.log("outer whoAmI");
       // 데이터가 없는경우 (일반 사용자)
     } else {
       setAdminBtn(true);
@@ -144,12 +147,21 @@ const Page = () => {
       <MyNavbar />
       <Container>
         {adminBtn && <AdminButton></AdminButton>}
-        <ProfileSection imageUrl={profileData.data.profile_url}>
-          <Typography variant="h5" gutterBottom>
-            {profileData.data.name}
-          </Typography>
-          <Typography variant="body1">{profileData.data.introduce}</Typography>
-        </ProfileSection>
+        {profileData && (
+          <ProfileSection
+            imageUrl={
+              "https://i10b105.p.ssafy.io/api/files/profile/" +
+                profileData.id || "default-image-url.jpg"
+            }
+          >
+            <Typography variant="h5" gutterBottom>
+              {profileData.name}
+            </Typography>
+            <Typography variant="body1">
+              {profileData.introduce || "마이페이지에서 소개말을 적어주세요."}
+            </Typography>
+          </ProfileSection>
+        )}
         <SearchTab />
         {questions.map((question, index) => (
           <Accordion

@@ -10,10 +10,12 @@ public class EmailTokenDto {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class joinEmailResponseDto {
+        private String emailToken;
         private int authNumber;
 
         @Builder
-        public joinEmailResponseDto(int authNumber) {
+        public joinEmailResponseDto(String emailToken, int authNumber) {
+            this.emailToken = emailToken;
             this.authNumber = authNumber;
         }
     }

@@ -57,7 +57,7 @@ const MakeSession = async (videoRef, dispatch) => {
   }
 };
 
-const OpenVideo = () => {
+const OpenVideo = ({ setSessionUrl }) => {
   const videoRef = useRef(null); // 비디오 요소 참조를 위한 ref
   const [recordingURL, setRecordingURL] = useState("");
   const [isRecording, setIsRecording] = useState(false);
@@ -115,11 +115,13 @@ const OpenVideo = () => {
   const handleRecordStop = () => {
     dispatch({ type: "SET_LOADING" });
     let urlSession = session.sessionId;
+    setSessionUrl(session.sessionId);
     stopRecording(
       {
         recording: session.sessionId,
       },
       (resp) => {
+        // Start - Signaling Server API
         console.log("녹화 종료: ", resp);
         setRecordingURL(
           "https://i10b105.p.ssafy.io/api/files/recording/" + urlSession
@@ -129,12 +131,11 @@ const OpenVideo = () => {
 
         // 세션 및, 퍼블리셔 종료 로직
         if (publisher) {
-          publisher.stream
-            .getVideoElement()
-            .parentNode.removeChild(publisher.stream.getVideoElement());
-          session.unpublish(publisher);
+          publisher = null;
         }
         session.disconnect();
+        // End - Signaling Server API
+
         dispatch({ type: "UNSET_LOADING" });
       },
       (error) => {

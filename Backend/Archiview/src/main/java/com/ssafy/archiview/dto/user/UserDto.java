@@ -64,17 +64,19 @@ public class UserDto {
         private String profileUrl;
         private String introduce;
         private Role role;
+        private boolean isAuth;
         private String accessToken;
         private String refreshToken;
 
         @Builder
-        public loginResponseDto(String id, String name, String email, String profileUrl, String introduce, Role role, String accessToken, String refreshToken) {
+        public loginResponseDto(String id, String name, String email, String profileUrl, String introduce, Role role, boolean isAuth, String accessToken, String refreshToken) {
             this.id = id;
             this.name = name;
             this.email = email;
             this.profileUrl = profileUrl;
             this.introduce = introduce;
             this.role = role;
+            this.isAuth = isAuth;
             this.accessToken = accessToken;
             this.refreshToken = refreshToken;
         }
@@ -124,15 +126,17 @@ public class UserDto {
         private String introduce;
         private String profileUrl;
         private Role role;
+        private boolean isAuth;
 
         @Builder
-        public DetailResponseDto(String id, String name, String email, String introduce, String profileUrl, Role role) {
+        public DetailResponseDto(String id, String name, String email, String introduce, String profileUrl, Role role, boolean isAuth) {
             this.id = id;
             this.name = name;
             this.email = email;
             this.introduce = introduce;
             this.profileUrl = profileUrl;
             this.role = role;
+            this.isAuth = isAuth;
         }
     }
 

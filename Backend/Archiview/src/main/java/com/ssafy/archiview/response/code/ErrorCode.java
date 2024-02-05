@@ -83,8 +83,8 @@ public enum ErrorCode implements ResponseCode {
         Token
      */
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 만료 되었습니다."),
-    UNSUPPORTED_TOKEN(HttpStatus.FORBIDDEN, "잘못된 토큰 입니다."),
-    INVALID_TOKEN(HttpStatus.BAD_REQUEST, "잘못된 토큰 입니다."),
+    UNSUPPORTED_TOKEN(HttpStatus.FORBIDDEN, "잘못된 토큰입니다."),
+    INVALID_TOKEN(HttpStatus.BAD_REQUEST, "잘못된 토큰입니다."),
     ;
     private final HttpStatus httpStatus;
     private final String message;

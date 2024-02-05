@@ -40,18 +40,15 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void userLogout(HttpServletRequest request) {
-    String accessToken = request.getHeader("Authorization");
-    String userId = jwtUtil.getUsername(request);
-    User user = repository.getById(userId);
-    user.updateRefreshToken(null);  // refreshToken 삭제
-    repository.save(user);
+        String userId = jwtUtil.getUsername(request);
+        User user = repository.getById(userId);
+        user.updateRefreshToken(null);  // refreshToken 삭제
+        repository.save(user);
     }
 
     @Override
     @Transactional
     public void userDelete(HttpServletRequest request) {
-        // request 에서 액세스토큰 정보 추출
-        String accessToken = request.getHeader("Authorization");
         String userId = jwtUtil.getUsername(request);  // 엑세스 토큰에서 userId 추출
         User user = repository.getById(userId);  // 추출된 userId로 DB 조회
         repository.delete(user);

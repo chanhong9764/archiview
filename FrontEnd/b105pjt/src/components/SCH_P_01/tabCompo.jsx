@@ -43,7 +43,15 @@ function a11yProps(index) {
 }
 
 export default function BasicTabs() {
-  const dumyBigTagList1 = ["직무", "역량"];
+  const dumyBigTagList1 = [
+    "직무",
+    "역량",
+    "직업1",
+    "직업2",
+    "직업3",
+    "직업4",
+    "직업5",
+  ];
   const dumyBigTagList2 = ["직업1", "직업2", "직업3", "직업4", "직업5"];
   const [value, setValue] = React.useState(0);
   const [tagDataList, setTagDataList] = React.useState([]);

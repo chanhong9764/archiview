@@ -5,10 +5,12 @@ import LoginIcon from "@mui/icons-material/Login";
 import "../../assets/css/LOG_M_01_login.css";
 import Logo from "../../assets/img/mainLogo-removebg-preview.png";
 import FoundIDResult from "./findIDResult";
-import { loginAxios } from "../../api/userAPI";
-import { useForm } from "../../hooks/useForm";
+import { login } from "../../api/userAPI";
+import { useForm } from "../../utils/useForm";
 import { useNavigate } from "react-router-dom";
 import { setCookie, getCookie, removeCookie } from "../../utils/cookie";
+
+let data;
 
 const LoginModal = ({ onSwitch, close }) => {
   const dispatch = useDispatch();
@@ -40,22 +42,29 @@ const LoginModal = ({ onSwitch, close }) => {
   };
 
   const handleLoginAxios = async () => {
-    try {
-      const data = await loginAxios(form);
-      setCookie("refreshToken", data.refreshToken, {
-        path: "/",
-        secure: true,
-        httpOnly: true,
-        SameSite: true,
-        Referrer: true,
-        maxAge: 60 * 60 * 24 * 7,
-      });
-      dispatch({ type: "LOGIN", accessToken: data.accessToken });
-      close();
-    } catch (error) {
-      console.error("데이터 전송 오류:", error);
-      alert("로그인 실패");
-    }
+    login(
+      form,
+      (resp) => {
+        data = resp;
+
+        setCookie("refreshToken", data.data.refreshToken, {
+          path: "/",
+          secure: true,
+          httpOnly: true,
+          SameSite: true,
+          Referrer: true,
+          maxAge: 60 * 60 * 24 * 7,
+        });
+
+        dispatch({ type: "LOGIN", accessToken: data.data.accessToken });
+        resetForm();
+        close();
+      },
+      (error) => {
+        console.error("데이터 전송 오류:", error);
+        alert("로그인 실패");
+      }
+    );
   };
 
   const handleIdChange = (event) => {

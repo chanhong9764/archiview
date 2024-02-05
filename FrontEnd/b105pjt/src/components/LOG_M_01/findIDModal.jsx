@@ -217,7 +217,7 @@ import Logo from "../../assets/img/mainLogo-removebg-preview.png";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import FindIDResult from "./findIDResult"; // FindIDResult 컴포넌트 import
 import FoundIDResult from "./findIDResult";
-import { findidAxios, sendFindEmailAxios } from "../../api/userAPI";
+import { findID, sendFindEmail } from "../../api/userAPI";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -234,6 +234,8 @@ const FindIDModal = ({ onSwitch }) => {
   const [nameValue, setNameValue] = useState("");
   const [findAccessToken, setFindAccessToken] = useState("");
   const [foundId, setFoundId] = useState("");
+  const [authNum, setAuthNum] = useState("");
+  const [inputAuthNum, setInputAuthNum] = useState("");
   if (foundId) {
     // 찾은 아이디가 있을 경우 FoundIDDisplay 컴포넌트를 렌더링
     return <FoundIDResult foundId={foundId} onSwitch={onSwitch} />;
@@ -257,31 +259,61 @@ const FindIDModal = ({ onSwitch }) => {
 
   const handleVerifyClick = () => {
     setIsInputDisabled(true);
-    setShowSignupFields(true);
-    console.log(emailValue);
-    setFindAccessToken(sendFindEmailAxios(emailValue));
+    sendFindEmail(
+      { email: emailValue },
+      (resp) => {
+        setFindAccessToken(resp.data.data.emailToken);
+        setShowSignupFields(true);
+        setAuthNum(resp.data.data.authNumber);
+        // console.log(resp.data.data.authNumber);
+      },
+      (error) => {
+        console.log("에러 발생: ", error);
+        setIsInputDisabled(false);
+      }
+    );
   };
 
   const handleAssignClick = () => {
-    const finded_id = findidAxios(
-      { name: nameValue, headers: { Authorization: findAccessToken } },
-      emailValue
-    );
-    console.log({
+    const form = {
       name: nameValue,
       headers: { Authorization: findAccessToken },
-    });
-    setFoundId("SSAFY"); // 아이디 찾기 결과 설정
+    };
+    findID(
+      form,
+      (resp) => {
+        alert(resp.data.message);
+        setFoundId(resp.data.data); // 아이디 찾기 결과 설정
+      },
+      (error) => {
+        alert(error.response.data.message);
+      }
+    );
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === "Enter" && isEmailValid && !isEmailEmpty) {
+    if (
+      e.key === "Enter" &&
+      isEmailValid &&
+      !isEmailEmpty &&
+      isNameValid &&
+      nameValue !== ""
+    ) {
       handleVerifyClick();
     }
   };
 
+  const handleAuthNumChange = (e) => {
+    const inputAuthNum = e.target.value;
+    setInputAuthNum(inputAuthNum);
+  };
+
   const handleAuthClick = () => {
-    setIsChangeBtnDisabled(false);
+    if (inputAuthNum === String(authNum)) {
+      setIsChangeBtnDisabled(false);
+    } else {
+      alert("인증번호가 다릅니다.");
+    }
   };
 
   const handleAuthKeyPress = (e) => {
@@ -294,6 +326,7 @@ const FindIDModal = ({ onSwitch }) => {
   const handleNameChange = (event) => {
     const newName = event.target.value;
     setNameValue(newName);
+    // console.log(nameValue);
     setIsNameValid(/^[가-힣]{2,32}$/.test(newName));
   };
 
@@ -352,7 +385,13 @@ const FindIDModal = ({ onSwitch }) => {
             endIcon={<SendIcon />}
             style={{ height: "56px", width: "100%" }}
             onClick={handleVerifyClick}
-            disabled={!isEmailValid || isEmailEmpty || isInputDisabled}
+            disabled={
+              !isEmailValid ||
+              isEmailEmpty ||
+              isInputDisabled ||
+              !isNameValid ||
+              nameValue === ""
+            }
           >
             인증하기
           </Button>
@@ -368,6 +407,7 @@ const FindIDModal = ({ onSwitch }) => {
                 label="인증번호"
                 placeholder="인증번호 입력"
                 variant="filled"
+                onChange={handleAuthNumChange}
                 onKeyDown={handleAuthKeyPress}
                 disabled={!isChangeBtnDisabled}
               />

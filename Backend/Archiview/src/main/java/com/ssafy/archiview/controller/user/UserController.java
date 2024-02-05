@@ -96,7 +96,7 @@ public class UserController {
     @GetMapping("/join-email")  // 회원가입용 이메일 인증 요청
     public ResponseEntity<Object> mailSend(@RequestParam("email") String email){
         int auth_number = mailService.joinSendMail(email);
-        EmailTokenDto.joinEmailResponseDto dto = new EmailTokenDto.joinEmailResponseDto(auth_number);
+        EmailTokenDto.findEmailResponseDto dto = jwtUtil.createEmailToken(email, auth_number);
         return SuccessResponse.createSuccess(SuccessCode.EMAIL_SUCCESS, dto);
     }
 

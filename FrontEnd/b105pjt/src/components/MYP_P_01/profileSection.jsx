@@ -16,16 +16,17 @@ import ActionButton from "../../components/MYP_P_01/actionButton";
 import { useSelector } from "react-redux";
 import { userDetail, uploadProfileImage } from "../../api/mypageAPI";
 import { useEffect } from "react";
+import { modifyUserInfo } from "../../api/userAPI";
 
 const ProfileSection = () => {
   const [openModal, setOpenModal] = useState(false);
 
   const accessToken = useSelector((state) => state.accessToken);
 
-  const [ id, setId ] = useState();
-  const [ name, setName ] = useState();
+  const [id, setId] = useState();
+  const [name, setName] = useState();
   const [email, setEmail] = useState();
-  
+
   // 현재 표시되는 프로필 사진
   const [currentProfileUrl, setCurrentProfileUrl] = useState();
   // 현재 표시되는 자기소개
@@ -33,7 +34,7 @@ const ProfileSection = () => {
   // 변경된 프로필 사진
   const [newProfileUrl, setNewProfileUrl] = useState();
   // 변경된 자기소개
-  const [newIntroduce, setNewIntroduce] = useState(); 
+  const [newIntroduce, setNewIntroduce] = useState();
   // 업로드 된 이미지
   const [uploadedImage, setUploadedImage] = useState();
 
@@ -56,7 +57,7 @@ const ProfileSection = () => {
       (error) => {
         console.log(error);
       }
-    ); 
+    );
   }, []);
 
   const handleOpenModal = () => {
@@ -75,7 +76,7 @@ const ProfileSection = () => {
   };
 
   const handleIntroduceChange = (newIntroduce) => {
-    console.log("자기소개 변경됨");
+    // console.log("자기소개 변경됨");
     setCurrentIntroduce(newIntroduce);
   };
 
@@ -85,7 +86,9 @@ const ProfileSection = () => {
     console.log("프로필 변경 지점 진입");
     const formData = new FormData();
     formData.append("img", uploadedImage);
-    uploadProfileImage(id, formData,
+    uploadProfileImage(
+      id,
+      formData,
       (resp) => {
         console.log(resp);
       },
@@ -95,7 +98,6 @@ const ProfileSection = () => {
     );
 
     // TODO 자기소개 변경
-
   };
 
   const handleDelete = () => {
@@ -156,12 +158,10 @@ const ProfileSection = () => {
       <ProfileEditModal
         open={openModal}
         onClose={handleCloseModal}
-
         newProfileUrl={currentProfileUrl}
         setNewProfileUrl={setNewProfileUrl}
         newIntroduce={currentIntroduce}
         setNewIntroduce={setNewIntroduce}
-
         onImageChange={handleImageChange}
         onIntroduceChange={handleIntroduceChange}
       />
@@ -181,13 +181,32 @@ const ProfileEditModal = ({
 }) => {
   if (newIntroduce == null) newIntroduce = "";
 
-
   const handleFileChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       const newImageFile = event.target.files[0];
       setNewProfileUrl(URL.createObjectURL(newImageFile));
       onImageChange(newImageFile);
     }
+  };
+
+  const token = useSelector((state) => state.accessToken);
+
+  // 업데이트 버튼
+  const handleUpdateBtn = () => {
+    console.log("newIntroduce >> ", newIntroduce);
+    modifyUserInfo(
+      token,
+      {
+        introduce: newIntroduce,
+        profileUrl: null,
+      },
+      (resp) => {
+        console.log("handleUpdateBtn resp >> ", resp);
+      },
+      (error) => {
+        console.log("handleUpdateBtn err >> ", error);
+      }
+    );
   };
 
   const handleIntroduceChange = (event) => {
@@ -217,7 +236,7 @@ const ProfileEditModal = ({
           aria-label="close"
           onClick={onClose}
           sx={{
-            position: 'absolute',
+            position: "absolute",
             right: 8,
             top: 8,
             color: (theme) => theme.palette.grey[500],
@@ -249,12 +268,7 @@ const ProfileEditModal = ({
           onChange={handleIntroduceChange}
           sx={{ mt: 2, mb: 2 }}
         />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={onClose}
-          sx={{ mt: 2 }}
-        >
+        <Button variant="contained" color="primary" onClick={handleUpdateBtn} sx={{ mt: 2 }}>
           업데이트
         </Button>
       </Box>

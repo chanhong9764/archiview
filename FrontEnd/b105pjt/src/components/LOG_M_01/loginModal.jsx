@@ -61,7 +61,7 @@ const LoginModal = ({ onSwitch, close }) => {
         close();
       },
       (error) => {
-        console.error("데이터 전송 오류:", error);
+        // console.error("데이터 전송 오류:", error);
         alert("로그인 실패");
       }
     );

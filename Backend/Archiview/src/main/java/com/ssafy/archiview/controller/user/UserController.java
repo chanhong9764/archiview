@@ -107,7 +107,7 @@ public class UserController {
         return SuccessResponse.createSuccess(SuccessCode.EMAIL_SUCCESS, dto);
     }
 
-    @PatchMapping("/upgrade")
+    @PatchMapping("/upgrade")  // 등업 신청
     public ResponseEntity<Object> applyUserUpgrade(HttpServletRequest request){
         String userId = jwtUtil.getUsername(request);
         System.out.println(userId);

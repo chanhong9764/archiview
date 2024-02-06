@@ -78,7 +78,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
         if (id == null || pw == null) {
             throw new AuthenticationServiceException("DATA IS MISS");
         }
-
+        System.out.println(id + " " + pw);
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(id, pw);
         // PrincipalDetailsService의 loadUserByUsername() 메서드가 실행된 후
         // 정상처리 되면 authentication이 리턴 됨

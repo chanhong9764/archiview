@@ -23,6 +23,7 @@ import { userDetail } from "../../api/mypageAPI";
 import { Image } from "@mui/icons-material";
 
 function Navbar() {
+  const role = useSelector((state) => state.role);
   const isAdmin = useSelector((state) => state.isAdmin);
   const accessToken = localStorage.getItem("accessToken");
   const navigate = useNavigate();
@@ -276,7 +277,7 @@ function Navbar() {
                     마이페이지
                   </Typography>
                 </MenuItem>
-                {isAdmin && (
+                {role === "ROLE_ADMIN" && (
                   <MenuItem onClick={handleCloseUserMenu}>
                     <Typography onClick={handleAdminpage} textAlign="center">
                       관리페이지

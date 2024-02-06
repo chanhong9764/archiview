@@ -16,13 +16,17 @@ import "./assets/css/App.css";
 import Footer from "./components/utils/footer";
 import Loading from "./components/utils/loading";
 import NavbarComponent from "./components/utils/navbarComponent";
+import AuthMiddleware from "./hoc/memberAuth";
+import UserAuth from "./hoc/userAuth";
+import AdminAuth from "./hoc/adminAuth";
 
 const devTools = window.__REDUX_DEVTOOLS_EXTENSION__;
 
 const initialState = {
   isLoggedIn: false,
   isLoading: false,
-  isAdmin: true,
+  role: "",
+  userId: "",
   accessToken: "",
 };
 
@@ -31,8 +35,7 @@ function authReducer(state = initialState, action) {
   switch (action.type) {
     //Login
     case "LOGIN":
-      console.log(action);
-      return { ...state, isLoggedIn: true, accessToken: action.accessToken };
+      return { ...state, isLoggedIn: true, accessToken: action.accessToken, role: action.role, userId: action.userId };
     case "LOGOUT":
       return { ...state, isLoggedIn: false, accessToken: "" };
 
@@ -43,12 +46,6 @@ function authReducer(state = initialState, action) {
     case "UNSET_LOADING":
       console.log("loading end");
       return { ...state, isLoading: false };
-
-    //Admin
-    case "ADMIN_LOGIN":
-      return { ...state, isAdmin: true };
-    case "ADMIN_LOGOUT":
-      return { ...state, isAdmin: false };
 
     default:
       return state;
@@ -71,13 +68,14 @@ function App() {
           <Routes>
             <Route path="/" element={<HOM_P_01 />}></Route>
             <Route path="/cal" element={<CAL_P_01 />}></Route>
-            <Route path="/myinterview" element={<MYI_P_01 />}></Route>
+            <Route path="/myinterview" element={<UserAuth><MYI_P_01 /></UserAuth>}></Route>
             <Route path="/addquestion" element={<MYI_P_02 />}></Route>
-            <Route path="/revise" element={<MYI_P_02_Modify />}></Route>
-            <Route path="/mypage" element={<MYP_P_01 />}></Route>
-            <Route path="/modify" element={<MYP_P_02 />}></Route>
+            <Route path="/interview/detail" element={<AuthMiddleware><MYI_P_02 /></AuthMiddleware>}></Route>
+            <Route path="/revise" element={<UserAuth><MYI_P_02_Modify /></UserAuth>}></Route>
+            <Route path="/mypage" element={<UserAuth><MYP_P_01 /></UserAuth>}></Route>
+            <Route path="/modify" element={<UserAuth><MYP_P_02 /></UserAuth>}></Route>
             <Route path="/search" element={<SCH_P_01 />}></Route>
-            <Route path="/admin" element={<ADM_P_01 />}></Route>
+            <Route path="/admin" element={<AdminAuth><ADM_P_01 /></AdminAuth>}></Route>
           </Routes>
         </div>
         <Footer />

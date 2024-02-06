@@ -16,6 +16,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import SearchIcon from "@mui/icons-material/Search";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import { questionSearch } from "../../api/questionAPI";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -46,7 +47,7 @@ function a11yProps(index) {
   };
 }
 
-export default function BasicTabs({ setCompanyId, setCsList, setJobList }) {
+export default function BasicTabs({ setQuestions }) {
   const dumyData = {
     code: "SELECT_TAG_LIST_SUCCESS",
     message: "태그 조회에 성공했습니다.",
@@ -93,6 +94,8 @@ export default function BasicTabs({ setCompanyId, setCsList, setJobList }) {
   const [smallTagList, setSmallTagList] = useState([]);
   const [pickTagList, setPickTagList] = useState([]);
   const [tagSearchOpen, setTagSearchOpen] = useState(true);
+  const [pgno, setPgno] = useState(1);
+  const [companyName, setCompanyName] = useState("");
 
   useEffect(() => {
     // setCsList(
@@ -108,6 +111,7 @@ export default function BasicTabs({ setCompanyId, setCsList, setJobList }) {
     //   .flat()
     // );
     // setCompanyId();
+
     console.log(
       tagDataList
         .filter((item) => item.tab === "csList")
@@ -156,6 +160,39 @@ export default function BasicTabs({ setCompanyId, setCsList, setJobList }) {
     // setChecked([]);
   };
 
+  const onClickSearch = async () => {
+    const data = {
+      userId: "",
+      company: companyName,
+      cs: tagDataList
+        .filter((item) => item.tab === "csList")
+        .map((item) => item.smallTag)
+        .flat()
+        .join(),
+      job: tagDataList
+        .filter((item) => item.tab === "jsList")
+        .map((item) => item.smallTag)
+        .flat()
+        .join(),
+      pgno: pgno,
+    };
+
+    await questionSearch(data)
+      .then((res) => {
+        const formattedQuestions = res.data.data.map((item) => {
+          return {
+            id: item.id,
+            content: item.content,
+            replies: item.replies,
+          };
+        });
+        setQuestions(formattedQuestions);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <Box
       sx={{
@@ -200,7 +237,7 @@ export default function BasicTabs({ setCompanyId, setCsList, setJobList }) {
           padding: "0 10px",
         }}
       >
-        <AutoCompleteCompo />
+        <AutoCompleteCompo setCompanyName={setCompanyName} />
         <div>
           {tagSearchOpen ? (
             <Button
@@ -338,7 +375,11 @@ export default function BasicTabs({ setCompanyId, setCsList, setJobList }) {
           onClick={() => handleReset()}
           startIcon={<RestartAltIcon />}
         ></Button>
-        <Button color="primary" startIcon={<SearchIcon />}></Button>
+        <Button
+          color="primary"
+          startIcon={<SearchIcon />}
+          onClick={onClickSearch}
+        ></Button>
       </Box>
     </Box>
   );

@@ -21,73 +21,204 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { getUserList } from "../../api/adminAPI";
+import { useSelector } from "react-redux";
 
-// 데이터 포맷 변환
-function createData(id, name, calories, fat, carbs, protein) {
+function createData(id, name, email, introduce, role, auth) {
+  introduce = introduce === null ? "None" : introduce;
+  auth = auth ? "신청중" : "";
+
   return {
     id,
     name,
-    calories,
-    fat,
-    carbs,
-    protein,
+    email,
+    introduce,
+    role,
+    auth,
   };
 }
 
 // sample 데이터
 const rows = [
-  createData(1, "Cupcake", 305, 3.7, 67, 4.3),
-  createData(2, "Donut", 452, 25.0, 51, 4.9),
-  createData(3, "Eclair", 262, 16.0, 24, 6.0),
-  createData(4, "Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData(5, "Gingerbread", 356, 16.0, 49, 3.9),
-  createData(6, "Honeycomb", 408, 3.2, 87, 6.5),
-  createData(7, "Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData(8, "Jelly Bean", 375, 0.0, 94, 0.0),
-  createData(9, "KitKat", 518, 26.0, 65, 7.0),
-  createData(10, "Lollipop", 392, 0.2, 98, 0.0),
-  createData(11, "Marshmallow", 318, 0, 81, 2.0),
-  createData(12, "Nougat", 360, 19.0, 9, 37.0),
-  createData(13, "Lemonade", 155, 12.1, 48, 8.8),
-  createData(14, "Brownie", 565, 14.5, 96, 9.1),
-  createData(15, "Zucchini Bread", 195, 7.9, 96, 6.1),
-  createData(16, "Sushi", 401, 7.5, 87, 7.1),
-  createData(17, "Flan", 502, 14.4, 62, 9.2),
-  createData(18, "Hotdog", 319, 18.4, 54, 2.9),
-  createData(19, "Dumpling", 474, 28.5, 9, 7.2),
-  createData(20, "Kebab", 593, 2.7, 24, 8.4),
-  createData(21, "Jam", 262, 11.9, 33, 3.7),
-  createData(22, "Nachos", 401, 14.2, 61, 5.3),
-  createData(23, "Brownie", 338, 5.3, 23, 4.2),
-  createData(24, "Ramen", 500, 21.4, 95, 8.7),
-  createData(25, "Quiche", 362, 11.5, 36, 2.2),
-  createData(26, "Ice Pop", 597, 22.0, 74, 4.8),
-  createData(27, "Hotdog", 146, 26.9, 4, 1.9),
-  createData(28, "Udon", 261, 16.5, 39, 0.7),
-  createData(29, "Yogurt", 413, 25.3, 100, 5.1),
-  createData(30, "Taco", 190, 29.5, 11, 0.5),
-  createData(31, "Nachos", 497, 3.6, 21, 6.4),
-  createData(32, "Lemonade", 354, 18.6, 78, 1.8),
-  createData(33, "Quiche", 250, 0.3, 86, 3.1),
-  createData(34, "Empanada", 550, 13.0, 59, 8.5),
-  createData(35, "Ramen", 379, 4.9, 5, 7.6),
-  createData(36, "Kebab", 318, 15.2, 40, 9.9),
-  createData(37, "Omelette", 558, 17.8, 53, 3.8),
-  createData(38, "Cheesecake", 204, 6.4, 29, 1.3),
-  createData(39, "Udon", 441, 20.1, 67, 2.5),
-  createData(40, "Brownie", 423, 7.7, 47, 6.9),
-  createData(41, "Vada", 192, 27.2, 88, 0.1),
-  createData(42, "Pancake", 118, 10.6, 15, 7.0),
-  createData(43, "Jam", 434, 9.4, 77, 9.7),
-  createData(44, "Sushi", 363, 14.9, 32, 4.5),
-  createData(45, "Flan", 196, 16.3, 50, 8.3),
-  createData(46, "Brownie", 153, 5.1, 20, 6.7),
-  createData(47, "Nachos", 411, 28.7, 70, 7.4),
-  createData(48, "Ice Pop", 107, 23.6, 82, 1.4),
-  createData(49, "Kebab", 400, 20.5, 30, 3.0),
-  createData(50, "Jam", 308, 10.3, 17, 9.5),
-  createData(51, "Bagel", 451, 11.7, 68, 4.6),
-  createData(52, "Vada", 213, 29.0, 2, 2.7),
+  createData(
+    "chan9784",
+    "박찬홍",
+    "abc@gmail.com",
+    "안녕하세요",
+    "ROLE_USER",
+    false
+  ),
+  createData(
+    "chan9184",
+    "박찬훙",
+    "abcd@gmail.com",
+    null,
+    "ROLE_MEMBER",
+    false
+  ),
+  createData(
+    "abc1184",
+    "김홍찬",
+    "123abc@gmail.com",
+    "소개말입니다",
+    "ROLE_ADMIN",
+    true
+  ),
+  createData(
+    "asdfgh4",
+    "홍찬김",
+    "123ab1c@gmail.com",
+    null,
+    "ROLE_BLOCK",
+    true
+  ),
+  createData("ea8b960f", "장지우", "f528g@gmail.com", null, "ROLE_USER", false),
+  createData(
+    "453682e9",
+    "박민수",
+    "da5so@gmail.com",
+    "소개말입니다",
+    "ROLE_ADMIN",
+    true
+  ),
+  createData(
+    "c045d260",
+    "한서윤",
+    "kwsb2@gmail.com",
+    null,
+    "ROLE_MEMBER",
+    false
+  ),
+  createData(
+    "0b0bbb6f",
+    "정민수",
+    "ptxa4@gmail.com",
+    null,
+    "ROLE_BLOCK",
+    false
+  ),
+  createData(
+    "5487bb96",
+    "조지우",
+    "2ydyj@gmail.com",
+    null,
+    "ROLE_ADMIN",
+    false
+  ),
+  createData(
+    "d7e5c3e3",
+    "정서윤",
+    "c4nhf@gmail.com",
+    "소개말입니다",
+    "ROLE_USER",
+    false
+  ),
+  createData("5360e0e1", "장민수", "l1io8@gmail.com", null, "ROLE_USER", false),
+  createData(
+    "9d588cdc",
+    "윤은지",
+    "9qcpi@gmail.com",
+    "소개말입니다",
+    "ROLE_MEMBER",
+    true
+  ),
+  createData(
+    "25ac9959",
+    "정홍찬",
+    "y2drp@gmail.com",
+    "안녕하세요",
+    "ROLE_ADMIN",
+    true
+  ),
+  createData(
+    "d94c3157",
+    "정하윤",
+    "g6jqw@gmail.com",
+    "소개말입니다",
+    "ROLE_USER",
+    true
+  ),
+  createData(
+    "08cebfe4",
+    "박성민",
+    "v4wvo@gmail.com",
+    "안녕하세요",
+    "ROLE_USER",
+    false
+  ),
+  createData(
+    "bcef065d",
+    "조서윤",
+    "9uhjl@gmail.com",
+    "안녕하세요",
+    "ROLE_MEMBER",
+    false
+  ),
+  createData(
+    "2083ae38",
+    "김홍찬",
+    "lhttu@gmail.com",
+    null,
+    "ROLE_MEMBER",
+    false
+  ),
+  createData(
+    "90ae9495",
+    "임홍찬",
+    "zalw5@gmail.com",
+    "소개말입니다",
+    "ROLE_ADMIN",
+    true
+  ),
+  createData(
+    "2f6eb979",
+    "임하윤",
+    "7kgf7@gmail.com",
+    "안녕하세요",
+    "ROLE_ADMIN",
+    false
+  ),
+  createData(
+    "2edb7115",
+    "임홍찬",
+    "8qh45@gmail.com",
+    "소개말입니다",
+    "ROLE_MEMBER",
+    false
+  ),
+  createData(
+    "53a9705c",
+    "최찬김",
+    "huuzv@gmail.com",
+    null,
+    "ROLE_ADMIN",
+    false
+  ),
+  createData(
+    "19309f8d",
+    "윤홍찬",
+    "2cwt5@gmail.com",
+    "안녕하세요",
+    "ROLE_MEMBER",
+    true
+  ),
+  createData(
+    "9d8d49b9",
+    "이은지",
+    "tvfq6@gmail.com",
+    "소개말입니다",
+    "ROLE_USER",
+    false
+  ),
+  createData(
+    "899335af",
+    "한찬훙",
+    "tnd9t@gmail.com",
+    null,
+    "ROLE_BLOCK",
+    false
+  ),
 ];
 
 // 내림차순 정렬 Comparator
@@ -124,34 +255,40 @@ function stableSort(array, comparator) {
 // Column명 관리
 const headCells = [
   {
-    id: "name",
+    id: "id",
     numeric: false,
     disablePadding: true,
-    label: "Dessert (100g serving)",
+    label: "ID",
   },
   {
-    id: "calories",
-    numeric: true,
+    id: "name",
+    numeric: false,
     disablePadding: false,
-    label: "Calories",
+    label: "NAME",
   },
   {
-    id: "fat",
-    numeric: true,
+    id: "email",
+    numeric: false,
     disablePadding: false,
-    label: "Fat (g)",
+    label: "E-MAIL",
   },
   {
-    id: "carbs",
-    numeric: true,
+    id: "introduce",
+    numeric: false,
     disablePadding: false,
-    label: "Carbs (g)",
+    label: "INTRODUCE",
   },
   {
-    id: "protein",
-    numeric: true,
+    id: "role",
+    numeric: false,
     disablePadding: false,
-    label: "Protein (g)",
+    label: "ROLE",
+  },
+  {
+    id: "auth",
+    numeric: false,
+    disablePadding: false,
+    label: "AUTH",
   },
 ];
 
@@ -209,7 +346,7 @@ function EnhancedTableHead(props) {
   );
 }
 
-// 데이터 타입 정의
+// 테이블 헤더
 EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
@@ -285,6 +422,21 @@ const ManageAccount = () => {
   const [dense, setDense] = React.useState(true);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const navigate = useNavigate();
+  const [row, setRow] = React.useState([]);
+
+  const token = useSelector((state) => state.accessToken);
+
+  useEffect(() => {
+    getUserList(
+      token,
+      (resp) => {
+        console.log("resp >> ", resp);
+      },
+      (error) => {
+        console.log("error >> ", error);
+      }
+    );
+  }, []);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -407,14 +559,14 @@ const ManageAccount = () => {
                           handleOpenDetail(row); // 여기서 row는 현재 행의 데이터를 나타냄
                         }}
                       >
-                        상세
+                        {row.id}
                       </Button>
-                      {row.name}
                     </TableCell>
-                    <TableCell align="right">{row.calories}</TableCell>
-                    <TableCell align="right">{row.fat}</TableCell>
-                    <TableCell align="right">{row.carbs}</TableCell>
-                    <TableCell align="right">{row.protein}</TableCell>
+                    <TableCell align="left">{row.name}</TableCell>
+                    <TableCell align="left">{row.email}</TableCell>
+                    <TableCell align="left">{row.introduce}</TableCell>
+                    <TableCell align="left">{row.role}</TableCell>
+                    <TableCell align="left">{row.auth}</TableCell>
                   </TableRow>
                 );
               })}

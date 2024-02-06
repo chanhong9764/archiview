@@ -19,10 +19,27 @@ async function setUserBlock(param, token, success, fail) {
     },
   };
 
-  await baseURL
-    .get(`admin/users/block`, param, config)
-    .then(success)
-    .catch(fail);
+  await baseURL.patch(`admin/users/block?userId=${param}`, config).then(success).catch(fail);
 }
 
-export { getUserList, setUserBlock };
+async function setUserUp(param, token, success, fail) {
+  const config = {
+    headers: {
+      Authorization: token,
+    },
+  };
+
+  await baseURL.patch(`admin/users/upgrade?userId=${param}`, config).then(success).catch(fail);
+}
+
+async function setUserDown(param, token, success, fail) {
+  const config = {
+    headers: {
+      Authorization: token,
+    },
+  };
+
+  await baseURL.patch(`admin/users/downgrade?userId=${param}`, config).then(success).catch(fail);
+}
+
+export { getUserList, setUserBlock, setUserDown, setUserUp };

@@ -97,9 +97,7 @@ const ProfileSection = () => {
     
     updateUserDetail(
       {
-        headers: {
           Authorization: accessToken,
-        }
       },
       {
         introduce: newIntroduce,

@@ -1,7 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import { FixedSizeList } from "react-window";
-import Listcompo from "./fitstTabFirstListCompo";
+import Listcompo from "./secondTabFirstListCompo";
 
 function renderRow(props) {
   const {
@@ -60,11 +60,11 @@ export default function VirtualizedList({
     <Box
       sx={{
         width: "100%",
-        height: 300,
+        height: 200,
         bgcolor: "background.paper",
       }}
     >
-      <FixedSizeList height={300} itemSize={46} itemCount={1}>
+      <FixedSizeList height={200} itemSize={46} itemCount={1}>
         {() =>
           renderRow({
             tagDataList,

@@ -14,15 +14,42 @@ import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { logout } from "../../api/userAPI";
 import Logo from "../../assets/img/symbolLogo_Slogun-removebg-preview.png";
+import { setCookie, getCookie, removeCookie } from "../../utils/cookie";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { userDetail } from "../../api/mypageAPI"
+import { Image } from "@mui/icons-material";
 
 function Navbar() {
+  const isAdmin = useSelector((state) => state.isAdmin);
+  const accessToken = useSelector((state) => state.accessToken);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation(); // 현재 경로 정보를 얻어오기 위해 useLocation 사용
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const [profileUrl, setProfileUrl] = React.useState(null);
+  useEffect(() => {
+    console.log(accessToken);
+    userDetail(
+      {
+        headers: {
+          Authorization: accessToken,
+        },
+      },
+      (resp) => {
+        console.log("회원정보 조회 성공");
+        setProfileUrl("https://i10b105.p.ssafy.io/api/files/profile/" + resp.data.data.id);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }, []);
 
   // 메뉴 여닫기
   const handleOpenNavMenu = (event) => {
@@ -43,7 +70,21 @@ function Navbar() {
 
   // 로그아웃 클릭시
   const handleLogout = () => {
-    dispatch({ type: "LOGOUT" });
+    logout(
+      {
+        headers: {
+          Authorization: accessToken,
+        },
+      },
+      (resp) => {
+        console.log(resp);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+    dispatch({ type: "LOGOUT", accessToken: "" });
+    removeCookie("refreshToken");
     navigate("/", { replace: true });
   };
 
@@ -67,9 +108,13 @@ function Navbar() {
     navigate("/myinterview", { replace: true });
   };
 
-  // 면접 관리 클릭시
+  // 마이페이지 클릭시
   const handleMypage = () => {
     navigate("/mypage", { replace: true });
+  };
+
+  const handleAdminpage = () => {
+    navigate("/admin", { replace: true });
   };
 
   const isCurrentPage = (path) => {
@@ -196,10 +241,10 @@ function Navbar() {
 
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Button onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   {/* 프로필 이미지 */}
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                </IconButton>
+                    <Avatar src={profileUrl} alt="Logo" style={{ height: "50px" }} />
+                </Button>
               </Tooltip>
               <Menu
                 sx={{ mt: "45px" }}
@@ -227,6 +272,13 @@ function Navbar() {
                     마이페이지
                   </Typography>
                 </MenuItem>
+                {isAdmin && (
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography onClick={handleAdminpage} textAlign="center">
+                      관리페이지
+                    </Typography>
+                  </MenuItem>
+                )}
               </Menu>
             </Box>
           </Toolbar>

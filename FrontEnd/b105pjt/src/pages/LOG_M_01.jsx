@@ -30,16 +30,16 @@ const LOG_M_01 = ({ close }) => {
     }
   };
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: "relative" }}>
       {/* 닫기 버튼 */}
       <IconButton
         aria-label="close"
         onClick={close}
         style={{
-          position: 'absolute',
-          right: 0,
-          top: 0,
-          color: 'gray',
+          position: "absolute",
+          right: -32,
+          top: -5,
+          color: "gray",
         }}
       >
         <CloseIcon />

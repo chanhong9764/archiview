@@ -1,10 +1,11 @@
 package com.ssafy.archiview.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.archiview.filter.TokenExceptionHandlerFilter;
 import com.ssafy.archiview.jwt.*;
-import com.ssafy.archiview.response.code.ErrorCode;
-import com.ssafy.archiview.response.structure.ErrorResponse;
-import com.ssafy.archiview.response.structure.SuccessResponse;
+import com.ssafy.archiview.filter.JsonUsernamePasswordAuthenticationFilter;
+import com.ssafy.archiview.filter.JwtAuthFilter;
+import com.ssafy.archiview.service.user.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,10 +18,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -30,6 +28,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     //AuthenticationManager가 인자로 받을 AuthenticationConfiguraion 객체 생성자 주입
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final CustomUserDetailsService customUserDetailsService;
     private final jwtUtil jwtUtil;
 
     private final ObjectMapper objectMapper;
@@ -63,12 +62,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET ,"/api/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE ,"/api/**").permitAll()
                         .requestMatchers("/**").permitAll()
-                        .anyRequest().authenticated())  // 나머지 요청은 모두 인증 되어야 함
-
-//                .addFilterAt(new loginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class)
-                // 필터 추가 LoginFilter()는 인자를 받음 (AuthenticationManager() 메소드에 authenticationConfiguration 객체를 넣어야 함) 따라서 빈 등록 필요
-                .addFilterBefore(jsonUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-
+                        .anyRequest().authenticated())  // 나머지 요청은 모두 인증 되어야 함.
+//                .addFilterBefore(new JwtAuthFilter(customUserDetailsService, jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jsonUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthFilter(customUserDetailsService, jwtUtil), JsonUsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new TokenExceptionHandlerFilter(), JwtAuthFilter.class);
         return http.build();
     }
 
@@ -86,10 +84,5 @@ public class SecurityConfig {
         provider.setUserDetailsService(loginService);
 
         return new ProviderManager(provider);
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }

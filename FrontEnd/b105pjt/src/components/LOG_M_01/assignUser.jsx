@@ -12,9 +12,9 @@ import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import SendIcon from "@mui/icons-material/Send";
 import Logo from "../../assets/img/mainLogo-removebg-preview.png";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
-import { useForm } from "../../hooks/useForm";
+import { useForm } from "../../utils/useForm";
 import { useNavigate } from "react-router-dom";
-import { signupAxios, sendEmailAxios } from "../../api/userAPI";
+import { signup, sendEmail } from "../../api/userAPI";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -32,6 +32,8 @@ const AssignUser = ({ onSwitch }) => {
   const [isPasswordValid, setIsPasswordValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isEmailEmpty, setIsEmailEmpty] = useState(true); // 이메일이 비어있는지 여부를 저장하는 상태 추가
+  const [authNumber, setAuthNumber] = useState("");
+  const [inputAuthNum, setInputAuthNum] = useState("");
 
   // API 관리 변수들 추가
   const navigate = useNavigate();
@@ -57,7 +59,19 @@ const AssignUser = ({ onSwitch }) => {
   // '인증하기' 버튼 클릭 시 핸들러 함수
   const handleVerifyClick = () => {
     setIsInputDisabled(true);
-    setShowSignupFields(true); // 회원가입 및 인증번호 필드를 보여줌
+    sendEmail(
+      { email: form.email },
+      (response) => {
+        console.log(response.data.data.authNumber);
+        setAuthNumber(response.data.data.authNumber);
+        setShowSignupFields(true);
+      },
+      (error) => {
+        console.error("데이터 전송 실패 :", error);
+        alert(error.response.data.message);
+        setIsInputDisabled(false);
+      }
+    ); // 회원가입 및 인증번호 필드를 보여줌
   };
 
   // ID 입력 필드의 값이 변경 시 호출되는 함수
@@ -83,7 +97,16 @@ const AssignUser = ({ onSwitch }) => {
 
   const handleSignupAxios = async () => {
     try {
-      const { data } = await signupAxios(form);
+      await signup(
+        form,
+        (response) => {
+          const data = response;
+          // console.log(data);
+        },
+        (error) => {
+          console.error("데이터 전송 실패", error);
+        }
+      );
     } catch (error) {
       console.error("데이터 전송 오류:", error);
     }
@@ -104,7 +127,18 @@ const AssignUser = ({ onSwitch }) => {
   // 엔터 입력시
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      if (isEmailValid && !isEmailEmpty) {
+      if (
+        isEmailValid &&
+        !isEmailEmpty &&
+        !isInputDisabled &&
+        password === confirmPassword &&
+        isPasswordValid &&
+        isIdValid &&
+        isNameValid &&
+        form.name !== "" &&
+        form.id !== "" &&
+        form.pw !== ""
+      ) {
         handleVerifyClick();
       }
     }
@@ -134,8 +168,18 @@ const AssignUser = ({ onSwitch }) => {
   };
 
   // 인증번호 관련 이벤트 처리
-  const handleAuthClick = () => {
-    setIsChangeBtnDisabled(false);
+  const handleAuthClick = (event) => {
+    if (inputAuthNum === String(authNumber)) {
+      setIsChangeBtnDisabled(false);
+    } else {
+      alert("인증번호가 다릅니다.");
+      setIsChangeBtnDisabled(true);
+    }
+  };
+
+  const handleAuthChange = (event) => {
+    const inputAuthNum = event.target.value;
+    setInputAuthNum(inputAuthNum);
   };
 
   const handleAuthKeyPress = (e) => {
@@ -164,9 +208,9 @@ const AssignUser = ({ onSwitch }) => {
             placeholder="홍길동"
             variant="filled"
             onChange={handleNameChange}
-            disabled={isInputDisabled}
             error={!isNameValid}
             helperText={!isNameValid ? "한글 2자 이상" : ""}
+            disabled={isInputDisabled}
           />
         </Grid>
 
@@ -181,9 +225,9 @@ const AssignUser = ({ onSwitch }) => {
             placeholder="사용자 ID"
             variant="filled"
             onChange={handleIdChange}
-            disabled={isInputDisabled}
             error={!isIdValid}
             helperText={!isIdValid ? "영소문자, 숫자 4~16자리 이내" : ""}
+            disabled={isInputDisabled}
           />
         </Grid>
 
@@ -199,12 +243,12 @@ const AssignUser = ({ onSwitch }) => {
             variant="filled"
             onChange={handlePasswordChange}
             error={!isPasswordValid}
-            disabled={isInputDisabled}
             helperText={
               !isPasswordValid
                 ? "대소문자, 특수문자, 숫자를 포함한 9~16자리"
                 : ""
             }
+            disabled={isInputDisabled}
           />
         </Grid>
 
@@ -230,8 +274,8 @@ const AssignUser = ({ onSwitch }) => {
                 : ""
             }
             value={confirmPassword}
-            disabled={isInputDisabled}
             onChange={handleConfirmPasswordChange}
+            disabled={isInputDisabled}
           />
         </Grid>
 
@@ -259,7 +303,18 @@ const AssignUser = ({ onSwitch }) => {
             endIcon={<SendIcon />}
             style={{ height: "56px", width: "100%" }}
             onClick={handleVerifyClick}
-            disabled={!isEmailValid || isEmailEmpty || isInputDisabled} // 이메일 정규표현식 만족 여부에 따라 버튼 활성화/비활성화
+            disabled={
+              !isEmailValid ||
+              isEmailEmpty ||
+              isInputDisabled ||
+              !(password === confirmPassword) ||
+              !isPasswordValid ||
+              !isIdValid ||
+              !isNameValid ||
+              form.name === "" || // 이름이 비어있을 때 버튼 비활성화
+              form.id === "" || // ID가 비어있을 때 버튼 비활성화
+              form.pw === "" // 비밀번호가 비어있을 때 버튼 비활성화
+            } // 이메일 정규표현식 만족 여부에 따라 버튼 활성화/비활성화
           >
             인증하기
           </Button>
@@ -270,11 +325,13 @@ const AssignUser = ({ onSwitch }) => {
           <>
             <Grid className="Input-Grid" item xs={8}>
               <TextField
+                id="authNum"
                 className="PW-input"
                 required
                 label="인증번호"
                 placeholder="인증번호 입력"
                 variant="filled"
+                onChange={handleAuthChange}
                 onKeyDown={handleAuthKeyPress}
                 disabled={!isChangeBtnDisabled}
               />
@@ -287,7 +344,7 @@ const AssignUser = ({ onSwitch }) => {
                 onClick={handleAuthClick} // 버튼 클릭 핸들러
                 disabled={!isChangeBtnDisabled}
               >
-                인증하기
+                인증확인
               </Button>
             </Grid>
 
@@ -299,7 +356,13 @@ const AssignUser = ({ onSwitch }) => {
                 color="success"
                 style={{ height: "56px", width: "100%" }}
                 onClick={handleAssignClick}
-                disabled={isChangeBtnDisabled} // 비밀번호 조건에 맞지 않으면 버튼 비활성화
+                disabled={
+                  isChangeBtnDisabled ||
+                  !isIdValid ||
+                  !isPasswordValid ||
+                  !(password === confirmPassword) ||
+                  !isPasswordValid
+                } // 비밀번호 조건에 맞지 않으면 버튼 비활성화
               >
                 회원가입 완료
               </Button>

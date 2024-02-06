@@ -1,4 +1,4 @@
-package com.ssafy.archiview.controller;
+package com.ssafy.archiview.controller.token;
 
 import com.ssafy.archiview.dto.token.TokenDto;
 import com.ssafy.archiview.response.code.SuccessCode;

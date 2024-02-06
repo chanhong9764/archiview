@@ -8,10 +8,9 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-export default function CheckboxesTags({ setCompanyId }) {
-  function handlebox(num) {
-    // console.log(num);
-    setCompanyId(num);
+export default function CheckboxesTags({ setCompanyName }) {
+  function handlebox(companyName) {
+    setCompanyName(companyName);
   }
   return (
     <Autocomplete
@@ -20,7 +19,7 @@ export default function CheckboxesTags({ setCompanyId }) {
       options={company.data}
       getOptionLabel={(option) => option.companyName}
       renderOption={(props, option, { selected }) => (
-        <li {...props} onClick={() => handlebox(option.id)}>
+        <li {...props} onClick={() => handlebox(option.companyName)}>
           <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
           {option.companyName}
         </li>

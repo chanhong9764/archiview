@@ -48,7 +48,7 @@ async function logout(param, success, fail) {
   await baseURL.post("users/logout", param).then(success).catch(fail);
 }
 
-async function whoAmI(token, success, fail) {
+async function userDetail(token, success, fail) {
   const config = {
     headers: {
       Authorization: token,
@@ -89,6 +89,10 @@ export {
   findPW,
   sendFindEmail,
   changePW,
+<<<<<<< HEAD
   whoAmI,
   validPW,
+=======
+  userDetail,
+>>>>>>> 45b8210719a7cc7c99a27299dc93703adba756c3
 };

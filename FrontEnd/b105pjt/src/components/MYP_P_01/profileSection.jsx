@@ -14,7 +14,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close"; // 닫기 아이콘을 위한 임포트
 import ActionButton from "../../components/MYP_P_01/actionButton";
 import { useSelector } from "react-redux";
-import { userDetail, uploadProfileImage } from "../../api/mypageAPI";
+import { userDetail, uploadProfileImage, updateUserDetail } from "../../api/mypageAPI";
 import { useEffect } from "react";
 import { modifyUserInfo } from "../../api/userAPI";
 
@@ -26,16 +26,23 @@ const ProfileSection = () => {
   const [id, setId] = useState();
   const [name, setName] = useState();
   const [email, setEmail] = useState();
+<<<<<<< HEAD
 
   // 현재 표시되는 프로필 사진
+=======
+  
+>>>>>>> 45b8210719a7cc7c99a27299dc93703adba756c3
   const [currentProfileUrl, setCurrentProfileUrl] = useState();
-  // 현재 표시되는 자기소개
   const [currentIntroduce, setCurrentIntroduce] = useState();
-  // 변경된 프로필 사진
   const [newProfileUrl, setNewProfileUrl] = useState();
+<<<<<<< HEAD
   // 변경된 자기소개
   const [newIntroduce, setNewIntroduce] = useState();
   // 업로드 된 이미지
+=======
+  const [introduce, setIntroduce] = useState();
+  const [newIntroduce, setNewIntroduce] = useState(); 
+>>>>>>> 45b8210719a7cc7c99a27299dc93703adba756c3
   const [uploadedImage, setUploadedImage] = useState();
 
   useEffect(() => {
@@ -51,6 +58,7 @@ const ProfileSection = () => {
         setEmail(resp.data.data.email);
         setCurrentProfileUrl("https://i10b105.p.ssafy.io/api/files/profile/" + resp.data.data.id);
         setNewProfileUrl("https://i10b105.p.ssafy.io/api/files/profile/" + resp.data.data.id);
+        setIntroduce(resp.data.data.introduce);
         setCurrentIntroduce(resp.data.data.introduce);
         setNewIntroduce(resp.data.data.introduce);
       },
@@ -64,26 +72,31 @@ const ProfileSection = () => {
     setOpenModal(true);
   };
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
+  const handleApply = () => {
     handleSave();
+    setOpenModal(false);
   };
 
+  const handleCancle = () => {
+    setCurrentProfileUrl("https://i10b105.p.ssafy.io/api/files/profile/" + id);
+    setCurrentIntroduce(introduce);
+    setOpenModal(false);
+  }
+
   const handleImageChange = (newImageFile) => {
-    console.log("이미지 변경됨", newImageFile);
     setCurrentProfileUrl(URL.createObjectURL(newImageFile));
     setUploadedImage(newImageFile);
   };
 
   const handleIntroduceChange = (newIntroduce) => {
+<<<<<<< HEAD
     // console.log("자기소개 변경됨");
+=======
+>>>>>>> 45b8210719a7cc7c99a27299dc93703adba756c3
     setCurrentIntroduce(newIntroduce);
   };
 
   const handleSave = () => {
-    // 프로필 사진 변경
-
-    console.log("프로필 변경 지점 진입");
     const formData = new FormData();
     formData.append("img", uploadedImage);
     uploadProfileImage(
@@ -97,7 +110,27 @@ const ProfileSection = () => {
       }
     );
 
+<<<<<<< HEAD
     // TODO 자기소개 변경
+=======
+    updateUserDetail(
+      {
+        headers: {
+          Authorization: accessToken,
+        }
+      },
+      {
+        introduce: newIntroduce,
+        profileUrl: newProfileUrl,
+      },
+      (resp) => {
+        console.log("profileSection -> uploadUserDetail | 회원정보 변경 성공");
+      },
+      (error) => {
+        console.log("profileSection -> uploadUserDetail | 회원정보 변경 실패");
+      }
+    );      
+>>>>>>> 45b8210719a7cc7c99a27299dc93703adba756c3
   };
 
   const handleDelete = () => {
@@ -157,7 +190,13 @@ const ProfileSection = () => {
       </Box>
       <ProfileEditModal
         open={openModal}
+<<<<<<< HEAD
         onClose={handleCloseModal}
+=======
+        handleApply={handleApply}
+        handleCancle={handleCancle}
+
+>>>>>>> 45b8210719a7cc7c99a27299dc93703adba756c3
         newProfileUrl={currentProfileUrl}
         setNewProfileUrl={setNewProfileUrl}
         newIntroduce={currentIntroduce}
@@ -171,7 +210,8 @@ const ProfileSection = () => {
 
 const ProfileEditModal = ({
   open,
-  onClose,
+  handleApply,
+  handleCancle,
   newProfileUrl,
   setNewProfileUrl,
   newIntroduce,
@@ -215,7 +255,7 @@ const ProfileEditModal = ({
   };
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open} onClose={handleCancle}>
       <Box
         sx={{
           position: "absolute",
@@ -234,7 +274,7 @@ const ProfileEditModal = ({
       >
         <IconButton
           aria-label="close"
-          onClick={onClose}
+          onClick={handleCancle}
           sx={{
             position: "absolute",
             right: 8,
@@ -268,7 +308,16 @@ const ProfileEditModal = ({
           onChange={handleIntroduceChange}
           sx={{ mt: 2, mb: 2 }}
         />
+<<<<<<< HEAD
         <Button variant="contained" color="primary" onClick={handleUpdateBtn} sx={{ mt: 2 }}>
+=======
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleApply}
+          sx={{ mt: 2 }}
+        >
+>>>>>>> 45b8210719a7cc7c99a27299dc93703adba756c3
           업데이트
         </Button>
       </Box>

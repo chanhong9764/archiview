@@ -13,10 +13,11 @@ import {
   CardMedia,
 } from "@mui/material";
 import MyNavbar from "../components/MYI_P_02/myNavbar.jsx";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, resolvePath } from "react-router-dom";
 import AdminButton from "../components/MYP_P_01/adminButton.jsx";
 import { useSelector } from "react-redux";
-import { whoAmI } from "../api/userAPI.js";
+import { userDetail } from "../api/userAPI.js";
+import { searchQuestion } from "../api/mypageAPI.js";
 
 // 커스텀 테마 정의
 const theme = createTheme({
@@ -99,42 +100,60 @@ const Page = () => {
   const location = useLocation();
   const [profileData, setProfileData] = useState(null);
 
-  const token = useSelector((state) => state.accessToken);
+  const accessToken = useSelector((state) => state.accessToken);
+
+  let userId;
+  
+  
+  
+
+  // const formattedQuestions = dummyQuestions.map((item) => {
+  //   const replyData = item.data.reply;
+  //   return {
+  //     id: replyData.id,
+  //     content: replyData.question.content,
+  //     replies: [replyData],
+  //   };
+  // });
+  // setQuestions(formattedQuestions);
 
   useEffect(() => {
     // 관리자 페이지에서 보낸 데이터
     const eventData = location.state?.event;
 
     if (!eventData) {
-      console.log("token >> ", token);
-      whoAmI(
-        token,
-        (resp) => {
-          console.log("resp >> ", resp.data.data);
-          setProfileData(resp.data.data);
-          console.log("profile >> ", profileData);
-        },
-        (error) => {
-          console.log(error);
+      // 데이터가 없는경우 (일반 사용자)
+      userDetail(
+        accessToken
+        , (resp) => {
+          userId = resp.data.data.id;
+          searchQuestion(
+            {
+              headers: {
+                Authorization: accessToken,
+              },
+            },
+            {
+              userId: userId,
+            },
+            (resp) => {
+              console.log("MYI_P_01 -> searchQuestion | 질문 검색 성공", userId, resp.data); 
+              if (resp.data.data)
+                setQuestions(resp.data.data);
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+        }
+        , (error) => {
+          console.log(error)
         }
       );
-
-      console.log("outer whoAmI");
-      // 데이터가 없는경우 (일반 사용자)
     } else {
       setAdminBtn(true);
       // 데이터가 있는경우 (admin)
     }
-
-    const formattedQuestions = dummyQuestions.map((item) => {
-      const replyData = item.data.reply;
-      return {
-        id: replyData.id,
-        content: replyData.question.content,
-        replies: [replyData],
-      };
-    });
-    setQuestions(formattedQuestions);
   }, []);
 
   const handleViewDetails = () => {
@@ -194,7 +213,7 @@ const Page = () => {
                       </Typography>
                       <Typography variant="body2">{reply.script}</Typography>
                       <Typography variant="caption" color="textSecondary">
-                        {reply.question.companyName}
+                        {question.companyName}
                       </Typography>
                     </CardContent>
                   </Card>

@@ -42,9 +42,7 @@ const InsertForm = () => {
     
     createReply(
       {
-        headers: {
           Authorization: accessToken,
-        }
       },
       {
         companyId: companyId,

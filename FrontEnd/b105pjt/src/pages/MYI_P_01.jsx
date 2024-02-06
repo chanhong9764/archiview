@@ -13,7 +13,7 @@ import {
   CardMedia,
 } from "@mui/material";
 import MyNavbar from "../components/MYI_P_02/myNavbar.jsx";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, resolvePath } from "react-router-dom";
 import AdminButton from "../components/MYP_P_01/adminButton.jsx";
 import { useSelector } from "react-redux";
 import { userDetail } from "../api/userAPI.js";
@@ -103,33 +103,9 @@ const Page = () => {
   const accessToken = useSelector((state) => state.accessToken);
 
   let userId;
-  userDetail(
-    accessToken
-    , (resp) => {
-      userId = resp.data.data.id;
-    }
-    , (error) => {
-      console.log(error)
-    }
-  );
   
-  searchQuestion(
-    {
-      headers: {
-        Authorization: accessToken,
-      },
-    },
-    {
-      userId: userId,
-    },
-    (resp) => {
-      console.log("MYI_P_01 -> searchQuestion | 질문 검색 성공", resp.data);
-      //setQuestions(resp.data);
-    },
-    (error) => {
-      console.log(error);
-    }
-  );
+  
+  
 
   // const formattedQuestions = dummyQuestions.map((item) => {
   //   const replyData = item.data.reply;
@@ -146,18 +122,34 @@ const Page = () => {
     const eventData = location.state?.event;
 
     if (!eventData) {
+      // 데이터가 없는경우 (일반 사용자)
       userDetail(
-        accessToken,
-        (resp) => {
-          console.log("resp >> ", resp.data.data);
-          setProfileData(resp.data.data);
-          console.log("profile >> ", profileData);
-        },
-        (error) => {
-          console.log(error);
+        accessToken
+        , (resp) => {
+          userId = resp.data.data.id;
+          searchQuestion(
+            {
+              headers: {
+                Authorization: accessToken,
+              },
+            },
+            {
+              userId: userId,
+            },
+            (resp) => {
+              console.log("MYI_P_01 -> searchQuestion | 질문 검색 성공", userId, resp.data); 
+              if (resp.data.data)
+                setQuestions(resp.data.data);
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+        }
+        , (error) => {
+          console.log(error)
         }
       );
-      // 데이터가 없는경우 (일반 사용자)
     } else {
       setAdminBtn(true);
       // 데이터가 있는경우 (admin)
@@ -221,7 +213,7 @@ const Page = () => {
                       </Typography>
                       <Typography variant="body2">{reply.script}</Typography>
                       <Typography variant="caption" color="textSecondary">
-                        {reply.question.companyName}
+                        {question.companyName}
                       </Typography>
                     </CardContent>
                   </Card>

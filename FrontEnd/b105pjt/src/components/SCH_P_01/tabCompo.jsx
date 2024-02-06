@@ -12,6 +12,10 @@ import SecondTabFirstList from "./secondTabFirstList";
 import SecondTabSecondList from "./secondTabSecondList";
 import TagListCompo from "./tagListCompo";
 import { Button } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import SearchIcon from "@mui/icons-material/Search";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -120,13 +124,28 @@ export default function BasicTabs() {
       </Box>
 
       {/* 회사명(자동완성 기능) */}
-      <div style={{ display: "flex" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "0 10px",
+        }}
+      >
         <AutoCompleteCompo />
-        {tagSearchOpen ? (
-          <Button onClick={handleOpenSearchBar}>펼치기</Button>
-        ) : (
-          <Button onClick={handleCloseSearchBar}>닫기</Button>
-        )}
+        <div>
+          {tagSearchOpen ? (
+            <Button
+              onClick={handleOpenSearchBar}
+              startIcon={<ExpandMoreIcon />}
+            ></Button>
+          ) : (
+            <Button
+              onClick={handleCloseSearchBar}
+              startIcon={<ExpandLessIcon />}
+            ></Button>
+          )}
+        </div>
       </div>
       <Divider />
 
@@ -250,8 +269,11 @@ export default function BasicTabs() {
         <Box>더미 스몰태그 벨류 리스트 : {JSON.stringify(smallTagList)}</Box>
         <Box>픽한 스몰테그 데이터 : {JSON.stringify(smallTagData)}</Box>
         <Box>출력할 픽 데이터 : {JSON.stringify(pickTagList)}</Box> */}
-        <Button onClick={() => handleReset()}>초기화</Button>
-        <Button color="primary">검색하기</Button>
+        <Button
+          onClick={() => handleReset()}
+          startIcon={<RestartAltIcon />}
+        ></Button>
+        <Button color="primary" startIcon={<SearchIcon />}></Button>
       </Box>
     </Box>
   );

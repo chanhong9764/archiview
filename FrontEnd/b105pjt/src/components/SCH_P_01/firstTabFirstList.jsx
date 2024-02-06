@@ -64,7 +64,7 @@ export default function VirtualizedList({
         bgcolor: "background.paper",
       }}
     >
-      <FixedSizeList height={300} itemSize={46} itemCount={1}>
+      <FixedSizeList height={200} itemSize={46} itemCount={1}>
         {() =>
           renderRow({
             tagDataList,

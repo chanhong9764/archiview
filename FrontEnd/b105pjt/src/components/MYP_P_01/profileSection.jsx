@@ -82,16 +82,19 @@ const ProfileSection = () => {
 
   const handleSave = () => {
     const formData = new FormData();
-    formData.append("img", uploadedImage);
-    uploadProfileImage(id, formData,
-      (resp) => {
-        console.log(resp);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-
+    if (uploadedImage) {
+      console.log("업로드 이미지", uploadedImage);
+      formData.append("img", uploadedImage);
+      uploadProfileImage(id, formData,
+        (resp) => {
+          console.log(resp);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }
+    
     updateUserDetail(
       {
         headers: {
@@ -100,7 +103,7 @@ const ProfileSection = () => {
       },
       {
         introduce: newIntroduce,
-        profileUrl: newProfileUrl,
+        profileUrl: "",
       },
       (resp) => {
         console.log("profileSection -> uploadUserDetail | 회원정보 변경 성공");

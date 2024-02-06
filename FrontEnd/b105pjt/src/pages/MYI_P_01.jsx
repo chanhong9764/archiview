@@ -11,12 +11,13 @@ import {
   Grid,
   CardContent,
   CardMedia,
+  Button,
 } from "@mui/material";
 import MyNavbar from "../components/MYI_P_02/myNavbar.jsx";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, resolvePath } from "react-router-dom";
 import AdminButton from "../components/MYP_P_01/adminButton.jsx";
-import { useSelector } from "react-redux";
-import { whoAmI } from "../api/userAPI.js";
+import { userDetail } from "../api/userAPI.js";
+import { searchQuestion } from "../api/mypageAPI.js";
 
 // 커스텀 테마 정의
 const theme = createTheme({
@@ -38,7 +39,6 @@ const theme = createTheme({
     },
   },
 });
-
 // 카드 및 미디어 스타일 정의
 const cardStyles = {
   boxShadow: theme.shadows[3],
@@ -61,80 +61,95 @@ const mediaStyles = {
   borderRadius: "15px 15px 0 0",
 };
 
-// 새로운 dummyQuestions 정의
-const dummyQuestions = [
-  // 데이터 구조 변경으로 예시 데이터 추가
-  {
-    code: "SELECT_REPLY_SUCCESS",
-    message: "답변 조회에 성공했습니다.",
-    data: {
-      reply: {
-        id: 1,
-        userId: "chan9784",
-        script: "나는 박찬홍이다",
-        videoUrl: "https://example.com/video",
-        thumbnailUrl: "https://via.placeholder.com/240X240",
-        question: {
-          content: "1분 자기소개",
-          companyName: "삼성전자",
-          csList: ["자기소개"],
-          jobList: ["프론트엔드", "백엔드"],
-        },
-        comments: [
-          { id: 1, userId: "user1", content: "멋진 소개입니다!" },
-          { id: 2, userId: "user2", content: "정말 인상적이네요!" },
-        ],
-        likeCnt: 1,
-      },
-      like: false,
-    },
-  },
-  // 추가 답변 데이터...
-];
-
 const Page = () => {
   const [questions, setQuestions] = useState([]);
   const [adminBtn, setAdminBtn] = useState(false);
+  const [isUpgradBtn, setIsUpgradBtn] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const [profileData, setProfileData] = useState(null);
+  const [block, setBlock] = useState(null);
+  const [role, setRole] = useState(null);
+  const [auth, setAuth] = useState(null);
+  const [userId, setUserId] = useState(null);
 
-  const token = useSelector((state) => state.accessToken);
+  const accessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
     // 관리자 페이지에서 보낸 데이터
     const eventData = location.state?.event;
 
+    // 데이터가 없는경우 (일반 사용자)
     if (!eventData) {
-      console.log("token >> ", token);
-      whoAmI(
-        token,
+      userDetail(
+        accessToken,
         (resp) => {
-          console.log("resp >> ", resp.data.data);
-          setProfileData(resp.data.data);
-          console.log("profile >> ", profileData);
+          userId = resp.data.data.id;
+          searchQuestion(
+            {
+              headers: {
+                Authorization: accessToken,
+              },
+            },
+            {
+              userId: userId,
+            },
+            (resp) => {
+              console.log(
+                "MYI_P_01 -> searchQuestion | 질문 검색 성공",
+                userId,
+                resp.data
+              );
+              if (resp.data.data) setQuestions(resp.data.data);
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
         },
         (error) => {
           console.log(error);
         }
       );
-
-      console.log("outer whoAmI");
-      // 데이터가 없는경우 (일반 사용자)
-    } else {
-      setAdminBtn(true);
-      // 데이터가 있는경우 (admin)
+      setIsUpgradBtn(true);
     }
-
-    const formattedQuestions = dummyQuestions.map((item) => {
-      const replyData = item.data.reply;
-      return {
-        id: replyData.id,
-        content: replyData.question.content,
-        replies: [replyData],
-      };
-    });
-    setQuestions(formattedQuestions);
+    // admin 페이지에서 온 경우
+    else {
+      setAdminBtn(true);
+      setBlock(eventData.block);
+      setRole(eventData.role);
+      console.log(eventData);
+      userDetail(
+        accessToken,
+        (resp) => {
+          userId = eventData.id;
+          searchQuestion(
+            {
+              headers: {
+                Authorization: accessToken,
+              },
+            },
+            {
+              userId: userId,
+            },
+            (resp) => {
+              console.log(
+                "MYI_P_01 -> searchQuestion | 질문 검색 성공",
+                userId,
+                resp.data
+              );
+              if (resp.data.data) setQuestions(resp.data.data);
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }
   }, []);
 
   const handleViewDetails = () => {
@@ -146,7 +161,19 @@ const Page = () => {
     <ThemeProvider theme={theme}>
       <MyNavbar />
       <Container>
-        {adminBtn && <AdminButton></AdminButton>}
+        {adminBtn && <AdminButton id={userId} isblock={block}></AdminButton>}
+        {isUpgradBtn && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "right",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <Button>등업신청</Button>
+          </div>
+        )}
         {profileData && (
           <ProfileSection
             imageUrl={
@@ -162,7 +189,7 @@ const Page = () => {
             </Typography>
           </ProfileSection>
         )}
-        <SearchTab />
+        <SearchTab setQuestions={setQuestions} />
         {questions.map((question, index) => (
           <Accordion
             key={index}
@@ -182,7 +209,10 @@ const Page = () => {
                     <CardMedia
                       component="img"
                       sx={mediaStyles}
-                      image={reply.thumbnailUrl}
+                      image={
+                        "https://i10b105.p.####.io/api/files/thumbnail/" +
+                        reply.thumbnailUrl
+                      }
                       alt="Thumbnail Image"
                     />
                     <CardContent>
@@ -194,7 +224,7 @@ const Page = () => {
                       </Typography>
                       <Typography variant="body2">{reply.script}</Typography>
                       <Typography variant="caption" color="textSecondary">
-                        {reply.question.companyName}
+                        {question.companyName}
                       </Typography>
                     </CardContent>
                   </Card>

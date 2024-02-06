@@ -19,12 +19,13 @@ import Logo from "../../assets/img/symbolLogo_Slogun-removebg-preview.png";
 import { setCookie, getCookie, removeCookie } from "../../utils/cookie";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
-import { userDetail } from "../../api/mypageAPI"
+import { userDetail } from "../../api/mypageAPI";
 import { Image } from "@mui/icons-material";
 
 function Navbar() {
+  const role = useSelector((state) => state.role);
   const isAdmin = useSelector((state) => state.isAdmin);
-  const accessToken = useSelector((state) => state.accessToken);
+  const accessToken = localStorage.getItem("accessToken");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation(); // 현재 경로 정보를 얻어오기 위해 useLocation 사용
@@ -34,7 +35,6 @@ function Navbar() {
 
   const [profileUrl, setProfileUrl] = React.useState(null);
   useEffect(() => {
-    console.log(accessToken);
     userDetail(
       {
         headers: {
@@ -42,8 +42,9 @@ function Navbar() {
         },
       },
       (resp) => {
-        console.log("회원정보 조회 성공");
-        setProfileUrl("https://i10b105.p.####.io/api/files/profile/" + resp.data.data.id);
+        setProfileUrl(
+          "https://i10b105.p.####.io/api/files/profile/" + resp.data.data.id
+        );
       },
       (error) => {
         console.log(error);
@@ -77,7 +78,7 @@ function Navbar() {
         },
       },
       (resp) => {
-        console.log(resp);
+        //
       },
       (error) => {
         console.log(error);
@@ -243,7 +244,11 @@ function Navbar() {
               <Tooltip title="Open settings">
                 <Button onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   {/* 프로필 이미지 */}
-                    <Avatar src={profileUrl} alt="Logo" style={{ height: "50px" }} />
+                  <Avatar
+                    src={profileUrl}
+                    alt="Logo"
+                    style={{ height: "50px" }}
+                  />
                 </Button>
               </Tooltip>
               <Menu
@@ -272,7 +277,7 @@ function Navbar() {
                     마이페이지
                   </Typography>
                 </MenuItem>
-                {isAdmin && (
+                {role === "ROLE_ADMIN" && (
                   <MenuItem onClick={handleCloseUserMenu}>
                     <Typography onClick={handleAdminpage} textAlign="center">
                       관리페이지

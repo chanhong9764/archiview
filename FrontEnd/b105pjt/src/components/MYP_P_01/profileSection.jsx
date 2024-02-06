@@ -13,29 +13,25 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close"; // 닫기 아이콘을 위한 임포트
 import ActionButton from "../../components/MYP_P_01/actionButton";
-import { useSelector } from "react-redux";
 import { userDetail, uploadProfileImage, updateUserDetail } from "../../api/mypageAPI";
 import { useEffect } from "react";
 import { modifyUserInfo } from "../../api/userAPI";
+import { useSelector } from "react-redux";
 
 const ProfileSection = () => {
   const [openModal, setOpenModal] = useState(false);
 
-  const accessToken = useSelector((state) => state.accessToken);
+  const accessToken = localStorage.getItem("accessToken");
 
   const [id, setId] = useState();
   const [name, setName] = useState();
   const [email, setEmail] = useState();
 
-  // 현재 표시되는 프로필 사진
   const [currentProfileUrl, setCurrentProfileUrl] = useState();
-  // 현재 표시되는 자기소개
   const [currentIntroduce, setCurrentIntroduce] = useState();
-  // 변경된 프로필 사진
   const [newProfileUrl, setNewProfileUrl] = useState();
-  // 변경된 자기소개
+  const [introduce, setIntroduce] = useState();
   const [newIntroduce, setNewIntroduce] = useState();
-  // 업로드 된 이미지
   const [uploadedImage, setUploadedImage] = useState();
 
   useEffect(() => {
@@ -51,6 +47,7 @@ const ProfileSection = () => {
         setEmail(resp.data.data.email);
         setCurrentProfileUrl("https://i10b105.p.####.io/api/files/profile/" + resp.data.data.id);
         setNewProfileUrl("https://i10b105.p.####.io/api/files/profile/" + resp.data.data.id);
+        setIntroduce(resp.data.data.introduce);
         setCurrentIntroduce(resp.data.data.introduce);
         setNewIntroduce(resp.data.data.introduce);
       },
@@ -64,45 +61,50 @@ const ProfileSection = () => {
     setOpenModal(true);
   };
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
+  const handleApply = () => {
     handleSave();
+    setOpenModal(false);
+  };
+
+  const handleCancle = () => {
+    setCurrentProfileUrl("https://i10b105.p.####.io/api/files/profile/" + id);
+    setCurrentIntroduce(introduce);
+    setOpenModal(false);
   };
 
   const handleImageChange = (newImageFile) => {
-    console.log("이미지 변경됨", newImageFile);
     setCurrentProfileUrl(URL.createObjectURL(newImageFile));
     setUploadedImage(newImageFile);
   };
 
   const handleIntroduceChange = (newIntroduce) => {
-    // console.log("자기소개 변경됨");
     setCurrentIntroduce(newIntroduce);
   };
 
   const handleSave = () => {
     const formData = new FormData();
-    formData.append("img", uploadedImage);
-    uploadProfileImage(
-      id,
-      formData,
-      (resp) => {
-        console.log(resp);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    if (uploadedImage) {
+      console.log("업로드 이미지", uploadedImage);
+      formData.append("img", uploadedImage);
+      uploadProfileImage(
+        id,
+        formData,
+        (resp) => {
+          console.log(resp);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }
 
     updateUserDetail(
       {
-        headers: {
-          Authorization: accessToken,
-        },
+        Authorization: accessToken,
       },
       {
         introduce: newIntroduce,
-        profileUrl: newProfileUrl,
+        profileUrl: "",
       },
       (resp) => {
         console.log("profileSection -> uploadUserDetail | 회원정보 변경 성공");
@@ -170,7 +172,8 @@ const ProfileSection = () => {
       </Box>
       <ProfileEditModal
         open={openModal}
-        onClose={handleCloseModal}
+        handleApply={handleApply}
+        handleCancle={handleCancle}
         newProfileUrl={currentProfileUrl}
         setNewProfileUrl={setNewProfileUrl}
         newIntroduce={currentIntroduce}
@@ -184,7 +187,8 @@ const ProfileSection = () => {
 
 const ProfileEditModal = ({
   open,
-  onClose,
+  handleApply,
+  handleCancle,
   newProfileUrl,
   setNewProfileUrl,
   newIntroduce,
@@ -228,7 +232,7 @@ const ProfileEditModal = ({
   };
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open} onClose={handleCancle}>
       <Box
         sx={{
           position: "absolute",
@@ -247,7 +251,7 @@ const ProfileEditModal = ({
       >
         <IconButton
           aria-label="close"
-          onClick={onClose}
+          onClick={handleCancle}
           sx={{
             position: "absolute",
             right: 8,
@@ -281,7 +285,7 @@ const ProfileEditModal = ({
           onChange={handleIntroduceChange}
           sx={{ mt: 2, mb: 2 }}
         />
-        <Button variant="contained" color="primary" onClick={handleUpdateBtn} sx={{ mt: 2 }}>
+        <Button variant="contained" color="primary" onClick={handleApply} sx={{ mt: 2 }}>
           업데이트
         </Button>
       </Box>

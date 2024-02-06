@@ -22,4 +22,17 @@ async function updateUserDetail(config, param, success, fail) {
     .catch(fail);
 }
 
-export { userDetail, uploadProfileImage, updateUserDetail };
+async function searchQuestion(config, param, success, fail) {
+  await baseURL
+    .get(
+      "questions/search",
+      { params: param },
+      {
+        headers: config,
+      }
+    )
+    .then(success)
+    .catch(fail);
+}
+
+export { userDetail, uploadProfileImage, updateUserDetail, searchQuestion };

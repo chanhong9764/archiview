@@ -11,6 +11,7 @@ import {
   Grid,
   CardContent,
   CardMedia,
+  Button,
 } from "@mui/material";
 import MyNavbar from "../components/MYI_P_02/myNavbar.jsx";
 import { useNavigate, useLocation, resolvePath } from "react-router-dom";
@@ -63,20 +64,23 @@ const mediaStyles = {
 const Page = () => {
   const [questions, setQuestions] = useState([]);
   const [adminBtn, setAdminBtn] = useState(false);
+  const [isUpgradBtn, setIsUpgradBtn] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const [profileData, setProfileData] = useState(null);
+  const [block, setBlock] = useState(null);
+  const [role, setRole] = useState(null);
+  const [auth, setAuth] = useState(null);
+  const [userId, setUserId] = useState(null);
 
   const accessToken = localStorage.getItem("accessToken");
-
-  let userId;
 
   useEffect(() => {
     // 관리자 페이지에서 보낸 데이터
     const eventData = location.state?.event;
 
+    // 데이터가 없는경우 (일반 사용자)
     if (!eventData) {
-      // 데이터가 없는경우 (일반 사용자)
       userDetail(
         accessToken,
         (resp) => {
@@ -107,9 +111,44 @@ const Page = () => {
           console.log(error);
         }
       );
-    } else {
+      setIsUpgradBtn(true);
+    }
+    // admin 페이지에서 온 경우
+    else {
       setAdminBtn(true);
-      // 데이터가 있는경우 (admin)
+      setBlock(eventData.block);
+      setRole(eventData.role);
+      console.log(eventData);
+      userDetail(
+        accessToken,
+        (resp) => {
+          userId = eventData.id;
+          searchQuestion(
+            {
+              headers: {
+                Authorization: accessToken,
+              },
+            },
+            {
+              userId: userId,
+            },
+            (resp) => {
+              console.log(
+                "MYI_P_01 -> searchQuestion | 질문 검색 성공",
+                userId,
+                resp.data
+              );
+              if (resp.data.data) setQuestions(resp.data.data);
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     }
   }, []);
 
@@ -122,7 +161,19 @@ const Page = () => {
     <ThemeProvider theme={theme}>
       <MyNavbar />
       <Container>
-        {adminBtn && <AdminButton></AdminButton>}
+        {adminBtn && <AdminButton id={userId} isblock={block}></AdminButton>}
+        {isUpgradBtn && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "right",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <Button>등업신청</Button>
+          </div>
+        )}
         {profileData && (
           <ProfileSection
             imageUrl={

@@ -181,7 +181,9 @@ const Page = () => {
             </Typography>
           </ProfileSection>
         )}
-        <SearchTab />
+        <SearchTab
+          setQuestions={setQuestions}
+        />
         {questions.map((question, index) => (
           <Accordion
             key={index}

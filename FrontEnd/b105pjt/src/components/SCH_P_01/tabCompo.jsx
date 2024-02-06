@@ -47,7 +47,7 @@ function a11yProps(index) {
   };
 }
 
-export default function BasicTabs({ setQuestions, setCompanyId, setCsList, setJobList }) {
+export default function BasicTabs({ setQuestions }) {
   const dumyData = {
     code: "SELECT_TAG_LIST_SUCCESS",
     message: "태그 조회에 성공했습니다.",
@@ -111,7 +111,7 @@ export default function BasicTabs({ setQuestions, setCompanyId, setCsList, setJo
     //   .flat()
     // );
     // setCompanyId();
-    
+
     console.log(
       tagDataList
         .filter((item) => item.tab === "csList")
@@ -165,28 +165,33 @@ export default function BasicTabs({ setQuestions, setCompanyId, setCsList, setJo
       userId: "",
       company: companyName,
       cs: tagDataList
-            .filter((item) => item.tab === "csList")
-            .map((item) => item.smallTag)
-            .flat().join(),
+        .filter((item) => item.tab === "csList")
+        .map((item) => item.smallTag)
+        .flat()
+        .join(),
       job: tagDataList
-            .filter((item) => item.tab === "jsList")
-            .map((item) => item.smallTag)
-            .flat().join(),
+        .filter((item) => item.tab === "jsList")
+        .map((item) => item.smallTag)
+        .flat()
+        .join(),
       pgno: pgno,
-    }
-    await questionSearch(data).then(res => {
-      const formattedQuestions = res.data.data.map((item) => {
-        return {
-          id: item.id,
-          content: item.content,
-          replies: item.replies,
-        };
+    };
+
+    await questionSearch(data)
+      .then((res) => {
+        const formattedQuestions = res.data.data.map((item) => {
+          return {
+            id: item.id,
+            content: item.content,
+            replies: item.replies,
+          };
+        });
+        setQuestions(formattedQuestions);
+      })
+      .catch((err) => {
+        console.log(err);
       });
-      setQuestions(formattedQuestions)
-    }).catch(err => {
-      console.log(err)
-    }) 
-  }
+  };
 
   return (
     <Box
@@ -232,7 +237,7 @@ export default function BasicTabs({ setQuestions, setCompanyId, setCsList, setJo
           padding: "0 10px",
         }}
       >
-        <AutoCompleteCompo setCompanyName={setCompanyName}  />
+        <AutoCompleteCompo setCompanyName={setCompanyName} />
         <div>
           {tagSearchOpen ? (
             <Button
@@ -370,12 +375,11 @@ export default function BasicTabs({ setQuestions, setCompanyId, setCsList, setJo
           onClick={() => handleReset()}
           startIcon={<RestartAltIcon />}
         ></Button>
-        <Button 
-          color="primary" 
+        <Button
+          color="primary"
           startIcon={<SearchIcon />}
           onClick={onClickSearch}
-        >
-        </Button>
+        ></Button>
       </Box>
     </Box>
   );

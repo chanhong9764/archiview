@@ -62,11 +62,12 @@ const LoginModal = ({ onSwitch, close }) => {
           role: data.data.data.role,
           userId: data.data.data.id,
         });
+        localStorage.setItem("accessToken", data.data.data.accessToken);
         resetForm();
         close();
       },
       (error) => {
-        // console.error("데이터 전송 오류:", error);
+        console.error("데이터 전송 오류:", error);
         alert("로그인 실패");
       }
     );

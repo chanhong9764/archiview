@@ -17,6 +17,8 @@ import {
 } from "@mui/material";
 import LoginModal from "../components/LOG_M_01/loginModal.jsx";
 import AlertModal from "../components/utils/alertModal.jsx";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 // 커스텀 테마 정의
 const theme = createTheme({
@@ -61,18 +63,24 @@ const mediaStyles = {
 };
 
 function Test() {
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const role = useSelector((state) => state.role);
+  const userId = useSelector((state) => state.userId);
+  const navigate = useNavigate();
+
   const [questions, setQuestions] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // 가정: 로그인 상태를 로컬 상태에서 관리
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showAlertModal, setShowAlertModal] = useState(false); // 경고 모달 상태 추가
 
   // const [questions, setQuestions] = useState([]);
 
-  const handleViewDetails = (videoUrl) => {
+  const handleViewDetails = (reply) => {
     if (!isLoggedIn) {
       setShowAlertModal(true); // 로그인이 되어 있지 않으면 로그인 모달 표시
     } else {
-      window.open(videoUrl, "_blank"); // 로그인이 되어 있으면 URL로 이동
+      navigate("/interview/detail", { 
+        state: { "postId": reply.userId }
+      });
     }
   };
 
@@ -102,7 +110,7 @@ function Test() {
               {question.replies.map((reply) => (
                 <Grid item xs={12} sm={6} md={4} key={reply.id}>
                   <Card
-                    onClick={() => handleViewDetails(reply.videoUrl)}
+                    onClick={() => handleViewDetails(reply)}
                     sx={cardStyles}
                   >
                     <CardMedia

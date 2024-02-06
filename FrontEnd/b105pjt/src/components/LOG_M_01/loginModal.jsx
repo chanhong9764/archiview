@@ -57,12 +57,14 @@ const LoginModal = ({ onSwitch, close }) => {
         });
 
         dispatch({ type: "LOGIN", accessToken: data.data.data.accessToken });
+        localStorage.setItem("accessToken", data.data.data.accessToken);
+
         console.log(data.data.data.accessToken);
         resetForm();
         close();
       },
       (error) => {
-        // console.error("데이터 전송 오류:", error);
+        console.error("데이터 전송 오류:", error);
         alert("로그인 실패");
       }
     );

@@ -1,7 +1,16 @@
 import React, { useState } from "react";
-import { Box, Modal, TextField, Button, Typography, IconButton } from "@mui/material";
+import {
+  Box,
+  Modal,
+  TextField,
+  Button,
+  Typography,
+  IconButton,
+} from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close"; // 닫기 아이콘을 위한 임포트
+import { validPW } from "../../api/userAPI";
+import { useSelector } from "react-redux";
 
 const style = {
   position: "absolute",
@@ -21,6 +30,8 @@ const PasswordCheckModal = ({ open, onClose }) => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [error, setError] = useState(""); // 오류 메시지 상태를 추가합니다.
   const navigate = useNavigate();
+
+  const token = useSelector((state) => state.accessToken);
 
   // 내 캘린더 클릭시
   const moveMypage = () => {
@@ -43,20 +54,24 @@ const PasswordCheckModal = ({ open, onClose }) => {
   // 틀린 경우, 오류 메시지를 저장하여 사용자에게 표시
   const handleSubmit = () => {
     // 현재 비밀번호 확인 로직 구현
-    const correctPassword = "123";
-    if (currentPassword === correctPassword) {
-      onPasswordVerified(); // 비밀번호가 확인되면 호출
-      onClose(); // 모달 닫기
-      moveMypage();
-    } else {
-      // 비밀번호가 틀렸다는 메시지를 사용자에게 보여줌
-      // 이 예시에서는 간단하게 콘솔에 메시지를 출력
-      setError("비밀번호가 틀렸습니다.");
-    }
+    validPW(
+      token,
+      { pw: currentPassword },
+      (resp) => {
+        console.log("resp >>", resp);
+        onPasswordVerified();
+        onClose();
+        moveMypage();
+      },
+      (error) => {
+        console.log("error >>", error);
+        alert("비밀번호를 다시 확인해주세요.");
+      }
+    );
   };
   // 키보드 이벤트 핸들러
   const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       handleSubmit(); // Enter 키를 누르면 handleSubmit 호출
     }
   };
@@ -73,7 +88,7 @@ const PasswordCheckModal = ({ open, onClose }) => {
           aria-label="close"
           onClick={onClose}
           sx={{
-            position: 'absolute',
+            position: "absolute",
             right: 8,
             top: 8,
             color: (theme) => theme.palette.grey[500],

@@ -21,9 +21,7 @@ const SaveButton = ({ onSave }) => {
   return (
     <Box
       sx={{
-        padding: "20px",
         margin: "20px auto",
-        width: "40%",
         textAlign: "center",
         mt: 1.5,
         display: "flex",

@@ -47,7 +47,7 @@ function a11yProps(index) {
   };
 }
 
-export default function BasicTabs({ setCompanyId, setCsList, setJobList }) {
+export default function BasicTabs({ setQuestions, setCompanyId, setCsList, setJobList }) {
   const dumyData = {
     code: "SELECT_TAG_LIST_SUCCESS",
     message: "태그 조회에 성공했습니다.",
@@ -94,6 +94,8 @@ export default function BasicTabs({ setCompanyId, setCsList, setJobList }) {
   const [smallTagList, setSmallTagList] = useState([]);
   const [pickTagList, setPickTagList] = useState([]);
   const [tagSearchOpen, setTagSearchOpen] = useState(true);
+  const [pgno, setPgno] = useState(1);
+  const [companyName, setCompanyName] = useState("");
 
   useEffect(() => {
     // setCsList(
@@ -106,9 +108,10 @@ export default function BasicTabs({ setCompanyId, setCsList, setJobList }) {
     // tagDataList
     //   .filter((item) => item.tab === "jsList")
     //   .map((item) => item.smallTag)
-    //   .flat();
+    //   .flat()
     // );
     // setCompanyId();
+    
     console.log(
       tagDataList
         .filter((item) => item.tab === "csList")
@@ -160,9 +163,15 @@ export default function BasicTabs({ setCompanyId, setCsList, setJobList }) {
   const onClickSearch = async () => {
     const data = {
       userId: "",
-      company: "",
-      cs: "",
-      job: "",
+      company: companyName,
+      cs: tagDataList
+            .filter((item) => item.tab === "csList")
+            .map((item) => item.smallTag)
+            .flat().join(),
+      job: tagDataList
+            .filter((item) => item.tab === "jsList")
+            .map((item) => item.smallTag)
+            .flat().join(),
       pgno: pgno,
     }
     await questionSearch(data).then(res => {
@@ -223,7 +232,7 @@ export default function BasicTabs({ setCompanyId, setCsList, setJobList }) {
           padding: "0 10px",
         }}
       >
-        <AutoCompleteCompo />
+        <AutoCompleteCompo setCompanyName={setCompanyName}  />
         <div>
           {tagSearchOpen ? (
             <Button

@@ -9,6 +9,7 @@ import {
   Button,
   TextField,
   Divider,
+  InputLabel,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close"; // 닫기 아이콘을 위한 임포트
@@ -272,17 +273,40 @@ const ProfileEditModal = ({
         <Typography variant="h6" sx={{ mb: 2, color: "primary.main" }}>
           프로필 편집
         </Typography>
-        <Avatar
-          src={newProfileUrl}
-          alt="New Profile"
-          sx={{ width: 150, height: 150, borderRadius: "50%", mb: 2 }}
-        />
-        <input
-          accept="image/*"
-          type="file"
-          onChange={handleFileChange}
-          style={{ display: "block", margin: "10px 0" }}
-        />
+        <Box sx={{ position: "relative"}}>
+          <Avatar
+            src={newProfileUrl}
+            alt="New Profile"
+            sx={{ width: 150, height: 150, borderRadius: "50%", mb: 2 }}
+          />
+          <input
+            id="profile"
+            accept="image/*"
+            type="file"
+            onChange={handleFileChange}
+            style={{ display: "none"}}
+          />
+          <label htmlFor="profile" 
+            style={{
+              position: "absolute",
+              bottom: 15,
+              right: 10,
+            }}
+          >
+            <IconButton
+              component='span'
+              color="primary"
+              sx={{
+                backgroundColor: "white",
+                "&:hover": {
+                  backgroundColor: "grey.200",
+                },
+              }}
+            >
+              <EditIcon />
+            </IconButton>
+          </label>
+        </Box>
         <TextField
           label="소개글"
           variant="outlined"
@@ -297,7 +321,7 @@ const ProfileEditModal = ({
           variant="contained"
           color="primary"
           onClick={handleApply}
-          sx={{ mt: 2 }}
+          sx={{ mt: 2, ml: "auto" }}
         >
           업데이트
         </Button>

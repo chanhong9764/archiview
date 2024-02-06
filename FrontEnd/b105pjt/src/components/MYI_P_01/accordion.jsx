@@ -23,6 +23,9 @@ const Accordion = ({ title, children }) => {
           borderBottomLeftRadius: "10px",
           borderBottomRightRadius: "10px",
         },
+        "&.MuiPaper-root": {
+          marginBottom: "10px",
+        },
       }}
     >
       <AccordionSummary

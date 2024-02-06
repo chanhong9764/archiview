@@ -19,12 +19,13 @@ import Logo from "../../assets/img/symbolLogo_Slogun-removebg-preview.png";
 import { setCookie, getCookie, removeCookie } from "../../utils/cookie";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
-import { userDetail } from "../../api/mypageAPI"
+import { userDetail } from "../../api/mypageAPI";
 import { Image } from "@mui/icons-material";
 
 function Navbar() {
   const role = useSelector((state) => state.role);
-  const accessToken = useSelector((state) => state.accessToken);
+  const isAdmin = useSelector((state) => state.isAdmin);
+  const accessToken = localStorage.getItem("accessToken");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation(); // 현재 경로 정보를 얻어오기 위해 useLocation 사용
@@ -41,7 +42,9 @@ function Navbar() {
         },
       },
       (resp) => {
-        setProfileUrl("https://i10b105.p.ssafy.io/api/files/profile/" + resp.data.data.id);
+        setProfileUrl(
+          "https://i10b105.p.ssafy.io/api/files/profile/" + resp.data.data.id
+        );
       },
       (error) => {
         console.log(error);
@@ -241,7 +244,11 @@ function Navbar() {
               <Tooltip title="Open settings">
                 <Button onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   {/* 프로필 이미지 */}
-                    <Avatar src={profileUrl} alt="Logo" style={{ height: "50px" }} />
+                  <Avatar
+                    src={profileUrl}
+                    alt="Logo"
+                    style={{ height: "50px" }}
+                  />
                 </Button>
               </Tooltip>
               <Menu

@@ -15,7 +15,6 @@ import {
 import MyNavbar from "../components/MYI_P_02/myNavbar.jsx";
 import { useNavigate, useLocation, resolvePath } from "react-router-dom";
 import AdminButton from "../components/MYP_P_01/adminButton.jsx";
-import { useSelector } from "react-redux";
 import { userDetail } from "../api/userAPI.js";
 import { searchQuestion } from "../api/mypageAPI.js";
 
@@ -68,10 +67,10 @@ const Page = () => {
   const location = useLocation();
   const [profileData, setProfileData] = useState(null);
 
-  const accessToken = useSelector((state) => state.accessToken);
+  const accessToken = localStorage.getItem("accessToken");
 
   let userId;
-  
+
   useEffect(() => {
     // 관리자 페이지에서 보낸 데이터
     const eventData = location.state?.event;
@@ -79,8 +78,8 @@ const Page = () => {
     if (!eventData) {
       // 데이터가 없는경우 (일반 사용자)
       userDetail(
-        accessToken
-        , (resp) => {
+        accessToken,
+        (resp) => {
           userId = resp.data.data.id;
           searchQuestion(
             {
@@ -92,17 +91,20 @@ const Page = () => {
               userId: userId,
             },
             (resp) => {
-              console.log("MYI_P_01 -> searchQuestion | 질문 검색 성공", userId, resp.data); 
-              if (resp.data.data)
-                setQuestions(resp.data.data);
+              console.log(
+                "MYI_P_01 -> searchQuestion | 질문 검색 성공",
+                userId,
+                resp.data
+              );
+              if (resp.data.data) setQuestions(resp.data.data);
             },
             (error) => {
               console.log(error);
             }
           );
-        }
-        , (error) => {
-          console.log(error)
+        },
+        (error) => {
+          console.log(error);
         }
       );
     } else {
@@ -136,9 +138,7 @@ const Page = () => {
             </Typography>
           </ProfileSection>
         )}
-        <SearchTab
-          setQuestions={setQuestions}
-        />
+        <SearchTab setQuestions={setQuestions} />
         {questions.map((question, index) => (
           <Accordion
             key={index}
@@ -158,7 +158,10 @@ const Page = () => {
                     <CardMedia
                       component="img"
                       sx={mediaStyles}
-                      image={"https://i10b105.p.ssafy.io/api/files/thumbnail/" + reply.thumbnailUrl}
+                      image={
+                        "https://i10b105.p.ssafy.io/api/files/thumbnail/" +
+                        reply.thumbnailUrl
+                      }
                       alt="Thumbnail Image"
                     />
                     <CardContent>

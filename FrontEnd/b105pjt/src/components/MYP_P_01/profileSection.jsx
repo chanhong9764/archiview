@@ -13,7 +13,6 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close"; // 닫기 아이콘을 위한 임포트
 import ActionButton from "../../components/MYP_P_01/actionButton";
-import { useSelector } from "react-redux";
 import {
   userDetail,
   uploadProfileImage,
@@ -21,11 +20,12 @@ import {
 } from "../../api/mypageAPI";
 import { useEffect } from "react";
 import { modifyUserInfo } from "../../api/userAPI";
+import { useSelector } from "react-redux";
 
 const ProfileSection = () => {
   const [openModal, setOpenModal] = useState(false);
 
-  const accessToken = useSelector((state) => state.accessToken);
+  const accessToken = localStorage.getItem("accessToken");
 
   const [id, setId] = useState();
   const [name, setName] = useState();
@@ -91,27 +91,28 @@ const ProfileSection = () => {
 
   const handleSave = () => {
     const formData = new FormData();
-    formData.append("img", uploadedImage);
-    uploadProfileImage(
-      id,
-      formData,
-      (resp) => {
-        console.log(resp);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    if (uploadedImage) {
+      console.log("업로드 이미지", uploadedImage);
+      formData.append("img", uploadedImage);
+      uploadProfileImage(
+        id,
+        formData,
+        (resp) => {
+          console.log(resp);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }
 
     updateUserDetail(
       {
-        headers: {
-          Authorization: accessToken,
-        },
+        Authorization: accessToken,
       },
       {
         introduce: newIntroduce,
-        profileUrl: newProfileUrl,
+        profileUrl: "",
       },
       (resp) => {
         console.log("profileSection -> uploadUserDetail | 회원정보 변경 성공");

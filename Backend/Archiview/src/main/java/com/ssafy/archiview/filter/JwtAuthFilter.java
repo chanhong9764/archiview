@@ -2,6 +2,7 @@ package com.####.archiview.filter;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.####.archiview.dto.user.CustomUserDetails;
 import com.####.archiview.jwt.jwtUtil;
 import com.####.archiview.response.code.ErrorCode;
 import com.####.archiview.response.structure.ErrorResponse;
@@ -16,6 +17,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -23,6 +25,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import javax.lang.model.type.ErrorType;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -60,12 +63,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {  // OncePerRequestFilt
             return;
         }
         // 유저와 토큰 일치 시 userDetail 생성
-        UserDetails userDetails = customuserDetailsService.loadUserByUsername(userId);
+        CustomUserDetails userDetails = (CustomUserDetails) customuserDetailsService.loadUserByUsername(userId);
         if (userDetails != null){
             // UserDetails, Password, Role -> 접근권한 인증 Token 생성
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            System.out.println(userDetails.getAuthorities());
+                    new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
             // 현재 Request의 Security Context에 접근권한 설정
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         }

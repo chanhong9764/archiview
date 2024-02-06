@@ -2,32 +2,23 @@ import React from "react";
 import { Container, Typography, Box } from "@mui/material";
 import ProfileSection from "../components/MYP_P_02/profileSection";
 import InfoSection from "../components/MYP_P_02/infoSection";
-import SaveButton from "../components/MYP_P_02/saveButton";
-import { useLocation, useNavigate } from "react-router-dom";
 
 const Page = () => {
-  const navigate = useNavigate();
-
-  const handleSave = () => {
-    navigate("/mypage", { replace: true });
-  };
-
   return (
     <Container
       sx={{
         display: "flex",
         flexDirection: "column",
-        height: "100vh",
+        paddingTop: "20px",
         justifyContent: "center",
         alignItems: "center",
       }}
     >
-      {/* <ProfileSection imageUrl="https://via.placeholder.com/160x160">
+      <ProfileSection imageUrl="https://via.placeholder.com/160x160">
         <Typography variant="h5">이름</Typography>
         <Typography>내 프로필 정보</Typography>
-      </ProfileSection> */}
+      </ProfileSection>
       <InfoSection />
-      <SaveButton onSave={handleSave} />
     </Container>
   );
 };

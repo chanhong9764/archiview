@@ -13,24 +13,27 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close"; // 닫기 아이콘을 위한 임포트
 import ActionButton from "../../components/MYP_P_01/actionButton";
-import { useSelector } from "react-redux";
-import { userDetail, uploadProfileImage, updateUserDetail } from "../../api/mypageAPI";
+import {
+  userDetail,
+  uploadProfileImage,
+  updateUserDetail,
+} from "../../api/mypageAPI";
 import { useEffect } from "react";
 
 const ProfileSection = () => {
   const [openModal, setOpenModal] = useState(false);
 
-  const accessToken = useSelector((state) => state.accessToken);
+  const accessToken = localStorage.getItem("accessToken");
 
-  const [ id, setId ] = useState();
-  const [ name, setName ] = useState();
+  const [id, setId] = useState();
+  const [name, setName] = useState();
   const [email, setEmail] = useState();
-  
+
   const [currentProfileUrl, setCurrentProfileUrl] = useState();
   const [currentIntroduce, setCurrentIntroduce] = useState();
   const [newProfileUrl, setNewProfileUrl] = useState();
   const [introduce, setIntroduce] = useState();
-  const [newIntroduce, setNewIntroduce] = useState(); 
+  const [newIntroduce, setNewIntroduce] = useState();
   const [uploadedImage, setUploadedImage] = useState();
 
   useEffect(() => {
@@ -44,8 +47,12 @@ const ProfileSection = () => {
         setId(resp.data.data.id);
         setName(resp.data.data.name);
         setEmail(resp.data.data.email);
-        setCurrentProfileUrl("https://i10b105.p.####.io/api/files/profile/" + resp.data.data.id);
-        setNewProfileUrl("https://i10b105.p.####.io/api/files/profile/" + resp.data.data.id);
+        setCurrentProfileUrl(
+          "https://i10b105.p.####.io/api/files/profile/" + resp.data.data.id
+        );
+        setNewProfileUrl(
+          "https://i10b105.p.####.io/api/files/profile/" + resp.data.data.id
+        );
         setIntroduce(resp.data.data.introduce);
         setCurrentIntroduce(resp.data.data.introduce);
         setNewIntroduce(resp.data.data.introduce);
@@ -53,7 +60,7 @@ const ProfileSection = () => {
       (error) => {
         console.log(error);
       }
-    ); 
+    );
   }, []);
 
   const handleOpenModal = () => {
@@ -69,7 +76,7 @@ const ProfileSection = () => {
     setCurrentProfileUrl("https://i10b105.p.####.io/api/files/profile/" + id);
     setCurrentIntroduce(introduce);
     setOpenModal(false);
-  }
+  };
 
   const handleImageChange = (newImageFile) => {
     setCurrentProfileUrl(URL.createObjectURL(newImageFile));
@@ -85,7 +92,9 @@ const ProfileSection = () => {
     if (uploadedImage) {
       console.log("업로드 이미지", uploadedImage);
       formData.append("img", uploadedImage);
-      uploadProfileImage(id, formData,
+      uploadProfileImage(
+        id,
+        formData,
         (resp) => {
           console.log(resp);
         },
@@ -94,10 +103,10 @@ const ProfileSection = () => {
         }
       );
     }
-    
+
     updateUserDetail(
       {
-          Authorization: accessToken,
+        Authorization: accessToken,
       },
       {
         introduce: newIntroduce,
@@ -109,7 +118,7 @@ const ProfileSection = () => {
       (error) => {
         console.log("profileSection -> uploadUserDetail | 회원정보 변경 실패");
       }
-    );      
+    );
   };
 
   const handleDelete = () => {
@@ -171,12 +180,10 @@ const ProfileSection = () => {
         open={openModal}
         handleApply={handleApply}
         handleCancle={handleCancle}
-
         newProfileUrl={currentProfileUrl}
         setNewProfileUrl={setNewProfileUrl}
         newIntroduce={currentIntroduce}
         setNewIntroduce={setNewIntroduce}
-
         onImageChange={handleImageChange}
         onIntroduceChange={handleIntroduceChange}
       />
@@ -196,7 +203,6 @@ const ProfileEditModal = ({
   onImageChange,
 }) => {
   if (newIntroduce == null) newIntroduce = "";
-
 
   const handleFileChange = (event) => {
     if (event.target.files && event.target.files[0]) {
@@ -233,7 +239,7 @@ const ProfileEditModal = ({
           aria-label="close"
           onClick={handleCancle}
           sx={{
-            position: 'absolute',
+            position: "absolute",
             right: 8,
             top: 8,
             color: (theme) => theme.palette.grey[500],

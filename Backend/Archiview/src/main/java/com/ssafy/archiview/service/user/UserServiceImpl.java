@@ -109,23 +109,38 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public void userUpgrade(String userId) {
-        System.out.println(Role.ROLE_MEMBER);
         User user = repository.getById(userId);
         if(user.getRole().equals(Role.ROLE_MEMBER) || !user.isAuth()) {
-            throw new RestApiException(ErrorCode.UPGRADE_NOT_ALLOWED);
+            throw new RestApiException(ErrorCode.UPDATE_NOT_ALLOWED);
         }
         user.updateUserRole(Role.ROLE_MEMBER);
         user.updateUserAuth(false);
     }
 
     @Override
-    @Transactional
-    public void userBlock(String userId) {
+    public void userDowngrade(String userId) {
         User user = repository.getById(userId);
-        if(user.getRole().equals(Role.ROLE_BLOCK)) {
-            throw new RestApiException(ErrorCode.BLOCK_NOT_ALLOWED);
+        if(user.getRole().equals(Role.ROLE_USER)){
+            throw new RestApiException(ErrorCode.UPDATE_NOT_ALLOWED);
         }
-        user.updateUserRole(Role.ROLE_BLOCK);
+        user.updateUserRole(Role.ROLE_USER);
+    }
+
+    @Override
+    @Transactional
+    public void userBlock(String userId, Boolean block) {
+        User user = repository.getById(userId);
+        if(!user.getRole().equals(Role.ROLE_BLOCK) && block) {
+            user.updateUserRole(Role.ROLE_BLOCK);
+        }
+        else if (user.getRole().equals(Role.ROLE_BLOCK) && !block){
+            user.updateUserRole(Role.ROLE_USER);
+        }
+        else if (user.getRole().equals(Role.ROLE_BLOCK) && block){
+            throw new RestApiException(ErrorCode.BLOCK_NOT_ALLOWED);
+        } else{
+            throw new RestApiException(ErrorCode.INVALID_REQUEST);
+        }
         user.updateUserAuth(false);
     }
 

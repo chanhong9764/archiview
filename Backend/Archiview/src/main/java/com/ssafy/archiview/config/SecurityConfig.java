@@ -1,8 +1,7 @@
 package com.ssafy.archiview.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.archiview.entity.Role;
-import com.ssafy.archiview.filter.TokenExceptionHandlerFilter;
+import com.ssafy.archiview.filter.JwtExceptionHandlerFilter;
 import com.ssafy.archiview.jwt.*;
 import com.ssafy.archiview.filter.JsonUsernamePasswordAuthenticationFilter;
 import com.ssafy.archiview.filter.JwtAuthFilter;
@@ -69,7 +68,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated())  // 나머지 요청은 모두 인증 되어야 함.
                 .addFilterBefore(jsonUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtAuthFilter(customUserDetailsService, jwtUtil), JsonUsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new TokenExceptionHandlerFilter(), JwtAuthFilter.class);
+                .addFilterBefore(new JwtExceptionHandlerFilter(), JwtAuthFilter.class);
         return http.build();
     }
 

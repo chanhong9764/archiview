@@ -14,7 +14,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close"; // 닫기 아이콘을 위한 임포트
 import ActionButton from "../../components/MYP_P_01/actionButton";
 import { useSelector } from "react-redux";
-import { userDetail, uploadProfileImage, updateUserDetail } from "../../api/mypageAPI";
+import {
+  userDetail,
+  uploadProfileImage,
+  updateUserDetail,
+} from "../../api/mypageAPI";
 import { useEffect } from "react";
 import { modifyUserInfo } from "../../api/userAPI";
 
@@ -26,23 +30,12 @@ const ProfileSection = () => {
   const [id, setId] = useState();
   const [name, setName] = useState();
   const [email, setEmail] = useState();
-<<<<<<< HEAD
 
-  // 현재 표시되는 프로필 사진
-=======
-  
->>>>>>> 45b8210719a7cc7c99a27299dc93703adba756c3
   const [currentProfileUrl, setCurrentProfileUrl] = useState();
   const [currentIntroduce, setCurrentIntroduce] = useState();
   const [newProfileUrl, setNewProfileUrl] = useState();
-<<<<<<< HEAD
-  // 변경된 자기소개
-  const [newIntroduce, setNewIntroduce] = useState();
-  // 업로드 된 이미지
-=======
   const [introduce, setIntroduce] = useState();
-  const [newIntroduce, setNewIntroduce] = useState(); 
->>>>>>> 45b8210719a7cc7c99a27299dc93703adba756c3
+  const [newIntroduce, setNewIntroduce] = useState();
   const [uploadedImage, setUploadedImage] = useState();
 
   useEffect(() => {
@@ -56,8 +49,12 @@ const ProfileSection = () => {
         setId(resp.data.data.id);
         setName(resp.data.data.name);
         setEmail(resp.data.data.email);
-        setCurrentProfileUrl("https://i10b105.p.####.io/api/files/profile/" + resp.data.data.id);
-        setNewProfileUrl("https://i10b105.p.####.io/api/files/profile/" + resp.data.data.id);
+        setCurrentProfileUrl(
+          "https://i10b105.p.####.io/api/files/profile/" + resp.data.data.id
+        );
+        setNewProfileUrl(
+          "https://i10b105.p.####.io/api/files/profile/" + resp.data.data.id
+        );
         setIntroduce(resp.data.data.introduce);
         setCurrentIntroduce(resp.data.data.introduce);
         setNewIntroduce(resp.data.data.introduce);
@@ -81,7 +78,7 @@ const ProfileSection = () => {
     setCurrentProfileUrl("https://i10b105.p.####.io/api/files/profile/" + id);
     setCurrentIntroduce(introduce);
     setOpenModal(false);
-  }
+  };
 
   const handleImageChange = (newImageFile) => {
     setCurrentProfileUrl(URL.createObjectURL(newImageFile));
@@ -89,10 +86,6 @@ const ProfileSection = () => {
   };
 
   const handleIntroduceChange = (newIntroduce) => {
-<<<<<<< HEAD
-    // console.log("자기소개 변경됨");
-=======
->>>>>>> 45b8210719a7cc7c99a27299dc93703adba756c3
     setCurrentIntroduce(newIntroduce);
   };
 
@@ -110,14 +103,11 @@ const ProfileSection = () => {
       }
     );
 
-<<<<<<< HEAD
-    // TODO 자기소개 변경
-=======
     updateUserDetail(
       {
         headers: {
           Authorization: accessToken,
-        }
+        },
       },
       {
         introduce: newIntroduce,
@@ -129,8 +119,7 @@ const ProfileSection = () => {
       (error) => {
         console.log("profileSection -> uploadUserDetail | 회원정보 변경 실패");
       }
-    );      
->>>>>>> 45b8210719a7cc7c99a27299dc93703adba756c3
+    );
   };
 
   const handleDelete = () => {
@@ -190,13 +179,8 @@ const ProfileSection = () => {
       </Box>
       <ProfileEditModal
         open={openModal}
-<<<<<<< HEAD
-        onClose={handleCloseModal}
-=======
         handleApply={handleApply}
         handleCancle={handleCancle}
-
->>>>>>> 45b8210719a7cc7c99a27299dc93703adba756c3
         newProfileUrl={currentProfileUrl}
         setNewProfileUrl={setNewProfileUrl}
         newIntroduce={currentIntroduce}
@@ -308,16 +292,12 @@ const ProfileEditModal = ({
           onChange={handleIntroduceChange}
           sx={{ mt: 2, mb: 2 }}
         />
-<<<<<<< HEAD
-        <Button variant="contained" color="primary" onClick={handleUpdateBtn} sx={{ mt: 2 }}>
-=======
         <Button
           variant="contained"
           color="primary"
           onClick={handleApply}
           sx={{ mt: 2 }}
         >
->>>>>>> 45b8210719a7cc7c99a27299dc93703adba756c3
           업데이트
         </Button>
       </Box>

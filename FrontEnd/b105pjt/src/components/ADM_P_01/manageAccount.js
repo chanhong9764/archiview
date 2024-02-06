@@ -26,8 +26,8 @@ import { getUserList } from "../../api/adminAPI";
 import { useSelector } from "react-redux";
 
 function createData(id, name, email, introduce, role, auth) {
-  introduce = introduce === null ? "None" : introduce;
-  auth = auth ? "신청중" : "";
+  introduce = introduce === null ? "-" : introduce;
+  auth = auth ? "신청중" : "-";
 
   return {
     id,
@@ -38,188 +38,6 @@ function createData(id, name, email, introduce, role, auth) {
     auth,
   };
 }
-
-// sample 데이터
-const rows = [
-  createData(
-    "chan9784",
-    "박찬홍",
-    "abc@gmail.com",
-    "안녕하세요",
-    "ROLE_USER",
-    false
-  ),
-  createData(
-    "chan9184",
-    "박찬훙",
-    "abcd@gmail.com",
-    null,
-    "ROLE_MEMBER",
-    false
-  ),
-  createData(
-    "abc1184",
-    "김홍찬",
-    "123abc@gmail.com",
-    "소개말입니다",
-    "ROLE_ADMIN",
-    true
-  ),
-  createData(
-    "asdfgh4",
-    "홍찬김",
-    "123ab1c@gmail.com",
-    null,
-    "ROLE_BLOCK",
-    true
-  ),
-  createData("ea8b960f", "장지우", "f528g@gmail.com", null, "ROLE_USER", false),
-  createData(
-    "453682e9",
-    "박민수",
-    "da5so@gmail.com",
-    "소개말입니다",
-    "ROLE_ADMIN",
-    true
-  ),
-  createData(
-    "c045d260",
-    "한서윤",
-    "kwsb2@gmail.com",
-    null,
-    "ROLE_MEMBER",
-    false
-  ),
-  createData(
-    "0b0bbb6f",
-    "정민수",
-    "ptxa4@gmail.com",
-    null,
-    "ROLE_BLOCK",
-    false
-  ),
-  createData(
-    "5487bb96",
-    "조지우",
-    "2ydyj@gmail.com",
-    null,
-    "ROLE_ADMIN",
-    false
-  ),
-  createData(
-    "d7e5c3e3",
-    "정서윤",
-    "c4nhf@gmail.com",
-    "소개말입니다",
-    "ROLE_USER",
-    false
-  ),
-  createData("5360e0e1", "장민수", "l1io8@gmail.com", null, "ROLE_USER", false),
-  createData(
-    "9d588cdc",
-    "윤은지",
-    "9qcpi@gmail.com",
-    "소개말입니다",
-    "ROLE_MEMBER",
-    true
-  ),
-  createData(
-    "25ac9959",
-    "정홍찬",
-    "y2drp@gmail.com",
-    "안녕하세요",
-    "ROLE_ADMIN",
-    true
-  ),
-  createData(
-    "d94c3157",
-    "정하윤",
-    "g6jqw@gmail.com",
-    "소개말입니다",
-    "ROLE_USER",
-    true
-  ),
-  createData(
-    "08cebfe4",
-    "박성민",
-    "v4wvo@gmail.com",
-    "안녕하세요",
-    "ROLE_USER",
-    false
-  ),
-  createData(
-    "bcef065d",
-    "조서윤",
-    "9uhjl@gmail.com",
-    "안녕하세요",
-    "ROLE_MEMBER",
-    false
-  ),
-  createData(
-    "2083ae38",
-    "김홍찬",
-    "lhttu@gmail.com",
-    null,
-    "ROLE_MEMBER",
-    false
-  ),
-  createData(
-    "90ae9495",
-    "임홍찬",
-    "zalw5@gmail.com",
-    "소개말입니다",
-    "ROLE_ADMIN",
-    true
-  ),
-  createData(
-    "2f6eb979",
-    "임하윤",
-    "7kgf7@gmail.com",
-    "안녕하세요",
-    "ROLE_ADMIN",
-    false
-  ),
-  createData(
-    "2edb7115",
-    "임홍찬",
-    "8qh45@gmail.com",
-    "소개말입니다",
-    "ROLE_MEMBER",
-    false
-  ),
-  createData(
-    "53a9705c",
-    "최찬김",
-    "huuzv@gmail.com",
-    null,
-    "ROLE_ADMIN",
-    false
-  ),
-  createData(
-    "19309f8d",
-    "윤홍찬",
-    "2cwt5@gmail.com",
-    "안녕하세요",
-    "ROLE_MEMBER",
-    true
-  ),
-  createData(
-    "9d8d49b9",
-    "이은지",
-    "tvfq6@gmail.com",
-    "소개말입니다",
-    "ROLE_USER",
-    false
-  ),
-  createData(
-    "899335af",
-    "한찬훙",
-    "tnd9t@gmail.com",
-    null,
-    "ROLE_BLOCK",
-    false
-  ),
-];
 
 // 내림차순 정렬 Comparator
 function descendingComparator(a, b, orderBy) {
@@ -421,8 +239,9 @@ const ManageAccount = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(true);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rows, setRows] = React.useState([]);
+
   const navigate = useNavigate();
-  const [row, setRow] = React.useState([]);
 
   const token = useSelector((state) => state.accessToken);
 
@@ -430,7 +249,19 @@ const ManageAccount = () => {
     getUserList(
       token,
       (resp) => {
-        console.log("resp >> ", resp);
+        console.log("resp >> ", resp.data.data);
+        const newRow = resp.data.data.map((item) =>
+          createData(
+            item.id,
+            item.name,
+            item.email,
+            item.introduce,
+            item.role,
+            item.auth
+          )
+        );
+        console.log("newRow >> ", newRow);
+        setRows(newRow);
       },
       (error) => {
         console.log("error >> ", error);
@@ -499,7 +330,7 @@ const ManageAccount = () => {
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage
       ),
-    [order, orderBy, page, rowsPerPage]
+    [order, orderBy, page, rowsPerPage, rows]
   );
 
   return (
@@ -552,11 +383,17 @@ const ManageAccount = () => {
                       id={labelId}
                       scope="row"
                       padding="none"
+                      align="left"
                     >
                       <Button
                         onClick={(event) => {
                           event.stopPropagation(); // 상위 요소로의 이벤트 전파를 막음
                           handleOpenDetail(row); // 여기서 row는 현재 행의 데이터를 나타냄
+                        }}
+                        sx={{
+                          justifyContent: "flex-start",
+                          textTransform: "none",
+                          paddingLeft: "1px",
                         }}
                       >
                         {row.id}

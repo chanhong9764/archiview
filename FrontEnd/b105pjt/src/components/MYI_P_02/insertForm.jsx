@@ -5,13 +5,12 @@ import BtnGroupInsert from "./btnGroupInsert";
 import OpenVideo from "../MYI_P_02/openVideo";
 import { useState } from "react";
 import { createReply } from "../../api/replyAPI";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const InsertForm = () => {
   const { Navigate } = useNavigate();
-  const accessToken = useSelector((state) => state.accessToken);
-  
+  const accessToken = localStorage.getItem("accessToken");
+
   // 실제 데이터로 수정할 때 주석 해제하고 더미데이터 삭제할 것
   // const [content, setContent] = useState();
   // const [script, setScript] = useState();
@@ -26,7 +25,11 @@ const InsertForm = () => {
   const [script, setScript] = useState("테스트 스크립트");
   const [companyId, setCompanyId] = useState(3);
   const [csList, setCsList] = useState(["자기소개", "기업", "기타"]);
-  const [jobList, setJobList] = useState(["Backend Developer", "Project Manager", "DBMA"]);
+  const [jobList, setJobList] = useState([
+    "Backend Developer",
+    "Project Manager",
+    "DBMA",
+  ]);
   const [sessionUrl, setSessionUrl] = useState();
   // End - Set Dummy Data
 
@@ -39,10 +42,10 @@ const InsertForm = () => {
 
   function onClickApply() {
     console.log("onClickApply");
-    
+
     createReply(
       {
-          Authorization: accessToken,
+        Authorization: accessToken,
       },
       {
         companyId: companyId,
@@ -54,7 +57,7 @@ const InsertForm = () => {
         questionId: null,
         script: script,
         videoUrl: sessionUrl,
-        thumbnailUrl: sessionUrl
+        thumbnailUrl: sessionUrl,
       },
       (resp) => {
         console.log("insertForm -> onClickApply | 내 면접 등록 성공");
@@ -63,7 +66,7 @@ const InsertForm = () => {
       (error) => {
         console.log("insertForm -> onClickApply | 내 면접 등록 실패");
       }
-    )
+    );
   }
   function onClickCancle() {
     console.log("onClickCancle");
@@ -88,9 +91,7 @@ const InsertForm = () => {
         ></SearchTab>
       </div>
 
-      <OpenVideo
-        setSessionUrl={setSessionUrl}
-      ></OpenVideo>
+      <OpenVideo setSessionUrl={setSessionUrl}></OpenVideo>
       <br />
 
       <TextField

@@ -19,6 +19,7 @@ function renderRow(props) {
     bigTagData,
     setPickTagList,
     pickTagList,
+    dumyData,
   } = props;
   return (
     <Listcompo
@@ -36,6 +37,7 @@ function renderRow(props) {
       bigTagData={bigTagData}
       setPickTagList={setPickTagList}
       pickTagList={pickTagList}
+      dumyData={dumyData}
     />
   );
 }
@@ -55,6 +57,7 @@ export default function VirtualizedList({
   bigTagData,
   pickTagList,
   setPickTagList,
+  dumyData,
 }) {
   return (
     <Box
@@ -81,6 +84,7 @@ export default function VirtualizedList({
             bigTagData,
             pickTagList,
             setPickTagList,
+            dumyData,
           })
         }
       </FixedSizeList>

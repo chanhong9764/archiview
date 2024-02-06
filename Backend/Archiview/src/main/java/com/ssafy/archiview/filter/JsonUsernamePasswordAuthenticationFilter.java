@@ -1,4 +1,4 @@
-package com.####.archiview.jwt;
+package com.####.archiview.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.####.archiview.dto.token.TokenDto;
@@ -6,7 +6,13 @@ import com.####.archiview.dto.user.CustomUserDetails;
 import com.####.archiview.dto.user.UserDto;
 import com.####.archiview.entity.Role;
 import com.####.archiview.entity.User;
+import com.####.archiview.jwt.jwtUtil;
 import com.####.archiview.repository.UserRepository;
+import com.####.archiview.response.code.ErrorCode;
+import com.####.archiview.response.code.ResponseCode;
+import com.####.archiview.response.code.SuccessCode;
+import com.####.archiview.response.exception.RestApiException;
+import com.####.archiview.response.structure.ErrorResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,9 +32,7 @@ import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
@@ -62,6 +66,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
         // PrincipalDetailsService의 loadUserByUsername()가 실행됨
         // 3. PrincipalDetails를 세션에 담고 (권한 관리를 위해서)
         // 4. JWT토큰을 만들어서 응답
+        System.out.println("로그인 필터입니다.");
         if (request.getContentType() == null || !request.getContentType().equals(CONTENT_TYPE)) {  // Json 요청이 아니면 에러 발생
             throw new AuthenticationServiceException("Authentication Content-Type not supported: " + request.getContentType());
         }
@@ -70,7 +75,6 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
 
         String id = loginDto.getId();
         String pw = loginDto.getPw();
-        System.out.println("login pw :" + pw);
         if (id == null || pw == null) {
             throw new AuthenticationServiceException("DATA IS MISS");
         }
@@ -101,49 +105,56 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
         String userId = customUserDetails.getUsername();  // userId 추출
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
-        GrantedAuthority auth = iterator.next();
-        String userRole = auth.getAuthority();  // role 추출
+        User user = userRepository.findById(userId).get();
 
-        TokenDto.createTokenDto token = jwtUtil.createJwt(userId, userRole);  // 토큰 생성
-        Role role = null;
-        if(userRole.equals("USER")) {
-            role = Role.USER;
-        } else {
-            role = Role.MEMBER;
-        }
-
-        Optional<User> user = userRepository.findById(userId);
+        TokenDto.createTokenDto token = jwtUtil.createJwt(userId, user.getRole().toString());  // 토큰 생성
 
         UserDto.loginResponseDto responseDto = UserDto.loginResponseDto.builder()
                 .accessToken(token.getAccessToken())
                 .refreshToken(token.getRefreshToken())
-                .id(userId)
-                .name(user.get().getName())
-                .email(user.get().getEmail())
-                .profileUrl(user.get().getProfileUrl())
-                .introduce((user.get().getIntroduce()))
-                .role(role)
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .profileUrl(user.getProfileUrl())
+                .introduce((user.getIntroduce()))
+                .role(user.getRole())
+                .isAuth(user.isAuth())
                 .build();
-        user.get().updateRefreshToken(token.getRefreshToken());
-        userRepository.save(user.get());  // 발급받은 refreshToken을 DB에 저장
+        user.updateRefreshToken(token.getRefreshToken());
+        userRepository.save(user);  // 발급받은 refreshToken을 DB에 저장
 
+        Map<String, Object> map = new LinkedHashMap<>();
+        map.put("code", SuccessCode.LOGIN_SUCCESS.name());
+        map.put("message", SuccessCode.LOGIN_SUCCESS.getMessage());
+        map.put("data", responseDto);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.OK.value());
-        response.getWriter().write(new ObjectMapper().writeValueAsString(responseDto));
-//        response.getWriter().write(new ObjectMapper().writeValueAsString(SuccessResponse.createSuccess(SuccessCode.LOGIN_SUCCESS, responseDto)));
+        response.getWriter().write(new ObjectMapper().writeValueAsString(map));
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
-        System.out.println("login failed");
-        response.setStatus(401);
+        ErrorCode errorCode = ErrorCode.UNAUTHORIZED_REQUEST;
+        ObjectMapper objectMapper = new ObjectMapper();
+        response.setStatus(errorCode.getHttpStatus().value());  // 401
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        ErrorResponse errorResponse = new ErrorResponse(errorCode.name(), errorCode.getMessage());
+        try{
+            response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
+
     @Data
     private static class LoginDto {
+        private final String id;  // request key (username -> id)
+        private final String pw;  // request key (password -> pw)
+    }
 
-        String id;  // request key (username -> id)
-        String pw;  // request key (password -> pw)
+    @Data
+    public static class ErrorResponse{
+        private final String code;
+        private final String message;
     }
 }

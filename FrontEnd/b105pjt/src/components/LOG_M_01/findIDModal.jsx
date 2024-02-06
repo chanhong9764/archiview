@@ -201,7 +201,6 @@
 
 // export default FindIDModal;
 
-
 import React, { useState } from "react";
 import {
   Button,
@@ -216,8 +215,9 @@ import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import SendIcon from "@mui/icons-material/Send";
 import Logo from "../../assets/img/mainLogo-removebg-preview.png";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
-import FindIDResult from './findIDResult'; // FindIDResult 컴포넌트 import
+import FindIDResult from "./findIDResult"; // FindIDResult 컴포넌트 import
 import FoundIDResult from "./findIDResult";
+import { findID, sendFindEmail } from "../../api/userAPI";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -230,7 +230,12 @@ const FindIDModal = ({ onSwitch }) => {
   const [isNameValid, setIsNameValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isEmailEmpty, setIsEmailEmpty] = useState(true);
+  const [emailValue, setEmailValue] = useState("");
+  const [nameValue, setNameValue] = useState("");
+  const [findAccessToken, setFindAccessToken] = useState("");
   const [foundId, setFoundId] = useState("");
+  const [authNum, setAuthNum] = useState("");
+  const [inputAuthNum, setInputAuthNum] = useState("");
   if (foundId) {
     // 찾은 아이디가 있을 경우 FoundIDDisplay 컴포넌트를 렌더링
     return <FoundIDResult foundId={foundId} onSwitch={onSwitch} />;
@@ -238,6 +243,7 @@ const FindIDModal = ({ onSwitch }) => {
 
   const handleEmailChange = (event) => {
     const newEmail = event.target.value;
+    setEmailValue(newEmail);
     setIsEmailValid(
       /[0-9a-zA-Z][-_￦.]*[0-9a-zA-Z]*\@[0-9a-zA-Z]*\.[a-zA-Z]{2,3}$/.test(
         newEmail
@@ -253,24 +259,65 @@ const FindIDModal = ({ onSwitch }) => {
 
   const handleVerifyClick = () => {
     setIsInputDisabled(true);
-    setShowSignupFields(true);
+    sendFindEmail(
+      { email: emailValue },
+      (resp) => {
+        setShowSignupFields(true);
+        setFindAccessToken(resp.data.data.emailToken);
+        setAuthNum(resp.data.data.authNumber);
+        // console.log(resp.data.data.authNumber);
+      },
+      (error) => {
+        // console.log("에러 발생: ", error);
+        setIsInputDisabled(false);
+      }
+    );
   };
 
   const handleAssignClick = () => {
-    setFoundId("SSAFY"); // 아이디 찾기 결과 설정
+    const form = {
+      name: nameValue,
+      headers: { Authorization: findAccessToken },
+    };
+    findID(
+      form,
+      (resp) => {
+        // alert(resp.data.message);
+        setFoundId(resp.data.data); // 아이디 찾기 결과 설정
+      },
+      (error) => {
+        alert(error.response.data.message);
+      }
+    );
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === "Enter" && isEmailValid && !isEmailEmpty) {
+    if (
+      e.key === "Enter" &&
+      isEmailValid &&
+      !isEmailEmpty &&
+      isNameValid &&
+      nameValue !== ""
+    ) {
       handleVerifyClick();
     }
   };
 
+  const handleAuthNumChange = (e) => {
+    const inputAuthNum = e.target.value;
+    setInputAuthNum(inputAuthNum);
+  };
+
   const handleAuthClick = () => {
-    setIsChangeBtnDisabled(false);
+    if (inputAuthNum === String(authNum)) {
+      setIsChangeBtnDisabled(false);
+    } else {
+      alert("인증번호가 다릅니다.");
+    }
   };
 
   const handleAuthKeyPress = (e) => {
+    const newEmail = e.target.value;
     if (e.key === "Enter") {
       handleAuthClick();
     }
@@ -278,6 +325,8 @@ const FindIDModal = ({ onSwitch }) => {
 
   const handleNameChange = (event) => {
     const newName = event.target.value;
+    setNameValue(newName);
+    // console.log(nameValue);
     setIsNameValid(/^[가-힣]{2,32}$/.test(newName));
   };
 
@@ -285,7 +334,6 @@ const FindIDModal = ({ onSwitch }) => {
     setFoundId(null); // 찾은 아이디 상태 초기화
     onSwitch("Login"); // 로그인 모달로 전환
   };
-  
 
   return (
     <div className="LOG-M-01-Content">
@@ -337,7 +385,13 @@ const FindIDModal = ({ onSwitch }) => {
             endIcon={<SendIcon />}
             style={{ height: "56px", width: "100%" }}
             onClick={handleVerifyClick}
-            disabled={!isEmailValid || isEmailEmpty || isInputDisabled}
+            disabled={
+              !isEmailValid ||
+              isEmailEmpty ||
+              isInputDisabled ||
+              !isNameValid ||
+              nameValue === ""
+            }
           >
             인증하기
           </Button>
@@ -346,14 +400,14 @@ const FindIDModal = ({ onSwitch }) => {
         {/* 인증번호 입력 필드와 아이디 찾기 버튼 */}
         {showSignupFields && (
           <>
-           
-           <Grid item xs={8}>
+            <Grid item xs={8}>
               <TextField
                 className="PW-input"
                 required
                 label="인증번호"
                 placeholder="인증번호 입력"
                 variant="filled"
+                onChange={handleAuthNumChange}
                 onKeyDown={handleAuthKeyPress}
                 disabled={!isChangeBtnDisabled}
               />
@@ -366,7 +420,7 @@ const FindIDModal = ({ onSwitch }) => {
                 onClick={handleAuthClick}
                 disabled={!isChangeBtnDisabled}
               >
-                인증하기
+                인증확인
               </Button>
             </Grid>
 

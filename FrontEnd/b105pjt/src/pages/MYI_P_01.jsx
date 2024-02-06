@@ -13,6 +13,10 @@ import {
   CardMedia,
 } from "@mui/material";
 import MyNavbar from "../components/MYI_P_02/myNavbar.jsx";
+import { useNavigate, useLocation } from "react-router-dom";
+import AdminButton from "../components/MYP_P_01/adminButton.jsx";
+import { useSelector } from "react-redux";
+import { whoAmI } from "../api/userAPI.js";
 
 // 커스텀 테마 정의
 const theme = createTheme({
@@ -38,7 +42,7 @@ const theme = createTheme({
 // 카드 및 미디어 스타일 정의
 const cardStyles = {
   boxShadow: theme.shadows[3],
-  borderRadius: "5px",
+  borderRadius: "15px",
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
@@ -54,7 +58,7 @@ const cardStyles = {
 const mediaStyles = {
   height: 140,
   objectFit: "cover",
-  borderRadius: "5px 5px 0 0",
+  borderRadius: "15px 15px 0 0",
 };
 
 // 새로운 dummyQuestions 정의
@@ -90,8 +94,38 @@ const dummyQuestions = [
 
 const Page = () => {
   const [questions, setQuestions] = useState([]);
+  const [adminBtn, setAdminBtn] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [profileData, setProfileData] = useState(null);
+
+  const token = useSelector((state) => state.accessToken);
 
   useEffect(() => {
+    // 관리자 페이지에서 보낸 데이터
+    const eventData = location.state?.event;
+
+    if (!eventData) {
+      console.log("token >> ", token);
+      whoAmI(
+        token,
+        (resp) => {
+          console.log("resp >> ", resp.data.data);
+          setProfileData(resp.data.data);
+          console.log("profile >> ", profileData);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+
+      console.log("outer whoAmI");
+      // 데이터가 없는경우 (일반 사용자)
+    } else {
+      setAdminBtn(true);
+      // 데이터가 있는경우 (admin)
+    }
+
     const formattedQuestions = dummyQuestions.map((item) => {
       const replyData = item.data.reply;
       return {
@@ -103,22 +137,31 @@ const Page = () => {
     setQuestions(formattedQuestions);
   }, []);
 
-  const handleViewDetails = (videoUrl) => {
-    window.open(videoUrl, "_blank");
+  const handleViewDetails = () => {
+    // window.open(videoUrl, "_blank");
+    navigate("/revise");
   };
 
   return (
     <ThemeProvider theme={theme}>
       <MyNavbar />
-      <Container sx={{ mt: 4, mb: 4 }}>
-        <ProfileSection imageUrl="https://via.placeholder.com/180X180">
-          <Typography variant="h5" gutterBottom>
-            이름
-          </Typography>
-          <Typography variant="body1">
-            이곳에 추가적인 프로필 정보를 표시합니다.
-          </Typography>
-        </ProfileSection>
+      <Container>
+        {adminBtn && <AdminButton></AdminButton>}
+        {profileData && (
+          <ProfileSection
+            imageUrl={
+              "https://i10b105.p.####.io/api/files/profile/" +
+                profileData.id || "default-image-url.jpg"
+            }
+          >
+            <Typography variant="h5" gutterBottom>
+              {profileData.name}
+            </Typography>
+            <Typography variant="body1">
+              {profileData.introduce || "마이페이지에서 소개말을 적어주세요."}
+            </Typography>
+          </ProfileSection>
+        )}
         <SearchTab />
         {questions.map((question, index) => (
           <Accordion

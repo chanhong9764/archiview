@@ -13,6 +13,8 @@ import PasswordChangeModal from "./passwordModal";
 import PasswordCheckModal from "./passwordCheck"; // 비밀번호 확인 모달 import
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { signout } from "../../api/userAPI";
+import { useSelector } from "react-redux";
 
 // 확인 다이얼로그 컴포넌트
 // onConfirm 함수는 회원 탈퇴를 확인할 때 호출되는 함수 -> 이건 ActionButton 컴포넌트에서 정의된 'handleConfirmDelete' 함수
@@ -37,6 +39,7 @@ const ConfirmationDialog = ({ open, onClose, onConfirm }) => {
 
 // 메인 컴포넌트 -> onDelete - 부모 컴포넌트에서 전달되는 회원탈퇴 처리 함수
 const ActionButton = ({ onDelete }) => {
+  const accessToken = useSelector((state) => state.accessToken);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -57,6 +60,19 @@ const ActionButton = ({ onDelete }) => {
   // 회원탈퇴를 확인하고 , onDelete 함수를 호출하는 함수 -> '예'를 누르면 이 함수 호출
   const handleOpenConfirmDialog = () => {
     setOpenConfirmDialog(true);
+    signout(
+      {
+        headers: {
+          Authorization: accessToken,
+        },
+      },
+      (resp) => {
+        console.log(resp);
+      },
+      (error) => {
+        console.log("에러 발생: ", error);
+      }
+    );
   };
 
   const handleCloseConfirmDialog = () => {

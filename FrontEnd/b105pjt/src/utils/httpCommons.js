@@ -4,10 +4,6 @@ const VITE_NAVER_CLIENT_ID = "vDZwnjUq2L0ecmGLqTDE";
 const VITE_NAVER_CLIENT_PW = "AFfmYdxuEK";
 const VITE_NAVER_SEARCH_URL = "https://openapi.naver.com/v1/search/";
 
-const instance = axios.create({
-  baseURL: "https://i10b105.p.####.io:11443",
-});
-
 // Naver API용 axios 인스턴스 생성
 function naverImgAxios() {
   const instance = axios.create({
@@ -18,11 +14,10 @@ function naverImgAxios() {
       "X-Naver-Client-Secret": VITE_NAVER_CLIENT_PW,
     },
   });
-
   return instance;
 }
 
-const APPLICATION_SERVER_URL = "https://i10b105.p.####.io:8443/";
+const APPLICATION_SERVER_URL = "https://i10b105.p.####.io/";
 
 // openVidu API용 axios 인스턴스 생성
 function openViduAxios() {
@@ -33,4 +28,14 @@ function openViduAxios() {
   return instance;
 }
 
-export { naverImgAxios, openViduAxios };
+const BASE_SERVER_URL = "https://i10b105.p.####.io/api/";
+
+function baseAxios() {
+  const instance = axios.create({
+    baseURL: BASE_SERVER_URL,
+    headers: {},
+  });
+  return instance;
+}
+
+export { naverImgAxios, openViduAxios, baseAxios };

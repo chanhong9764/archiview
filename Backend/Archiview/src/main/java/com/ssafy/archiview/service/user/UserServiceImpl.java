@@ -2,6 +2,7 @@ package com.####.archiview.service.user;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.####.archiview.dto.user.UserDto;
+import com.####.archiview.entity.Role;
 import com.####.archiview.entity.User;
 import com.####.archiview.jwt.jwtUtil;
 import com.####.archiview.repository.UserRepository;
@@ -13,16 +14,22 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService{
     private final UserRepository repository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final jwtUtil jwtUtil;
-    private final JPAQueryFactory factory;
 
     @Override
-    public void userAdd(UserDto.AddRequestDto requestDto) {
+    public void userAdd(UserDto.AddRequestDto requestDto, HttpServletRequest request) {
+        String userEmail = jwtUtil.getUserEmail(request);
+        if(!userEmail.equals(requestDto.getEmail())){
+            throw new RestApiException(ErrorCode.UNSUPPORTED_TOKEN);
+        }
         repository.findById(requestDto.getId()).ifPresent(user -> {
             throw new RestApiException(ErrorCode.DUPLICATED_USER);
         });
@@ -34,8 +41,6 @@ public class UserServiceImpl implements UserService{
     @Override
     public void userLogout(HttpServletRequest request) {
     String accessToken = request.getHeader("Authorization");
-
-    jwtUtil.validateToken(accessToken);
     String userId = jwtUtil.getUsername(request);
     User user = repository.getById(userId);
     user.updateRefreshToken(null);  // refreshToken 삭제
@@ -47,9 +52,6 @@ public class UserServiceImpl implements UserService{
     public void userDelete(HttpServletRequest request) {
         // request 에서 액세스토큰 정보 추출
         String accessToken = request.getHeader("Authorization");
-
-        // 토큰 유효성 검사
-        jwtUtil.validateToken(accessToken);
         String userId = jwtUtil.getUsername(request);  // 엑세스 토큰에서 userId 추출
         User user = repository.getById(userId);  // 추출된 userId로 DB 조회
         repository.delete(user);
@@ -60,10 +62,17 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public List<UserDto.DetailResponseDto> userDetailList() {
+        return repository.findAll().stream()
+                .map(User::toDetailResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void validPassword(String userId, String userPw) {
         String password = repository.getById(userId).getPw();
         if(!bCryptPasswordEncoder.matches(userPw, password)){  // 패스워드가 일치하지 않으면 에러
-            throw new RestApiException(ErrorCode.INVLAID_PASSWORD);
+            throw new RestApiException(ErrorCode.INVALID_PASSWORD);
         }
     }
 
@@ -98,5 +107,37 @@ public class UserServiceImpl implements UserService{
         User user = repository.getById(id);
         user.updateUserDetail(profileUrl, introduce);
         repository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void userUpgrade(String userId) {
+        User user = repository.getById(userId);
+        if(user.getRole().equals(Role.MEMBER) || !user.isAuth()) {
+            throw new RestApiException(ErrorCode.UPGRADE_NOT_ALLOWED);
+        }
+        user.updateUserRole(Role.MEMBER);
+        user.updateUserAuth(false);
+    }
+
+    @Override
+    @Transactional
+    public void userBlock(String userId) {
+        User user = repository.getById(userId);
+        if(user.getRole().equals(Role.BLOCK)) {
+            throw new RestApiException(ErrorCode.BLOCK_NOT_ALLOWED);
+        }
+        user.updateUserRole(Role.BLOCK);
+        user.updateUserAuth(false);
+    }
+
+    @Override
+    @Transactional
+    public void userApplyUpgrade(String userId) {
+        User user = repository.getById(userId);
+        if(!user.getRole().equals(Role.USER) || user.isAuth()) {
+            throw new RestApiException(ErrorCode.UPGRADE_NOT_ACCEPTED);
+        }
+        user.updateUserAuth(true);
     }
 }

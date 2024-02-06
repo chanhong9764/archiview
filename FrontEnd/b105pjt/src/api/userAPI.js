@@ -4,8 +4,14 @@ const baseURL = baseAxios();
 
 async function signup(param, token, success, fail) {
   const config = {
-    Authorization: token,
+    headers: {
+      Authorization: token,
+    },
   };
+
+  console.log("signup param >> ", param);
+  console.log("signup header >> ", config);
+
   await baseURL.post("users", param, config).then(success).catch(fail);
 }
 
@@ -14,7 +20,10 @@ async function signout(param, success, fail) {
 }
 
 async function findID(param, success, fail) {
-  await baseURL.get(`users/find-id?name=${param.name}`, param).then(success).catch(fail);
+  await baseURL
+    .get(`users/find-id?name=${param.name}`, param)
+    .then(success)
+    .catch(fail);
 }
 
 async function findPW(param, success, fail) {
@@ -29,15 +38,24 @@ async function changePW(param, headers, success, fail) {
     headers: headers,
   };
 
-  await baseURL.patch("users/update-password", param, config).then(success).catch(fail);
+  await baseURL
+    .patch("users/update-password", param, config)
+    .then(success)
+    .catch(fail);
 }
 
 async function sendEmail(param, success, fail) {
-  await baseURL.get(`users/join-email?email=${param.email}`, param).then(success).catch(fail);
+  await baseURL
+    .get(`users/join-email?email=${param.email}`, param)
+    .then(success)
+    .catch(fail);
 }
 
 async function sendFindEmail(param, success, fail) {
-  await baseURL.get(`users/find-email?email=${param.email}`, param).then(success).catch(fail);
+  await baseURL
+    .get(`users/find-email?email=${param.email}`, param)
+    .then(success)
+    .catch(fail);
 }
 
 async function login(param, success, fail) {
@@ -48,7 +66,7 @@ async function logout(param, success, fail) {
   await baseURL.post("users/logout", param).then(success).catch(fail);
 }
 
-async function whoAmI(token, success, fail) {
+async function userDetail(token, success, fail) {
   const config = {
     headers: {
       Authorization: token,
@@ -65,7 +83,10 @@ async function validPW(token, param, success, fail) {
     },
   };
 
-  await baseURL.post("users/valid-password", param, config).then(success).catch(fail);
+  await baseURL
+    .post("users/valid-password", param, config)
+    .then(success)
+    .catch(fail);
 }
 
 async function modifyUserInfo(token, param, success, fail) {
@@ -89,6 +110,6 @@ export {
   findPW,
   sendFindEmail,
   changePW,
-  whoAmI,
+  userDetail,
   validPW,
 };

@@ -112,14 +112,7 @@ const headCells = [
 
 // Column명 표시해주는 row
 function EnhancedTableHead(props) {
-  const {
-    onSelectAllClick,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort,
-  } = props;
+  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -127,22 +120,11 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              "aria-label": "select all desserts",
-            }}
-          />
-        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
             align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "normal"}
+            padding="normal"
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
@@ -184,45 +166,18 @@ function EnhancedTableToolbar(props) {
         pr: { xs: 1, sm: 1 },
         ...(numSelected > 0 && {
           bgcolor: (theme) =>
-            alpha(
-              theme.palette.primary.main,
-              theme.palette.action.activatedOpacity
-            ),
+            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
         }),
       }}
     >
       {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
+        <Typography sx={{ flex: "1 1 100%" }} color="inherit" variant="subtitle1" component="div">
           {numSelected} selected
         </Typography>
       ) : (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
+        <Typography sx={{ flex: "1 1 100%" }} variant="h6" id="tableTitle" component="div">
           회원관리
         </Typography>
-      )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
       )}
     </Toolbar>
   );
@@ -251,14 +206,7 @@ const ManageAccount = () => {
       (resp) => {
         console.log("resp >> ", resp.data.data);
         const newRow = resp.data.data.map((item) =>
-          createData(
-            item.id,
-            item.name,
-            item.email,
-            item.introduce,
-            item.role,
-            item.auth
-          )
+          createData(item.id, item.name, item.email, item.introduce, item.role, item.auth)
         );
         console.log("newRow >> ", newRow);
         setRows(newRow);
@@ -321,8 +269,7 @@ const ManageAccount = () => {
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   const visibleRows = React.useMemo(
     () =>
@@ -369,22 +316,7 @@ const ManageAccount = () => {
                     selected={isItemSelected}
                     sx={{ cursor: "pointer" }}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                      padding="none"
-                      align="left"
-                    >
+                    <TableCell component="th" id={labelId} scope="row" padding="3px" align="left">
                       <Button
                         onClick={(event) => {
                           event.stopPropagation(); // 상위 요소로의 이벤트 전파를 막음

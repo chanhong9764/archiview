@@ -39,7 +39,6 @@ const theme = createTheme({
     },
   },
 });
-
 // 카드 및 미디어 스타일 정의
 const cardStyles = {
   boxShadow: theme.shadows[3],
@@ -62,37 +61,6 @@ const mediaStyles = {
   borderRadius: "15px 15px 0 0",
 };
 
-// 새로운 dummyQuestions 정의
-const dummyQuestions = [
-  // 데이터 구조 변경으로 예시 데이터 추가
-  {
-    code: "SELECT_REPLY_SUCCESS",
-    message: "답변 조회에 성공했습니다.",
-    data: {
-      reply: {
-        id: 1,
-        userId: "chan9784",
-        script: "나는 박찬홍이다",
-        videoUrl: "https://example.com/video",
-        thumbnailUrl: "https://via.placeholder.com/240X240",
-        question: {
-          content: "1분 자기소개",
-          companyName: "삼성전자",
-          csList: ["자기소개"],
-          jobList: ["프론트엔드", "백엔드"],
-        },
-        comments: [
-          { id: 1, userId: "user1", content: "멋진 소개입니다!" },
-          { id: 2, userId: "user2", content: "정말 인상적이네요!" },
-        ],
-        likeCnt: 1,
-      },
-      like: false,
-    },
-  },
-  // 추가 답변 데이터...
-];
-
 const Page = () => {
   const [questions, setQuestions] = useState([]);
   const [adminBtn, setAdminBtn] = useState(false);
@@ -104,19 +72,6 @@ const Page = () => {
 
   let userId;
   
-  
-  
-
-  // const formattedQuestions = dummyQuestions.map((item) => {
-  //   const replyData = item.data.reply;
-  //   return {
-  //     id: replyData.id,
-  //     content: replyData.question.content,
-  //     replies: [replyData],
-  //   };
-  // });
-  // setQuestions(formattedQuestions);
-
   useEffect(() => {
     // 관리자 페이지에서 보낸 데이터
     const eventData = location.state?.event;
@@ -203,7 +158,7 @@ const Page = () => {
                     <CardMedia
                       component="img"
                       sx={mediaStyles}
-                      image={reply.thumbnailUrl}
+                      image={"https://i10b105.p.ssafy.io/api/files/thumbnail/" + reply.thumbnailUrl}
                       alt="Thumbnail Image"
                     />
                     <CardContent>

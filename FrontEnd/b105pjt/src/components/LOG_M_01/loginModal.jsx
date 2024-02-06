@@ -57,6 +57,8 @@ const LoginModal = ({ onSwitch, close }) => {
         });
 
         dispatch({ type: "LOGIN", accessToken: data.data.data.accessToken });
+        localStorage.setItem("accessToken", data.data.data.accessToken);
+
         console.log(data.data.data.accessToken);
         resetForm();
         close();

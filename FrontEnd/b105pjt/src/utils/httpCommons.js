@@ -17,7 +17,7 @@ function naverImgAxios() {
   return instance;
 }
 
-const BASE_SERVER_URL = "https://i10b105.p.####.io/api/";
+const BASE_SERVER_URL = "/api";
 
 function baseAxios() {
   const instance = axios.create({

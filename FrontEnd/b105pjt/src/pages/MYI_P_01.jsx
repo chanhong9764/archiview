@@ -13,7 +13,10 @@ import {
   CardMedia,
 } from "@mui/material";
 import MyNavbar from "../components/MYI_P_02/myNavbar.jsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import AdminButton from "../components/MYP_P_01/adminButton.jsx";
+import { useSelector } from "react-redux";
+import { whoAmI } from "../api/userAPI.js";
 
 // 커스텀 테마 정의
 const theme = createTheme({
@@ -58,18 +61,6 @@ const mediaStyles = {
   borderRadius: "15px 15px 0 0",
 };
 
-const dummyProfileData = {
-  code: 200,
-  message: "회원정보 조회에 성공했습니다.",
-  data: {
-    id: "ssafy123",
-    name: "김싸피",
-    email: "ssafy@naver.com",
-    introduce: "안녕하세요",
-    profile_url: "https://via.placeholder.com/150",
-  },
-};
-
 // 새로운 dummyQuestions 정의
 const dummyQuestions = [
   // 데이터 구조 변경으로 예시 데이터 추가
@@ -103,9 +94,38 @@ const dummyQuestions = [
 
 const Page = () => {
   const [questions, setQuestions] = useState([]);
+  const [adminBtn, setAdminBtn] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [profileData, setProfileData] = useState(null);
+
+  const token = useSelector((state) => state.accessToken);
 
   useEffect(() => {
+    // 관리자 페이지에서 보낸 데이터
+    const eventData = location.state?.event;
+
+    if (!eventData) {
+      console.log("token >> ", token);
+      whoAmI(
+        token,
+        (resp) => {
+          console.log("resp >> ", resp.data.data);
+          setProfileData(resp.data.data);
+          console.log("profile >> ", profileData);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+
+      console.log("outer whoAmI");
+      // 데이터가 없는경우 (일반 사용자)
+    } else {
+      setAdminBtn(true);
+      // 데이터가 있는경우 (admin)
+    }
+
     const formattedQuestions = dummyQuestions.map((item) => {
       const replyData = item.data.reply;
       return {
@@ -125,15 +145,23 @@ const Page = () => {
   return (
     <ThemeProvider theme={theme}>
       <MyNavbar />
-      <Container sx={{ mt: 4, mb: 4 }}>
-        <ProfileSection imageUrl={dummyProfileData.data.profile_url}>
-          <Typography variant="h5" gutterBottom>
-            {dummyProfileData.data.name}
-          </Typography>
-          <Typography variant="body1">
-            {dummyProfileData.data.introduce}
-          </Typography>
-        </ProfileSection>
+      <Container>
+        {adminBtn && <AdminButton></AdminButton>}
+        {profileData && (
+          <ProfileSection
+            imageUrl={
+              "https://i10b105.p.ssafy.io/api/files/profile/" +
+                profileData.id || "default-image-url.jpg"
+            }
+          >
+            <Typography variant="h5" gutterBottom>
+              {profileData.name}
+            </Typography>
+            <Typography variant="body1">
+              {profileData.introduce || "마이페이지에서 소개말을 적어주세요."}
+            </Typography>
+          </ProfileSection>
+        )}
         <SearchTab />
         {questions.map((question, index) => (
           <Accordion

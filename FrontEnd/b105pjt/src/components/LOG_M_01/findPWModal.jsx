@@ -6,13 +6,9 @@ import Logo from "../../assets/img/mainLogo-removebg-preview.png";
 import CheckIcon from "@mui/icons-material/Check";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import { Tune } from "@mui/icons-material";
-import {
-  findpwAxios,
-  changepwAxios,
-  sendFindEmailAxios,
-} from "../../api/userAPI";
+import { sendFindEmail, findPW } from "../../api/userAPI";
 
-const FindPWModal = ({ onSwitch }) => {
+const FindPWModal = ({ onSwitch, setToken, data }) => {
   const [showSignupFields, setShowSignupFields] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isChangeBtnDisabled, setIsChangeBtnDisabled] = useState(true);
@@ -21,12 +17,17 @@ const FindPWModal = ({ onSwitch }) => {
   const [isEmailEmpty, setIsEmailEmpty] = useState(true);
   const [isInputDisabled, setIsInputDisabled] = useState(false);
   const [emailValue, setEmailValue] = useState("");
+  const [idValue, setIdValue] = useState("");
+  const [emailToken, setemailToken] = useState("");
+  const [authNum, setAuthNum] = useState("");
+  const [inputAuthNum, setInputAuthNum] = useState("");
 
   // ID 입력 필드의 값이 변경 시 호출되는 함수
   const handleIdChange = (event) => {
     const newId = event.target.value;
     setIsIdValid(/^[a-z0-9]{4,16}$/.test(newId));
     // 나머지 코드 유지
+    setIdValue(newId);
   };
 
   // 이메일 입력 필드의 값이 변경 시 호출되는 함수
@@ -44,23 +45,51 @@ const FindPWModal = ({ onSwitch }) => {
 
   const handleVerifyClick = () => {
     setIsInputDisabled(true); // 버튼을 비활성화 시킴
-    setShowSignupFields(true); // 인증번호 필드를 보여줌
-    sendFindEmailAxios(emailValue);
+    sendFindEmail(
+      { email: emailValue },
+      (resp) => {
+        setShowSignupFields(true); // 인증번호 필드를 보여줌
+        // console.log(resp);
+        setemailToken(resp.data.data.emailToken);
+        setAuthNum(resp.data.data.authNumber);
+      },
+      (error) => {
+        console.log("에러 발생: ", error);
+        setIsInputDisabled(false); // 버튼을 비활성화 시킴
+      }
+    );
   };
 
   const handleAuthClick = () => {
-    setIsChangeBtnDisabled(false);
+    if (inputAuthNum === String(authNum)) {
+      setIsChangeBtnDisabled(false);
+    } else {
+      alert("인증번호가 다릅니다.");
+    }
   };
 
   // '비밀번호 변경' 버튼 클릭시 핸들러 함수
   const handleAssignClick = () => {
-    onSwitch("ChangePW");
+    findPW(
+      {
+        id: idValue,
+        email: emailValue,
+      },
+      (resp) => {
+        // console.log(resp);
+        setToken(emailToken);
+        onSwitch("ChangePW");
+      },
+      (error) => {
+        alert(error.response.data.message);
+      }
+    );
   };
 
   // 엔터 입력시
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      if (isEmailValid && !isEmailEmpty) {
+      if (isEmailValid && !isEmailEmpty && isIdValid && idValue !== "") {
         handleVerifyClick();
       }
     }
@@ -70,6 +99,11 @@ const FindPWModal = ({ onSwitch }) => {
     if (e.key === "Enter") {
       handleAuthClick();
     }
+  };
+
+  const handleAuthChange = (e) => {
+    const inputAuthValue = e.target.value;
+    setInputAuthNum(inputAuthValue);
   };
 
   return (
@@ -118,7 +152,13 @@ const FindPWModal = ({ onSwitch }) => {
             endIcon={<SendIcon />}
             style={{ height: "56px", width: "100%" }}
             onClick={handleVerifyClick} // 버튼 클릭 핸들러
-            disabled={!isEmailValid || isEmailEmpty || isInputDisabled}
+            disabled={
+              !isEmailValid ||
+              isEmailEmpty ||
+              isInputDisabled ||
+              !isIdValid ||
+              idValue === ""
+            }
             onKeyDown={handleKeyPress}
           >
             인증하기
@@ -136,6 +176,7 @@ const FindPWModal = ({ onSwitch }) => {
                 placeholder="인증번호 입력"
                 disabled={!isChangeBtnDisabled}
                 variant="filled"
+                onChange={handleAuthChange}
                 onKeyDown={handleAuthKeyPress}
               />
             </Grid>

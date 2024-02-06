@@ -9,7 +9,6 @@ async function getUserList(token, success, fail) {
     },
   };
 
-  console.log(config);
   await baseURL.get(`admin/users`, config).then(success).catch(fail);
 }
 

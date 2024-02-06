@@ -57,12 +57,12 @@ public class SecurityConfig {
                 // URL Mapping
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("api/admin/**").hasRole("ADMIN")  // ADMIN 접근 가능
-                        .requestMatchers(HttpMethod.GET, "api/replies/**").hasAnyRole("MEMBER", "ADMIN")  // 답변상세조회
-                        .requestMatchers(HttpMethod.POST, "api/replies/**").hasAnyRole("MEMBER", "ADMIN")  // 댓글작성, 좋아요
-                        .requestMatchers(HttpMethod.DELETE, "api/replies/**").hasAnyRole("MEMBER", "ADMIN")  // 댓글삭제, 좋아요 취소
-                        .requestMatchers(HttpMethod.POST, "api/replies").permitAll()  // 답변 등록 허용
+//                        .requestMatchers(HttpMethod.GET, "api/replies/**").hasAnyRole("MEMBER", "ADMIN")  // 답변상세조회
+//                        .requestMatchers(HttpMethod.POST, "api/replies/**").hasAnyRole("MEMBER", "ADMIN")  // 댓글작성, 좋아요
+//                        .requestMatchers(HttpMethod.DELETE, "api/replies/**").hasAnyRole("MEMBER", "ADMIN")  // 댓글삭제, 좋아요 취소
+                        .requestMatchers("/api/replies").permitAll()  // 답변 등록 허용
                         .requestMatchers(HttpMethod.POST ,"/api/users").permitAll()  // 회원가입 허용
-                        .requestMatchers(HttpMethod.POST ,"/api/users/login").permitAll()  // 로그인 허용
+                        .requestMatchers(HttpMethod.POST ,"api/users/login").permitAll()  // 로그인 허용
                         .requestMatchers("api/users/find-id", "api/users/find-password").permitAll()  // 아이디 찾기, 패스워드 찾기 허용
                         .requestMatchers("api/users/find-email", "api/users/join-email").permitAll()  // 이메일 인증 요청 허용
                         .requestMatchers("api/questions/**", "api/recruits/**", "api/commons/**").permitAll() // ~ 허용

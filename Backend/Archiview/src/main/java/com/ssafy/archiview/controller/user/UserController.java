@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpServerErrorException;
@@ -81,7 +82,6 @@ public class UserController {
         }else{
             userInfo = jwtUtil.getUserEmail(request);
         }
-        System.out.println(userInfo);
         service.updatePassword(userInfo, dto.getPw());
         return SuccessResponse.createSuccess(SuccessCode.PASSWORD_UPDATE_SUCCESS);
     }
@@ -107,9 +107,10 @@ public class UserController {
         return SuccessResponse.createSuccess(SuccessCode.EMAIL_SUCCESS, dto);
     }
 
-    @PatchMapping("/upgrade")
+    @PatchMapping("/upgrade")  // 등업 신청
     public ResponseEntity<Object> applyUserUpgrade(HttpServletRequest request){
         String userId = jwtUtil.getUsername(request);
+        System.out.println(userId);
         service.userApplyUpgrade(userId);
         return SuccessResponse.createSuccess(SuccessCode.USER_APPLY_UPGRADE_SUCCESS);
     }

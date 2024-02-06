@@ -56,10 +56,13 @@ const LoginModal = ({ onSwitch, close }) => {
           maxAge: 60 * 60 * 24 * 7,
         });
 
-        dispatch({ type: "LOGIN", accessToken: data.data.data.accessToken });
+        dispatch({ 
+          type: "LOGIN", 
+          accessToken: data.data.data.accessToken,
+          role: data.data.data.role,
+          userId: data.data.data.id,
+        });
         localStorage.setItem("accessToken", data.data.data.accessToken);
-
-        console.log(data.data.data.accessToken);
         resetForm();
         close();
       },

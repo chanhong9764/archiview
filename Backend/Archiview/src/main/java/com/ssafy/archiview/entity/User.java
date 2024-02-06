@@ -43,7 +43,7 @@ public class User implements Persistable<String> {
     private String introduce;
 
     @Column(name = "role")
-    @ColumnDefault("'USER'")
+    @ColumnDefault("'ROLE_USER'")
     @Enumerated(EnumType.STRING)
     private Role role;  // 권한
 
@@ -92,7 +92,7 @@ public class User implements Persistable<String> {
     }
 
     public void blockUser() {
-        this.role = Role.BLOCK;
+        this.role = Role.ROLE_BLOCK;
     }
 
     @Override

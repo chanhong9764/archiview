@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   Avatar,
@@ -9,18 +9,12 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
-  Modal,
-  Typography,
-  Box,
   Button,
 } from "@mui/material";
 import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 import CreateIcon from "@mui/icons-material/Create";
-import LoginModal from "../components/LOG_M_01/loginModal";
 import "../assets/css/CAL_M_01.css";
 import { selectImg } from "../api/naverAPI";
-import CloseIcon from "@mui/icons-material/Close"; // 닫기 아이콘 추가
-import AlertModal from "../components/utils/alertModal"; // AlertModal 컴포넌트 임포트
 
 const dummyData = {
   code: 200,
@@ -48,14 +42,10 @@ const dummyData = {
 };
 
 const CAL_M_01 = (props) => {
-  const { onClose } = props;
-  const [dense, setDense] = useState(false);
-  const [secondary, setSecondary] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showAlertModal, setShowAlertModal] = useState(false);
-
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [dense, setDense] = useState(false);
 
   const title = props.event.title;
 
@@ -68,17 +58,8 @@ const CAL_M_01 = (props) => {
     if (isLoggedIn) {
       navigate("/addquestion", { replace: true });
     } else {
-      setShowAlertModal(true);
+      dispatch({ type: "OPEN_ALERT" });
     }
-  };
-
-  const handleCloseLoginModal = () => {
-    setShowLoginModal(false);
-  };
-
-  const handleConfirmAlert = () => {
-    setShowAlertModal(false);
-    setShowLoginModal(true);
   };
 
   return (
@@ -137,49 +118,6 @@ const CAL_M_01 = (props) => {
           </List>
         </Grid>
       </Grid>
-
-      {/* 경고 메시지 모달 */}
-      <AlertModal
-        open={showAlertModal}
-        onClose={() => setShowAlertModal(false)}
-        onConfirm={handleConfirmAlert}
-      />
-
-      {/* 로그인 모달 */}
-      <Modal
-        open={showLoginModal}
-        onClose={handleCloseLoginModal}
-        aria-labelledby="login-modal-title"
-        aria-describedby="login-modal-description"
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 400,
-            bgcolor: "background.paper",
-            boxShadow: 24,
-            p: 4,
-            borderRadius: 2,
-          }}
-        >
-          <LoginModal close={handleCloseLoginModal} />
-        </Box>
-      </Modal>
-      <IconButton
-        aria-label="close"
-        onClick={onClose} // 여기서 onClose 함수를 사용하여 모달 닫기
-        style={{
-          position: "absolute",
-          right: 8,
-          top: 8,
-          color: "gray",
-        }}
-      >
-        <CloseIcon />
-      </IconButton>
     </div>
   );
 };

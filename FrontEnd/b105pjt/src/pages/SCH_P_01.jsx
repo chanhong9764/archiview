@@ -6,18 +6,12 @@ import {
   ThemeProvider,
   Container,
   Typography,
-  Button,
   Card,
   Grid,
-  CardActions,
   CardContent,
   CardMedia,
-  Modal,
-  Box,
 } from "@mui/material";
-import LoginModal from "../components/LOG_M_01/loginModal.jsx";
-import AlertModal from "../components/utils/alertModal.jsx";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 // 커스텀 테마 정의
@@ -62,41 +56,26 @@ const mediaStyles = {
   borderRadius: "15px 15px 0 0",
 };
 
-function Test() {
+function SCH_P_01() {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
-  const role = useSelector((state) => state.role);
-  const userId = useSelector((state) => state.userId);
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const [questions, setQuestions] = useState([]);
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showAlertModal, setShowAlertModal] = useState(false); // 경고 모달 상태 추가
-
-  // const [questions, setQuestions] = useState([]);
 
   const handleViewDetails = (reply) => {
     if (!isLoggedIn) {
-      setShowAlertModal(true); // 로그인이 되어 있지 않으면 로그인 모달 표시
+      dispatch({ type: "OPEN_ALERT" });
     } else {
-      navigate("/interview/detail", { 
-        state: { "postId": reply.userId }
+      navigate("/interview/detail", {
+        state: { postId: reply.userId },
       });
     }
-  };
-
-  const handleCloseLoginModal = () => {
-    setShowLoginModal(false);
-  };
-
-  const handleConfirmAlert = () => {
-    setShowAlertModal(false); // 경고 모달 닫기
-    setShowLoginModal(true); // 로그인 모달 열기
   };
 
   return (
     <ThemeProvider theme={theme}>
       <Container sx={{ mt: 4, mb: 4 }}>
-        <Tabcompo setQuestions={setQuestions}/>
+        <Tabcompo setQuestions={setQuestions} />
         {questions.map((question, index) => (
           <Accordion
             key={index}
@@ -116,7 +95,10 @@ function Test() {
                     <CardMedia
                       component="img"
                       sx={mediaStyles}
-                      image={reply.thumbnailUrl}
+                      image={
+                        "https://i10b105.p.ssafy.io/api/files/thumbnail/" +
+                        reply.thumbnailUrl
+                      }
                       alt="Thumbnail Image"
                     />
                     <CardContent>
@@ -137,41 +119,9 @@ function Test() {
             </Grid>
           </Accordion>
         ))}
-        {/* 경고 메시지 모달 */}
-        <AlertModal
-          open={showAlertModal}
-          onClose={() => setShowAlertModal(false)}
-          onConfirm={handleConfirmAlert}
-          title="로그인 필요"
-          message="이 기능을 사용하기 위해서는 로그인이 필요합니다."
-        />
-
-        {/* 로그인 모달 */}
-        <Modal
-          open={showLoginModal}
-          onClose={handleCloseLoginModal}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: 400,
-              bgcolor: "background.paper",
-              boxShadow: 24,
-              p: 4,
-              borderRadius: 2,
-            }}
-          >
-            <LoginModal close={handleCloseLoginModal} />
-          </Box>
-        </Modal>
       </Container>
     </ThemeProvider>
   );
 }
 
-export default Test;
+export default SCH_P_01;

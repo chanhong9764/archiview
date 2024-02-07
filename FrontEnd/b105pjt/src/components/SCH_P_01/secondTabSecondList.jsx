@@ -132,11 +132,12 @@ export default function ChipsArray({
     <Box
       sx={{
         display: "flex",
-        justifyContent: "center",
         flexWrap: "wrap",
         listStyle: "none",
         p: 0.5,
         m: 0,
+        maxHeight: "200px",
+        overflowY: "auto",
       }}
       component="ul"
     >

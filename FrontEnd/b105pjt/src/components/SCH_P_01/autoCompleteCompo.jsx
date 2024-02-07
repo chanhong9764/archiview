@@ -4,19 +4,41 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import { useEffect, useState } from "react";
+import { getCompanyList } from "../../api/commonsAPI";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-export default function CheckboxesTags({ setCompanyName }) {
+export default function CheckboxesTags({ setCompanyName, setCompanyId }) {
+  const [company, setCompany] = useState([]);
+
   function handlebox(company) {
     setCompanyName(company.name);
+    if (setCompanyId) {
+      setCompanyId(company.Id);
+    }
   }
+
+  useEffect(() => {
+    const getCompany = async () => {
+      await getCompanyList(
+        (res) => {
+          setCompany(res.data.data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    };
+    getCompany();
+  }, []);
+
   return (
     <Autocomplete
       id="company"
       freeSolo
-      options={company.data}
+      options={company}
       getOptionLabel={(option) => option.name}
       renderOption={(props, option, { selected }) => (
         <li {...props}>
@@ -34,17 +56,3 @@ export default function CheckboxesTags({ setCompanyName }) {
     />
   );
 }
-
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
-const company = {
-  data: [
-    {
-      id: 1,
-      name: "삼성전자",
-    },
-    {
-      id: 2,
-      name: "멀티캠퍼스",
-    },
-  ],
-};

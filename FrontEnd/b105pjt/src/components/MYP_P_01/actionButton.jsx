@@ -86,7 +86,9 @@ const ActionButton = ({ onDelete }) => {
     onDelete();
     handleCloseConfirmDialog();
     setOpenPasswordCheckModal(false);
-    dispatch({ type: "LOGOUT" });
+    dispatch({
+      type: "LOGOUT",
+    });
     navigate("/", { replace: true });
   };
 

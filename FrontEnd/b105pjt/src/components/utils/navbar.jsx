@@ -73,9 +73,7 @@ function Navbar() {
   const handleLogout = () => {
     logout(
       {
-        headers: {
-          Authorization: accessToken,
-        },
+        Authorization: accessToken,
       },
       (resp) => {
         //

@@ -7,52 +7,56 @@ import {
   Select,
   Switch,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-const AdminButton = () => {
-  const [isBlocked, setIsBlocked] = useState(true);
+const AdminButton = ({ blocked, role, onUpdate }) => {
+  // 초기 상태를 props로부터 설정
+  const [userRole, setUserRole] = useState(role);
+  const navigate = useNavigate();
 
-  const handleSwitchChange = (event) => {
-    setIsBlocked(event.target.checked);
+  useEffect(() => {
+    setUserRole(role);
+  }, [blocked, role]);
+
+  const handleRoleChange = (event) => {
+    const newRole = event.target.value;
+    setUserRole(newRole);
+    // 상태 변경을 부모 컴포넌트에 전달
+    onUpdate({ role: newRole });
   };
 
-  const [auth, setAuth] = useState("일반");
-
-  const handleChange = (event) => {
-    setAuth(event.target.value);
+  // 목록으로 다시
+  const handleRedirect = () => {
+    navigate("/admin", { replace: true });
   };
 
   return (
     <div
       style={{
         display: "flex",
-        justifyContent: "right",
+        justifyContent: "space-between",
         alignItems: "center",
         width: "100%",
       }}
     >
-      <div>
-        <FormControlLabel
-          style={{ paddingLeft: "10px" }}
-          control={<Switch checked={isBlocked} onChange={handleSwitchChange} />}
-          label={isBlocked ? "Block" : "Unblock"} // 조건부 렌더링을 통한 라벨 변경
-        />
-      </div>
-      <div style={{ width: "80px" }}>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">권한</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={auth}
-            label="권한"
-            onChange={handleChange}
-          >
-            <MenuItem value={"일반"}>일반</MenuItem>
-            <MenuItem value={"멤버"}>멤버</MenuItem>
-          </Select>
-        </FormControl>
-      </div>
+      <Button variant="outlined" color="info" onClick={handleRedirect}>
+        목록으로
+      </Button>
+      <FormControl fullWidth style={{ marginLeft: "10px", width: "100px" }}>
+        <InputLabel id="role-select-label">권한</InputLabel>
+        <Select
+          labelId="role-select-label"
+          id="role-select"
+          value={userRole}
+          label="권한"
+          onChange={handleRoleChange}
+        >
+          <MenuItem value="ROLE_USER">일반</MenuItem>
+          <MenuItem value="ROLE_MEMBER">멤버</MenuItem>
+          <MenuItem value="ROLE_BLOCK">차단</MenuItem>
+        </Select>
+      </FormControl>
     </div>
   );
 };

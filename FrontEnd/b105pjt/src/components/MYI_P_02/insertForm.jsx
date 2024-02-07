@@ -26,9 +26,9 @@ const InsertForm = () => {
   const [companyId, setCompanyId] = useState(3);
   const [csList, setCsList] = useState(["자기소개", "기업", "기타"]);
   const [jobList, setJobList] = useState([
-    "Backend Developer",
-    "Project Manager",
-    "DBMA",
+    "게임기획",
+    "경영기획",
+    "광고기획",
   ]);
   const [sessionUrl, setSessionUrl] = useState();
   // End - Set Dummy Data

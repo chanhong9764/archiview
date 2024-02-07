@@ -273,7 +273,7 @@ const ProfileEditModal = ({
         <Typography variant="h6" sx={{ mb: 2, color: "primary.main" }}>
           프로필 편집
         </Typography>
-        <Box sx={{ position: "relative"}}>
+        <Box sx={{ position: "relative" }}>
           <Avatar
             src={newProfileUrl}
             alt="New Profile"
@@ -284,9 +284,10 @@ const ProfileEditModal = ({
             accept="image/*"
             type="file"
             onChange={handleFileChange}
-            style={{ display: "none"}}
+            style={{ display: "none" }}
           />
-          <label htmlFor="profile" 
+          <label
+            htmlFor="profile"
             style={{
               position: "absolute",
               bottom: 15,
@@ -294,7 +295,7 @@ const ProfileEditModal = ({
             }}
           >
             <IconButton
-              component='span'
+              component="span"
               color="primary"
               sx={{
                 backgroundColor: "white",

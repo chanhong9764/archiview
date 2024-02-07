@@ -55,12 +55,13 @@ const LoginModal = ({ onSwitch, close }) => {
           Referrer: true,
           maxAge: 60 * 60 * 24 * 7,
         });
-
-        dispatch({ 
-          type: "LOGIN", 
+        dispatch({
+          type: "LOGIN",
           accessToken: data.data.data.accessToken,
           role: data.data.data.role,
           userId: data.data.data.id,
+          profile:
+            "https://i10b105.p.ssafy.io/api/files/profile/" + data.data.data.id,
         });
         localStorage.setItem("accessToken", data.data.data.accessToken);
         resetForm();

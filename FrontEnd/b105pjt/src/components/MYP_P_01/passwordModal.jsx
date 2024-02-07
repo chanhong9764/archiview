@@ -58,7 +58,6 @@ const PasswordCheckModal = ({ open, onClose }) => {
       token,
       { pw: currentPassword },
       (resp) => {
-        console.log("resp >>", resp);
         onPasswordVerified();
         onClose();
         moveMypage();

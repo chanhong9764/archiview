@@ -40,7 +40,6 @@ const MakeSession = async (videoRef) => {
 
   try {
     const resp = await getToken({ sessionName: sessionName });
-    console.log("토큰 받기 성공:", resp.data[0]);
 
     let token = resp.data[0];
     await session.connect(token, { clientData: "example" });

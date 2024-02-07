@@ -8,7 +8,7 @@ import { createReply } from "../../api/replyAPI";
 import { useNavigate } from "react-router-dom";
 
 const InsertForm = () => {
-  const { Navigate } = useNavigate();
+  const { navigate } = useNavigate();
   const accessToken = localStorage.getItem("accessToken");
 
   // 실제 데이터로 수정할 때 주석 해제하고 더미데이터 삭제할 것
@@ -61,7 +61,7 @@ const InsertForm = () => {
       },
       (resp) => {
         console.log("insertForm -> onClickApply | 내 면접 등록 성공");
-        Navigate("/myinterview");
+        navigate("/myinterview", { replace: true });
       },
       (error) => {
         console.log("insertForm -> onClickApply | 내 면접 등록 실패");
@@ -69,8 +69,7 @@ const InsertForm = () => {
     );
   }
   function onClickCancle() {
-    console.log("onClickCancle");
-    Navigate("/myinterview");
+    navigate("/myinterview", { replace: true });
   }
 
   return (

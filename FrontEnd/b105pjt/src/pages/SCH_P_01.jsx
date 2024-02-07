@@ -95,7 +95,10 @@ function SCH_P_01() {
                     <CardMedia
                       component="img"
                       sx={mediaStyles}
-                      image={reply.thumbnailUrl}
+                      image={
+                        "https://i10b105.p.ssafy.io/api/files/thumbnail/" +
+                        reply.thumbnailUrl
+                      }
                       alt="Thumbnail Image"
                     />
                     <CardContent>

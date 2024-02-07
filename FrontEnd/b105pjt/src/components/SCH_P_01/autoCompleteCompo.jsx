@@ -8,9 +8,10 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-export default function CheckboxesTags({ setCompanyName }) {
+export default function CheckboxesTags({ setCompanyName, setCompanyId }) {
   function handlebox(company) {
     setCompanyName(company.name);
+    setCompanyId(company.id);
   }
   return (
     <Autocomplete
@@ -35,7 +36,6 @@ export default function CheckboxesTags({ setCompanyName }) {
   );
 }
 
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
 const company = {
   data: [
     {

@@ -47,7 +47,12 @@ function a11yProps(index) {
   };
 }
 
-export default function BasicTabs({ setQuestions }) {
+export default function BasicTabs({
+  setQuestions,
+  setCompanyId,
+  setCsList,
+  setJobList,
+}) {
   const dumyData = {
     code: "SELECT_TAG_LIST_SUCCESS",
     message: "태그 조회에 성공했습니다.",
@@ -71,7 +76,6 @@ export default function BasicTabs({ setQuestions }) {
           name: "게임",
           jobSubList: ["게임 디자인", "게임 프로그래밍", "게임 서버 관리"],
         },
-        
       ],
     },
   };
@@ -99,32 +103,20 @@ export default function BasicTabs({ setQuestions }) {
   const [companyName, setCompanyName] = useState("");
 
   useEffect(() => {
-    // setCsList(
-    // tagDataList
-    //   .filter((item) => item.tab === "csList")
-    //   .map((item) => item.smallTag)
-    //   .flat()
-    // );
-    // setJobList(
-    // tagDataList
-    //   .filter((item) => item.tab === "jsList")
-    //   .map((item) => item.smallTag)
-    //   .flat()
-    // );
-    // setCompanyId();
-
-    console.log(
-      tagDataList
-        .filter((item) => item.tab === "csList")
-        .map((item) => item.smallTag)
-        .flat()
-    );
-    console.log(
-      tagDataList
-        .filter((item) => item.tab === "jsList")
-        .map((item) => item.smallTag)
-        .flat()
-    );
+    if (setCsList && setJobList) {
+      setCsList(
+        tagDataList
+          .filter((item) => item.tab === "csList")
+          .map((item) => item.smallTag)
+          .flat()
+      );
+      setJobList(
+        tagDataList
+          .filter((item) => item.tab === "jsList")
+          .map((item) => item.smallTag)
+          .flat()
+      );
+    }
   }, [tagDataList]);
 
   const handleChange = (event, newValue) => {
@@ -158,7 +150,6 @@ export default function BasicTabs({ setQuestions }) {
     setSmallTagList([]);
     setSmallTagData([]);
     setTab(tabData);
-    // setChecked([]);
   };
 
   const onClickSearch = async () => {
@@ -238,7 +229,10 @@ export default function BasicTabs({ setQuestions }) {
           padding: "0 10px",
         }}
       >
-        <AutoCompleteCompo setCompanyName={setCompanyName} />
+        <AutoCompleteCompo
+          setCompanyName={setCompanyName}
+          setCompanyId={setCompanyId}
+        />
         <div>
           {tagSearchOpen ? (
             <Button

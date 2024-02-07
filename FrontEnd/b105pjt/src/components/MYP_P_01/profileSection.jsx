@@ -13,26 +13,22 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close"; // 닫기 아이콘을 위한 임포트
 import ActionButton from "../../components/MYP_P_01/actionButton";
-import { userDetail, uploadProfileImage, updateUserDetail } from "../../api/mypageAPI";
+import {
+  userDetail,
+  uploadProfileImage,
+  updateUserDetail,
+} from "../../api/mypageAPI";
 import { useEffect } from "react";
-import { modifyUserInfo } from "../../api/userAPI";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const ProfileSection = () => {
   const [openModal, setOpenModal] = useState(false);
-
   const accessToken = localStorage.getItem("accessToken");
+  const profile = useSelector((state) => state.profile);
 
-  const [id, setId] = useState();
   const [name, setName] = useState();
   const [email, setEmail] = useState();
-
-  const [currentProfileUrl, setCurrentProfileUrl] = useState();
-  const [currentIntroduce, setCurrentIntroduce] = useState();
-  const [newProfileUrl, setNewProfileUrl] = useState();
   const [introduce, setIntroduce] = useState();
-  const [newIntroduce, setNewIntroduce] = useState();
-  const [uploadedImage, setUploadedImage] = useState();
 
   useEffect(() => {
     userDetail(
@@ -42,14 +38,9 @@ const ProfileSection = () => {
         },
       },
       (resp) => {
-        setId(resp.data.data.id);
         setName(resp.data.data.name);
         setEmail(resp.data.data.email);
-        setCurrentProfileUrl("https://i10b105.p.####.io/api/files/profile/" + resp.data.data.id);
-        setNewProfileUrl("https://i10b105.p.####.io/api/files/profile/" + resp.data.data.id);
         setIntroduce(resp.data.data.introduce);
-        setCurrentIntroduce(resp.data.data.introduce);
-        setNewIntroduce(resp.data.data.introduce);
       },
       (error) => {
         console.log(error);
@@ -61,57 +52,8 @@ const ProfileSection = () => {
     setOpenModal(true);
   };
 
-  const handleApply = () => {
-    handleSave();
-    setOpenModal(false);
-  };
-
   const handleCancle = () => {
-    setCurrentProfileUrl("https://i10b105.p.####.io/api/files/profile/" + id);
-    setCurrentIntroduce(introduce);
     setOpenModal(false);
-  };
-
-  const handleImageChange = (newImageFile) => {
-    setCurrentProfileUrl(URL.createObjectURL(newImageFile));
-    setUploadedImage(newImageFile);
-  };
-
-  const handleIntroduceChange = (newIntroduce) => {
-    setCurrentIntroduce(newIntroduce);
-  };
-
-  const handleSave = () => {
-    const formData = new FormData();
-    if (uploadedImage) {
-      formData.append("img", uploadedImage);
-      uploadProfileImage(
-        id,
-        formData,
-        (resp) => {
-          console.log(resp);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    }
-
-    updateUserDetail(
-      {
-        Authorization: accessToken,
-      },
-      {
-        introduce: newIntroduce,
-        profileUrl: "",
-      },
-      (resp) => {
-        console.log("profileSection -> uploadUserDetail | 회원정보 변경 성공");
-      },
-      (error) => {
-        console.log("profileSection -> uploadUserDetail | 회원정보 변경 실패");
-      }
-    );
   };
 
   const handleDelete = () => {
@@ -138,7 +80,7 @@ const ProfileSection = () => {
 
       <Box sx={{ position: "relative", mb: 2 }}>
         <Avatar
-          src={currentProfileUrl}
+          src={profile}
           alt="Profile"
           sx={{ width: 150, height: 150, borderRadius: "50%" }}
         />
@@ -165,68 +107,92 @@ const ProfileSection = () => {
         <Typography variant="h6" sx={{ mb: 2 }}>
           {email}
         </Typography>
-        <Typography sx={{ mb: 3 }}>{currentIntroduce}</Typography>
+        <Typography sx={{ mb: 3 }}>{introduce}</Typography>
         <Divider sx={{ width: "100%", my: 2 }} />
-        <ActionButton onSave={handleSave} onDelete={handleDelete} />
+        <ActionButton onDelete={handleDelete} />
       </Box>
       <ProfileEditModal
         open={openModal}
-        handleApply={handleApply}
         handleCancle={handleCancle}
-        newProfileUrl={currentProfileUrl}
-        setNewProfileUrl={setNewProfileUrl}
-        newIntroduce={currentIntroduce}
-        setNewIntroduce={setNewIntroduce}
-        onImageChange={handleImageChange}
-        onIntroduceChange={handleIntroduceChange}
+        setIntroduce={setIntroduce}
+        introduce={introduce}
       />
     </Paper>
   );
 };
 
-const ProfileEditModal = ({
-  open,
-  handleApply,
-  handleCancle,
-  newProfileUrl,
-  setNewProfileUrl,
-  newIntroduce,
-  setNewIntroduce,
-  onIntroduceChange,
-  onImageChange,
-}) => {
-  if (newIntroduce == null) newIntroduce = "";
+const ProfileEditModal = ({ open, handleCancle, setIntroduce, introduce }) => {
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.accessToken);
+  const profile = useSelector((state) => state.profile);
+  const userId = useSelector((state) => state.userId);
+
+  const [newProfileUrl, setNewProfileUrl] = useState("");
+  const [profileFile, setProfileFile] = useState(null);
+  const [newIntroduce, setNewIntroduce] = useState("");
+
+  useEffect(() => {
+    setNewProfileUrl(profile);
+    setNewIntroduce(introduce);
+  }, [open]);
 
   const handleFileChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       const newImageFile = event.target.files[0];
       setNewProfileUrl(URL.createObjectURL(newImageFile));
-      onImageChange(newImageFile);
+      setProfileFile(newImageFile);
     }
   };
 
-  const token = useSelector((state) => state.accessToken);
-
   // 업데이트 버튼
   const handleUpdateBtn = () => {
-    modifyUserInfo(
-      token,
+    const formData = new FormData();
+
+    if (profileFile) {
+      formData.append("img", profileFile);
+      uploadProfileImage(
+        userId,
+        formData,
+        (resp) => {
+          let profileURL;
+          if (profile.includes("https")) {
+            profileURL =
+              "http://i10b105.p.####.io/api/files/profile/" + userId;
+          } else {
+            profileURL =
+              "https://i10b105.p.####.io/api/files/profile/" + userId;
+          }
+          dispatch({
+            type: "UPDATE_PROFILE",
+            profile: profileURL,
+          });
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }
+
+    updateUserDetail(
+      {
+        Authorization: token,
+      },
       {
         introduce: newIntroduce,
-        profileUrl: null,
+        profileUrl: "",
       },
       (resp) => {
-        console.log("handleUpdateBtn resp >> ", resp);
+        setIntroduce(newIntroduce);
       },
       (error) => {
-        console.log("handleUpdateBtn err >> ", error);
+        console.log(error);
       }
     );
+    handleCancle();
   };
 
   const handleIntroduceChange = (event) => {
     setNewIntroduce(event.target.value);
-    onIntroduceChange(event.target.value);
   };
 
   return (
@@ -262,17 +228,41 @@ const ProfileEditModal = ({
         <Typography variant="h6" sx={{ mb: 2, color: "primary.main" }}>
           프로필 편집
         </Typography>
-        <Avatar
-          src={newProfileUrl}
-          alt="New Profile"
-          sx={{ width: 150, height: 150, borderRadius: "50%", mb: 2 }}
-        />
-        <input
-          accept="image/*"
-          type="file"
-          onChange={handleFileChange}
-          style={{ display: "block", margin: "10px 0" }}
-        />
+        <Box sx={{ position: "relative" }}>
+          <Avatar
+            src={newProfileUrl}
+            alt="New Profile"
+            sx={{ width: 150, height: 150, borderRadius: "50%", mb: 2 }}
+          />
+          <input
+            id="profile"
+            accept="image/*"
+            type="file"
+            onChange={handleFileChange}
+            style={{ display: "none" }}
+          />
+          <label
+            htmlFor="profile"
+            style={{
+              position: "absolute",
+              bottom: 15,
+              right: 10,
+            }}
+          >
+            <IconButton
+              component="span"
+              color="primary"
+              sx={{
+                backgroundColor: "white",
+                "&:hover": {
+                  backgroundColor: "grey.200",
+                },
+              }}
+            >
+              <EditIcon />
+            </IconButton>
+          </label>
+        </Box>
         <TextField
           label="소개글"
           variant="outlined"
@@ -283,7 +273,12 @@ const ProfileEditModal = ({
           onChange={handleIntroduceChange}
           sx={{ mt: 2, mb: 2 }}
         />
-        <Button variant="contained" color="primary" onClick={handleApply} sx={{ mt: 2 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleUpdateBtn}
+          sx={{ mt: 2, ml: "auto" }}
+        >
           업데이트
         </Button>
       </Box>

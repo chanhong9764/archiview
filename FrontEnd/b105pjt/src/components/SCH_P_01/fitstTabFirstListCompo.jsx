@@ -24,6 +24,7 @@ export default function CheckboxList({
   setPickTagList,
   dumyData,
 }) {
+  // csSubList
   function smallTagFilter(arr, pickTag) {
     return arr.filter((el) => el.name === pickTag);
   }

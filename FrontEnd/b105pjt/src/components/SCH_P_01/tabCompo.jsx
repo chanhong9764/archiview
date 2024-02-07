@@ -17,6 +17,8 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import SearchIcon from "@mui/icons-material/Search";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { questionSearch } from "../../api/questionAPI";
+import { getJobPostingDetail } from "../../api/commonsAPI";
+import { useSelector } from "react-redux";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -47,48 +49,23 @@ function a11yProps(index) {
   };
 }
 
-export default function BasicTabs({ setQuestions }) {
-  const dumyData = {
-    code: "SELECT_TAG_LIST_SUCCESS",
-    message: "태그 조회에 성공했습니다.",
-    data: {
-      csList: [
-        {
-          name: "공통",
-          csSubList: ["장단점", "자기소개", "뽑아야할 이유"],
-        },
-        {
-          name: "특화",
-          csSubList: ["역량", "경험", "언어", "기술"],
-        },
-      ],
-      jsList: [
-        {
-          name: "IT",
-          jobSubList: ["프론트엔드", "백엔드", "풀스택", "Java", "Python"],
-        },
-        {
-          name: "게임",
-          jobSubList: ["게임 디자인", "게임 프로그래밍", "게임 서버 관리"],
-        },
-      ],
-    },
-  };
-
-  const dumyBigTagList1 = dumyData.data.csList.map(function (ojt) {
-    const rOjt = ojt.name;
-    return rOjt;
-  });
-  const dumyBigTagList2 = dumyData.data.jsList.map(function (ojt) {
-    const rOjt = ojt.name;
-    return rOjt;
+export default function BasicTabs({
+  setQuestions,
+  setCompanyId,
+  setCsList,
+  setJobList,
+  userId,
+}) {
+  const [dumyData, setDumyData] = useState({
+    csList: [{ name: "", csSubList: "" }],
+    jsList: [{ name: "", jobSubList: "" }],
   });
 
   const [tab, setTab] = useState("csList");
   const [value, setValue] = useState(0);
   const [tagDataList, setTagDataList] = useState([]);
   const [checked, setChecked] = useState([]);
-  const [bigTagList, setBigTagList] = useState(dumyBigTagList1);
+  const [bigTagList, setBigTagList] = useState([]);
   const [bigTagData, setBigTagData] = useState("");
   const [smallTagData, setSmallTagData] = useState([]);
   const [smallTagList, setSmallTagList] = useState([]);
@@ -96,42 +73,57 @@ export default function BasicTabs({ setQuestions }) {
   const [tagSearchOpen, setTagSearchOpen] = useState(true);
   const [pgno, setPgno] = useState(1);
   const [companyName, setCompanyName] = useState("");
+  const [tabCsList, setTabCsList] = useState([]);
+  const [tabJobList, setTabJobList] = useState([]);
 
   useEffect(() => {
-    // setCsList(
-    // tagDataList
-    //   .filter((item) => item.tab === "csList")
-    //   .map((item) => item.smallTag)
-    //   .flat()
-    // );
-    // setJobList(
-    // tagDataList
-    //   .filter((item) => item.tab === "jsList")
-    //   .map((item) => item.smallTag)
-    //   .flat()
-    // );
-    // setCompanyId();
-
-    console.log(
-      tagDataList
-        .filter((item) => item.tab === "csList")
-        .map((item) => item.smallTag)
-        .flat()
-    );
-    console.log(
-      tagDataList
-        .filter((item) => item.tab === "jsList")
-        .map((item) => item.smallTag)
-        .flat()
-    );
+    if (setCsList && setJobList) {
+      setCsList(
+        tagDataList
+          .filter((item) => item.tab === "csList")
+          .map((item) => item.smallTag)
+          .flat()
+      );
+      setJobList(
+        tagDataList
+          .filter((item) => item.tab === "jsList")
+          .map((item) => item.smallTag)
+          .flat()
+      );
+    }
   }, [tagDataList]);
+
+  useEffect(() => {
+    const csList = dumyData.csList.map(function (ojt) {
+      const rOjt = ojt.name;
+      return rOjt;
+    });
+    const jobList = dumyData.jsList.map(function (ojt) {
+      const rOjt = ojt.name;
+      return rOjt;
+    });
+    setTabCsList(csList);
+    setTabJobList(jobList);
+    setBigTagList(csList);
+  }, [dumyData]);
+
+  useEffect(() => {
+    const getJobDetail = async () => {
+      await getJobPostingDetail(
+        (res) => {
+          setDumyData(res.data.data);
+          // console.log(res.data.data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    };
+    getJobDetail();
+  }, []);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-  };
-
-  const handleTabChange = (event, tabData, bigTagData) => {
-    setTab();
   };
 
   const handleReset = () => {
@@ -157,12 +149,11 @@ export default function BasicTabs({ setQuestions }) {
     setSmallTagList([]);
     setSmallTagData([]);
     setTab(tabData);
-    // setChecked([]);
   };
 
   const onClickSearch = async () => {
     const data = {
-      userId: "",
+      userId: userId,
       company: companyName,
       cs: tagDataList
         .filter((item) => item.tab === "csList")
@@ -179,14 +170,18 @@ export default function BasicTabs({ setQuestions }) {
 
     await questionSearch(data)
       .then((res) => {
-        const formattedQuestions = res.data.data.map((item) => {
-          return {
-            id: item.id,
-            content: item.content,
-            replies: item.replies,
-          };
-        });
-        setQuestions(formattedQuestions);
+        if (res.data.data) {
+          const formattedQuestions = res.data.data.map((item) => {
+            return {
+              id: item.id,
+              content: item.content,
+              replies: item.replies,
+            };
+          });
+          setQuestions(formattedQuestions);
+        } else {
+          alert("검색된 값이 없습니다.");
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -214,15 +209,15 @@ export default function BasicTabs({ setQuestions }) {
       >
         <Tabs value={value} onChange={handleChange} aria-label="기본 탭 예제">
           <Tab
-            label="CS"
+            label="면접 유형"
             {...a11yProps(0)}
-            onClick={() => onClickTab(dumyBigTagList1, "csList")}
+            onClick={() => onClickTab(tabCsList, "csList")}
             sx={{ padding: "5px 10px" }} // 탭의 패딩 감소
           />
           <Tab
-            label="JOB"
+            label="희망 직무"
             {...a11yProps(1)}
-            onClick={() => onClickTab(dumyBigTagList2, "jobList")}
+            onClick={() => onClickTab(tabJobList, "jobList")}
             sx={{ padding: "5px 10px" }} // 탭의 패딩 감소
           />
         </Tabs>
@@ -237,7 +232,10 @@ export default function BasicTabs({ setQuestions }) {
           padding: "0 10px",
         }}
       >
-        <AutoCompleteCompo setCompanyName={setCompanyName} />
+        <AutoCompleteCompo
+          setCompanyName={setCompanyName}
+          setCompanyId={setCompanyId}
+        />
         <div>
           {tagSearchOpen ? (
             <Button
@@ -259,9 +257,12 @@ export default function BasicTabs({ setQuestions }) {
           {/* SELECT1 패널 */}
           {/* 대분류, 소분류까지 */}
           <CustomTabPanel value={value} index={0} padding="0px">
-            <Grid container spacing={2}>
+            <Grid container>
               {/* 대분류 */}
-              <Grid xs={5} sx={{ pr: "0px" }}>
+              <Grid
+                xs={6}
+                sx={{ borderRight: "0.8px solid rgba(0, 0, 0, 0.12)" }}
+              >
                 <FirstTabFirstList
                   tagDataList={tagDataList}
                   setTagDataList={setTagDataList}
@@ -277,14 +278,12 @@ export default function BasicTabs({ setQuestions }) {
                   setSmallTagList={setSmallTagList}
                   pickTagList={pickTagList}
                   setPickTagList={setPickTagList}
-                  dumyData={dumyData.data.csList}
+                  dumyData={dumyData.csList}
                 />
               </Grid>
 
-              <Divider orientation="vertical" variant="middle" flexItem />
-
               {/* 소분류 */}
-              <Grid>
+              <Grid xs={6}>
                 <FirstTabSecondList
                   tagDataList={tagDataList}
                   setTagDataList={setTagDataList}
@@ -299,13 +298,15 @@ export default function BasicTabs({ setQuestions }) {
             </Grid>
             <Divider />
           </CustomTabPanel>
-
           {/* SELECT2 패널 */}
           {/* 대분류, 소분류까지 */}
           <CustomTabPanel value={value} index={1}>
-            <Grid container spacing={2}>
+            <Grid container>
               {/* 대분류 */}
-              <Grid xs={5} sx={{ pr: "0px" }}>
+              <Grid
+                xs={6}
+                sx={{ borderRight: "0.8px solid rgba(0, 0, 0, 0.12)" }}
+              >
                 <SecondTabFirstList
                   tagDataList={tagDataList}
                   setTagDataList={setTagDataList}
@@ -321,13 +322,12 @@ export default function BasicTabs({ setQuestions }) {
                   setSmallTagList={setSmallTagList}
                   pickTagList={pickTagList}
                   setPickTagList={setPickTagList}
-                  dumyData={dumyData.data.jsList}
+                  dumyData={dumyData.jsList}
                 />
               </Grid>
-              <Divider orientation="vertical" variant="middle" flexItem />
 
               {/* 소분류 */}
-              <Grid>
+              <Grid xs={6}>
                 <SecondTabSecondList
                   tagDataList={tagDataList}
                   setTagDataList={setTagDataList}

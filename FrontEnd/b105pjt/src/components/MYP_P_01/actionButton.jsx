@@ -66,7 +66,6 @@ const ActionButton = ({ onDelete }) => {
         },
       },
       (resp) => {
-        console.log(resp);
       },
       (error) => {
         console.log("에러 발생: ", error);

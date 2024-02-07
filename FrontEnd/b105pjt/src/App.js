@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { createStore } from "redux";
-import { Provider, useSelector, useDispatch } from "react-redux";
-import NavbarLogin from "./components/utils/navbarLogin";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import HOM_P_01 from "./pages/HOM_P_01";
 import MYI_P_02_Modify from "./pages/MYI_P_02_Modify";
@@ -15,24 +14,43 @@ import ADM_P_01 from "./pages/ADM_P_01";
 import "./assets/css/App.css";
 import Footer from "./components/utils/footer";
 import Loading from "./components/utils/loading";
-import NavbarComponent from "./components/utils/navbarComponent";
 import AuthMiddleware from "./hoc/memberAuth";
 import UserAuth from "./hoc/userAuth";
 import AdminAuth from "./hoc/adminAuth";
+import Navbar from "./components/utils/navbar";
+import { Box, Modal } from "@mui/material";
+import LOG_M_01 from "./pages/LOG_M_01";
+import AlertModal from "./components/utils/alertModal";
 
-const devTools = window.__REDUX_DEVTOOLS_EXTENSION__;
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  maxHeight: 700,
+  overflowY: "auto",
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  pt: 2,
+  px: 4,
+  pb: 3,
+  borderRadius: "10px",
+};
 
 const initialState = {
   isLoggedIn: false,
   isLoading: false,
   role: "",
   userId: "",
+  profile: "",
   accessToken: "",
-  imgurl: "",
+  isModalOpen: false,
+  isAlertOpen: false,
 };
 
 // 리듀서
-function authReducer(state = initialState, action) {
+export function authReducer(state = initialState, action) {
   switch (action.type) {
     //Login
     case "LOGIN":
@@ -42,42 +60,70 @@ function authReducer(state = initialState, action) {
         accessToken: action.accessToken,
         role: action.role,
         userId: action.userId,
-        imgurl: action.imgurl,
+        profile: action.profile,
       };
     case "LOGOUT":
       return {
         ...state,
         isLoggedIn: false,
         accessToken: "",
+        profile: "",
         userId: "",
         role: "",
       };
 
     //Loading
     case "SET_LOADING":
-      console.log("loading");
       return { ...state, isLoading: true };
     case "UNSET_LOADING":
-      console.log("loading end");
       return { ...state, isLoading: false };
 
+    case "OPEN_MODAL":
+      return { ...state, isModalOpen: true };
+    case "CLOSE_MODAL":
+      return { ...state, isModalOpen: false };
+
+    case "OPEN_ALERT":
+      return { ...state, isAlertOpen: true };
+    case "CLOSE_ALERT":
+      return { ...state, isAlertOpen: false };
+
+    case "UPDATE_PROFILE":
+      return { ...state, profile: action.profile };
     default:
       return state;
   }
 }
 
-// 스토어 생성
-const store = createStore(authReducer, devTools && devTools());
-
 // 애플리케이션의 루트 컴포넌트
 function App() {
+  const dispatch = useDispatch();
+  const isModalOpen = useSelector((state) => state.isModalOpen);
+
+  const closeModal = () => {
+    dispatch({ type: "CLOSE_MODAL" });
+  };
   return (
-    <Provider store={store}>
+    <>
       <Loading />
       <div
         style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
       >
-        <NavbarComponent />
+        {/* 로그인 모달 */}
+        <Modal
+          open={isModalOpen}
+          onClose={closeModal}
+          aria-labelledby="parent-modal-title"
+          aria-describedby="parent-modal-description"
+        >
+          <Box sx={{ ...style, width: 400 }}>
+            <LOG_M_01 close={closeModal}></LOG_M_01>
+          </Box>
+        </Modal>
+        {/* 경고 모달 */}
+        <AlertModal />
+
+        <Navbar />
         <div className="App" style={{ flex: 1 }}>
           <Routes>
             <Route path="/" element={<HOM_P_01 />}></Route>
@@ -136,7 +182,7 @@ function App() {
         </div>
         <Footer />
       </div>
-    </Provider>
+    </>
   );
 }
 

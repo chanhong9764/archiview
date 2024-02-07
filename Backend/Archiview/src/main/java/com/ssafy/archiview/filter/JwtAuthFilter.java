@@ -44,20 +44,20 @@ public class JwtAuthFilter extends OncePerRequestFilter {  // OncePerRequestFilt
             if(refreshToken != null){  // 리프레시 토큰이 존재 (엑세스 토큰 재발급 요청)
                 if(jwtUtil.validateToken(refreshToken)){
                     System.out.println("검증된 리프레시 토큰입니다.");
-                    setAuthentication(refreshToken, request);
+                    setAuthentication(request);
                 }
             }
             else {  // 재발급 요청 외 모든 요청
                 if(jwtUtil.validateToken(accessToken)) {
                     System.out.println("검증된 엑세스 토큰입니다.");
-                    setAuthentication(accessToken, request);
+                    setAuthentication(request);
                 }
             }
         }
         filterChain.doFilter(request, response);  // 다음 필터로 넘김
     }
 
-    public void setAuthentication(String token, HttpServletRequest request){
+    public void setAuthentication(HttpServletRequest request){
         String userId = jwtUtil.getUsername(request);
         if(userId == null) {  // 이메일 인증 토큰이면 return
             return;

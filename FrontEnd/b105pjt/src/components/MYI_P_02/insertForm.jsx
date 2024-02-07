@@ -37,8 +37,6 @@ const InsertForm = () => {
   }
 
   function onClickApply() {
-    console.log("onClickApply");
-
     createReply(
       {
         Authorization: accessToken,

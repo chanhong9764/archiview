@@ -4,13 +4,10 @@ import React, { useState } from "react";
 import LoginIcon from "@mui/icons-material/Login";
 import "../../assets/css/LOG_M_01_login.css";
 import Logo from "../../assets/img/mainLogo-removebg-preview.png";
-import FoundIDResult from "./findIDResult";
 import { login } from "../../api/userAPI";
 import { useForm } from "../../utils/useForm";
 import { useNavigate } from "react-router-dom";
-import { setCookie, getCookie, removeCookie } from "../../utils/cookie";
-
-let data;
+import { setCookie } from "../../utils/cookie";
 
 const LoginModal = ({ onSwitch, close }) => {
   const dispatch = useDispatch();
@@ -28,6 +25,7 @@ const LoginModal = ({ onSwitch, close }) => {
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
   const [foundId, setFoundId] = useState(null);
+  const [message, setMessage] = useState("");
 
   const handleClickFindID = () => {
     onSwitch("FindID");
@@ -42,34 +40,41 @@ const LoginModal = ({ onSwitch, close }) => {
   };
 
   const handleLoginAxios = async () => {
+    setMessage("");
     login(
       form,
       (resp) => {
-        data = resp;
+        if (resp.data.data.role === "ROLE_BLOCK") {
+          setMessage("정지된 유저입니다.");
+          navigate("/");
+        } else {
+          setCookie("refreshToken", resp.data.data.refreshToken, {
+            path: "/",
+            secure: true,
+            httpOnly: true,
+            SameSite: true,
+            Referrer: true,
+            maxAge: 60 * 60 * 24 * 7,
+          });
 
-        setCookie("refreshToken", data.data.data.refreshToken, {
-          path: "/",
-          secure: true,
-          httpOnly: true,
-          SameSite: true,
-          Referrer: true,
-          maxAge: 60 * 60 * 24 * 7,
-        });
-        dispatch({
-          type: "LOGIN",
-          accessToken: data.data.data.accessToken,
-          role: data.data.data.role,
-          userId: data.data.data.id,
-          profile:
-            "https://i10b105.p.####.io/api/files/profile/" + data.data.data.id,
-        });
-        localStorage.setItem("accessToken", data.data.data.accessToken);
-        resetForm();
-        close();
+          dispatch({
+            type: "LOGIN",
+            accessToken: resp.data.data.accessToken,
+            role: resp.data.data.role,
+            userId: resp.data.data.id,
+            profile:
+              "https://i10b105.p.####.io/api/files/profile/" +
+              resp.data.data.id,
+          });
+          localStorage.setItem("accessToken", resp.data.data.accessToken);
+          resetForm();
+          close();
+        }
       },
+
       (error) => {
         console.error("데이터 전송 오류:", error);
-        alert("로그인 실패");
+        setMessage("아이디 및 패스워드를 확인해주세요.");
       }
     );
   };
@@ -140,14 +145,16 @@ const LoginModal = ({ onSwitch, close }) => {
             onChange={handlePwChange}
           />
         </Grid>
-
+        <Grid item xs={12}>
+          <span style={{ color: "red", fontSize: 13 }}>{message}</span>
+        </Grid>
         <Grid item xs={12}>
           <Button
             className="Login-btn"
             variant="contained"
             endIcon={<LoginIcon />}
             onClick={handleLogin}
-            color="success"
+            color="primary"
           >
             로그인
           </Button>

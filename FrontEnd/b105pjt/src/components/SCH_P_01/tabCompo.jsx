@@ -17,6 +17,7 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import SearchIcon from "@mui/icons-material/Search";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { questionSearch } from "../../api/questionAPI";
+import { getJobPostingDetail } from "../../api/commonsAPI";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -53,47 +54,16 @@ export default function BasicTabs({
   setCsList,
   setJobList,
 }) {
-  const dumyData = {
-    code: "SELECT_TAG_LIST_SUCCESS",
-    message: "태그 조회에 성공했습니다.",
-    data: {
-      csList: [
-        {
-          name: "공통",
-          csSubList: ["장단점", "자기소개", "뽑아야할 이유"],
-        },
-        {
-          name: "특화",
-          csSubList: ["역량", "경험", "언어", "기술"],
-        },
-      ],
-      jsList: [
-        {
-          name: "IT",
-          jobSubList: ["프론트엔드", "백엔드", "풀스택", "Java", "Python"],
-        },
-        {
-          name: "게임",
-          jobSubList: ["게임 디자인", "게임 프로그래밍", "게임 서버 관리"],
-        },
-      ],
-    },
-  };
-
-  const dumyBigTagList1 = dumyData.data.csList.map(function (ojt) {
-    const rOjt = ojt.name;
-    return rOjt;
-  });
-  const dumyBigTagList2 = dumyData.data.jsList.map(function (ojt) {
-    const rOjt = ojt.name;
-    return rOjt;
+  const [dumyData, setDumyData] = useState({
+    csList: [{ name: "", csSubList: "" }],
+    jsList: [{ name: "", jobSubList: "" }],
   });
 
   const [tab, setTab] = useState("csList");
   const [value, setValue] = useState(0);
   const [tagDataList, setTagDataList] = useState([]);
   const [checked, setChecked] = useState([]);
-  const [bigTagList, setBigTagList] = useState(dumyBigTagList1);
+  const [bigTagList, setBigTagList] = useState([]);
   const [bigTagData, setBigTagData] = useState("");
   const [smallTagData, setSmallTagData] = useState([]);
   const [smallTagList, setSmallTagList] = useState([]);
@@ -101,6 +71,8 @@ export default function BasicTabs({
   const [tagSearchOpen, setTagSearchOpen] = useState(true);
   const [pgno, setPgno] = useState(1);
   const [companyName, setCompanyName] = useState("");
+  const [tabCsList, setTabCsList] = useState([]);
+  const [tabJobList, setTabJobList] = useState([]);
 
   useEffect(() => {
     if (setCsList && setJobList) {
@@ -119,12 +91,37 @@ export default function BasicTabs({
     }
   }, [tagDataList]);
 
+  useEffect(() => {
+    const csList = dumyData.csList.map(function (ojt) {
+      const rOjt = ojt.name;
+      return rOjt;
+    });
+    const jobList = dumyData.jsList.map(function (ojt) {
+      const rOjt = ojt.name;
+      return rOjt;
+    });
+    setTabCsList(csList);
+    setTabJobList(jobList);
+    setBigTagList(csList);
+  }, [dumyData]);
+
+  useEffect(() => {
+    const getJobDetail = async () => {
+      await getJobPostingDetail(
+        (res) => {
+          setDumyData(res.data.data);
+          // console.log(res.data.data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    };
+    getJobDetail();
+  }, []);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
-  };
-
-  const handleTabChange = (event, tabData, bigTagData) => {
-    setTab();
   };
 
   const handleReset = () => {
@@ -208,13 +205,13 @@ export default function BasicTabs({
           <Tab
             label="면접 유형"
             {...a11yProps(0)}
-            onClick={() => onClickTab(dumyBigTagList1, "csList")}
+            onClick={() => onClickTab(tabCsList, "csList")}
             sx={{ padding: "5px 10px" }} // 탭의 패딩 감소
           />
           <Tab
             label="희망 직무"
             {...a11yProps(1)}
-            onClick={() => onClickTab(dumyBigTagList2, "jobList")}
+            onClick={() => onClickTab(tabJobList, "jobList")}
             sx={{ padding: "5px 10px" }} // 탭의 패딩 감소
           />
         </Tabs>
@@ -254,9 +251,12 @@ export default function BasicTabs({
           {/* SELECT1 패널 */}
           {/* 대분류, 소분류까지 */}
           <CustomTabPanel value={value} index={0} padding="0px">
-            <Grid container spacing={2}>
+            <Grid container>
               {/* 대분류 */}
-              <Grid xs={5} sx={{ pr: "0px" }}>
+              <Grid
+                xs={6}
+                sx={{ borderRight: "0.8px solid rgba(0, 0, 0, 0.12)" }}
+              >
                 <FirstTabFirstList
                   tagDataList={tagDataList}
                   setTagDataList={setTagDataList}
@@ -272,14 +272,12 @@ export default function BasicTabs({
                   setSmallTagList={setSmallTagList}
                   pickTagList={pickTagList}
                   setPickTagList={setPickTagList}
-                  dumyData={dumyData.data.csList}
+                  dumyData={dumyData.csList}
                 />
               </Grid>
 
-              <Divider orientation="vertical" variant="middle" flexItem />
-
               {/* 소분류 */}
-              <Grid>
+              <Grid xs={6}>
                 <FirstTabSecondList
                   tagDataList={tagDataList}
                   setTagDataList={setTagDataList}
@@ -294,13 +292,15 @@ export default function BasicTabs({
             </Grid>
             <Divider />
           </CustomTabPanel>
-
           {/* SELECT2 패널 */}
           {/* 대분류, 소분류까지 */}
           <CustomTabPanel value={value} index={1}>
-            <Grid container spacing={2}>
+            <Grid container>
               {/* 대분류 */}
-              <Grid xs={5} sx={{ pr: "0px" }}>
+              <Grid
+                xs={6}
+                sx={{ borderRight: "0.8px solid rgba(0, 0, 0, 0.12)" }}
+              >
                 <SecondTabFirstList
                   tagDataList={tagDataList}
                   setTagDataList={setTagDataList}
@@ -316,13 +316,12 @@ export default function BasicTabs({
                   setSmallTagList={setSmallTagList}
                   pickTagList={pickTagList}
                   setPickTagList={setPickTagList}
-                  dumyData={dumyData.data.jsList}
+                  dumyData={dumyData.jsList}
                 />
               </Grid>
-              <Divider orientation="vertical" variant="middle" flexItem />
 
               {/* 소분류 */}
-              <Grid>
+              <Grid xs={6}>
                 <SecondTabSecondList
                   tagDataList={tagDataList}
                   setTagDataList={setTagDataList}

@@ -90,19 +90,12 @@ const Page = () => {
           setAuth(resp.data.data.auth);
           searchQuestion(
             {
-              headers: {
-                Authorization: accessToken,
-              },
+              Authorization: accessToken,
             },
             {
-              userId: userId,
+              userId: resp.data.data.id,
             },
             (resp) => {
-              console.log(
-                "MYI_P_01 -> searchQuestion | 질문 검색 성공",
-                userId,
-                resp.data
-              );
               if (resp.data.data) setQuestions(resp.data.data);
             },
             (error) => {

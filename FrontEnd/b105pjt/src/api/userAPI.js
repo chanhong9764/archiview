@@ -92,16 +92,6 @@ async function validPW(token, param, success, fail) {
     .catch(fail);
 }
 
-async function modifyUserInfo(token, param, success, fail) {
-  console.log(token);
-  const config = {
-    headers: {
-      Authorization: token,
-    },
-  };
-  await baseURL.patch("users", param, config).then(success).catch(fail);
-}
-
 async function wantUpgrade(token, success, fail) {
   console.log(token);
   const config = {
@@ -114,7 +104,6 @@ async function wantUpgrade(token, success, fail) {
 
 export {
   wantUpgrade,
-  modifyUserInfo,
   signup,
   sendEmail,
   login,

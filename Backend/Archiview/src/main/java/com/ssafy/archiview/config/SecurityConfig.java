@@ -1,11 +1,13 @@
 package com.####.archiview.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.####.archiview.filter.JwtAccessDeniedHandler;
 import com.####.archiview.filter.JwtExceptionHandlerFilter;
 import com.####.archiview.jwt.*;
 import com.####.archiview.filter.JsonUsernamePasswordAuthenticationFilter;
 import com.####.archiview.filter.JwtAuthFilter;
 import com.####.archiview.service.user.CustomUserDetailsService;
+import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -67,9 +69,14 @@ public class SecurityConfig {
                         .requestMatchers("api/users/find-email", "api/users/join-email").permitAll()  // 이메일 인증 요청 허용
                         .requestMatchers("api/questions/**", "api/recruits/**", "api/commons/**").permitAll() // ~ 허용
                         .anyRequest().authenticated())  // 나머지 요청은 모두 인증 되어야 함.
+
                 .addFilterBefore(jsonUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtAuthFilter(customUserDetailsService, jwtUtil), JsonUsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JwtExceptionHandlerFilter(), JwtAuthFilter.class);
+                .addFilterBefore(new JwtExceptionHandlerFilter(), JwtAuthFilter.class)
+                
+                .exceptionHandling((exceptionHandling) ->
+                        exceptionHandling.accessDeniedHandler(new JwtAccessDeniedHandler())
+        );
         return http.build();
     }
 

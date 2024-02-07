@@ -49,7 +49,6 @@ const FindPWModal = ({ onSwitch, setToken, data }) => {
       { email: emailValue },
       (resp) => {
         setShowSignupFields(true); // 인증번호 필드를 보여줌
-        // console.log(resp);
         setemailToken(resp.data.data.emailToken);
         setAuthNum(resp.data.data.authNumber);
       },
@@ -76,7 +75,6 @@ const FindPWModal = ({ onSwitch, setToken, data }) => {
         email: emailValue,
       },
       (resp) => {
-        // console.log(resp);
         setToken(emailToken);
         onSwitch("ChangePW");
       },

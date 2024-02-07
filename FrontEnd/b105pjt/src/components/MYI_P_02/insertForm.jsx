@@ -41,8 +41,6 @@ const InsertForm = () => {
   }
 
   function onClickApply() {
-    console.log("onClickApply");
-
     createReply(
       {
         Authorization: accessToken,
@@ -69,7 +67,6 @@ const InsertForm = () => {
     );
   }
   function onClickCancle() {
-    console.log("onClickCancle");
     Navigate("/myinterview");
   }
 

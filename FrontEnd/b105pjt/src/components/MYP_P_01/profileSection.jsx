@@ -84,7 +84,6 @@ const ProfileSection = () => {
   const handleSave = () => {
     const formData = new FormData();
     if (uploadedImage) {
-      console.log("업로드 이미지", uploadedImage);
       formData.append("img", uploadedImage);
       uploadProfileImage(
         id,
@@ -210,7 +209,6 @@ const ProfileEditModal = ({
 
   // 업데이트 버튼
   const handleUpdateBtn = () => {
-    console.log("newIntroduce >> ", newIntroduce);
     modifyUserInfo(
       token,
       {

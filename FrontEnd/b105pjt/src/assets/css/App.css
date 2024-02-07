@@ -20,11 +20,19 @@
   background: rgba(0, 0, 0, 0.5);
 }
 
+@font-face {
+  font-family: "Pretendard";
+  src: url("../font/Pretendard-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
 html,
 body {
   margin: 0;
   padding: 0;
   height: 100%;
+  font-family: "Pretendard";
 }
 
 #root,

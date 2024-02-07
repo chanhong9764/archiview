@@ -4,9 +4,8 @@ import ManageGrade from "../components/ADM_P_01/manageGrade";
 
 const ADM_P_01 = () => {
   return (
-    <div>
+    <div style={{ width: "90%", margin: "0 auto" }}>
       <ManageAccount></ManageAccount>
-      {/* <ManageGrade></ManageGrade> */}
     </div>
   );
 };

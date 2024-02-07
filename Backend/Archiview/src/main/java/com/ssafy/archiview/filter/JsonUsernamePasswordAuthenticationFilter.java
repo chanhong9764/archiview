@@ -80,7 +80,6 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
         }
 
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(id, pw);
-
         // PrincipalDetailsService의 loadUserByUsername() 메서드가 실행된 후
         // 정상처리 되면 authentication이 리턴 됨
         Authentication authentication = getAuthenticationManager().authenticate(authRequest);
@@ -94,7 +93,8 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+                                            FilterChain chain, Authentication authentication) throws IOException {
         System.out.println("login success");
         // 유저 권한 추출
         String authoritie = authentication.getAuthorities().stream()
@@ -106,7 +106,6 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
 
         String userId = customUserDetails.getUsername();  // userId 추출
         User user = userRepository.findById(userId).get();
-
         TokenDto.createTokenDto token = jwtUtil.createJwt(userId, user.getRole().toString());  // 토큰 생성
 
         UserDto.loginResponseDto responseDto = UserDto.loginResponseDto.builder()

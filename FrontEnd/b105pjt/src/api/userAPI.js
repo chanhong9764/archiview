@@ -62,8 +62,8 @@ async function login(param, success, fail) {
   await baseURL.post("users/login", param).then(success).catch(fail);
 }
 
-async function logout(param, success, fail) {
-  await baseURL.post("users/logout", param).then(success).catch(fail);
+async function logout(headers, success, fail) {
+  await baseURL.get("users/logout", headers).then(success).catch(fail);
 }
 
 async function userDetail(token, success, fail) {

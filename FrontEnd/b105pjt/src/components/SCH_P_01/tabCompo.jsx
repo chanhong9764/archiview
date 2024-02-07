@@ -18,6 +18,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { questionSearch } from "../../api/questionAPI";
 import { getJobPostingDetail } from "../../api/commonsAPI";
+import { useSelector } from "react-redux";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -53,6 +54,7 @@ export default function BasicTabs({
   setCompanyId,
   setCsList,
   setJobList,
+  userId,
 }) {
   const [dumyData, setDumyData] = useState({
     csList: [{ name: "", csSubList: "" }],
@@ -151,7 +153,7 @@ export default function BasicTabs({
 
   const onClickSearch = async () => {
     const data = {
-      userId: "",
+      userId: userId,
       company: companyName,
       cs: tagDataList
         .filter((item) => item.tab === "csList")
@@ -168,14 +170,18 @@ export default function BasicTabs({
 
     await questionSearch(data)
       .then((res) => {
-        const formattedQuestions = res.data.data.map((item) => {
-          return {
-            id: item.id,
-            content: item.content,
-            replies: item.replies,
-          };
-        });
-        setQuestions(formattedQuestions);
+        if (res.data.data) {
+          const formattedQuestions = res.data.data.map((item) => {
+            return {
+              id: item.id,
+              content: item.content,
+              replies: item.replies,
+            };
+          });
+          setQuestions(formattedQuestions);
+        } else {
+          alert("검색된 값이 없습니다.");
+        }
       })
       .catch((err) => {
         console.log(err);

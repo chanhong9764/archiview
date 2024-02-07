@@ -62,9 +62,7 @@ const AssignUser = ({ onSwitch }) => {
     sendEmail(
       { email: form.email },
       (response) => {
-        console.log(response.data.data.emailToken);
         setEmailToken(response.data.data.emailToken);
-        console.log(response.data.data.authNumber);
         setAuthNumber(response.data.data.authNumber);
         setShowSignupFields(true);
       },
@@ -100,7 +98,6 @@ const AssignUser = ({ onSwitch }) => {
         emailToken,
         (response) => {
           const data = response;
-          // console.log(data);
         },
         (error) => {
           console.error("데이터 전송 실패", error);

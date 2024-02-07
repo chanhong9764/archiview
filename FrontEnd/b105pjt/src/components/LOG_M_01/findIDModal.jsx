@@ -265,10 +265,8 @@ const FindIDModal = ({ onSwitch }) => {
         setShowSignupFields(true);
         setFindAccessToken(resp.data.data.emailToken);
         setAuthNum(resp.data.data.authNumber);
-        // console.log(resp.data.data.authNumber);
       },
       (error) => {
-        // console.log("에러 발생: ", error);
         setIsInputDisabled(false);
       }
     );
@@ -326,7 +324,6 @@ const FindIDModal = ({ onSwitch }) => {
   const handleNameChange = (event) => {
     const newName = event.target.value;
     setNameValue(newName);
-    // console.log(nameValue);
     setIsNameValid(/^[가-힣]{2,32}$/.test(newName));
   };
 

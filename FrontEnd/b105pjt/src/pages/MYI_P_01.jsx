@@ -19,6 +19,7 @@ import AdminButton from "../components/MYP_P_01/adminButton.jsx";
 import { userDetail, wantUpgrade } from "../api/userAPI.js";
 import { searchQuestion } from "../api/mypageAPI.js";
 import { setUserBlock, setUserDown, setUserUp } from "../api/adminAPI.js";
+import { useSelector } from "react-redux";
 
 // 커스텀 테마 정의
 const theme = createTheme({
@@ -72,7 +73,7 @@ const Page = () => {
   const [block, setBlock] = useState(null);
   const [role, setRole] = useState(null);
   const [auth, setAuth] = useState(null);
-  const [userId, setUserId] = useState(null);
+  const [userId, setUserId] = useState(useSelector((state) => state.userId));
 
   const accessToken = localStorage.getItem("accessToken");
 
@@ -97,7 +98,11 @@ const Page = () => {
               userId: userId,
             },
             (resp) => {
-              console.log("MYI_P_01 -> searchQuestion | 질문 검색 성공", userId, resp.data);
+              console.log(
+                "MYI_P_01 -> searchQuestion | 질문 검색 성공",
+                userId,
+                resp.data
+              );
               if (resp.data.data) setQuestions(resp.data.data);
             },
             (error) => {
@@ -129,7 +134,11 @@ const Page = () => {
               userId: userId,
             },
             (resp) => {
-              console.log("MYI_P_01 -> searchQuestion | 질문 검색 성공", userId, resp.data);
+              console.log(
+                "MYI_P_01 -> searchQuestion | 질문 검색 성공",
+                userId,
+                resp.data
+              );
               if (resp.data.data) setQuestions(resp.data.data);
             },
             (error) => {
@@ -216,15 +225,20 @@ const Page = () => {
           />
         )}
         {isUpgradBtn && (
-          <Button disabled={auth} variant="outlined" color="info" onClick={handleUpgrade}>
+          <Button
+            disabled={auth}
+            variant="outlined"
+            color="info"
+            onClick={handleUpgrade}
+          >
             등업신청
           </Button>
         )}
         {profileData && (
           <ProfileSection
             imageUrl={
-              "https://i10b105.p.####.io/api/files/profile/" + profileData.id ||
-              "default-image-url.jpg"
+              "https://i10b105.p.####.io/api/files/profile/" +
+                profileData.id || "default-image-url.jpg"
             }
           >
             <Typography variant="h5" gutterBottom>
@@ -235,7 +249,7 @@ const Page = () => {
             </Typography>
           </ProfileSection>
         )}
-        <SearchTab setQuestions={setQuestions} />
+        <SearchTab setQuestions={setQuestions} userId={userId} />
         {questions.map((question, index) => (
           <Accordion
             key={index}
@@ -248,15 +262,24 @@ const Page = () => {
             <Grid container spacing={2}>
               {question.replies.map((reply) => (
                 <Grid item xs={12} sm={6} md={4} key={reply.id}>
-                  <Card onClick={() => handleViewDetails(reply.videoUrl)} sx={cardStyles}>
+                  <Card
+                    onClick={() => handleViewDetails(reply.videoUrl)}
+                    sx={cardStyles}
+                  >
                     <CardMedia
                       component="img"
                       sx={mediaStyles}
-                      image={"https://i10b105.p.####.io/api/files/thumbnail/" + reply.thumbnailUrl}
+                      image={
+                        "https://i10b105.p.####.io/api/files/thumbnail/" +
+                        reply.thumbnailUrl
+                      }
                       alt="Thumbnail Image"
                     />
                     <CardContent>
-                      <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+                      <Typography
+                        variant="subtitle1"
+                        sx={{ fontWeight: "bold" }}
+                      >
                         {reply.userId}
                       </Typography>
                       <Typography variant="body2">{reply.script}</Typography>

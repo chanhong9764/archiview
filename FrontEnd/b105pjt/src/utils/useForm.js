@@ -6,7 +6,6 @@ const useForm = (initialState) => {
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
-    console.log(form);
   };
 
   const handleFileChange = (e) => {

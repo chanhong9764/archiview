@@ -78,8 +78,8 @@ function Test() {
     if (!isLoggedIn) {
       setShowAlertModal(true); // 로그인이 되어 있지 않으면 로그인 모달 표시
     } else {
-      navigate("/interview/detail", { 
-        state: { "postId": reply.userId }
+      navigate("/interview/detail", {
+        state: { postId: reply.userId },
       });
     }
   };
@@ -96,7 +96,7 @@ function Test() {
   return (
     <ThemeProvider theme={theme}>
       <Container sx={{ mt: 4, mb: 4 }}>
-        <Tabcompo setQuestions={setQuestions}/>
+        <Tabcompo setQuestions={setQuestions} />
         {questions.map((question, index) => (
           <Accordion
             key={index}
@@ -116,7 +116,10 @@ function Test() {
                     <CardMedia
                       component="img"
                       sx={mediaStyles}
-                      image={reply.thumbnailUrl}
+                      image={
+                        "https://i10b105.p.####.io/api/files/thumbnail/" +
+                        reply.thumbnailUrl
+                      }
                       alt="Thumbnail Image"
                     />
                     <CardContent>

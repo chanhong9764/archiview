@@ -71,6 +71,7 @@ export default function BasicTabs({ setQuestions }) {
           name: "게임",
           jobSubList: ["게임 디자인", "게임 프로그래밍", "게임 서버 관리"],
         },
+        
       ],
     },
   };
@@ -214,13 +215,13 @@ export default function BasicTabs({ setQuestions }) {
       >
         <Tabs value={value} onChange={handleChange} aria-label="기본 탭 예제">
           <Tab
-            label="CS"
+            label="면접 유형"
             {...a11yProps(0)}
             onClick={() => onClickTab(dumyBigTagList1, "csList")}
             sx={{ padding: "5px 10px" }} // 탭의 패딩 감소
           />
           <Tab
-            label="JOB"
+            label="희망 직무"
             {...a11yProps(1)}
             onClick={() => onClickTab(dumyBigTagList2, "jobList")}
             sx={{ padding: "5px 10px" }} // 탭의 패딩 감소

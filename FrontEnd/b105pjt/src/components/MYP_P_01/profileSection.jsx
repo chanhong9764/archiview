@@ -9,11 +9,16 @@ import {
   Button,
   TextField,
   Divider,
+  InputLabel,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close"; // 닫기 아이콘을 위한 임포트
 import ActionButton from "../../components/MYP_P_01/actionButton";
-import { userDetail, uploadProfileImage, updateUserDetail } from "../../api/mypageAPI";
+import {
+  userDetail,
+  uploadProfileImage,
+  updateUserDetail,
+} from "../../api/mypageAPI";
 import { useEffect } from "react";
 import { modifyUserInfo } from "../../api/userAPI";
 import { useSelector } from "react-redux";
@@ -45,8 +50,12 @@ const ProfileSection = () => {
         setId(resp.data.data.id);
         setName(resp.data.data.name);
         setEmail(resp.data.data.email);
-        setCurrentProfileUrl("https://i10b105.p.ssafy.io/api/files/profile/" + resp.data.data.id);
-        setNewProfileUrl("https://i10b105.p.ssafy.io/api/files/profile/" + resp.data.data.id);
+        setCurrentProfileUrl(
+          "https://i10b105.p.ssafy.io/api/files/profile/" + resp.data.data.id
+        );
+        setNewProfileUrl(
+          "https://i10b105.p.ssafy.io/api/files/profile/" + resp.data.data.id
+        );
         setIntroduce(resp.data.data.introduce);
         setCurrentIntroduce(resp.data.data.introduce);
         setNewIntroduce(resp.data.data.introduce);
@@ -264,17 +273,41 @@ const ProfileEditModal = ({
         <Typography variant="h6" sx={{ mb: 2, color: "primary.main" }}>
           프로필 편집
         </Typography>
-        <Avatar
-          src={newProfileUrl}
-          alt="New Profile"
-          sx={{ width: 150, height: 150, borderRadius: "50%", mb: 2 }}
-        />
-        <input
-          accept="image/*"
-          type="file"
-          onChange={handleFileChange}
-          style={{ display: "block", margin: "10px 0" }}
-        />
+        <Box sx={{ position: "relative" }}>
+          <Avatar
+            src={newProfileUrl}
+            alt="New Profile"
+            sx={{ width: 150, height: 150, borderRadius: "50%", mb: 2 }}
+          />
+          <input
+            id="profile"
+            accept="image/*"
+            type="file"
+            onChange={handleFileChange}
+            style={{ display: "none" }}
+          />
+          <label
+            htmlFor="profile"
+            style={{
+              position: "absolute",
+              bottom: 15,
+              right: 10,
+            }}
+          >
+            <IconButton
+              component="span"
+              color="primary"
+              sx={{
+                backgroundColor: "white",
+                "&:hover": {
+                  backgroundColor: "grey.200",
+                },
+              }}
+            >
+              <EditIcon />
+            </IconButton>
+          </label>
+        </Box>
         <TextField
           label="소개글"
           variant="outlined"
@@ -285,7 +318,12 @@ const ProfileEditModal = ({
           onChange={handleIntroduceChange}
           sx={{ mt: 2, mb: 2 }}
         />
-        <Button variant="contained" color="primary" onClick={handleApply} sx={{ mt: 2 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleApply}
+          sx={{ mt: 2, ml: "auto" }}
+        >
           업데이트
         </Button>
       </Box>

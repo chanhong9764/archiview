@@ -27,16 +27,12 @@ const ChangPWModal = ({ currentComponent, data, onSwitch }) => {
     const headers = {
       Authorization: data,
     };
-    console.log(form);
-    console.log(headers);
     changePW(
       form,
       headers,
       (resp) => {
-        console.log(resp);
       },
       (error) => {
-        console.log(error);
       }
     );
 

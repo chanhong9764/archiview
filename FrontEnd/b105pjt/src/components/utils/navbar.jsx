@@ -11,46 +11,23 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import { Link } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../../api/userAPI";
 import Logo from "../../assets/img/symbolLogo_Slogun-removebg-preview.png";
-import { setCookie, getCookie, removeCookie } from "../../utils/cookie";
+import { removeCookie } from "../../utils/cookie";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
-import { userDetail } from "../../api/mypageAPI";
-import { Image } from "@mui/icons-material";
 
 function Navbar() {
   const role = useSelector((state) => state.role);
-  const isAdmin = useSelector((state) => state.isAdmin);
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const profile = useSelector((state) => state.profile);
   const accessToken = localStorage.getItem("accessToken");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation(); // 현재 경로 정보를 얻어오기 위해 useLocation 사용
-
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-
-  const [profileUrl, setProfileUrl] = React.useState(null);
-  useEffect(() => {
-    userDetail(
-      {
-        headers: {
-          Authorization: accessToken,
-        },
-      },
-      (resp) => {
-        setProfileUrl(
-          "https://i10b105.p.ssafy.io/api/files/profile/" + resp.data.data.id
-        );
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-  }, []);
 
   // 메뉴 여닫기
   const handleOpenNavMenu = (event) => {
@@ -62,6 +39,7 @@ function Navbar() {
   };
   // 메뉴 여닫기
   const handleCloseNavMenu = () => {
+    console.log("hihi");
     setAnchorElNav(null);
   };
   // 메뉴 여닫기
@@ -120,6 +98,11 @@ function Navbar() {
 
   const isCurrentPage = (path) => {
     return location.pathname === path;
+  };
+
+  // 모달 열기
+  const openModal = () => {
+    dispatch({ type: "OPEN_MODAL" });
   };
 
   return (
@@ -183,7 +166,7 @@ function Navbar() {
               >
                 <MenuItem onClick={handleCloseNavMenu}>
                   <Typography onClick={handleCalendar} textAlign="center">
-                    채용 공고
+                    취업 캘린더
                   </Typography>
                 </MenuItem>
                 <MenuItem onClick={handleCloseNavMenu}>
@@ -191,11 +174,13 @@ function Navbar() {
                     상세 검색
                   </Typography>
                 </MenuItem>
-                <MenuItem onClick={handleCloseNavMenu}>
-                  <Typography onClick={handleMyInterview} textAlign="center">
-                    내 인터뷰
-                  </Typography>
-                </MenuItem>
+                {isLoggedIn && (
+                  <MenuItem onClick={handleCloseNavMenu}>
+                    <Typography onClick={handleMyInterview} textAlign="center">
+                      면접 관리
+                    </Typography>
+                  </MenuItem>
+                )}
               </Menu>
             </Box>
 
@@ -223,69 +208,91 @@ function Navbar() {
               >
                 상세 검색
               </Button>
-              <Button
-                onClick={handleMyInterview}
-                sx={{
-                  my: 2,
-                  color: "#222222",
-                  display: "block",
-                  fontWeight:
-                    isCurrentPage("/myinterview") ||
-                    isCurrentPage("/addquestion")
-                      ? "bold"
-                      : "normal",
-                }}
-              >
-                면접 관리
-              </Button>
+              {isLoggedIn && (
+                <Button
+                  onClick={handleMyInterview}
+                  sx={{
+                    my: 2,
+                    color: "#222222",
+                    display: "block",
+                    fontWeight:
+                      isCurrentPage("/myinterview") ||
+                      isCurrentPage("/addquestion")
+                        ? "bold"
+                        : "normal",
+                  }}
+                >
+                  면접 관리
+                </Button>
+              )}
             </Box>
 
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <Button onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  {/* 프로필 이미지 */}
-                  <Avatar
-                    src={profileUrl}
-                    alt="Logo"
-                    style={{ height: "50px" }}
-                  />
-                </Button>
-              </Tooltip>
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Typography onClick={handleLogout} textAlign="center">
-                    로그아웃
-                  </Typography>
-                </MenuItem>
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Typography onClick={handleMypage} textAlign="center">
-                    마이페이지
-                  </Typography>
-                </MenuItem>
-                {role === "ROLE_ADMIN" && (
+            {isLoggedIn ? (
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title="Open settings">
+                  <Button onClick={handleOpenUserMenu}>
+                    {/* 프로필 이미지 */}
+                    <Avatar
+                      src={profile}
+                      alt="Logo"
+                      style={{
+                        width: "50px",
+                        height: "50px",
+                      }}
+                    />
+                  </Button>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
                   <MenuItem onClick={handleCloseUserMenu}>
-                    <Typography onClick={handleAdminpage} textAlign="center">
-                      관리페이지
+                    <Typography onClick={handleLogout} textAlign="center">
+                      로그아웃
                     </Typography>
                   </MenuItem>
-                )}
-              </Menu>
-            </Box>
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography onClick={handleMypage} textAlign="center">
+                      마이페이지
+                    </Typography>
+                  </MenuItem>
+                  {role === "ROLE_ADMIN" && (
+                    <MenuItem onClick={handleCloseUserMenu}>
+                      <Typography onClick={handleAdminpage} textAlign="center">
+                        관리페이지
+                      </Typography>
+                    </MenuItem>
+                  )}
+                </Menu>
+              </Box>
+            ) : (
+              <Box sx={{ flexGrow: 0 }}>
+                <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "flex" } }}>
+                  <Button
+                    onClick={openModal}
+                    sx={{
+                      my: 2,
+                      color: "#222222",
+                      display: "block",
+                    }}
+                  >
+                    로그인
+                  </Button>
+                </Box>
+              </Box>
+            )}
           </Toolbar>
         </Container>
       </AppBar>

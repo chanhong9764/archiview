@@ -25,11 +25,7 @@ const InsertForm = () => {
   const [script, setScript] = useState("테스트 스크립트");
   const [companyId, setCompanyId] = useState(3);
   const [csList, setCsList] = useState(["자기소개", "기업", "기타"]);
-  const [jobList, setJobList] = useState([
-    "게임기획",
-    "경영기획",
-    "광고기획",
-  ]);
+  const [jobList, setJobList] = useState(["게임기획", "경영기획", "광고기획"]);
   const [sessionUrl, setSessionUrl] = useState();
   // End - Set Dummy Data
 
@@ -41,8 +37,6 @@ const InsertForm = () => {
   }
 
   function onClickApply() {
-    console.log("onClickApply");
-
     createReply(
       {
         Authorization: accessToken,

@@ -23,10 +23,8 @@ const BtnGroupInsert = () => {
   // 모달의 "예" 버튼 클릭 처리
   const handleConfirm = () => {
     if (confirmType === "edit") {
-      console.log("수정 로직 실행");
       // 수정 로직을 여기에 추가하세요.
     } else if (confirmType === "delete") {
-      console.log("삭제 로직 실행");
       // 삭제 로직을 여기에 추가하세요.
     }
     setOpenConfirm(false); // 모달 닫기

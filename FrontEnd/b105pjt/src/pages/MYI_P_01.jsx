@@ -90,19 +90,21 @@ const Page = () => {
           setAuth(resp.data.data.auth);
           searchQuestion(
             {
-              headers: {
-                Authorization: accessToken,
-              },
+              Authorization: accessToken,
             },
             {
-              userId: userId,
+              userId: resp.data.data.id,
             },
             (resp) => {
+<<<<<<< HEAD
               console.log(
                 "MYI_P_01 -> searchQuestion | 질문 검색 성공",
                 userId,
                 resp.data
               );
+=======
+              console.log("MYI_P_01 -> searchQuestion | 질문 검색 성공", resp.data);
+>>>>>>> 558024b1565c90e108b6ec6ac6e65b570962c00d
               if (resp.data.data) setQuestions(resp.data.data);
             },
             (error) => {

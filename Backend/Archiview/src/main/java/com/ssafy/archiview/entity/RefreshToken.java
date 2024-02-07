@@ -11,12 +11,16 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
 
 @Getter
-@Builder
-@AllArgsConstructor
-@RedisHash(value = "refreshToken", timeToLive = 1209600)  // 2주 뒤 refreshToken 삭제
+@RedisHash(value = "refreshToken", timeToLive = 20)  // 2주 뒤 refreshToken 삭제
 public class RefreshToken {
     @Id
     private String id;
     @Indexed
     private String refreshToken;
+
+    @Builder
+    public RefreshToken(String id, String refreshToken){
+        this.id = id;
+        this.refreshToken = refreshToken;
+    }
 }

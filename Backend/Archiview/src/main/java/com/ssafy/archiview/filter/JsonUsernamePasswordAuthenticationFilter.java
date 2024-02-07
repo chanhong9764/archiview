@@ -82,11 +82,13 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
         if (id == null || pw == null) {
             throw new AuthenticationServiceException("DATA IS MISS");
         }
-
+        // ID, PW를 기반으로 Authentication 객체 생성
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(id, pw);
-        // PrincipalDetailsService의 loadUserByUsername() 메서드가 실행된 후
-        // 정상처리 되면 authentication이 리턴 됨
+
+        // 실제 검증 (사용자 비밀번호 체크)
+        // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
         Authentication authentication = getAuthenticationManager().authenticate(authRequest);
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         setDetails(request, authRequest);
         return authentication;

@@ -63,7 +63,10 @@ async function login(param, success, fail) {
 }
 
 async function logout(headers, success, fail) {
-  await baseURL.get("users/logout", headers).then(success).catch(fail);
+  const config = {
+    headers: headers,
+  };
+  await baseURL.get("users/logout", config).then(success).catch(fail);
 }
 
 async function userDetail(token, success, fail) {

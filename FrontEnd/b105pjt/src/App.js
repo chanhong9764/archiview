@@ -28,6 +28,7 @@ const initialState = {
   role: "",
   userId: "",
   accessToken: "",
+  imgurl: "",
 };
 
 // 리듀서
@@ -35,9 +36,22 @@ function authReducer(state = initialState, action) {
   switch (action.type) {
     //Login
     case "LOGIN":
-      return { ...state, isLoggedIn: true, accessToken: action.accessToken, role: action.role, userId: action.userId };
+      return {
+        ...state,
+        isLoggedIn: true,
+        accessToken: action.accessToken,
+        role: action.role,
+        userId: action.userId,
+        imgurl: action.imgurl,
+      };
     case "LOGOUT":
-      return { ...state, isLoggedIn: false, accessToken: "" };
+      return {
+        ...state,
+        isLoggedIn: false,
+        accessToken: "",
+        userId: "",
+        role: "",
+      };
 
     //Loading
     case "SET_LOADING":
@@ -68,14 +82,56 @@ function App() {
           <Routes>
             <Route path="/" element={<HOM_P_01 />}></Route>
             <Route path="/cal" element={<CAL_P_01 />}></Route>
-            <Route path="/myinterview" element={<UserAuth><MYI_P_01 /></UserAuth>}></Route>
+            <Route
+              path="/myinterview"
+              element={
+                <UserAuth>
+                  <MYI_P_01 />
+                </UserAuth>
+              }
+            ></Route>
             <Route path="/addquestion" element={<MYI_P_02 />}></Route>
-            <Route path="/interview/detail" element={<AuthMiddleware><MYI_P_02 /></AuthMiddleware>}></Route>
-            <Route path="/revise" element={<UserAuth><MYI_P_02_Modify /></UserAuth>}></Route>
-            <Route path="/mypage" element={<UserAuth><MYP_P_01 /></UserAuth>}></Route>
-            <Route path="/modify" element={<UserAuth><MYP_P_02 /></UserAuth>}></Route>
+            <Route
+              path="/interview/detail"
+              element={
+                <AuthMiddleware>
+                  <MYI_P_02 />
+                </AuthMiddleware>
+              }
+            ></Route>
+            <Route
+              path="/revise"
+              element={
+                <UserAuth>
+                  <MYI_P_02_Modify />
+                </UserAuth>
+              }
+            ></Route>
+            <Route
+              path="/mypage"
+              element={
+                <UserAuth>
+                  <MYP_P_01 />
+                </UserAuth>
+              }
+            ></Route>
+            <Route
+              path="/modify"
+              element={
+                <UserAuth>
+                  <MYP_P_02 />
+                </UserAuth>
+              }
+            ></Route>
             <Route path="/search" element={<SCH_P_01 />}></Route>
-            <Route path="/admin" element={<AdminAuth><ADM_P_01 /></AdminAuth>}></Route>
+            <Route
+              path="/admin"
+              element={
+                <AdminAuth>
+                  <ADM_P_01 />
+                </AdminAuth>
+              }
+            ></Route>
           </Routes>
         </div>
         <Footer />

@@ -11,12 +11,14 @@ import {
   Grid,
   CardContent,
   CardMedia,
+  Button,
 } from "@mui/material";
 import MyNavbar from "../components/MYI_P_02/myNavbar.jsx";
 import { useNavigate, useLocation, resolvePath } from "react-router-dom";
 import AdminButton from "../components/MYP_P_01/adminButton.jsx";
-import { userDetail } from "../api/userAPI.js";
+import { userDetail, wantUpgrade } from "../api/userAPI.js";
 import { searchQuestion } from "../api/mypageAPI.js";
+import { setUserBlock, setUserDown, setUserUp } from "../api/adminAPI.js";
 
 // 커스텀 테마 정의
 const theme = createTheme({
@@ -63,24 +65,28 @@ const mediaStyles = {
 const Page = () => {
   const [questions, setQuestions] = useState([]);
   const [adminBtn, setAdminBtn] = useState(false);
+  const [isUpgradBtn, setIsUpgradBtn] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const [profileData, setProfileData] = useState(null);
+  const [block, setBlock] = useState(null);
+  const [role, setRole] = useState(null);
+  const [auth, setAuth] = useState(null);
+  const [userId, setUserId] = useState(null);
 
   const accessToken = localStorage.getItem("accessToken");
-
-  let userId;
 
   useEffect(() => {
     // 관리자 페이지에서 보낸 데이터
     const eventData = location.state?.event;
 
+    // 데이터가 없는경우 (일반 사용자)
     if (!eventData) {
-      // 데이터가 없는경우 (일반 사용자)
       userDetail(
         accessToken,
         (resp) => {
-          userId = resp.data.data.id;
+          setUserId(resp.data.data.id);
+          setAuth(resp.data.data.auth);
           searchQuestion(
             {
               headers: {
@@ -91,11 +97,7 @@ const Page = () => {
               userId: userId,
             },
             (resp) => {
-              console.log(
-                "MYI_P_01 -> searchQuestion | 질문 검색 성공",
-                userId,
-                resp.data
-              );
+              console.log("MYI_P_01 -> searchQuestion | 질문 검색 성공", userId, resp.data);
               if (resp.data.data) setQuestions(resp.data.data);
             },
             (error) => {
@@ -107,9 +109,38 @@ const Page = () => {
           console.log(error);
         }
       );
-    } else {
+      setIsUpgradBtn(true);
+    }
+    // admin 페이지에서 온 경우
+    else {
       setAdminBtn(true);
-      // 데이터가 있는경우 (admin)
+      setRole(eventData.role);
+      userDetail(
+        accessToken,
+        (resp) => {
+          setUserId(resp.data.data.id);
+          searchQuestion(
+            {
+              headers: {
+                Authorization: accessToken,
+              },
+            },
+            {
+              userId: userId,
+            },
+            (resp) => {
+              console.log("MYI_P_01 -> searchQuestion | 질문 검색 성공", userId, resp.data);
+              if (resp.data.data) setQuestions(resp.data.data);
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     }
   }, []);
 
@@ -118,16 +149,82 @@ const Page = () => {
     navigate("/revise");
   };
 
+  // 등업신청 버튼 클릭 시
+  const handleUpgrade = () => {
+    console.log(">>>>>", auth);
+    wantUpgrade(
+      accessToken,
+      (resp) => {
+        console.log(resp);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <MyNavbar />
       <Container>
-        {adminBtn && <AdminButton></AdminButton>}
+        {adminBtn && (
+          <AdminButton
+            id={userId}
+            blocked={block}
+            role={role}
+            onUpdate={(updatedData) => {
+              switch (updatedData.role) {
+                case "ROLE_USER":
+                  setUserDown(
+                    userId,
+                    accessToken,
+                    (resp) => {
+                      console.log("block >> ", resp);
+                    },
+                    (error) => {
+                      console.log("error >> ", error);
+                    }
+                  );
+                  break;
+                case "ROLE_MEMBER":
+                  setUserUp(
+                    userId,
+                    accessToken,
+                    (resp) => {
+                      console.log("block >> ", resp);
+                    },
+                    (error) => {
+                      console.log("error >> ", error);
+                    }
+                  );
+                  break;
+                case "ROLE_BLOCK":
+                  setUserBlock(
+                    userId,
+                    accessToken,
+                    (resp) => {
+                      console.log("block >> ", resp);
+                    },
+                    (error) => {
+                      console.log("error >> ", error);
+                    }
+                  );
+                  break;
+                default:
+              }
+            }}
+          />
+        )}
+        {isUpgradBtn && (
+          <Button disabled={auth} variant="outlined" color="info" onClick={handleUpgrade}>
+            등업신청
+          </Button>
+        )}
         {profileData && (
           <ProfileSection
             imageUrl={
-              "https://i10b105.p.####.io/api/files/profile/" +
-                profileData.id || "default-image-url.jpg"
+              "https://i10b105.p.####.io/api/files/profile/" + profileData.id ||
+              "default-image-url.jpg"
             }
           >
             <Typography variant="h5" gutterBottom>
@@ -151,24 +248,15 @@ const Page = () => {
             <Grid container spacing={2}>
               {question.replies.map((reply) => (
                 <Grid item xs={12} sm={6} md={4} key={reply.id}>
-                  <Card
-                    onClick={() => handleViewDetails(reply.videoUrl)}
-                    sx={cardStyles}
-                  >
+                  <Card onClick={() => handleViewDetails(reply.videoUrl)} sx={cardStyles}>
                     <CardMedia
                       component="img"
                       sx={mediaStyles}
-                      image={
-                        "https://i10b105.p.####.io/api/files/thumbnail/" +
-                        reply.thumbnailUrl
-                      }
+                      image={"https://i10b105.p.####.io/api/files/thumbnail/" + reply.thumbnailUrl}
                       alt="Thumbnail Image"
                     />
                     <CardContent>
-                      <Typography
-                        variant="subtitle1"
-                        sx={{ fontWeight: "bold" }}
-                      >
+                      <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
                         {reply.userId}
                       </Typography>
                       <Typography variant="body2">{reply.script}</Typography>

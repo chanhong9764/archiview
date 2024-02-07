@@ -11,7 +11,9 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 export default function CheckboxesTags({ setCompanyName, setCompanyId }) {
   function handlebox(company) {
     setCompanyName(company.name);
-    setCompanyId(company.id);
+    if (setCompanyId) {
+      setCompanyId(company.Id);
+    }
   }
   return (
     <Autocomplete
@@ -36,6 +38,7 @@ export default function CheckboxesTags({ setCompanyName, setCompanyId }) {
   );
 }
 
+// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
 const company = {
   data: [
     {

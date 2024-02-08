@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Logo from "../assets/img/mainLogo-removebg-preview.png";
 import {
   InputAdornment,
@@ -22,9 +22,15 @@ const HOM_P_01 = () => {
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
   const navigate = useNavigate();
+  const [companyName, setCompanyName] = useState("");
 
   const handleSearchBtn = () => {
-    navigate("/search", { replace: true });
+    navigate("/search", {
+      state: {
+        companyName: companyName,
+      },
+      replace: true,
+    });
   };
 
   const handleKeyPress = (e) => {

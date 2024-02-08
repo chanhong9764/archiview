@@ -21,7 +21,7 @@ function renderRow(props) {
     pickTagList,
     dumyData,
   } = props;
-  // console.log(dumyData);
+
   return (
     <Listcompo
       tagDataList={tagDataList}

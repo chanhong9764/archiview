@@ -12,7 +12,7 @@ import {
   CardMedia,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // 커스텀 테마 정의
 const theme = createTheme({
@@ -50,16 +50,13 @@ const cardStyles = {
   },
 };
 
-const mediaStyles = {
-  height: 140,
-  objectFit: "cover",
-  borderRadius: "15px 15px 0 0",
-};
-
 function SCH_P_01() {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const role = useSelector((state) => state.role);
+  const userId = useSelector((state) => state.userId);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   const [questions, setQuestions] = useState([]);
 
   const handleViewDetails = (reply) => {
@@ -94,7 +91,17 @@ function SCH_P_01() {
                   >
                     <CardMedia
                       component="img"
-                      sx={mediaStyles}
+                      sx={{
+                        height: 140,
+                        objectFit: "cover",
+                        borderRadius: "15px 15px 0 0",
+                        filter:
+                          role === "ROLE_MEMBER" ||
+                          role === "ROLE_ADMIN" ||
+                          reply.userId === userId
+                            ? "blur(0px)"
+                            : "blur(10px)",
+                      }}
                       image={
                         "https://i10b105.p.ssafy.io/api/files/thumbnail/" +
                         reply.thumbnailUrl

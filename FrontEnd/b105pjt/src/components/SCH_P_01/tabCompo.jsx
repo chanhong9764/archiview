@@ -70,7 +70,7 @@ export default function BasicTabs({
   const [smallTagData, setSmallTagData] = useState([]);
   const [smallTagList, setSmallTagList] = useState([]);
   const [pickTagList, setPickTagList] = useState([]);
-  const [tagSearchOpen, setTagSearchOpen] = useState(true);
+  const [tagSearchOpen, setTagSearchOpen] = useState(false);
   const [pgno, setPgno] = useState(1);
   const [companyName, setCompanyName] = useState("");
   const [tabCsList, setTabCsList] = useState([]);

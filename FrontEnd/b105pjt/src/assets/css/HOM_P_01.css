@@ -10,3 +10,7 @@
 .hompage > div {
   margin: 10px;
 }
+
+.MuiAutocomplete-inputRoot {
+  padding-right: 9px !important;
+}

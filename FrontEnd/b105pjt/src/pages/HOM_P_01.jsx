@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Logo from "../assets/img/mainLogo-removebg-preview.png";
 import {
   InputAdornment,
@@ -12,7 +12,6 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import SearchIcon from "@mui/icons-material/Search";
 import "../assets/css/HOM_P_01.css";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { getCompanyList } from "../api/commonsAPI";
 
 const HOM_P_01 = () => {

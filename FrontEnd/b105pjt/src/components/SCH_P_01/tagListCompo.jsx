@@ -22,16 +22,24 @@ export default function ChipsArray({
     const bigTagFilter = tagDataList.filter(
       (item) => item.bigTag === content.bigTag
     );
-    const bigTagFilterData = bigTagFilter[0].smallTagIndex.filter(
+    const bigTagFilterDataIndex = bigTagFilter[0].smallTagIndex.filter(
       (item) => item !== content.key
     );
+    const bigTagFilterDataSmallTag = bigTagFilter[0].smallTagIndex.filter(
+      (item) => item !== content.smallTag
+    );
+    const bigTagFilterDataSmallTab = bigTagFilter[0].smallTagIndex.filter(
+      (item) => item !== content.tab
+    );
     // console.log(bigTagFilterData.length === 0);
-    if (bigTagFilterData.length !== 0) {
+    if (bigTagFilterDataIndex.length !== 0) {
       setTagDataList([
         ...tagDataList.filter((item) => item.bigTag !== content.bigTag),
         {
           bigTag: content.bigTag,
-          smallTagIndex: bigTagFilterData,
+          smallTagIndex: bigTagFilterDataIndex,
+          tab: bigTagFilterDataSmallTab,
+          smallTag: bigTagFilterDataSmallTag,
         },
       ]);
     } else {
@@ -41,7 +49,7 @@ export default function ChipsArray({
       setChecked([...checked.filter((item) => item !== content.bigTag)]);
     }
     if (bigTagData === content.bigTag) {
-      setSmallTagData(bigTagFilterData);
+      setSmallTagData(bigTagFilterDataIndex);
     }
   }
 
@@ -60,7 +68,9 @@ export default function ChipsArray({
       setTagDataList([
         ...tagDataList.filter((item) => item.bigTag !== chipToDelete.bigTag),
       ]);
-      if (chipToDelete.bigTag === bigTagData) setSmallTagData([]);
+      if (chipToDelete.bigTag === bigTagData) {
+        setSmallTagData([]);
+      }
     }
   };
 

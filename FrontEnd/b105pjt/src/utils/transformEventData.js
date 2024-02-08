@@ -12,8 +12,6 @@ const transformEventData = (dummyData) => {
       color: "#929292", // 예시 색상
     },
   ]);
-
-  console.log(transformedData);
   return transformedData;
 };
 

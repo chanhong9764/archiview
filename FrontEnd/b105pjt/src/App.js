@@ -105,10 +105,10 @@ function App() {
   };
   return (
     <>
-      <Loading />
       <div
         style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
       >
+        <Loading />
         {/* 로그인 모달 */}
         <Modal
           open={isModalOpen}

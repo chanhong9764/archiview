@@ -53,16 +53,15 @@ public class AdminController {
         return SuccessResponse.createSuccess(SuccessCode.USER_UPGRADE_SUCCESS);
     }
 
-    @PatchMapping("/user/downgrade")  // 유저 강등
+    @PatchMapping("/users/downgrade")  // 유저 강등
     public ResponseEntity<Object> userDowngrade(@RequestParam("userId") String userId){
         userService.userDowngrade(userId);
         return SuccessResponse.createSuccess(SuccessCode.USER_DOWNGRADE_SUCCESS);
     }
 
-    @PatchMapping ("/users/block")  // 유저 정지, 해제
-    public ResponseEntity<Object> userBlock(@RequestParam("userId") String userId,
-                                            @RequestParam("isBlocked") Boolean block) {
-        userService.userBlock(userId, block);
+    @PatchMapping ("/users/block")  // 유저 정지
+    public ResponseEntity<Object> userBlock(@RequestParam("userId") String userId) {
+        userService.userBlock(userId);
         return SuccessResponse.createSuccess(SuccessCode.USER_BLOCK_SUCCESS);
     }
 }

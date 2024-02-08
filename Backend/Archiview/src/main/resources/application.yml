@@ -29,6 +29,14 @@ spring:
           timeout: 5000
           starttls:
             enable: true
+
+  # redis
+#  data:
+#    redis:
+#      host: 127.0.0.1
+#      port: 6379
+
+# jwt secret key
 jwt:
   secret: 1Ak0LMGoQpMaTrq4yJKZWD14l9CwN+f9dIOR2cELfZc=
 

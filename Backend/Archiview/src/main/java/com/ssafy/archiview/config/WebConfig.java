@@ -13,7 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "https://i10b105.p.####.io:80",
                         "https://i10b105.p.####.io:443"
                         )
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
                 .allowedHeaders("Authorization", "Content-Type")
                 .exposedHeaders("Custom-Header")
                 .maxAge(3600);

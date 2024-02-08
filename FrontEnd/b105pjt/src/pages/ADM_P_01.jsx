@@ -4,7 +4,7 @@ import ManageGrade from "../components/ADM_P_01/manageGrade";
 
 const ADM_P_01 = () => {
   return (
-    <div style={{ width: "90%", margin: "0 auto" }}>
+    <div style={{ width: "90%", margin: "50px auto" }}>
       <ManageAccount></ManageAccount>
     </div>
   );

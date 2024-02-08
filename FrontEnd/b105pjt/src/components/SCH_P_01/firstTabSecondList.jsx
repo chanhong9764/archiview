@@ -7,7 +7,7 @@ const ListItem = styled("li")(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
 
-export default function ChipsArray({
+export default function firstTabSecondList({
   tagDataList,
   bigTagData,
   setTagDataList,

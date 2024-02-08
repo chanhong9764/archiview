@@ -14,6 +14,7 @@ import NotificationsOffOutlinedIcon from "@mui/icons-material/NotificationsOffOu
 import SearchIcon from "@mui/icons-material/Search";
 import { selectAllRecruits, selectCompanyRecruits } from "../api/calendarAPI";
 import interactionPlugin from "@fullcalendar/interaction";
+import { useDispatch, useSelector } from "react-redux";
 
 let today = new Date();
 let year = today.getFullYear(); // 년도
@@ -109,31 +110,9 @@ const SearchContainer = styled.div`
   justify-content: flex-start;
   padding: 0px 0 15px 0;
 `;
-
-const selectRecruit = (setEvents) => {
-  selectAllRecruits(
-    date,
-    (resp) => {
-      const newEvents = transformEventData(resp.data);
-      setEvents(newEvents);
-    },
-    (error) => {}
-  );
-};
-
-// 달력 페이지 전환 시 API 호출
-const handleDatesSet = (arg) => {
-  const currentStart = arg.view.currentStart;
-  year = currentStart.getFullYear();
-  month = currentStart.getMonth() + 1; // 월은 0부터 시작하므로 1을 더함
-
-  formattedMonth = month < 10 ? `0${month}` : `${month}`;
-  date = year + "-" + formattedMonth + "-01";
-
-  selectRecruit();
-};
-
 const CAL_P_01 = () => {
+  const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.isLoading);
   const [open, setOpen] = useState(false);
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -155,6 +134,31 @@ const CAL_P_01 = () => {
   useEffect(() => {
     selectRecruit(setEvents);
   }, []);
+
+  const selectRecruit = (setEvents) => {
+    dispatch({ type: "SET_LOADING" });
+    selectAllRecruits(
+      date,
+      (resp) => {
+        const newEvents = transformEventData(resp.data);
+        setEvents(newEvents);
+        dispatch({ type: "UNSET_LOADING" });
+      },
+      (error) => {}
+    );
+  };
+
+  // 달력 페이지 전환 시 API 호출
+  const handleDatesSet = (arg) => {
+    const currentStart = arg.view.currentStart;
+    year = currentStart.getFullYear();
+    month = currentStart.getMonth() + 1; // 월은 0부터 시작하므로 1을 더함
+
+    formattedMonth = month < 10 ? `0${month}` : `${month}`;
+    date = year + "-" + formattedMonth + "-01";
+
+    selectRecruit();
+  };
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

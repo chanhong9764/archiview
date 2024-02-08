@@ -113,10 +113,13 @@ const Page = () => {
     else {
       setAdminBtn(true);
       setRole(eventData.role);
+
+      console.log("event >>>", eventData.id);
+      setUserId(eventData.id); // async await..
+
       userDetail(
         accessToken,
         (resp) => {
-          setUserId(resp.data.data.id);
           searchQuestion(
             {
               headers: {
@@ -124,12 +127,12 @@ const Page = () => {
               },
             },
             {
-              userId: userId,
+              userId: eventData.id,
             },
             (resp) => {
               console.log(
                 "MYI_P_01 -> searchQuestion | 질문 검색 성공",
-                userId,
+                eventData.id,
                 resp.data
               );
               if (resp.data.data) setQuestions(resp.data.data);
@@ -190,7 +193,10 @@ const Page = () => {
                   break;
                 case "ROLE_MEMBER":
                   setUserUp(
-                    userId,
+                    {
+                      id: userId,
+                      block: true,
+                    },
                     accessToken,
                     (resp) => {
                       console.log("block >> ", resp);

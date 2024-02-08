@@ -31,7 +31,7 @@ public interface UserService {
     // 유저 등급 강등
     void userDowngrade(String userId);
     // 유저 정지
-    void userBlock(String userId, Boolean block);
+    void userBlock(String userId);
     // 유저 등업 신청
     void userApplyUpgrade(String userId);
 }

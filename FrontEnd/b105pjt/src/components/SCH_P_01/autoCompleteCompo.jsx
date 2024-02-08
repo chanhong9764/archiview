@@ -14,9 +14,11 @@ export default function CheckboxesTags({ setCompanyName, setCompanyId }) {
   const [company, setCompany] = useState([]);
 
   function handlebox(company) {
-    setCompanyName(company.name);
-    if (setCompanyId) {
-      setCompanyId(company.Id);
+    if (company) {
+      setCompanyName(company.name);
+      if (setCompanyId) {
+        setCompanyId(company.Id);
+      }
     }
   }
 

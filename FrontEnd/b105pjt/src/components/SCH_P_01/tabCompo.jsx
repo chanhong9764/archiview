@@ -293,6 +293,8 @@ export default function BasicTabs({
                   smallTagList={smallTagList}
                   pickTagList={pickTagList}
                   setPickTagList={setPickTagList}
+                  checked={checked}
+                  setChecked={setChecked}
                 />
               </Grid>
             </Grid>
@@ -337,6 +339,8 @@ export default function BasicTabs({
                   smallTagList={smallTagList}
                   pickTagList={pickTagList}
                   setPickTagList={setPickTagList}
+                  checked={checked}
+                  setChecked={setChecked}
                 />
               </Grid>
             </Grid>

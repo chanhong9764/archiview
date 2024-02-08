@@ -19,7 +19,10 @@ async function setUserBlock(param, token, success, fail) {
     },
   };
 
-  await baseURL.patch(`admin/users/block?userId=${param}`, config).then(success).catch(fail);
+  await baseURL
+    .patch(`admin/users/block?userId=${param}`, null, config)
+    .then(success)
+    .catch(fail);
 }
 
 async function setUserUp(param, token, success, fail) {
@@ -29,7 +32,12 @@ async function setUserUp(param, token, success, fail) {
     },
   };
 
-  await baseURL.patch(`admin/users/upgrade?userId=${param}`, config).then(success).catch(fail);
+  console.log(">>>>>", param);
+
+  await baseURL
+    .patch(`admin/users/upgrade?userId=${param}`, null, config)
+    .then(success)
+    .catch(fail);
 }
 
 async function setUserDown(param, token, success, fail) {
@@ -39,7 +47,10 @@ async function setUserDown(param, token, success, fail) {
     },
   };
 
-  await baseURL.patch(`admin/users/downgrade?userId=${param}`, config).then(success).catch(fail);
+  await baseURL
+    .patch(`admin/users/downgrade?userId=${param}`, null, config)
+    .then(success)
+    .catch(fail);
 }
 
 export { getUserList, setUserBlock, setUserDown, setUserUp };

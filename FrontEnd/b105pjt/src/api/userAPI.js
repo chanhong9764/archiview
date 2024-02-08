@@ -99,7 +99,7 @@ async function wantUpgrade(token, success, fail) {
       Authorization: token,
     },
   };
-  await baseURL.patch("users/upgrade", config).then(success).catch(fail);
+  await baseURL.patch("users/upgrade", null, config).then(success).catch(fail);
 }
 
 export {

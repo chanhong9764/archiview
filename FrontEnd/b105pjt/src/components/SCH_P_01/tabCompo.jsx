@@ -292,6 +292,8 @@ export default function TabCompo({
                   smallTagList={smallTagList}
                   pickTagList={pickTagList}
                   setPickTagList={setPickTagList}
+                  checked={checked}
+                  setChecked={setChecked}
                 />
               </Grid>
             </Grid>
@@ -336,6 +338,8 @@ export default function TabCompo({
                   smallTagList={smallTagList}
                   pickTagList={pickTagList}
                   setPickTagList={setPickTagList}
+                  checked={checked}
+                  setChecked={setChecked}
                 />
               </Grid>
             </Grid>

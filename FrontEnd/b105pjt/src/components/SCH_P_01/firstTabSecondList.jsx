@@ -50,6 +50,7 @@ export default function firstTabSecondList({
         smallTag: content.smallTag,
         bigTag: bigTagData,
         key: content.key,
+        tab: "csList",
       },
     ]);
   }
@@ -64,7 +65,7 @@ export default function firstTabSecondList({
           smallTag: content.smallTag,
           bigTag: bigTagData,
           key: content.key,
-          small: content.smallTag,
+          tab: "csList",
         },
       ]);
     }
@@ -93,28 +94,35 @@ export default function firstTabSecondList({
     // if (!checked.includes(data.bigTag)) {
     //   setChecked([...checked, data.bigTag]);
     // }
-    setSmallTagData((prevSelectedChips) => {
+    setSmallTagData((smallTagData) => {
       if (smallTagData.length === smallTagList.length) {
         changeTagData([data.key], [data.smallTag]);
         changePickTagData(data);
         return [data.key];
       } else {
-        if (prevSelectedChips.includes(data.key)) {
+        if (smallTagData.includes(data.key)) {
           if (smallTagData.length !== 1) {
             changeTagData(
-              prevSelectedChips.filter((chipKey) => chipKey !== data.key),
+              smallTagData.filter((chipKey) => chipKey !== data.key),
               tagDataList
                 .filter((item) => item.bigTag === bigTagData)[0]
                 .smallTag.filter((item) => item !== data.smallTag)
             );
             delPickTagData(data);
-            return prevSelectedChips.filter((chipKey) => chipKey !== data.key);
+            return smallTagData.filter((chipKey) => chipKey !== data.key);
           } else {
-            return [...prevSelectedChips];
+            return [...smallTagData];
           }
+        } else if (
+          tagDataList.filter((item) => item.bigTag === bigTagData).length === 0
+        ) {
+          changeTagData([...smallTagData, data.key], [data.smallTag]);
+          plusPickTagData(data);
+          setChecked([...checked, bigTagData]);
+          return [...smallTagData, data.key];
         } else {
           changeTagData(
-            [...prevSelectedChips, data.key],
+            [...smallTagData, data.key],
             [
               ...tagDataList.filter((item) => item.bigTag === bigTagData)[0]
                 .smallTag,
@@ -122,7 +130,7 @@ export default function firstTabSecondList({
             ]
           );
           plusPickTagData(data);
-          return [...prevSelectedChips, data.key];
+          return [...smallTagData, data.key];
         }
       }
     });

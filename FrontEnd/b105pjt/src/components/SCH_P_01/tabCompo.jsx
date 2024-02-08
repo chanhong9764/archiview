@@ -18,7 +18,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { questionSearch } from "../../api/questionAPI";
 import { getJobPostingDetail } from "../../api/commonsAPI";
-import { useSelector } from "react-redux";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -49,7 +48,7 @@ function a11yProps(index) {
   };
 }
 
-export default function BasicTabs({
+export default function TabCompo({
   setQuestions,
   setCompanyId,
   setCsList,

@@ -24,7 +24,6 @@ export default function CheckboxList({
   setPickTagList,
   dumyData,
 }) {
-  // csSubList
   function smallTagFilter(arr, pickTag) {
     return arr.filter((el) => el.name === pickTag);
   }
@@ -73,7 +72,6 @@ export default function CheckboxList({
         }
       }
       setSmallTagData(tagDataList.filter(smallTagPick)[0].smallTagIndex);
-      //   setChecked(checked.filter((item) => item !== value));
     }
   };
 

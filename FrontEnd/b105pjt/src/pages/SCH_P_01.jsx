@@ -12,7 +12,7 @@ import {
   CardMedia,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // 커스텀 테마 정의
 const theme = createTheme({
@@ -56,6 +56,7 @@ function SCH_P_01() {
   const userId = useSelector((state) => state.userId);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   const [questions, setQuestions] = useState([]);
 
   const handleViewDetails = (reply) => {

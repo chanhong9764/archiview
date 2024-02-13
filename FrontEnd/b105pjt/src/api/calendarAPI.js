@@ -10,4 +10,8 @@ async function selectCompanyRecruits(param, success, fail) {
   await baseURL.get(`recruits?date=${param}`).then(success).catch(fail);
 }
 
-export { selectAllRecruits, selectCompanyRecruits };
+async function detailCompanyRecruits(param, success, fail) {
+  await baseURL.get(`recruits/${param}`).then(success).catch(fail);
+}
+
+export { selectAllRecruits, selectCompanyRecruits, detailCompanyRecruits };

@@ -118,19 +118,6 @@ const CAL_P_01 = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
 
-  const fetchImage = async (title) => {
-    await selectImg(
-      { query: title },
-      (response) => {
-        const firstImage = response.data.items[0].link;
-        setImageUrl(firstImage);
-      },
-      (error) => {
-        console.error("이미지 검색 실패:", error);
-      }
-    );
-  };
-
   useEffect(() => {
     selectRecruit(setEvents);
   }, []);
@@ -164,9 +151,8 @@ const CAL_P_01 = () => {
   const handleClose = () => setOpen(false);
 
   const handleEventClick = (clickInfo) => {
-    console.log("Event clicked:", clickInfo.event.title);
+    console.log("Event clicked:", clickInfo);
     setSelectedEvent(clickInfo.event);
-    fetchImage(clickInfo.event.title);
     handleOpen();
   };
 

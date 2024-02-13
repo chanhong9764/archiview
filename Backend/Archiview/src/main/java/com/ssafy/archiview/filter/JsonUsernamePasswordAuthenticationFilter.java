@@ -41,7 +41,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
     private final jwtUtil jwtUtil;
     @Autowired
     private UserRepository userRepository;
-//    @Autowired
+    @Autowired
 //    private RefreshTokenRepository refreshTokenRepository;
     private static final String DEFAULT_LOGIN_REQUEST_URL = "/api/users/login";  // /api/users/login으로 오는 요청을 처리
     private static final String HTTP_METHOD = "POST";    //HTTP 메서드의 방식은 POST

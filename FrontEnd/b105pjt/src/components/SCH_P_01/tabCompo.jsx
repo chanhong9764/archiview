@@ -54,6 +54,8 @@ export default function TabCompo({
   setCsList,
   setJobList,
   userId,
+  inView,
+  questions,
 }) {
   const [dumyData, setDumyData] = useState({
     csList: [{ name: "", csSubList: "" }],
@@ -74,6 +76,7 @@ export default function TabCompo({
   const [companyName, setCompanyName] = useState("");
   const [tabCsList, setTabCsList] = useState([]);
   const [tabJobList, setTabJobList] = useState([]);
+  const [isClick, setisClick] = useState(false);
 
   useEffect(() => {
     if (setCsList && setJobList) {
@@ -90,6 +93,8 @@ export default function TabCompo({
           .flat()
       );
     }
+    setisClick(false);
+    setPgno(1);
   }, [tagDataList]);
 
   useEffect(() => {
@@ -108,18 +113,22 @@ export default function TabCompo({
 
   useEffect(() => {
     const getJobDetail = async () => {
-      await getJobPostingDetail(
-        (res) => {
-          setDumyData(res.data.data);
-          // console.log(res.data.data);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+      await getJobPostingDetail((res) => {
+        setDumyData(res.data.data);
+      });
     };
+    if (userId) {
+      setisClick(true);
+    }
     getJobDetail();
   }, []);
+
+  // 무한 스크롤
+  useEffect(() => {
+    if (inView && isClick) {
+      onClickSearch();
+    }
+  }, [inView]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -166,25 +175,31 @@ export default function TabCompo({
         .join(),
       pgno: pgno,
     };
-
-    await questionSearch(data)
-      .then((res) => {
-        if (res.data.data) {
-          const formattedQuestions = res.data.data.map((item) => {
-            return {
-              id: item.id,
-              content: item.content,
-              replies: item.replies,
-            };
-          });
-          setQuestions(formattedQuestions);
+    await questionSearch(data).then((res) => {
+      if (res.data.data) {
+        if (!isClick) {
+          updateSearch(parsingData(res.data.data));
+          setisClick(true);
         } else {
-          alert("검색된 값이 없습니다.");
+          updateSearch([...questions, ...parsingData(res.data.data)]);
         }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      }
+    });
+  };
+
+  const updateSearch = async (updateQuestions) => {
+    setQuestions(updateQuestions);
+    setPgno((page) => page + 1);
+  };
+
+  const parsingData = (data) => {
+    return data.map((item) => {
+      return {
+        id: item.id,
+        content: item.content,
+        replies: item.replies,
+      };
+    });
   };
 
   return (
@@ -292,8 +307,6 @@ export default function TabCompo({
                   smallTagList={smallTagList}
                   pickTagList={pickTagList}
                   setPickTagList={setPickTagList}
-                  checked={checked}
-                  setChecked={setChecked}
                 />
               </Grid>
             </Grid>
@@ -338,8 +351,6 @@ export default function TabCompo({
                   smallTagList={smallTagList}
                   pickTagList={pickTagList}
                   setPickTagList={setPickTagList}
-                  checked={checked}
-                  setChecked={setChecked}
                 />
               </Grid>
             </Grid>

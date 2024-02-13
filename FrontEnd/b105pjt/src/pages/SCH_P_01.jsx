@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Tabcompo from "../components/SCH_P_01/tabCompo";
 import Accordion from "../components/MYI_P_01/accordion.jsx";
 import {
@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useInView } from "react-intersection-observer";
 import { selectReply } from "../api/replyAPI.js";
 
 // 커스텀 테마 정의
@@ -64,6 +65,7 @@ function SCH_P_01() {
   const dispatch = useDispatch();
   const location = useLocation();
   const [questions, setQuestions] = useState([]);
+  const [ref, inView] = useInView();
   const [replyDetails, setReplyDetails] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedReply, setSelectedReply] = useState(null);
@@ -81,9 +83,6 @@ function SCH_P_01() {
         (resp) => {
           setReplyDetails(resp.data.data.reply);
           setModalOpen(true);
-        },
-        (err) => {
-          console.log("호출 실패: ", err);
         }
       );
     }
@@ -97,7 +96,6 @@ function SCH_P_01() {
           message: "로그인이 필요합니다.",
         },
       });
-      console.log(reply);
     } else {
       if (role === "ROLE_USER") {
         dispatch({
@@ -165,7 +163,11 @@ function SCH_P_01() {
   return (
     <ThemeProvider theme={theme}>
       <Container sx={{ mt: 4, mb: 4 }}>
-        <Tabcompo setQuestions={setQuestions} />
+        <Tabcompo
+          setQuestions={setQuestions}
+          inView={inView}
+          questions={questions}
+        />
         {questions.map((question, index) => (
           <Accordion
             key={index}
@@ -220,6 +222,7 @@ function SCH_P_01() {
           </Accordion>
         ))}
         <DetailModal />
+        <div ref={ref} />
       </Container>
     </ThemeProvider>
   );

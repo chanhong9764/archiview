@@ -69,12 +69,6 @@ const InfoSection = () => {
       },
       {
         Authorization: token,
-      },
-      (resp) => {
-        console.log("resp>> ", resp);
-      },
-      (error) => {
-        console.log("error>> ", error);
       }
     );
     alert("비밀번호가 변경되었습니다.");

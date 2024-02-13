@@ -41,9 +41,6 @@ const ProfileSection = () => {
         setName(resp.data.data.name);
         setEmail(resp.data.data.email);
         setIntroduce(resp.data.data.introduce);
-      },
-      (error) => {
-        console.log(error);
       }
     );
   }, []);
@@ -150,27 +147,18 @@ const ProfileEditModal = ({ open, handleCancle, setIntroduce, introduce }) => {
 
     if (profileFile) {
       formData.append("img", profileFile);
-      uploadProfileImage(
-        userId,
-        formData,
-        (resp) => {
-          let profileURL;
-          if (profile.includes("https")) {
-            profileURL =
-              "http://i10b105.p.ssafy.io/api/files/profile/" + userId;
-          } else {
-            profileURL =
-              "https://i10b105.p.ssafy.io/api/files/profile/" + userId;
-          }
-          dispatch({
-            type: "UPDATE_PROFILE",
-            profile: profileURL,
-          });
-        },
-        (error) => {
-          console.log(error);
+      uploadProfileImage(userId, formData, (resp) => {
+        let profileURL;
+        if (profile.includes("https")) {
+          profileURL = "http://i10b105.p.ssafy.io/api/files/profile/" + userId;
+        } else {
+          profileURL = "https://i10b105.p.ssafy.io/api/files/profile/" + userId;
         }
-      );
+        dispatch({
+          type: "UPDATE_PROFILE",
+          profile: profileURL,
+        });
+      });
     }
 
     updateUserDetail(
@@ -183,9 +171,6 @@ const ProfileEditModal = ({ open, handleCancle, setIntroduce, introduce }) => {
       },
       (resp) => {
         setIntroduce(newIntroduce);
-      },
-      (error) => {
-        console.log(error);
       }
     );
     handleCancle();

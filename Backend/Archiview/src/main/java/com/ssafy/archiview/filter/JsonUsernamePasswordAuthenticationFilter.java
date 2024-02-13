@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.####.archiview.dto.token.TokenDto;
 import com.####.archiview.dto.user.CustomUserDetails;
 import com.####.archiview.dto.user.UserDto;
+import com.####.archiview.entity.RefreshToken;
+import com.####.archiview.repository.RefreshTokenRepository;
 import com.####.archiview.entity.Role;
 import com.####.archiview.entity.User;
 import com.####.archiview.jwt.jwtUtil;
@@ -39,6 +41,8 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
     private final jwtUtil jwtUtil;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private RefreshTokenRepository refreshTokenRepository;
     private static final String DEFAULT_LOGIN_REQUEST_URL = "/api/users/login";  // /api/users/login으로 오는 요청을 처리
     private static final String HTTP_METHOD = "POST";    //HTTP 메서드의 방식은 POST
     private static final String CONTENT_TYPE = "application/json";//json 타입의 데이터로만 로그인을 진행
@@ -78,12 +82,13 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
         if (id == null || pw == null) {
             throw new AuthenticationServiceException("DATA IS MISS");
         }
-
+        // ID, PW를 기반으로 Authentication 객체 생성
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(id, pw);
 
-        // PrincipalDetailsService의 loadUserByUsername() 메서드가 실행된 후
-        // 정상처리 되면 authentication이 리턴 됨
+        // 실제 검증 (사용자 비밀번호 체크)
+        // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
         Authentication authentication = getAuthenticationManager().authenticate(authRequest);
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         setDetails(request, authRequest);
         return authentication;
@@ -94,7 +99,8 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+                                            FilterChain chain, Authentication authentication) throws IOException {
         System.out.println("login success");
         // 유저 권한 추출
         String authoritie = authentication.getAuthorities().stream()
@@ -106,7 +112,6 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
 
         String userId = customUserDetails.getUsername();  // userId 추출
         User user = userRepository.findById(userId).get();
-
         TokenDto.createTokenDto token = jwtUtil.createJwt(userId, user.getRole().toString());  // 토큰 생성
 
         UserDto.loginResponseDto responseDto = UserDto.loginResponseDto.builder()
@@ -122,6 +127,12 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
                 .build();
         user.updateRefreshToken(token.getRefreshToken());
         userRepository.save(user);  // 발급받은 refreshToken을 DB에 저장
+
+        RefreshToken refreshToken = RefreshToken.builder()
+                .id(user.getId())
+                .refreshToken(token.getRefreshToken())
+                .build();
+        refreshTokenRepository.save(refreshToken);  // 발급받은 refreshToken을 redis에 저장
 
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("code", SuccessCode.LOGIN_SUCCESS.name());

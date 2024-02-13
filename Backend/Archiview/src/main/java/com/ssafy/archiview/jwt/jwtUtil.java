@@ -31,9 +31,9 @@ public class jwtUtil {
     public jwtUtil(@Value("${jwt.secret}") String secret){
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
     }
-    Long accessTokenValidTime = 30 * 60 * 1000L;  // 엑세스 토큰 유효기간 30분
-    Long refreshTokenValidTime = 60 * 60 * 24 * 1000L;  // 리프레시 토큰 유효기간 30분
-    Long emailTokenValidTime = 60 * 60 * 1000L;  // 유효기간 3분
+    Long accessTokenValidTime = 60 * 30 * 1000L;  // 엑세스 토큰 유효기간 30분
+    Long refreshTokenValidTime = 60 * 60 * 24 * 14 * 1000L;  // 리프레시 토큰 유효기간 2주
+    Long emailTokenValidTime = 60 * 3 * 1000L;  // 유효기간 3분
     public TokenDto.createTokenDto createJwt(String username, String role) {
         String accessToken = Jwts.builder()
                 .claim("role", role)
@@ -93,13 +93,6 @@ public class jwtUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId", String.class);
     }
 
-    public Boolean isExpired(String token) {  // 토큰 만료를 검증하는 메서드
-        return Jwts.parser().verifyWith(secretKey).build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getExpiration()
-                .before(new Date());
-    }
 
     // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
     public Authentication getAuthentication(String accessToken) {

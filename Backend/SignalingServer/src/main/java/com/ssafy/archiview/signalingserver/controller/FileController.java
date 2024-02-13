@@ -51,9 +51,15 @@ public class FileController {
     public Resource downloadThumbnailImage(@PathVariable String sessionId) throws IOException {
         logger.info("FileController -> downloadThumbnailImage | sessionId: " + sessionId);
 
-        return new ByteArrayResource((FileCopyUtils.copyToByteArray(new FileInputStream(
-                "/opt/openvidu/recordings/" + sessionId + "/" + sessionId + ".jpg"
-        ))));
+        try {
+            return new ByteArrayResource((FileCopyUtils.copyToByteArray(new FileInputStream(
+                    "/opt/openvidu/recordings/" + sessionId + "/" + sessionId + ".jpg"
+            ))));
+        } catch (Exception e) {
+            return new ByteArrayResource((FileCopyUtils.copyToByteArray(new FileInputStream(
+                    "/opt/openvidu/recordings/thumbnail_default.png"
+            ))));
+        }
     }
 
     /**

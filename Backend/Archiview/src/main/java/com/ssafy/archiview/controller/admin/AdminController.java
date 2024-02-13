@@ -23,19 +23,19 @@ public class AdminController {
     private final ReplyService replyService;
     private final UserService userService;
 
-    @DeleteMapping("/questions/{questionId}")
+    @DeleteMapping("/questions/{questionId}")  // 질문 삭제
     public ResponseEntity<Object> questionDelete(@PathVariable("questionId") int questionId) {
         questionService.deleteQuestion(questionId);
         return SuccessResponse.createSuccess(SuccessCode.DELETE_QUESTION_SUCCESS);
     }
 
-    @DeleteMapping("/replies/{replyId}")
+    @DeleteMapping("/replies/{replyId}")  // 답변 삭제
     public ResponseEntity<Object> replyDelete(@PathVariable("replyId") int replyId) {
         replyService.replyDeleteByAdmin(replyId);
         return SuccessResponse.createSuccess(SuccessCode.DELETE_QUESTION_SUCCESS);
     }
 
-    @DeleteMapping("/comments/{commentId}")
+    @DeleteMapping("/comments/{commentId}")  // 댓글 삭제
     public ResponseEntity<Object> commentDelete(@PathVariable("commentId") int commentId) {
         replyService.replyCommentDeleteByAdmin(commentId);
         return SuccessResponse.createSuccess(SuccessCode.DELETE_QUESTION_SUCCESS);
@@ -47,13 +47,19 @@ public class AdminController {
         return SuccessResponse.createSuccess(SuccessCode.USER_DETAIL_LIST_SUCCESS, responseDto);
     }
 
-    @PatchMapping ("/users/upgrade")
+    @PatchMapping ("/users/upgrade")  // 유저 등업
     public ResponseEntity<Object> userUpgrade(@RequestParam("userId") String userId) {
         userService.userUpgrade(userId);
         return SuccessResponse.createSuccess(SuccessCode.USER_UPGRADE_SUCCESS);
     }
 
-    @PatchMapping ("/users/block")
+    @PatchMapping("/users/downgrade")  // 유저 강등
+    public ResponseEntity<Object> userDowngrade(@RequestParam("userId") String userId){
+        userService.userDowngrade(userId);
+        return SuccessResponse.createSuccess(SuccessCode.USER_DOWNGRADE_SUCCESS);
+    }
+
+    @PatchMapping ("/users/block")  // 유저 정지
     public ResponseEntity<Object> userBlock(@RequestParam("userId") String userId) {
         userService.userBlock(userId);
         return SuccessResponse.createSuccess(SuccessCode.USER_BLOCK_SUCCESS);

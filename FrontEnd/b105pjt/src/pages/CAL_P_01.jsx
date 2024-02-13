@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import koLocale from "@fullcalendar/core/locales/ko";
@@ -41,7 +41,6 @@ const style = {
   borderRadius: "10px",
 };
 
-// 캘린더 스타일
 const FullCalendarContainer = styled.div`
   max-width: 70%;
   margin: 0 auto;
@@ -111,34 +110,34 @@ const SearchContainer = styled.div`
   padding: 0px 0 15px 0;
 `;
 
+const selectRecruit = (setEvents) => {
+  selectAllRecruits(
+    date,
+    (resp) => {
+      const newEvents = transformEventData(resp.data);
+      setEvents(newEvents);
+    },
+    (error) => {}
+  );
+};
+
+// 달력 페이지 전환 시 API 호출
+const handleDatesSet = (arg) => {
+  const currentStart = arg.view.currentStart;
+  year = currentStart.getFullYear();
+  month = currentStart.getMonth() + 1; // 월은 0부터 시작하므로 1을 더함
+
+  formattedMonth = month < 10 ? `0${month}` : `${month}`;
+  date = year + "-" + formattedMonth + "-01";
+
+  selectRecruit();
+};
+
 const CAL_P_01 = () => {
   const [open, setOpen] = useState(false);
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
-
-  const selectRecruit = () => {
-    selectAllRecruits(
-      date,
-      (resp) => {
-        const newEvents = transformEventData(resp.data);
-        setEvents(newEvents);
-      },
-      (error) => {}
-    );
-  };
-
-  // 달력 페이지 전환 시 API 호출
-  const handleDatesSet = (arg) => {
-    const currentStart = arg.view.currentStart;
-    year = currentStart.getFullYear();
-    month = currentStart.getMonth() + 1; // 월은 0부터 시작하므로 1을 더함
-
-    formattedMonth = month < 10 ? `0${month}` : `${month}`;
-    date = year + "-" + formattedMonth + "-01";
-
-    selectRecruit();
-  };
 
   const fetchImage = async (title) => {
     await selectImg(
@@ -154,7 +153,7 @@ const CAL_P_01 = () => {
   };
 
   useEffect(() => {
-    selectRecruit();
+    selectRecruit(setEvents);
   }, []);
 
   const handleOpen = () => setOpen(true);
@@ -183,7 +182,7 @@ const CAL_P_01 = () => {
     return (
       <div className="icon">
         {Icon && <Icon style={{ marginRight: "4px", fontSize: "medium" }} />}
-        <span>{eventInfo.event.title}</span>
+        <span className="event-title">{eventInfo.event.title}</span>
       </div>
     );
   };
@@ -203,12 +202,30 @@ const CAL_P_01 = () => {
       <div style={{ marginBottom: "20px" }}>
         <div className="parent-container">
           <FullCalendarContainer>
+            <SearchContainer>
+              <TextField
+                style={{ width: "500px", borderRadius: "50px" }}
+                label="회사명으로 면접 질문 검색"
+                variant="outlined"
+                onKeyDown={handleKeyPress}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleSearchBtn}>
+                        <SearchIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </SearchContainer>
+
             <FullCalendar
               plugins={[dayGridPlugin, interactionPlugin]}
               initialView="dayGridMonth"
-              datesSet={handleDatesSet}
               events={events}
               locale={koLocale}
+              datesSet={handleDatesSet}
               eventClick={handleEventClick}
               eventContent={renderEventContent}
             />

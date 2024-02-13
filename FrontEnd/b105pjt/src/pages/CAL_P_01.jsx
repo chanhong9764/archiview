@@ -125,8 +125,7 @@ const CAL_P_01 = () => {
       date,
       (resp) => {
         if (resp.data.data) {
-          const newEvents = transformEventData(resp.data);
-          setEvents(newEvents);
+          setEvents(transformEventData(resp.data.data));
         }
         dispatch({ type: "UNSET_LOADING" });
       },
@@ -152,6 +151,7 @@ const CAL_P_01 = () => {
   const handleClose = () => setOpen(false);
 
   const handleEventClick = (clickInfo) => {
+    console.log("clickinfo", clickInfo);
     setSelectedEvent(clickInfo.event);
     fetchImage(clickInfo.event.title);
     handleOpen();

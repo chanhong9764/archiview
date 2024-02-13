@@ -29,28 +29,14 @@ const CAL_M_01 = (props) => {
   const title = props.event.title;
 
   useEffect(() => {
-    detailCompanyRecruits(
-      "30",
-      (resp) => {
-        console.log("detailCompanyRecruits resp >>", resp.data.data);
-        setDummyData(resp.data.data);
-      },
-      (err) => {
-        console.log("detailCompanyRecruits err >>", err);
-      }
-    );
+    detailCompanyRecruits("30", (resp) => {
+      setDummyData(resp.data.data);
+    });
 
-    selectImg(
-      title,
-      (response) => {
-        console.log("selectImg >>", response.data.data.imageUrl);
-        const firstImage = response.data.data.imageUrl;
-        setImageUrl(firstImage);
-      },
-      (error) => {
-        console.error("이미지 검색 실패:", error);
-      }
-    );
+    selectImg(title, (response) => {
+      const firstImage = response.data.data.imageUrl;
+      setImageUrl(firstImage);
+    });
   }, []);
 
   // "질문 더보기" 클릭 핸들러

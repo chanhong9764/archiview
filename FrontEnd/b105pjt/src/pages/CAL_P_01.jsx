@@ -112,13 +112,6 @@ const CAL_P_01 = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
 
-  const fetchImage = async (title) => {
-    await selectImg({ query: title }, (response) => {
-      const firstImage = response.data.items[0].link;
-      setImageUrl(firstImage);
-    });
-  };
-
   const selectRecruit = () => {
     dispatch({ type: "SET_LOADING" });
     selectAllRecruits(

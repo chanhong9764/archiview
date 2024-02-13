@@ -31,11 +31,11 @@ spring:
             enable: true
 
 # redis
-  data:
-    redis:
-      host: 127.0.0.1
-      port: 6379
-      password: ####
+#  data:
+#    redis:
+#      host: 127.0.0.1
+#      port: 6379
+#      password: ####
 
 # jwt secret key
 jwt:

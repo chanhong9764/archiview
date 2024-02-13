@@ -164,7 +164,7 @@ const CAL_P_01 = () => {
   const handleClose = () => setOpen(false);
 
   const handleEventClick = (clickInfo) => {
-    console.log("Event clicked:", clickInfo.event.title);
+    "Event clicked:", clickInfo.event.title;
     setSelectedEvent(clickInfo.event);
     fetchImage(clickInfo.event.title);
     handleOpen();
@@ -192,7 +192,7 @@ const CAL_P_01 = () => {
   };
 
   const handleSearchBtn = () => {
-    console.log(">>검색버튼");
+    (">>검색버튼");
   };
 
   const handleKeyPress = (e) => {

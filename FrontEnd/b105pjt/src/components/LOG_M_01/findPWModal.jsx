@@ -53,7 +53,6 @@ const FindPWModal = ({ onSwitch, setToken, data }) => {
         setAuthNum(resp.data.data.authNumber);
       },
       (error) => {
-        console.log("에러 발생: ", error);
         setIsInputDisabled(false); // 버튼을 비활성화 시킴
       }
     );

@@ -25,7 +25,7 @@ const MakeSession = async (videoRef, dispatch) => {
 
   try {
     const resp = await getToken({ sessionName: sessionName });
-    console.log("토큰 받기 성공:", resp.data[0]);
+    "토큰 받기 성공:", resp.data[0];
 
     let token = resp.data[0];
     await session.connect(token, { clientData: "example" });
@@ -69,7 +69,7 @@ const OpenVideo = ({ setSessionUrl }) => {
 
     MakeSession(videoRef, dispatch)
       .then(() => {
-        console.log("MakeSession 성공");
+        ("MakeSession 성공");
       })
       .catch((error) => {
         console.error("MakeSession 오류:", error);
@@ -83,7 +83,7 @@ const OpenVideo = ({ setSessionUrl }) => {
           publisher = null;
         }
 
-        console.log("세션 종료:", session.sessionId);
+        "세션 종료:", session.sessionId;
         // 세션 연결 해제
         session.disconnect();
       }
@@ -91,7 +91,7 @@ const OpenVideo = ({ setSessionUrl }) => {
   }, []);
 
   const handleRecordStart = () => {
-    console.log("sessionId: ", session.sessionId);
+    "sessionId: ", session.sessionId;
     dispatch({ type: "SET_LOADING" });
     startRecording(
       {
@@ -101,12 +101,12 @@ const OpenVideo = ({ setSessionUrl }) => {
         hasVideo: true,
       },
       (resp) => {
-        console.log("녹화 시작: ", resp);
+        "녹화 시작: ", resp;
         setIsRecording(true);
         dispatch({ type: "UNSET_LOADING" });
       },
       (error) => {
-        console.log("에러 발생: ", error);
+        "에러 발생: ", error;
         dispatch({ type: "UNSET_LOADING" });
       }
     );
@@ -122,11 +122,11 @@ const OpenVideo = ({ setSessionUrl }) => {
       },
       (resp) => {
         // Start - Signaling Server API
-        console.log("녹화 종료: ", resp);
+        "녹화 종료: ", resp;
         setRecordingURL(
           "https://i10b105.p.ssafy.io/api/files/recording/" + urlSession
         );
-        console.log(recordingURL);
+        recordingURL;
         setIsRecording(false);
 
         // 세션 및, 퍼블리셔 종료 로직
@@ -139,7 +139,7 @@ const OpenVideo = ({ setSessionUrl }) => {
         dispatch({ type: "UNSET_LOADING" });
       },
       (error) => {
-        console.log("에러 발생: ", error);
+        "에러 발생: ", error;
         dispatch({ type: "UNSET_LOADING" });
       }
     );

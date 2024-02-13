@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Tabcompo from "../components/SCH_P_01/tabCompo";
 import Accordion from "../components/MYI_P_01/accordion.jsx";
 import {
@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useInView } from "react-intersection-observer";
 
 // 커스텀 테마 정의
 const theme = createTheme({
@@ -58,6 +59,7 @@ function SCH_P_01() {
   const dispatch = useDispatch();
   const location = useLocation();
   const [questions, setQuestions] = useState([]);
+  const [ref, inView] = useInView();
 
   const handleViewDetails = (reply) => {
     if (!isLoggedIn) {
@@ -72,7 +74,11 @@ function SCH_P_01() {
   return (
     <ThemeProvider theme={theme}>
       <Container sx={{ mt: 4, mb: 4 }}>
-        <Tabcompo setQuestions={setQuestions} />
+        <Tabcompo
+          setQuestions={setQuestions}
+          inView={inView}
+          questions={questions}
+        />
         {questions.map((question, index) => (
           <Accordion
             key={index}
@@ -126,6 +132,7 @@ function SCH_P_01() {
             </Grid>
           </Accordion>
         ))}
+        <div ref={ref} />
       </Container>
     </ThemeProvider>
   );

@@ -8,10 +8,6 @@ async function signup(param, token, success, fail) {
       Authorization: token,
     },
   };
-
-  console.log("signup param >> ", param);
-  console.log("signup header >> ", config);
-
   await baseURL.post("users", param, config).then(success).catch(fail);
 }
 
@@ -93,7 +89,6 @@ async function validPW(token, param, success, fail) {
 }
 
 async function wantUpgrade(token, success, fail) {
-  console.log(token);
   const config = {
     headers: {
       Authorization: token,

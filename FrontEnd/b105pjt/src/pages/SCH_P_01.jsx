@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Tabcompo from "../components/SCH_P_01/tabCompo";
 import Accordion from "../components/MYI_P_01/accordion.jsx";
 import {
@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useInView } from "react-intersection-observer";
 import { selectReply } from "../api/replyAPI.js";
 
 // 커스텀 테마 정의
@@ -64,6 +65,7 @@ function SCH_P_01() {
   const dispatch = useDispatch();
   const location = useLocation();
   const [questions, setQuestions] = useState([]);
+  const [ref, inView] = useInView();
   const [replyDetails, setReplyDetails] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedReply, setSelectedReply] = useState(null);
@@ -79,23 +81,34 @@ function SCH_P_01() {
         },
         selectedReply.id,
         (resp) => {
-          console.log(resp.data.data.reply);
           setReplyDetails(resp.data.data.reply);
           setModalOpen(true);
-        },
-        (err) => {
-          console.log("호출 실패: ", err);
         }
       );
     }
   }, [selectedReply]); // selectedReply가 변경될 때만 이 effect를 실행
 
   const handleViewDetails = (reply) => {
-    console.log(reply);
     if (!isLoggedIn) {
-      dispatch({ type: "OPEN_ALERT" });
+      dispatch({
+        type: "OPEN_ALERT",
+        payload: {
+          message: "로그인이 필요합니다.",
+        },
+      });
     } else {
-      setSelectedReply(reply);
+      if (role === "ROLE_USER") {
+        dispatch({
+          type: "OPEN_ALERT",
+          payload: {
+            message:
+              "MEMBER 등급이 아닙니다.\n답변을 작성하고, 등업 신청 부탁드립니다.",
+          },
+        });
+        navigate("/myinterview");
+      } else {
+        setSelectedReply(reply);
+      }
     }
   };
 
@@ -129,13 +142,12 @@ function SCH_P_01() {
                 width="500"
               ></video>
             </div>
-            {/* 스크립트 섹션에 인라인 스타일을 적용합니다. */}
             <div
               style={{
-                border: "1px solid #007BFF", // 테두리 색상을 지정합니다.
-                borderRadius: "3px", // 둥근 모서리를 적용합니다.
-                padding: "10px", // 내부 여백을 추가합니다.
-                marginTop: "10px", // 상단 여백을 추가합니다.
+                border: "1px solid #007BFF",
+                borderRadius: "3px",
+                padding: "10px",
+                marginTop: "10px",
               }}
             >
               {replyDetails.script}
@@ -151,7 +163,11 @@ function SCH_P_01() {
   return (
     <ThemeProvider theme={theme}>
       <Container sx={{ mt: 4, mb: 4 }}>
-        <Tabcompo setQuestions={setQuestions} />
+        <Tabcompo
+          setQuestions={setQuestions}
+          inView={inView}
+          questions={questions}
+        />
         {questions.map((question, index) => (
           <Accordion
             key={index}
@@ -206,6 +222,7 @@ function SCH_P_01() {
           </Accordion>
         ))}
         <DetailModal />
+        <div ref={ref} />
       </Container>
     </ThemeProvider>
   );

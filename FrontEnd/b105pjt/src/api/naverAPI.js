@@ -1,9 +1,9 @@
-import { naverImgAxios } from "../utils/httpCommons";
+import { baseAxios } from "../utils/httpCommons";
 
-const naverImg = naverImgAxios();
+const baseURL = baseAxios();
 
 async function selectImg(param, success, fail) {
-  await naverImg.get("image", { params: param }).then(success).catch(fail);
+  await baseURL.get(`/commons/search?query=${param}`).then(success).catch(fail);
 }
 
 export { selectImg };

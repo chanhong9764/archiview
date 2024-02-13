@@ -112,7 +112,14 @@ const headCells = [
 
 // Column명 표시해주는 row
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+  const {
+    onSelectAllClick,
+    order,
+    orderBy,
+    numSelected,
+    rowCount,
+    onRequestSort,
+  } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -166,16 +173,29 @@ function EnhancedTableToolbar(props) {
         pr: { xs: 1, sm: 1 },
         ...(numSelected > 0 && {
           bgcolor: (theme) =>
-            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
+            alpha(
+              theme.palette.primary.main,
+              theme.palette.action.activatedOpacity
+            ),
         }),
       }}
     >
       {numSelected > 0 ? (
-        <Typography sx={{ flex: "1 1 100%" }} color="inherit" variant="subtitle1" component="div">
+        <Typography
+          sx={{ flex: "1 1 100%" }}
+          color="inherit"
+          variant="subtitle1"
+          component="div"
+        >
           {numSelected} selected
         </Typography>
       ) : (
-        <Typography sx={{ flex: "1 1 100%" }} variant="h6" id="tableTitle" component="div">
+        <Typography
+          sx={{ flex: "1 1 100%" }}
+          variant="h6"
+          id="tableTitle"
+          component="div"
+        >
           회원관리
         </Typography>
       )}
@@ -204,16 +224,19 @@ const ManageAccount = () => {
     getUserList(
       token,
       (resp) => {
-        console.log("resp >> ", resp.data.data);
         const newRow = resp.data.data.map((item) =>
-          createData(item.id, item.name, item.email, item.introduce, item.role, item.auth)
+          createData(
+            item.id,
+            item.name,
+            item.email,
+            item.introduce,
+            item.role,
+            item.auth
+          )
         );
-        console.log("newRow >> ", newRow);
         setRows(newRow);
       },
-      (error) => {
-        console.log("error >> ", error);
-      }
+      (error) => {}
     );
   }, []);
 
@@ -262,14 +285,14 @@ const ManageAccount = () => {
 
   // 상세버튼 클릭 시 동작
   const handleOpenDetail = (event) => {
-    console.log("선택된 row: ", event);
     navigate("/myinterview", { state: { event: event }, replace: true });
   };
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   const visibleRows = React.useMemo(
     () =>
@@ -316,7 +339,13 @@ const ManageAccount = () => {
                     selected={isItemSelected}
                     sx={{ cursor: "pointer" }}
                   >
-                    <TableCell component="th" id={labelId} scope="row" padding="3px" align="left">
+                    <TableCell
+                      component="th"
+                      id={labelId}
+                      scope="row"
+                      padding="3px"
+                      align="left"
+                    >
                       <Button
                         onClick={(event) => {
                           event.stopPropagation(); // 상위 요소로의 이벤트 전파를 막음

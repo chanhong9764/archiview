@@ -74,6 +74,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
     public void updatePassword(String userInfo, String userPw) {
         User user = repository.findById(userInfo).orElseGet(() ->
                 repository.findByEmail(userInfo).orElseThrow(
@@ -84,7 +85,6 @@ public class UserServiceImpl implements UserService{
         }
 
         user.updatePassword(bCryptPasswordEncoder.encode(userPw));
-        repository.save(user);
     }
 
     @Override
@@ -100,10 +100,10 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
     public void updateUserDetail(String profileUrl, String introduce, String id) {
         User user = repository.getById(id);
         user.updateUserDetail(profileUrl, introduce);
-        repository.save(user);
     }
 
     @Override
@@ -118,6 +118,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
     public void userDowngrade(String userId) {
         User user = repository.getById(userId);
         if(user.getRole().equals(Role.ROLE_USER)){
@@ -128,18 +129,13 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public void userBlock(String userId, Boolean block) {
+    public void userBlock(String userId) {
         User user = repository.getById(userId);
-        if(!user.getRole().equals(Role.ROLE_BLOCK) && block) {
+        if(!user.getRole().equals(Role.ROLE_BLOCK)) {
             user.updateUserRole(Role.ROLE_BLOCK);
         }
-        else if (user.getRole().equals(Role.ROLE_BLOCK) && !block){
-            user.updateUserRole(Role.ROLE_USER);
-        }
-        else if (user.getRole().equals(Role.ROLE_BLOCK) && block){
+        else{
             throw new RestApiException(ErrorCode.BLOCK_NOT_ALLOWED);
-        } else{
-            throw new RestApiException(ErrorCode.INVALID_REQUEST);
         }
         user.updateUserAuth(false);
     }

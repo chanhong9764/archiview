@@ -32,7 +32,7 @@ dependencies {
 	// 스프링 시큐리티
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	// redis
-//	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'com.mysql:mysql-connector-j:8.0.33'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'

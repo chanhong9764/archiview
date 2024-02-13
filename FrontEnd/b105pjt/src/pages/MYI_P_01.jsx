@@ -20,6 +20,7 @@ import { userDetail, wantUpgrade } from "../api/userAPI.js";
 import { searchQuestion } from "../api/mypageAPI.js";
 import { setUserBlock, setUserDown, setUserUp } from "../api/adminAPI.js";
 import { useSelector } from "react-redux";
+import { useInView } from "react-intersection-observer";
 
 // 커스텀 테마 정의
 const theme = createTheme({
@@ -63,7 +64,7 @@ const mediaStyles = {
   borderRadius: "15px 15px 0 0",
 };
 
-const Page = () => {
+const MYI_P_01 = () => {
   const [questions, setQuestions] = useState([]);
   const [adminBtn, setAdminBtn] = useState(false);
   const [isUpgradBtn, setIsUpgradBtn] = useState(false);
@@ -74,6 +75,7 @@ const Page = () => {
   const [role, setRole] = useState(null);
   const [auth, setAuth] = useState(null);
   const [userId, setUserId] = useState(useSelector((state) => state.userId));
+  const [ref, inView] = useInView();
 
   const accessToken = localStorage.getItem("accessToken");
 
@@ -83,30 +85,21 @@ const Page = () => {
 
     // 데이터가 없는경우 (일반 사용자)
     if (!eventData) {
-      userDetail(
-        accessToken,
-        (resp) => {
-          setUserId(resp.data.data.id);
-          setAuth(resp.data.data.auth);
-          searchQuestion(
-            {
-              Authorization: accessToken,
-            },
-            {
-              userId: resp.data.data.id,
-            },
-            (resp) => {
-              if (resp.data.data) setQuestions(resp.data.data);
-            },
-            (error) => {
-              error;
-            }
-          );
-        },
-        (error) => {
-          error;
-        }
-      );
+      userDetail(accessToken, (resp) => {
+        setUserId(resp.data.data.id);
+        setAuth(resp.data.data.auth);
+        searchQuestion(
+          {
+            Authorization: accessToken,
+          },
+          {
+            userId: resp.data.data.id,
+          },
+          (resp) => {
+            if (resp.data.data) setQuestions(resp.data.data);
+          }
+        );
+      });
       setIsUpgradBtn(true);
     }
     // admin 페이지에서 온 경우
@@ -116,33 +109,21 @@ const Page = () => {
       setUserId(eventData.id);
       setAuth(eventData.auth);
 
-      userDetail(
-        accessToken,
-        (resp) => {
-          searchQuestion(
-            {
-              headers: {
-                Authorization: accessToken,
-              },
+      userDetail(accessToken, (resp) => {
+        searchQuestion(
+          {
+            headers: {
+              Authorization: accessToken,
             },
-            {
-              userId: eventData.id,
-            },
-            (resp) => {
-              "MYI_P_01 -> searchQuestion | 질문 검색 성공",
-                eventData.id,
-                resp.data;
-              if (resp.data.data) setQuestions(resp.data.data);
-            },
-            (error) => {
-              error;
-            }
-          );
-        },
-        (error) => {
-          error;
-        }
-      );
+          },
+          {
+            userId: eventData.id,
+          },
+          (resp) => {
+            if (resp.data.data) setQuestions(resp.data.data);
+          }
+        );
+      });
     }
   }, []);
 
@@ -153,18 +134,10 @@ const Page = () => {
 
   // 등업신청 버튼 클릭 시
   const handleUpgrade = () => {
-    ">>>>>", auth;
     setIsUpgradBtn(false);
-    wantUpgrade(
-      accessToken,
-      (resp) => {
-        resp;
-        alert("신청이 완료되었습니다");
-      },
-      (error) => {
-        error;
-      }
-    );
+    wantUpgrade(accessToken, (resp) => {
+      alert("신청이 완료되었습니다");
+    });
   };
 
   return (
@@ -178,47 +151,23 @@ const Page = () => {
             onUpdate={(updatedData) => {
               switch (updatedData.role) {
                 case "ROLE_USER":
-                  ">>>", userId;
-                  setUserDown(
-                    userId,
-                    accessToken,
-                    (resp) => {
-                      "block >> ", resp;
-                    },
-                    (error) => {
-                      "error >> ", error;
-                    }
-                  );
+                  setUserDown(userId, accessToken, (resp) => {});
                   break;
                 case "ROLE_MEMBER":
-                  ">>>", userId;
                   setUserUp(
                     {
                       id: userId,
                       block: true,
                     },
                     accessToken,
-                    (resp) => {
-                      "block >> ", resp;
-                    },
+                    (resp) => {},
                     (error) => {
                       alert("신청중인 유저가 아닙니다");
-                      "error >> ", error;
                     }
                   );
                   break;
                 case "ROLE_BLOCK":
-                  ">>>", userId;
-                  setUserBlock(
-                    userId,
-                    accessToken,
-                    (resp) => {
-                      "block >> ", resp;
-                    },
-                    (error) => {
-                      "error >> ", error;
-                    }
-                  );
+                  setUserBlock(userId, accessToken, (resp) => {});
                   break;
                 default:
               }
@@ -250,7 +199,12 @@ const Page = () => {
             </Typography>
           </ProfileSection>
         )}
-        <SearchTab setQuestions={setQuestions} userId={userId} />
+        <SearchTab
+          setQuestions={setQuestions}
+          userId={userId}
+          questions={questions}
+          inView={inView}
+        />
         {questions.map((question, index) => (
           <Accordion
             key={index}
@@ -294,9 +248,10 @@ const Page = () => {
             </Grid>
           </Accordion>
         ))}
+        <div ref={ref} />
       </Container>
     </ThemeProvider>
   );
 };
 
-export default Page;
+export default MYI_P_01;

@@ -25,8 +25,6 @@ const MakeSession = async (videoRef, dispatch) => {
 
   try {
     const resp = await getToken({ sessionName: sessionName });
-    "토큰 받기 성공:", resp.data[0];
-
     let token = resp.data[0];
     await session.connect(token, { clientData: "example" });
 
@@ -82,8 +80,6 @@ const OpenVideo = ({ setSessionUrl }) => {
         if (publisher) {
           publisher = null;
         }
-
-        "세션 종료:", session.sessionId;
         // 세션 연결 해제
         session.disconnect();
       }
@@ -91,7 +87,6 @@ const OpenVideo = ({ setSessionUrl }) => {
   }, []);
 
   const handleRecordStart = () => {
-    "sessionId: ", session.sessionId;
     dispatch({ type: "SET_LOADING" });
     startRecording(
       {
@@ -101,12 +96,10 @@ const OpenVideo = ({ setSessionUrl }) => {
         hasVideo: true,
       },
       (resp) => {
-        "녹화 시작: ", resp;
         setIsRecording(true);
         dispatch({ type: "UNSET_LOADING" });
       },
       (error) => {
-        "에러 발생: ", error;
         dispatch({ type: "UNSET_LOADING" });
       }
     );
@@ -122,11 +115,9 @@ const OpenVideo = ({ setSessionUrl }) => {
       },
       (resp) => {
         // Start - Signaling Server API
-        "녹화 종료: ", resp;
         setRecordingURL(
           "https://i10b105.p.####.io/api/files/recording/" + urlSession
         );
-        recordingURL;
         setIsRecording(false);
 
         // 세션 및, 퍼블리셔 종료 로직
@@ -139,7 +130,6 @@ const OpenVideo = ({ setSessionUrl }) => {
         dispatch({ type: "UNSET_LOADING" });
       },
       (error) => {
-        "에러 발생: ", error;
         dispatch({ type: "UNSET_LOADING" });
       }
     );

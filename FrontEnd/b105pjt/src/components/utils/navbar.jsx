@@ -55,9 +55,6 @@ function Navbar() {
       },
       (resp) => {
         //
-      },
-      (error) => {
-        error;
       }
     );
     dispatch({ type: "LOGOUT", accessToken: "" });

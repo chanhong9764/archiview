@@ -47,11 +47,7 @@ const InsertForm = () => {
         thumbnailUrl: sessionUrl,
       },
       (resp) => {
-        console.log("insertForm -> onClickApply | 내 면접 등록 성공");
         navigate("/myinterview", { replace: true });
-      },
-      (error) => {
-        console.log("insertForm -> onClickApply | 내 면접 등록 실패", error);
       }
     );
   }

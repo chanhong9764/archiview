@@ -18,11 +18,8 @@ import {
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-<<<<<<< HEAD
 import { useInView } from "react-intersection-observer";
-=======
 import { selectReply } from "../api/replyAPI.js";
->>>>>>> 840745ad78a15def8eea53e25d24de8b021f322b
 
 // 커스텀 테마 정의
 const theme = createTheme({

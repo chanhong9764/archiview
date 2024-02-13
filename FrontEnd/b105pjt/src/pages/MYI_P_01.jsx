@@ -113,13 +113,8 @@ const Page = () => {
     else {
       setAdminBtn(true);
       setRole(eventData.role);
-
-      console.log("event >>>", eventData.id);
-<<<<<<< HEAD
       setUserId(eventData.id);
-=======
-      setUserId(eventData.id); // async await..
->>>>>>> b5021c95bd3841e60d2d3bd94d2edabf20e87e38
+      setAuth(eventData.auth);
 
       userDetail(
         accessToken,
@@ -161,10 +156,12 @@ const Page = () => {
   // 등업신청 버튼 클릭 시
   const handleUpgrade = () => {
     console.log(">>>>>", auth);
+    setIsUpgradBtn(false);
     wantUpgrade(
       accessToken,
       (resp) => {
         console.log(resp);
+        alert("신청이 완료되었습니다");
       },
       (error) => {
         console.log(error);
@@ -207,6 +204,7 @@ const Page = () => {
                       console.log("block >> ", resp);
                     },
                     (error) => {
+                      alert("신청중인 유저가 아닙니다");
                       console.log("error >> ", error);
                     }
                   );

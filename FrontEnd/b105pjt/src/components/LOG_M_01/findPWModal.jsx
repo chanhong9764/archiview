@@ -48,13 +48,14 @@ const FindPWModal = ({ onSwitch, setToken, data }) => {
     sendFindEmail(
       { email: emailValue },
       (resp) => {
-        console.log(resp);
-        setemailToken(resp.data.data.emailToken);
         setShowSignupFields(true); // 인증번호 필드를 보여줌
+        // console.log(resp);
+        setemailToken(resp.data.data.emailToken);
         setAuthNum(resp.data.data.authNumber);
       },
       (error) => {
         console.log("에러 발생: ", error);
+        setIsInputDisabled(false); // 버튼을 비활성화 시킴
       }
     );
   };
@@ -75,17 +76,14 @@ const FindPWModal = ({ onSwitch, setToken, data }) => {
         email: emailValue,
       },
       (resp) => {
-        console.log(resp);
+        // console.log(resp);
         setToken(emailToken);
         onSwitch("ChangePW");
       },
       (error) => {
         alert(error.response.data.message);
-      },
-      idValue,
-      emailValue
+      }
     );
-    onSwitch("ChangePW", "123");
   };
 
   // 엔터 입력시

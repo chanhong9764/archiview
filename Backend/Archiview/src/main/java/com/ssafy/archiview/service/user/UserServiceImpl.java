@@ -40,18 +40,15 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void userLogout(HttpServletRequest request) {
-    String accessToken = request.getHeader("Authorization");
-    String userId = jwtUtil.getUsername(request);
-    User user = repository.getById(userId);
-    user.updateRefreshToken(null);  // refreshToken 삭제
-    repository.save(user);
+        String userId = jwtUtil.getUsername(request);
+        User user = repository.getById(userId);
+        user.updateRefreshToken(null);  // refreshToken 삭제
+        repository.save(user);
     }
 
     @Override
     @Transactional
     public void userDelete(HttpServletRequest request) {
-        // request 에서 액세스토큰 정보 추출
-        String accessToken = request.getHeader("Authorization");
         String userId = jwtUtil.getUsername(request);  // 엑세스 토큰에서 userId 추출
         User user = repository.getById(userId);  // 추출된 userId로 DB 조회
         repository.delete(user);
@@ -77,6 +74,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
     public void updatePassword(String userInfo, String userPw) {
         User user = repository.findById(userInfo).orElseGet(() ->
                 repository.findByEmail(userInfo).orElseThrow(
@@ -87,7 +85,6 @@ public class UserServiceImpl implements UserService{
         }
 
         user.updatePassword(bCryptPasswordEncoder.encode(userPw));
-        repository.save(user);
     }
 
     @Override
@@ -103,31 +100,43 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
     public void updateUserDetail(String profileUrl, String introduce, String id) {
         User user = repository.getById(id);
         user.updateUserDetail(profileUrl, introduce);
-        repository.save(user);
     }
 
     @Override
     @Transactional
     public void userUpgrade(String userId) {
         User user = repository.getById(userId);
-        if(user.getRole().equals(Role.MEMBER) || !user.isAuth()) {
-            throw new RestApiException(ErrorCode.UPGRADE_NOT_ALLOWED);
+        if(user.getRole().equals(Role.ROLE_MEMBER) || !user.isAuth()) {
+            throw new RestApiException(ErrorCode.UPDATE_NOT_ALLOWED);
         }
-        user.updateUserRole(Role.MEMBER);
+        user.updateUserRole(Role.ROLE_MEMBER);
         user.updateUserAuth(false);
+    }
+
+    @Override
+    @Transactional
+    public void userDowngrade(String userId) {
+        User user = repository.getById(userId);
+        if(user.getRole().equals(Role.ROLE_USER)){
+            throw new RestApiException(ErrorCode.UPDATE_NOT_ALLOWED);
+        }
+        user.updateUserRole(Role.ROLE_USER);
     }
 
     @Override
     @Transactional
     public void userBlock(String userId) {
         User user = repository.getById(userId);
-        if(user.getRole().equals(Role.BLOCK)) {
+        if(!user.getRole().equals(Role.ROLE_BLOCK)) {
+            user.updateUserRole(Role.ROLE_BLOCK);
+        }
+        else{
             throw new RestApiException(ErrorCode.BLOCK_NOT_ALLOWED);
         }
-        user.updateUserRole(Role.BLOCK);
         user.updateUserAuth(false);
     }
 
@@ -135,7 +144,7 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public void userApplyUpgrade(String userId) {
         User user = repository.getById(userId);
-        if(!user.getRole().equals(Role.USER) || user.isAuth()) {
+        if(!user.getRole().equals(Role.ROLE_USER) || user.isAuth()) {
             throw new RestApiException(ErrorCode.UPGRADE_NOT_ACCEPTED);
         }
         user.updateUserAuth(true);

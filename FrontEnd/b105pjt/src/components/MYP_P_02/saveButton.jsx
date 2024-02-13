@@ -1,6 +1,6 @@
-import React, { useState }  from 'react';
-import { Button, Box } from '@mui/material';
-import ConfirmModal from './confirmModal';
+import React, { useState } from "react";
+import { Button, Box } from "@mui/material";
+import ConfirmModal from "./confirmModal";
 
 const SaveButton = ({ onSave }) => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -19,32 +19,34 @@ const SaveButton = ({ onSave }) => {
   };
 
   return (
-    <Box sx={{ 
-      padding: '20px', 
-      margin: '20px auto', 
-      width: '40%', 
-      textAlign: 'center', 
-      mt: 1.5, 
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center' 
-    }}>
-      <Button 
-        variant="contained" 
-        color="primary" 
+    <Box
+      sx={{
+        padding: "20px",
+        margin: "20px auto",
+        width: "40%",
+        textAlign: "center",
+        mt: 1.5,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Button
+        variant="contained"
+        color="primary"
         onClick={handleButtonClick}
-        sx={{ 
-          width:'100%',
-          maxWidth: '350px',
-          height:'50px',
+        sx={{
+          width: "100%",
+          maxWidth: "350px",
+          height: "50px",
         }}
       >
-        저장
+        비밀번호 변경
       </Button>
-      <ConfirmModal 
-        open={isModalOpen} 
-        onConfirm={handleConfirm} 
-        onCancel={handleCancel} 
+      <ConfirmModal
+        open={isModalOpen}
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
       />
     </Box>
   );

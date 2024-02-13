@@ -28,6 +28,8 @@ public interface UserService {
     void updateUserDetail(String profileUrl, String introduce, String id);
     // 유저 등업 승인
     void userUpgrade(String userId);
+    // 유저 등급 강등
+    void userDowngrade(String userId);
     // 유저 정지
     void userBlock(String userId);
     // 유저 등업 신청

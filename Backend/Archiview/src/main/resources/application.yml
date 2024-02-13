@@ -5,9 +5,7 @@ spring:
 #    url: jdbc:mysql://localhost:3306/archiview?serverTimezone=Asia/Seoul
     username: archiview
     password: ssafyb105
-#    url: jdbc:mysql://localhost:3306/archiview?serverTimezone=Asia/Seoul
-#    username: ssafy
-#    password: ssafy
+
   jpa:
     # Hibernate가 실행한 모든 SQL을 출력
     show-sql: true
@@ -31,8 +29,17 @@ spring:
           timeout: 5000
           starttls:
             enable: true
+
+# redis
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password: ssafyb105
+
+# jwt secret key
 jwt:
-  secret: aaaabbbsdifqbvaesoioegwaaaabbbsdidsfdsfdfsdfsdfsdfsdfsd
+  secret: 1Ak0LMGoQpMaTrq4yJKZWD14l9CwN+f9dIOR2cELfZc=
 
 server:
   servlet:

@@ -13,11 +13,11 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 export default function CheckboxesTags({ setCompanyName, setCompanyId }) {
   const [company, setCompany] = useState([]);
 
-  function handlebox(company) {
-    if (company) {
-      setCompanyName(company.name);
+  function handlebox(value) {
+    if (value) {
+      setCompanyName(value.name);
       if (setCompanyId) {
-        setCompanyId(company.Id);
+        setCompanyId(value.id);
       }
     }
   }

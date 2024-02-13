@@ -31,7 +31,7 @@ export default function ChipsArray({
     const bigTagFilterDataSmallTab = bigTagFilter[0].smallTagIndex.filter(
       (item) => item !== content.tab
     );
-    // console.log(bigTagFilterData.length === 0);
+    //  (bigTagFilterData.length === 0);
     if (bigTagFilterDataIndex.length !== 0) {
       setTagDataList([
         ...tagDataList.filter((item) => item.bigTag !== content.bigTag),
@@ -60,7 +60,7 @@ export default function ChipsArray({
           chip.key !== chipToDelete.key || chip.bigTag !== chipToDelete.bigTag
       )
     );
-    // console.log(chipToDelete);
+    //  (chipToDelete);
     if (chipToDelete.key !== "ALL") {
       changeTagData(chipToDelete);
     } else {

@@ -72,11 +72,9 @@ const ModifyForm = () => {
     dispatch({ type: "SET_LOADING" });
     MakeSession(videoRef)
       .then(() => {
-        console.log("MakeSession 성공");
         dispatch({ type: "UNSET_LOADING" });
       })
       .catch((error) => {
-        console.error("MakeSession 오류:", error);
         dispatch({ type: "UNSET_LOADING" });
       });
 
@@ -86,8 +84,6 @@ const ModifyForm = () => {
         if (publisher) {
           publisher = null;
         }
-
-        console.log("세션 종료:", session.sessionId);
         // 세션 연결 해제
         session.disconnect();
       }
@@ -95,7 +91,6 @@ const ModifyForm = () => {
   }, []);
 
   const handleRecordStart = () => {
-    console.log("sessionId: ", session.sessionId);
     dispatch({ type: "SET_LOADING" });
     startRecording(
       {
@@ -105,12 +100,10 @@ const ModifyForm = () => {
         hasVideo: true,
       },
       (resp) => {
-        console.log("녹화 시작: ", resp);
         setIsRecording(true);
         dispatch({ type: "UNSET_LOADING" });
       },
       (error) => {
-        console.log("에러 발생: ", error);
         dispatch({ type: "UNSET_LOADING" });
       }
     );
@@ -124,11 +117,9 @@ const ModifyForm = () => {
         recording: session.sessionId,
       },
       (resp) => {
-        console.log("녹화 종료: ", resp);
         setRecordingURL(
           "https://i10b105.p.####.io/api/files/recording/" + urlSession
         );
-        console.log(recordingURL);
         setIsRecording(false);
 
         // 세션 및, 퍼블리셔 종료 로직
@@ -142,7 +133,6 @@ const ModifyForm = () => {
         dispatch({ type: "UNSET_LOADING" });
       },
       (error) => {
-        console.log("에러 발생: ", error);
         dispatch({ type: "UNSET_LOADING" });
       }
     );

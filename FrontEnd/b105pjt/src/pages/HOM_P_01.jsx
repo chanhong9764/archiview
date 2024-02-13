@@ -40,14 +40,9 @@ const HOM_P_01 = () => {
 
   useEffect(() => {
     const getCompany = async () => {
-      await getCompanyList(
-        (res) => {
-          setCompany(res.data.data);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+      await getCompanyList((res) => {
+        setCompany(res.data.data);
+      });
     };
     getCompany();
   }, []);

@@ -65,11 +65,7 @@ const ActionButton = ({ onDelete }) => {
           Authorization: accessToken,
         },
       },
-      (resp) => {
-      },
-      (error) => {
-        console.log("에러 발생: ", error);
-      }
+      (resp) => {}
     );
   };
 

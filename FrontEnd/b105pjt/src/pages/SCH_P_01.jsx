@@ -10,9 +10,15 @@ import {
   Grid,
   CardContent,
   CardMedia,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  Button,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import { selectReply } from "../api/replyAPI.js";
 
 // 커스텀 테마 정의
 const theme = createTheme({
@@ -58,16 +64,103 @@ function SCH_P_01() {
   const dispatch = useDispatch();
   const location = useLocation();
   const [questions, setQuestions] = useState([]);
+  const [replyDetails, setReplyDetails] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedReply, setSelectedReply] = useState(null);
+
+  const accessToken = localStorage.getItem("accessToken");
+
+  useEffect(() => {
+    // selectedReply가 변경될 때마다 API 호출
+    if (selectedReply) {
+      selectReply(
+        {
+          Authorization: accessToken,
+        },
+        selectedReply.id,
+        (resp) => {
+          setReplyDetails(resp.data.data.reply);
+          setModalOpen(true);
+        },
+        (err) => {
+          console.log("호출 실패: ", err);
+        }
+      );
+    }
+  }, [selectedReply]); // selectedReply가 변경될 때만 이 effect를 실행
 
   const handleViewDetails = (reply) => {
     if (!isLoggedIn) {
-      dispatch({ type: "OPEN_ALERT" });
-    } else {
-      navigate("/interview/detail", {
-        state: { postId: reply.userId },
+      dispatch({
+        type: "OPEN_ALERT",
+        payload: {
+          message: "로그인이 필요합니다.",
+        },
       });
+      console.log(reply);
+    } else {
+      if (role === "ROLE_USER") {
+        dispatch({
+          type: "OPEN_ALERT",
+          payload: {
+            message:
+              "MEMBER 등급이 아닙니다.\n답변을 작성하고, 등업 신청 부탁드립니다.",
+          },
+        });
+        navigate("/myinterview");
+      } else {
+        setSelectedReply(reply);
+      }
     }
   };
+
+  const handleCloseModal = () => {
+    setModalOpen(false); // 모달을 닫기
+  };
+
+  // 모달 컴포넌트
+  const DetailModal = () => (
+    <Dialog open={modalOpen} onClose={handleCloseModal}>
+      <DialogContent>
+        {replyDetails ? (
+          <DialogContentText>
+            <div
+              style={{
+                fontSize: "24px",
+                fontWeight: "bold",
+                marginBottom: "10px",
+              }}
+            >
+              {replyDetails.question.content}
+            </div>
+            {/* 비디오 컨트롤러 */}
+            <div>
+              <video
+                controls
+                src={
+                  "https://i10b105.p.ssafy.io/api/files/recording/" +
+                  replyDetails.videoUrl
+                }
+                width="500"
+              ></video>
+            </div>
+            <div
+              style={{
+                border: "1px solid #007BFF",
+                borderRadius: "3px",
+                padding: "10px",
+                marginTop: "10px",
+              }}
+            >
+              {replyDetails.script}
+            </div>
+          </DialogContentText>
+        ) : (
+          <DialogContentText>Loading...</DialogContentText> // 데이터 로딩 중 표시
+        )}
+      </DialogContent>
+    </Dialog>
+  );
 
   return (
     <ThemeProvider theme={theme}>
@@ -126,6 +219,7 @@ function SCH_P_01() {
             </Grid>
           </Accordion>
         ))}
+        <DetailModal />
       </Container>
     </ThemeProvider>
   );

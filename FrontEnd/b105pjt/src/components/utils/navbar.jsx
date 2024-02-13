@@ -15,6 +15,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../../api/userAPI";
 import Logo from "../../assets/img/symbolLogo_Slogun-removebg-preview.png";
+import User from "../../assets/img/user.png";
 import { removeCookie } from "../../utils/cookie";
 import { useSelector } from "react-redux";
 
@@ -227,7 +228,7 @@ function Navbar() {
 
             {isLoggedIn ? (
               <Box sx={{ flexGrow: 0 }}>
-                <Tooltip title="Open settings">
+                <Tooltip title="설정">
                   <Button onClick={handleOpenUserMenu}>
                     {/* 프로필 이미지 */}
                     <Avatar
@@ -276,19 +277,17 @@ function Navbar() {
                 </Menu>
               </Box>
             ) : (
-              <Box sx={{ flexGrow: 0 }}>
-                <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "flex" } }}>
-                  <Button
-                    onClick={openModal}
-                    sx={{
-                      my: 2,
-                      color: "#222222",
-                      display: "block",
-                    }}
-                  >
-                    로그인
-                  </Button>
-                </Box>
+              <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                <Button
+                  onClick={openModal}
+                  sx={{
+                    my: 2,
+                    color: "#222222",
+                    display: "block",
+                  }}
+                >
+                  <img alt="user" src={User} width={50} height={50} />
+                </Button>
               </Box>
             )}
           </Toolbar>

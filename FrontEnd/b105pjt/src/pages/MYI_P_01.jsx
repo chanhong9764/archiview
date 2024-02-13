@@ -115,7 +115,11 @@ const Page = () => {
       setRole(eventData.role);
 
       console.log("event >>>", eventData.id);
+<<<<<<< HEAD
       setUserId(eventData.id);
+=======
+      setUserId(eventData.id); // async await..
+>>>>>>> b5021c95bd3841e60d2d3bd94d2edabf20e87e38
 
       userDetail(
         accessToken,

@@ -40,7 +40,6 @@ function Navbar() {
   };
   // 메뉴 여닫기
   const handleCloseNavMenu = () => {
-    console.log("hihi");
     setAnchorElNav(null);
   };
   // 메뉴 여닫기
@@ -56,9 +55,6 @@ function Navbar() {
       },
       (resp) => {
         //
-      },
-      (error) => {
-        console.log(error);
       }
     );
     dispatch({ type: "LOGOUT", accessToken: "" });

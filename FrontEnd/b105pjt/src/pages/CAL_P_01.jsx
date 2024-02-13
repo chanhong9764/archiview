@@ -104,12 +104,6 @@ const FullCalendarContainer = styled.div`
     height: 100px !important; /* 셀의 높이 조정 */
     border: 1px solid #ddd !important; /* 셀의 테두리 조정 */
 `;
-
-const SearchContainer = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  padding: 0px 0 15px 0;
-`;
 const CAL_P_01 = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.isLoading);
@@ -118,20 +112,19 @@ const CAL_P_01 = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
 
-  useEffect(() => {
-    selectRecruit(setEvents);
-  }, []);
-
-  const selectRecruit = (setEvents) => {
+  const selectRecruit = () => {
     dispatch({ type: "SET_LOADING" });
     selectAllRecruits(
       date,
       (resp) => {
-        const newEvents = transformEventData(resp.data);
-        setEvents(newEvents);
+        if (resp.data.data) {
+          setEvents(transformEventData(resp.data.data));
+        }
         dispatch({ type: "UNSET_LOADING" });
       },
-      (error) => {}
+      (error) => {
+        dispatch({ type: "UNSET_LOADING" });
+      }
     );
   };
 
@@ -151,7 +144,6 @@ const CAL_P_01 = () => {
   const handleClose = () => setOpen(false);
 
   const handleEventClick = (clickInfo) => {
-    console.log("Event clicked:", clickInfo);
     setSelectedEvent(clickInfo.event);
     handleOpen();
   };
@@ -177,39 +169,11 @@ const CAL_P_01 = () => {
     );
   };
 
-  const handleSearchBtn = () => {
-    console.log(">>검색버튼");
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleSearchBtn();
-    }
-  };
-
   return (
     <PageContainer>
       <div style={{ marginBottom: "20px" }}>
         <div className="parent-container">
           <FullCalendarContainer>
-            <SearchContainer>
-              <TextField
-                style={{ width: "500px", borderRadius: "50px" }}
-                label="회사명으로 면접 질문 검색"
-                variant="outlined"
-                onKeyDown={handleKeyPress}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={handleSearchBtn}>
-                        <SearchIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </SearchContainer>
-
             <FullCalendar
               plugins={[dayGridPlugin, interactionPlugin]}
               initialView="dayGridMonth"

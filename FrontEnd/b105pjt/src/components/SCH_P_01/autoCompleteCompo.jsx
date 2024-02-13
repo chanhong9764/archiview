@@ -29,7 +29,7 @@ export default function CheckboxesTags({ setCompanyName, setCompanyId }) {
           setCompany(res.data.data);
         },
         (error) => {
-          console.log(error);
+          error;
         }
       );
     };

@@ -45,7 +45,7 @@ const HOM_P_01 = () => {
           setCompany(res.data.data);
         },
         (error) => {
-          console.log(error);
+          error;
         }
       );
     };

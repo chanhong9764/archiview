@@ -99,12 +99,12 @@ const Page = () => {
               if (resp.data.data) setQuestions(resp.data.data);
             },
             (error) => {
-              console.log(error);
+              error;
             }
           );
         },
         (error) => {
-          console.log(error);
+          error;
         }
       );
       setIsUpgradBtn(true);
@@ -129,20 +129,18 @@ const Page = () => {
               userId: eventData.id,
             },
             (resp) => {
-              console.log(
-                "MYI_P_01 -> searchQuestion | 질문 검색 성공",
+              "MYI_P_01 -> searchQuestion | 질문 검색 성공",
                 eventData.id,
-                resp.data
-              );
+                resp.data;
               if (resp.data.data) setQuestions(resp.data.data);
             },
             (error) => {
-              console.log(error);
+              error;
             }
           );
         },
         (error) => {
-          console.log(error);
+          error;
         }
       );
     }
@@ -155,16 +153,16 @@ const Page = () => {
 
   // 등업신청 버튼 클릭 시
   const handleUpgrade = () => {
-    console.log(">>>>>", auth);
+    ">>>>>", auth;
     setIsUpgradBtn(false);
     wantUpgrade(
       accessToken,
       (resp) => {
-        console.log(resp);
+        resp;
         alert("신청이 완료되었습니다");
       },
       (error) => {
-        console.log(error);
+        error;
       }
     );
   };
@@ -180,20 +178,20 @@ const Page = () => {
             onUpdate={(updatedData) => {
               switch (updatedData.role) {
                 case "ROLE_USER":
-                  console.log(">>>", userId);
+                  ">>>", userId;
                   setUserDown(
                     userId,
                     accessToken,
                     (resp) => {
-                      console.log("block >> ", resp);
+                      "block >> ", resp;
                     },
                     (error) => {
-                      console.log("error >> ", error);
+                      "error >> ", error;
                     }
                   );
                   break;
                 case "ROLE_MEMBER":
-                  console.log(">>>", userId);
+                  ">>>", userId;
                   setUserUp(
                     {
                       id: userId,
@@ -201,24 +199,24 @@ const Page = () => {
                     },
                     accessToken,
                     (resp) => {
-                      console.log("block >> ", resp);
+                      "block >> ", resp;
                     },
                     (error) => {
                       alert("신청중인 유저가 아닙니다");
-                      console.log("error >> ", error);
+                      "error >> ", error;
                     }
                   );
                   break;
                 case "ROLE_BLOCK":
-                  console.log(">>>", userId);
+                  ">>>", userId;
                   setUserBlock(
                     userId,
                     accessToken,
                     (resp) => {
-                      console.log("block >> ", resp);
+                      "block >> ", resp;
                     },
                     (error) => {
-                      console.log("error >> ", error);
+                      "error >> ", error;
                     }
                   );
                   break;

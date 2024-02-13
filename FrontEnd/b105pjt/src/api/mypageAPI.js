@@ -23,7 +23,6 @@ async function updateUserDetail(config, param, success, fail) {
 }
 
 async function searchQuestion(config, param, success, fail) {
-  console.log("parma>>>", param);
   await baseURL
     .get(
       "questions/search",

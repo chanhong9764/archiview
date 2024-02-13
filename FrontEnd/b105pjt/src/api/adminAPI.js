@@ -32,8 +32,6 @@ async function setUserUp(param, token, success, fail) {
     },
   };
 
-  console.log(">>>>>", param);
-
   await baseURL
     .patch(`admin/users/upgrade?userId=${param.id}`, null, config)
     .then(success)

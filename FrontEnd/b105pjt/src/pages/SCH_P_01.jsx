@@ -81,7 +81,6 @@ function SCH_P_01() {
         },
         selectedReply.id,
         (resp) => {
-          console.log(resp.data.data.reply);
           setReplyDetails(resp.data.data.reply);
           setModalOpen(true);
         },
@@ -93,11 +92,27 @@ function SCH_P_01() {
   }, [selectedReply]); // selectedReply가 변경될 때만 이 effect를 실행
 
   const handleViewDetails = (reply) => {
-    console.log(reply);
     if (!isLoggedIn) {
-      dispatch({ type: "OPEN_ALERT" });
+      dispatch({
+        type: "OPEN_ALERT",
+        payload: {
+          message: "로그인이 필요합니다.",
+        },
+      });
+      console.log(reply);
     } else {
-      setSelectedReply(reply);
+      if (role === "ROLE_USER") {
+        dispatch({
+          type: "OPEN_ALERT",
+          payload: {
+            message:
+              "MEMBER 등급이 아닙니다.\n답변을 작성하고, 등업 신청 부탁드립니다.",
+          },
+        });
+        navigate("/myinterview");
+      } else {
+        setSelectedReply(reply);
+      }
     }
   };
 
@@ -131,13 +146,12 @@ function SCH_P_01() {
                 width="500"
               ></video>
             </div>
-            {/* 스크립트 섹션에 인라인 스타일을 적용합니다. */}
             <div
               style={{
-                border: "1px solid #007BFF", // 테두리 색상을 지정합니다.
-                borderRadius: "3px", // 둥근 모서리를 적용합니다.
-                padding: "10px", // 내부 여백을 추가합니다.
-                marginTop: "10px", // 상단 여백을 추가합니다.
+                border: "1px solid #007BFF",
+                borderRadius: "3px",
+                padding: "10px",
+                marginTop: "10px",
               }}
             >
               {replyDetails.script}

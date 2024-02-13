@@ -51,11 +51,17 @@ const cardStyles = {
   justifyContent: "space-between",
   maxHeight: 400,
   overflow: "hidden",
-  transition: "transform 0.3s ease-in-out",
-  cursor: "pointer", // 커서 포인터 추가
+  transition: "transform 0.1s ease-in-out",
+  cursor: "pointer",
   "&:hover": {
-    transform: "scale(1.05)",
+    transform: "scale(1.03)",
   },
+};
+
+const textOverflowStyles = {
+  overflow: "hidden",
+  whiteSpace: "nowrap",
+  textOverflow: "ellipsis",
 };
 
 const mediaStyles = {
@@ -131,9 +137,9 @@ const MYI_P_01 = () => {
     }
   }, []);
 
-  const handleViewDetails = () => {
-    // window.open(videoUrl, "_blank");
-    navigate("/revise");
+  const handleViewDetails = (reply) => {
+    console.log("handleViewDetails>> ", reply);
+    navigate("/revise", { state: { reply } });
   };
 
   // 등업신청 버튼 클릭 시
@@ -209,49 +215,47 @@ const MYI_P_01 = () => {
           questions={questions}
           inView={inView}
         />
-        {questions.map((question, index) => (
-          <Accordion
-            key={index}
-            title={
-              <Typography variant="h6" color="primary" gutterBottom>
-                {question.content}
-              </Typography>
-            }
-          >
-            <Grid container spacing={2}>
-              {question.replies.map((reply) => (
-                <Grid item xs={12} sm={6} md={4} key={reply.id}>
-                  <Card
-                    onClick={() => handleViewDetails(reply.videoUrl)}
-                    sx={cardStyles}
-                  >
-                    <CardMedia
-                      component="img"
-                      sx={mediaStyles}
-                      image={
-                        "https://i10b105.p.ssafy.io/api/files/thumbnail/" +
-                        reply.thumbnailUrl
-                      }
-                      alt="Thumbnail Image"
-                    />
-                    <CardContent>
-                      <Typography
-                        variant="subtitle1"
-                        sx={{ fontWeight: "bold" }}
-                      >
-                        {reply.userId}
-                      </Typography>
-                      <Typography variant="body2">{reply.script}</Typography>
-                      <Typography variant="caption" color="textSecondary">
-                        {question.companyName}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
-          </Accordion>
-        ))}
+        <Grid container spacing={2}>
+          {questions.map((question) =>
+            question.replies.map((reply) => (
+              <Grid item xs={12} sm={6} md={4} key={reply.id}>
+                <Card
+                  onClick={() => handleViewDetails(question)}
+                  sx={cardStyles}
+                >
+                  <CardMedia
+                    component="img"
+                    sx={mediaStyles}
+                    image={
+                      "https://i10b105.p.ssafy.io/api/files/thumbnail/" +
+                      reply.thumbnailUrl
+                    }
+                    alt="Thumbnail Image"
+                  />
+                  <CardContent>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ ...textOverflowStyles, fontWeight: "bold" }}
+                    >
+                      {question.content}
+                    </Typography>
+                    <Typography variant="body2" sx={{ ...textOverflowStyles }}>
+                      {reply.script}
+                    </Typography>
+                    <Typography
+                      variant="caption"
+                      color="textSecondary"
+                      sx={{ ...textOverflowStyles }}
+                    >
+                      {question.companyName}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))
+          )}
+        </Grid>
+        <br></br>
         <div ref={ref} />
       </Container>
     </ThemeProvider>

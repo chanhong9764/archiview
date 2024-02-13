@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -15,39 +15,43 @@ import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 import CreateIcon from "@mui/icons-material/Create";
 import "../assets/css/CAL_M_01.css";
 import { selectImg } from "../api/naverAPI";
-
-const dummyData = {
-  code: 200,
-  message: "채용 공고를 조회했습니다.",
-  data: {
-    recruit_id: 10,
-    company_id: 32,
-    title: "네이버 백엔드 개발자 모집 공고",
-    content: <div>네이버다잉</div>,
-    start: "2024-01-16",
-    end: "2024-02-18",
-    questions: [
-      {
-        id: 10,
-        company_id: 32,
-        content: "1분 자기소개",
-      },
-      {
-        id: 12,
-        company_id: 32,
-        content: "2분 자기소개",
-      },
-    ],
-  },
-};
+import { detailCompanyRecruits } from "../api/calendarAPI";
+import { CircularProgress } from "@mui/material";
 
 const CAL_M_01 = (props) => {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [dense, setDense] = useState(false);
+  const [dummyData, setDummyData] = useState([]);
+  const [imageUrl, setImageUrl] = useState("");
 
   const title = props.event.title;
+
+  useEffect(() => {
+    detailCompanyRecruits(
+      "30",
+      (resp) => {
+        console.log("detailCompanyRecruits resp >>", resp.data.data);
+        setDummyData(resp.data.data);
+      },
+      (err) => {
+        console.log("detailCompanyRecruits err >>", err);
+      }
+    );
+
+    selectImg(
+      title,
+      (response) => {
+        console.log("selectImg >>", response.data.data.imageUrl);
+        const firstImage = response.data.data.imageUrl;
+        setImageUrl(firstImage);
+      },
+      (error) => {
+        console.error("이미지 검색 실패:", error);
+      }
+    );
+  }, []);
 
   // "질문 더보기" 클릭 핸들러
   const handleMoreQuestionsClick = () => {
@@ -58,7 +62,12 @@ const CAL_M_01 = (props) => {
     if (isLoggedIn) {
       navigate("/addquestion", { replace: true });
     } else {
-      dispatch({ type: "OPEN_ALERT" });
+      dispatch({
+        type: "OPEN_ALERT",
+        payload: {
+          message: "로그인이 필요합니다.",
+        },
+      });
     }
   };
 
@@ -66,19 +75,40 @@ const CAL_M_01 = (props) => {
     <div>
       <Grid container spacing={2}>
         <Grid className="content-center" item xs={3}>
-          <img src={""} alt="이미지" />
+          {imageUrl ? (
+            <img
+              src={imageUrl}
+              style={{ width: "140px", height: "100px" }}
+              alt="img"
+            />
+          ) : (
+            <div
+              style={{
+                width: "140px",
+                height: "100px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <CircularProgress />
+            </div>
+          )}
         </Grid>
         <Grid item xs={9}>
           <Grid item xs={12}>
             <div className="border-line">
               <div className="title">{title}</div>
               <span>
-                {dummyData.data.start} ~ {dummyData.data.end}
+                {dummyData.recruit &&
+                  `${dummyData.recruit.start} ~ ${dummyData.recruit.end}`}
               </span>
             </div>
           </Grid>
           <Grid item xs={12}>
-            <div className="content-title">{dummyData.data.title}</div>
+            <div className="content-title">
+              {dummyData.recruit && `${dummyData.recruit.title}`}
+            </div>
           </Grid>
         </Grid>
 
@@ -93,9 +123,31 @@ const CAL_M_01 = (props) => {
 
         <Grid item xs={12}>
           <List dense={dense}>
-            {dummyData.data.questions.map((question) => (
+            {dummyData.questions && dummyData.questions.length > 0 ? (
+              dummyData.questions.map((question) => (
+                <ListItem
+                  key={question.id}
+                  className="listItem"
+                  secondaryAction={
+                    <IconButton
+                      edge="end"
+                      aria-label="create"
+                      onClick={handleClickListItem}
+                    >
+                      <CreateIcon />
+                    </IconButton>
+                  }
+                >
+                  <ListItemAvatar>
+                    <Avatar>
+                      <ContactSupportIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary={question.content} />
+                </ListItem>
+              ))
+            ) : (
               <ListItem
-                key={question.id}
                 className="listItem"
                 secondaryAction={
                   <IconButton
@@ -112,9 +164,9 @@ const CAL_M_01 = (props) => {
                     <ContactSupportIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={question.content} />
+                <ListItemText primary="등록된 질문이 없습니다." />
               </ListItem>
-            ))}
+            )}
           </List>
         </Grid>
       </Grid>

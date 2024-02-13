@@ -88,6 +88,8 @@ const MYI_P_01 = () => {
       userDetail(accessToken, (resp) => {
         setUserId(resp.data.data.id);
         setAuth(resp.data.data.auth);
+        setRole(resp.data.data.role);
+        setProfileData(resp.data.data);
         searchQuestion(
           {
             Authorization: accessToken,
@@ -100,7 +102,9 @@ const MYI_P_01 = () => {
           }
         );
       });
-      setIsUpgradBtn(true);
+      if (role === "ROLE_USER") {
+        setIsUpgradBtn(true);
+      }
     }
     // admin 페이지에서 온 경우
     else {
@@ -108,7 +112,7 @@ const MYI_P_01 = () => {
       setRole(eventData.role);
       setUserId(eventData.id);
       setAuth(eventData.auth);
-
+      setProfileData(eventData);
       userDetail(accessToken, (resp) => {
         searchQuestion(
           {

@@ -2,8 +2,14 @@ import React from "react";
 import "../assets/css/MYI_P_02.css";
 import ModifyForm from "../components/MYI_P_02/modifyForm";
 import MyNavbar from "../components/MYI_P_02/myNavbar";
+import { useLocation } from "react-router-dom";
 
 const MYI_P_02 = () => {
+  const location = useLocation();
+  const { reply } = location.state || {};
+
+  console.log("Received reply:", reply);
+
   return (
     <div>
       <MyNavbar></MyNavbar>
@@ -11,7 +17,7 @@ const MYI_P_02 = () => {
       {/* insert form */}
       <div className="MYI-P-02-Content">
         <div className="Insert-form">
-          <ModifyForm></ModifyForm>
+          <ModifyForm reply={reply}></ModifyForm>
         </div>
       </div>
     </div>

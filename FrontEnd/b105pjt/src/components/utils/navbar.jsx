@@ -277,12 +277,12 @@ function Navbar() {
                 <Button
                   onClick={openModal}
                   sx={{
-                    my: 2,
                     color: "#222222",
-                    display: "block",
+                    display: "flex",
+                    alignItems: "center",
                   }}
                 >
-                  <img alt="user" src={User} width={50} height={50} />
+                  <img alt="user" src={User} width="50px" height="50px" />
                 </Button>
               </Box>
             )}

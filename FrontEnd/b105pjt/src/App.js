@@ -47,6 +47,7 @@ const initialState = {
   accessToken: "",
   isModalOpen: false,
   isAlertOpen: false,
+  alertMessage: "",
 };
 
 // 리듀서
@@ -84,7 +85,11 @@ export function authReducer(state = initialState, action) {
       return { ...state, isModalOpen: false };
 
     case "OPEN_ALERT":
-      return { ...state, isAlertOpen: true };
+      return {
+        ...state,
+        isAlertOpen: true,
+        alertMessage: action.payload.message,
+      };
     case "CLOSE_ALERT":
       return { ...state, isAlertOpen: false };
 

@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 const AlertModal = () => {
   const dispatch = useDispatch();
   const isAlertOpen = useSelector((state) => state.isAlertOpen);
+  const alertMessage = useSelector((state) => state.alertMessage);
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
 
   const style = {
     position: "absolute",
@@ -27,7 +29,9 @@ const AlertModal = () => {
 
   const onConfirm = () => {
     dispatch({ type: "CLOSE_ALERT" });
-    dispatch({ type: "OPEN_MODAL" });
+    if (!isLoggedIn) {
+      dispatch({ type: "OPEN_MODAL" });
+    }
   };
 
   return (
@@ -45,8 +49,9 @@ const AlertModal = () => {
           variant="h6"
           component="h2"
           sx={{ mt: 2, mb: 2 }}
+          style={{ whiteSpace: "pre-line" }}
         >
-          로그인이 필요합니다
+          {alertMessage}
         </Typography>
         <Button variant="contained" color="primary" onClick={onConfirm}>
           확인

@@ -27,9 +27,11 @@ async function modifyReply(config, param, success, fail) {
     .catch(fail);
 }
 
-async function selectReply(id, success, fail) {
+async function selectReply(config, id, success, fail) {
   await baseURL
-    .get("replies/" + id)
+    .get("replies/" + id, {
+      headers: config,
+    })
     .then(success)
     .catch(fail);
 }

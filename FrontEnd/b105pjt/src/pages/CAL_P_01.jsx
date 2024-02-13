@@ -151,9 +151,7 @@ const CAL_P_01 = () => {
   const handleClose = () => setOpen(false);
 
   const handleEventClick = (clickInfo) => {
-    console.log("clickinfo", clickInfo);
     setSelectedEvent(clickInfo.event);
-    fetchImage(clickInfo.event.title);
     handleOpen();
   };
 

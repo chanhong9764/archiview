@@ -117,10 +117,11 @@ export default function TabCompo({
         setDumyData(res.data.data);
       });
     };
+    if (userId) {
+      setisClick(true);
+    }
     getJobDetail();
   }, []);
-
-  useEffect(() => {}, []);
 
   // 무한 스크롤
   useEffect(() => {

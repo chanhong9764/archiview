@@ -83,9 +83,6 @@ function SCH_P_01() {
         (resp) => {
           setReplyDetails(resp.data.data.reply);
           setModalOpen(true);
-        },
-        (err) => {
-          console.log("호출 실패: ", err);
         }
       );
     }
@@ -99,7 +96,6 @@ function SCH_P_01() {
           message: "로그인이 필요합니다.",
         },
       });
-      console.log(reply);
     } else {
       if (role === "ROLE_USER") {
         dispatch({

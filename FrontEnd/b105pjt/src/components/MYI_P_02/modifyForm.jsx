@@ -20,7 +20,9 @@ import { useDispatch } from "react-redux";
 import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
-import BtnGroupModify from "./btnGroupModify";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import ConfirmModal from "./confirmModal";
 
 let session;
 let publisher;
@@ -61,13 +63,19 @@ const MakeSession = async (videoRef) => {
   }
 };
 
-const ModifyForm = () => {
+const ModifyForm = (props) => {
   const videoRef = useRef(null); // 비디오 요소 참조를 위한 ref
-  const [recordingURL, setRecordingURL] = useState("");
+  const [recordingURL, setRecordingURL] = useState(
+    "https://i10b105.p.ssafy.io/api/files/recording/" +
+      props.reply.replies[0].videoUrl
+  );
   const [isRecording, setIsRecording] = useState(false);
   const dispatch = useDispatch();
+  const [title, setTitle] = useState(props.reply.content);
+  const [script, setScript] = useState(props.reply.replies[0].script);
 
   useEffect(() => {
+    console.log("props>>", props.reply.content);
     // 컴포넌트 정리
     dispatch({ type: "SET_LOADING" });
     MakeSession(videoRef)
@@ -152,6 +160,8 @@ const ModifyForm = () => {
         id="filled-basic"
         label="제목"
         variant="filled"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)} // 제목 상태 업데이트
       />
 
       <div className="Insert-search">
@@ -211,11 +221,71 @@ const ModifyForm = () => {
         label="스크립트"
         multiline
         rows={4}
-        defaultValue=""
         variant="filled"
+        value={script}
+        onChange={(e) => setScript(e.target.value)} // 스크립트 상태 업데이트
         style={{ paddingTop: "5px" }}
       />
-      <BtnGroupModify />
+      <BtnGroupInsert />
+    </div>
+  );
+};
+
+const BtnGroupInsert = () => {
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const [confirmType, setConfirmType] = useState(""); // "edit" 또는 "delete"
+
+  // 수정 확인 모달 열기
+  const handleEdit = () => {
+    setConfirmType("edit");
+    setOpenConfirm(true);
+  };
+
+  // 삭제 확인 모달 열기
+  const handleDelete = () => {
+    setConfirmType("delete");
+    setOpenConfirm(true);
+  };
+
+  // 모달의 "예" 버튼 클릭 처리
+  const handleConfirm = () => {
+    if (confirmType === "edit") {
+      // 수정 로직을 여기에 추가하세요.
+    } else if (confirmType === "delete") {
+      // 삭제 로직을 여기에 추가하세요.
+    }
+    setOpenConfirm(false); // 모달 닫기
+  };
+
+  return (
+    <div className="Insert-btn-group">
+      <Button
+        variant="outlined"
+        startIcon={<ModeEditIcon />}
+        color="success"
+        onClick={handleEdit}
+      >
+        수정
+      </Button>
+      <Button
+        variant="contained"
+        endIcon={<DeleteForeverIcon />}
+        color="error"
+        onClick={handleDelete}
+      >
+        삭제
+      </Button>
+
+      <ConfirmModal
+        open={openConfirm}
+        onClose={() => setOpenConfirm(false)}
+        onConfirm={handleConfirm}
+        title={confirmType === "edit" ? "알림" : "알림"}
+      >
+        {confirmType === "edit"
+          ? "정말로 수정하시겠습니까?"
+          : "정말로 삭제하시겠습니까?"}
+      </ConfirmModal>
     </div>
   );
 };

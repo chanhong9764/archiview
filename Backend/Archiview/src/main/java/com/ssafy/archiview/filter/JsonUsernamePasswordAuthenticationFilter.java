@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.####.archiview.dto.token.TokenDto;
 import com.####.archiview.dto.user.CustomUserDetails;
 import com.####.archiview.dto.user.UserDto;
-import com.####.archiview.entity.RefreshToken;
-import com.####.archiview.repository.RefreshTokenRepository;
+//import com.####.archiview.entity.RefreshToken;
+//import com.####.archiview.repository.RefreshTokenRepository;
 import com.####.archiview.entity.Role;
 import com.####.archiview.entity.User;
 import com.####.archiview.jwt.jwtUtil;
@@ -42,7 +42,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private RefreshTokenRepository refreshTokenRepository;
+//    private RefreshTokenRepository refreshTokenRepository;
     private static final String DEFAULT_LOGIN_REQUEST_URL = "/api/users/login";  // /api/users/login으로 오는 요청을 처리
     private static final String HTTP_METHOD = "POST";    //HTTP 메서드의 방식은 POST
     private static final String CONTENT_TYPE = "application/json";//json 타입의 데이터로만 로그인을 진행
@@ -128,11 +128,11 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
         user.updateRefreshToken(token.getRefreshToken());
         userRepository.save(user);  // 발급받은 refreshToken을 DB에 저장
 
-        RefreshToken refreshToken = RefreshToken.builder()
-                .id(user.getId())
-                .refreshToken(token.getRefreshToken())
-                .build();
-        refreshTokenRepository.save(refreshToken);  // 발급받은 refreshToken을 redis에 저장
+//        RefreshToken refreshToken = RefreshToken.builder()
+//                .id(user.getId())
+//                .refreshToken(token.getRefreshToken())
+//                .build();
+//        refreshTokenRepository.save(refreshToken);  // 발급받은 refreshToken을 redis에 저장
 
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("code", SuccessCode.LOGIN_SUCCESS.name());

@@ -29,15 +29,17 @@ async function findPW(param, success, fail) {
     .catch(fail);
 }
 
-function changePW(param, headers, success, fail) {
+async function changePW(param, token, success, fail) {
   const config = {
-    headers: headers,
+    headers: {
+      Authorization: token,
+    },
   };
+  const userPw = {
+    pw: param
+  }
 
-  return baseURL
-    .patch("users/update-password", param, config)
-    .then(success)
-    .catch(fail);
+  await baseURL.patch("users/update-password", userPw, config).then(success).catch(fail);
 }
 
 async function sendEmail(param, success, fail) {

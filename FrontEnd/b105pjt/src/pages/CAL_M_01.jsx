@@ -29,7 +29,7 @@ const CAL_M_01 = (props) => {
   const title = props.event.title;
 
   useEffect(() => {
-    detailCompanyRecruits("30", (resp) => {
+    detailCompanyRecruits(props.event.id, (resp) => {
       setDummyData(resp.data.data);
     });
 

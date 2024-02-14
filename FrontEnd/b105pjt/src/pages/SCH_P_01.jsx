@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
 import { selectReply } from "../api/replyAPI.js";
+import { openAlert } from "../store/slice/modalSlice.js";
 
 // 커스텀 테마 정의
 const theme = createTheme({
@@ -58,12 +59,9 @@ const cardStyles = {
 };
 
 function SCH_P_01() {
-  const isLoggedIn = useSelector((state) => state.isLoggedIn);
-  const role = useSelector((state) => state.role);
-  const userId = useSelector((state) => state.userId);
+  const { isLoggedIn, role, userId } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const location = useLocation();
   const [questions, setQuestions] = useState([]);
   const [ref, inView] = useInView();
   const [replyDetails, setReplyDetails] = useState(null);
@@ -90,21 +88,23 @@ function SCH_P_01() {
 
   const handleViewDetails = (reply) => {
     if (!isLoggedIn) {
-      dispatch({
-        type: "OPEN_ALERT",
-        payload: {
-          message: "로그인이 필요합니다.",
-        },
-      });
+      dispatch(
+        openAlert({
+          payload: {
+            message: "로그인이 필요합니다.",
+          },
+        })
+      );
     } else {
       if (role === "ROLE_USER") {
-        dispatch({
-          type: "OPEN_ALERT",
-          payload: {
-            message:
-              "MEMBER 등급이 아닙니다.\n답변을 작성하고, 등업 신청 부탁드립니다.",
-          },
-        });
+        dispatch(
+          openAlert({
+            payload: {
+              message:
+                "MEMBER 등급이 아닙니다.\n답변을 작성하고, 등업 신청 부탁드립니다.",
+            },
+          })
+        );
         navigate("/myinterview");
       } else {
         setSelectedReply(reply);

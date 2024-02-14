@@ -18,6 +18,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { questionSearch } from "../../api/questionAPI";
 import { getJobPostingDetail } from "../../api/commonsAPI";
+import { useDispatch, useSelector } from "react-redux";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -50,18 +51,17 @@ function a11yProps(index) {
 
 export default function TabCompo({
   setQuestions,
-  setCompanyId,
   setCsList,
   setJobList,
   userId,
   inView,
   questions,
 }) {
+  const dispatch = useDispatch();
   const [dumyData, setDumyData] = useState({
     csList: [{ name: "", csSubList: "" }],
     jsList: [{ name: "", jobSubList: "" }],
   });
-
   const [value, setValue] = useState(0);
   const [tagDataList, setTagDataList] = useState([]);
   const [checked, setChecked] = useState([]);
@@ -75,10 +75,7 @@ export default function TabCompo({
   const [tabCsList, setTabCsList] = useState([]);
   const [tabJobList, setTabJobList] = useState([]);
   const [isClick, setisClick] = useState(false);
-  const [company, setCompany] = useState({
-    id: "",
-    name: "",
-  });
+  const selectedCompany = useSelector((state) => state.selectedCompany);
 
   useEffect(() => {
     if (setCsList && setJobList) {
@@ -100,7 +97,7 @@ export default function TabCompo({
   useEffect(() => {
     setisClick(false);
     setPgno(1);
-  }, [tagDataList, company]);
+  }, [tagDataList, selectedCompany]);
 
   useEffect(() => {
     const csList = dumyData.csList.map(function (ojt) {
@@ -147,16 +144,13 @@ export default function TabCompo({
     setChecked([]);
     setPickTagList([]);
     setQuestions([]);
-  };
-
-  const resetCompany = () => {
-    setCompany({
-      id: "",
-      name: "",
+    dispatch({
+      type: "UPDATE_SELECTED_COMPANY",
+      selectedCompany: {
+        id: "",
+        name: "",
+      },
     });
-    if (setCompanyId) {
-      setCompanyId("");
-    }
   };
 
   const handleOpenSearchBar = () => {
@@ -177,7 +171,7 @@ export default function TabCompo({
   const onClickSearch = async () => {
     const data = {
       userId: userId,
-      company: company.name,
+      company: selectedCompany.name,
       cs: tagDataList
         .filter((item) => item.tab === "csList")
         .map((item) => item.smallTag)
@@ -197,6 +191,10 @@ export default function TabCompo({
           setisClick(true);
         } else {
           updateSearch([...questions, ...parsingData(res.data.data)]);
+        }
+      } else {
+        if (!isClick) {
+          updateSearch([]);
         }
       }
     });
@@ -261,11 +259,7 @@ export default function TabCompo({
           padding: "0 10px",
         }}
       >
-        <AutoCompleteCompo
-          setCompany={setCompany}
-          setCompanyId={setCompanyId}
-          company={company}
-        />
+        <AutoCompleteCompo />
         <div>
           {tagSearchOpen ? (
             <Button

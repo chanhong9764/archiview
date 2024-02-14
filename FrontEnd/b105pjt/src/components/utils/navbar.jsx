@@ -73,7 +73,13 @@ function Navbar() {
   };
 
   // 상세 검색 클릭시
-  const handleSearch = () => {
+  const handleSearch = () => {dispatch({
+    type: "UPDATE_SELECTED_COMPANY",
+    selectedCompany: {
+      id: -1,
+      name: "",
+    },
+  });
     navigate("/search", { replace: true });
   };
 

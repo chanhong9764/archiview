@@ -138,7 +138,6 @@ const MYI_P_01 = () => {
   }, []);
 
   const handleViewDetails = (reply) => {
-    console.log("handleViewDetails>> ", reply);
     navigate("/revise", { state: { reply } });
   };
 

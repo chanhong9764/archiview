@@ -80,7 +80,9 @@ const MYI_P_01 = () => {
   const [block, setBlock] = useState(null);
   const [role, setRole] = useState(null);
   const [auth, setAuth] = useState(null);
-  const [userId, setUserId] = useState(useSelector((state) => state.userId));
+  const [userId, setUserId] = useState(
+    useSelector((state) => state.user.userId)
+  );
   const [ref, inView] = useInView();
 
   const accessToken = localStorage.getItem("accessToken");

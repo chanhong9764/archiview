@@ -6,6 +6,7 @@ import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { useEffect, useState } from "react";
 import { getCompanyList } from "../../api/commonsAPI";
+import { useSelector, useDispatch } from "react-redux";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -13,16 +14,27 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 export default function CheckboxesTags({ setCompanyName, setCompanyId }) {
   const [company, setCompany] = useState([]);
 
+  const selectedCompany = useSelector((state) => state.selectedCompany);
+  const dispatch = useDispatch();
+
   function handlebox(value) {
     let companyName = "";
-    let compnayId = "";
+    let companyId = "";
     if (value !== null) {
       companyName = value.name;
-      compnayId = value.id;
+      companyId = value.id;
+
+      dispatch({
+        type: "UPDATE_SELECTED_COMPANY",
+        selectedCompany: {
+          id: companyId,
+          name: companyName,
+        },
+      })
     }
     setCompanyName(companyName);
     if (setCompanyId) {
-      setCompanyId(compnayId);
+      setCompanyId(companyId);
     }
   }
 
@@ -41,9 +53,15 @@ export default function CheckboxesTags({ setCompanyName, setCompanyId }) {
       freeSolo
       options={company}
       getOptionLabel={(option) => option.name}
+
+      value={{
+        id: selectedCompany.id || -1,
+        name: selectedCompany.name || " ",
+      }}
+
       renderOption={(props, option, { selected }) => (
         <li {...props}>
-          <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
+          <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected || option.name == selectedCompany.name} />
           {option.name}
         </li>
       )}

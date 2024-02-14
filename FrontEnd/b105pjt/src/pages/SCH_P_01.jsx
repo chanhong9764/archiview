@@ -90,19 +90,15 @@ function SCH_P_01() {
     if (!isLoggedIn) {
       dispatch(
         openAlert({
-          payload: {
-            message: "로그인이 필요합니다.",
-          },
+          message: "로그인이 필요합니다.",
         })
       );
     } else {
       if (role === "ROLE_USER") {
         dispatch(
           openAlert({
-            payload: {
-              message:
-                "MEMBER 등급이 아닙니다.\n답변을 작성하고, 등업 신청 부탁드립니다.",
-            },
+            message:
+              "MEMBER 등급이 아닙니다.\n답변을 작성하고, 등업 신청 부탁드립니다.",
           })
         );
         navigate("/myinterview");

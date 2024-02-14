@@ -2,7 +2,7 @@ import React from "react";
 import { Modal, Box, Typography, Button } from "@mui/material";
 import LockOpenIcon from "@mui/icons-material/LockOpen"; // 로그인 아이콘 추가
 import { useDispatch, useSelector } from "react-redux";
-import { openModal } from "../../store/slice/modalSlice";
+import { closeAlert, openModal } from "../../store/slice/modalSlice";
 
 const AlertModal = () => {
   const dispatch = useDispatch();
@@ -23,7 +23,7 @@ const AlertModal = () => {
     textAlign: "center", // 텍스트 중앙 정렬
   };
 
-  const closeAlert = () => {
+  const alertClose = () => {
     dispatch(closeAlert());
   };
 
@@ -37,7 +37,7 @@ const AlertModal = () => {
   return (
     <Modal
       open={isAlertOpen}
-      onClose={closeAlert}
+      onClose={alertClose}
       aria-labelledby="alert-modal-title"
       aria-describedby="alert-modal-description"
     >

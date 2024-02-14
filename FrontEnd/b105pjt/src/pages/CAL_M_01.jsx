@@ -36,12 +36,12 @@ const CAL_M_01 = (props) => {
   const defaultAnchorStyle = {
     color: "black",
     textDecoration: "none",
-  }
+  };
   const hoverAnchorStyle = {
     ...defaultAnchorStyle,
     fontWeight: "bold",
-    cursor: "pointer"
-  }
+    cursor: "pointer",
+  };
 
   useEffect(() => {
     detailCompanyRecruits(props.event.id, (resp) => {
@@ -82,9 +82,7 @@ const CAL_M_01 = (props) => {
     } else {
       dispatch(
         openAlert({
-          payload: {
-            message: "로그인이 필요합니다.",
-          },
+          message: "로그인이 필요합니다.",
         })
       );
     }
@@ -126,7 +124,7 @@ const CAL_M_01 = (props) => {
           </Grid>
           <Grid item xs={12}>
             <div className="content-title">
-              <div style={{display: "flex"}}>
+              <div style={{ display: "flex" }}>
                 <div
                   style={{
                     display: "flex",
@@ -138,14 +136,17 @@ const CAL_M_01 = (props) => {
                     border: "1px solid black",
                     borderRadius: "10px",
                     height: "30px",
-                  }}>
+                  }}
+                >
                   <a
                     href={dummyData.recruit && dummyData.company.url}
                     target="_blank"
                     style={urlHover ? hoverAnchorStyle : defaultAnchorStyle}
                     onMouseEnter={() => setUrlHover(true)}
                     onMouseLeave={() => setUrlHover(false)}
-                  >채용공고</a>
+                  >
+                    채용공고
+                  </a>
                 </div>
                 <div
                   style={{
@@ -158,13 +159,18 @@ const CAL_M_01 = (props) => {
                     border: "1px solid black",
                     borderRadius: "10px",
                     height: "30px",
-                  }}>
+                  }}
+                >
                   <div
-                    style={questionListHover ? hoverAnchorStyle : defaultAnchorStyle}
+                    style={
+                      questionListHover ? hoverAnchorStyle : defaultAnchorStyle
+                    }
                     onMouseEnter={() => setQuestionListHover(true)}
                     onMouseLeave={() => setQuestionListHover(false)}
                     onClick={handleMoreQuestionsClick}
-                  >질문목록</div>
+                  >
+                    질문목록
+                  </div>
                 </div>
               </div>
             </div>

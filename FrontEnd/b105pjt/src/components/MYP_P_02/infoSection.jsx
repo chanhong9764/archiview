@@ -62,16 +62,21 @@ const InfoSection = () => {
     }
   };
 
-  const handleConfirm = () => {
-    changePW(
+  const handleConfirm = async () => {
+    await changePW(
       {
         pw: password,
       },
       {
         Authorization: token,
       }
-    );
-    alert("비밀번호가 변경되었습니다.");
+    )
+      .then((resp) => {
+        alert("비밀번호가 변경되었습니다.");
+      })
+      .catch((error) => {
+        alert("비밀번호 변경에 실패했습니다.");
+      });
     setModalOpen(false); // 모달 닫기
     navigate("/mypage", { replace: true });
   };

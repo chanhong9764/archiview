@@ -8,6 +8,7 @@ import AssignUser from "../components/LOG_M_01/assignUser";
 import ChangPWModal from "../components/LOG_M_01/changePWModal";
 const LOG_M_01 = ({ close }) => {
   const [currentComponent, setCurrentComponent] = useState("Login");
+  const [emailToken, setEmailToken] = useState("");
 
   const switchComponent = (componentName) => {
     setCurrentComponent(componentName);
@@ -20,11 +21,11 @@ const LOG_M_01 = ({ close }) => {
       case "FindID":
         return <FindIDModal onSwitch={switchComponent} />;
       case "FindPW":
-        return <FindPWModal onSwitch={switchComponent} />;
+        return <FindPWModal onSwitch={switchComponent} setEmailToken={setEmailToken} />;
       case "Assign":
         return <AssignUser onSwitch={switchComponent} />;
       case "ChangePW":
-        return <ChangPWModal onSwitch={switchComponent} />;
+        return <ChangPWModal onSwitch={switchComponent} emailToken={emailToken}/>;
       default:
         return null;
     }

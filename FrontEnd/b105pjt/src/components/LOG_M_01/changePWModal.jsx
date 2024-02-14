@@ -16,20 +16,15 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const ChangPWModal = ({ currentComponent, data, onSwitch }) => {
+const ChangPWModal = ({ currentComponent, data, onSwitch, emailToken }) => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const handleAssignClick = () => {
     // setOpenSnackbar(true);
-    const form = {
-      pw: password,
-    };
-    const headers = {
-      Authorization: data,
-    };
+
     changePW(
-      form,
-      headers,
+      password,
+      emailToken,
       (resp) => {
       },
       (error) => {

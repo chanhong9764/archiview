@@ -136,7 +136,7 @@ const CAL_P_01 = () => {
 
     formattedMonth = month < 10 ? `0${month}` : `${month}`;
     date = year + "-" + formattedMonth + "-01";
-
+    setEvents([]);
     selectRecruit();
   };
 
@@ -162,9 +162,14 @@ const CAL_P_01 = () => {
     }
 
     return (
-      <div className="icon">
+      <div
+        className="icon"
+        style={{ padding: "3px", whiteSpace: "nowrap", textOverflow: "clip" }}
+      >
         {Icon && <Icon style={{ marginRight: "4px", fontSize: "medium" }} />}
-        <span className="event-title">{eventInfo.event.title}</span>
+        <span className="event-title" style={{ overflow: "hidden" }}>
+          {eventInfo.event.title}
+        </span>
       </div>
     );
   };

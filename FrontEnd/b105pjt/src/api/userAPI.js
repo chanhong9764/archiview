@@ -29,12 +29,12 @@ async function findPW(param, success, fail) {
     .catch(fail);
 }
 
-async function changePW(param, headers, success, fail) {
+function changePW(param, headers, success, fail) {
   const config = {
     headers: headers,
   };
 
-  await baseURL
+  return baseURL
     .patch("users/update-password", param, config)
     .then(success)
     .catch(fail);

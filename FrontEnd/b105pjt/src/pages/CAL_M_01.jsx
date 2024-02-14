@@ -41,11 +41,26 @@ const CAL_M_01 = (props) => {
 
   // "질문 더보기" 클릭 핸들러
   const handleMoreQuestionsClick = () => {
+    dispatch({
+      type: "UPDATE_SELECTED_COMPANY",
+      selectedCompany: {
+        id: dummyData.company.id,
+        name: dummyData.company.name,
+      },
+    });
+
     navigate("/search"); // useNavigate 훅을 사용해 /search 경로로 이동
   };
 
   const handleClickListItem = () => {
     if (isLoggedIn) {
+      dispatch({
+        type: "UPDATE_SELECTED_COMPANY",
+        selectedCompany: {
+          id: dummyData.company.id,
+          name: dummyData.company.name,
+        },
+      });
       navigate("/addquestion", { replace: true });
     } else {
       dispatch({

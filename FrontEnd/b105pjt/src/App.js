@@ -48,6 +48,10 @@ const initialState = {
   isModalOpen: false,
   isAlertOpen: false,
   alertMessage: "",
+  selectedCompany: {
+    id: -1,
+    name: "",
+  },
 };
 
 // 리듀서
@@ -95,6 +99,8 @@ export function authReducer(state = initialState, action) {
 
     case "UPDATE_PROFILE":
       return { ...state, profile: action.profile };
+    case "UPDATE_SELECTED_COMPANY":
+      return { ...state, selectedCompany: action.selectedCompany };
     default:
       return state;
   }
@@ -110,9 +116,7 @@ function App() {
   };
   return (
     <>
-      <div
-        style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
-      >
+      <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
         <Loading />
         {/* 로그인 모달 */}
         <Modal

@@ -9,7 +9,7 @@ const MemberAuth = ({ children }) => {
   if (state == null) {
     return <Navigate to="/" />;
   }
-
+  console.log(userId, state.postId);
   // 본인의 글일 경우
   if (userId === state.postId) {
     return children;

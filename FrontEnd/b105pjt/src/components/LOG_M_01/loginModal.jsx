@@ -8,8 +8,10 @@ import { login } from "../../api/userAPI";
 import { useForm } from "../../utils/useForm";
 import { useNavigate } from "react-router-dom";
 import { setCookie } from "../../utils/cookie";
+import { closeModal } from "../../store/slice/modalSlice";
+import { userLogin } from "../../store/slice/userSlice";
 
-const LoginModal = ({ onSwitch, close }) => {
+const LoginModal = ({ onSwitch }) => {
   const dispatch = useDispatch();
 
   // API 관리 변수들 추가
@@ -26,6 +28,10 @@ const LoginModal = ({ onSwitch, close }) => {
   const [pw, setPw] = useState("");
   const [foundId, setFoundId] = useState(null);
   const [message, setMessage] = useState("");
+
+  const close = () => {
+    dispatch(closeModal());
+  };
 
   const handleClickFindID = () => {
     onSwitch("FindID");
@@ -57,15 +63,16 @@ const LoginModal = ({ onSwitch, close }) => {
             maxAge: 60 * 60 * 24 * 7,
           });
 
-          dispatch({
-            type: "LOGIN",
-            accessToken: resp.data.data.accessToken,
-            role: resp.data.data.role,
-            userId: resp.data.data.id,
-            profile:
-              "https://i10b105.p.####.io/api/files/profile/" +
-              resp.data.data.id,
-          });
+          dispatch(
+            userLogin({
+              accessToken: resp.data.data.accessToken,
+              role: resp.data.data.role,
+              userId: resp.data.data.id,
+              profile:
+                "https://i10b105.p.####.io/api/files/profile/" +
+                resp.data.data.id,
+            })
+          );
           localStorage.setItem("accessToken", resp.data.data.accessToken);
           resetForm();
           close();
@@ -94,19 +101,9 @@ const LoginModal = ({ onSwitch, close }) => {
     close(); // 로그인 모달 닫기
   };
 
-  // 로그인 버튼 클릭 시 (로그인 동작)
-  const handleLogin = () => {
-    if (id === "123" && pw === "123") {
-      dispatch({ type: "LOGIN" });
-      close();
-    } else {
-      handleLoginAxios();
-    }
-  };
-
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      handleLogin();
+      handleLoginAxios();
     }
   };
 
@@ -155,7 +152,7 @@ const LoginModal = ({ onSwitch, close }) => {
                 className="Login-btn"
                 variant="contained"
                 endIcon={<LoginIcon />}
-                onClick={handleLogin}
+                onClick={handleLoginAxios}
                 color="primary"
               >
                 로그인

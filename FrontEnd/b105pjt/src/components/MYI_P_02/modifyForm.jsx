@@ -23,6 +23,7 @@ import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import ConfirmModal from "./confirmModal";
+import { setLoading, unSetLoading } from "../../store/slice/loadingSlice";
 
 let session;
 let publisher;
@@ -76,13 +77,13 @@ const ModifyForm = (props) => {
 
   useEffect(() => {
     // 컴포넌트 정리
-    dispatch({ type: "SET_LOADING" });
+    dispatch(setLoading());
     MakeSession(videoRef)
       .then(() => {
-        dispatch({ type: "UNSET_LOADING" });
+        dispatch(unSetLoading());
       })
       .catch((error) => {
-        dispatch({ type: "UNSET_LOADING" });
+        dispatch(unSetLoading());
       });
 
     return () => {
@@ -98,7 +99,7 @@ const ModifyForm = (props) => {
   }, []);
 
   const handleRecordStart = () => {
-    dispatch({ type: "SET_LOADING" });
+    dispatch(setLoading());
     startRecording(
       {
         session: session.sessionId,
@@ -108,16 +109,16 @@ const ModifyForm = (props) => {
       },
       (resp) => {
         setIsRecording(true);
-        dispatch({ type: "UNSET_LOADING" });
+        dispatch(unSetLoading());
       },
       (error) => {
-        dispatch({ type: "UNSET_LOADING" });
+        dispatch(unSetLoading());
       }
     );
   };
 
   const handleRecordStop = () => {
-    dispatch({ type: "SET_LOADING" });
+    dispatch(setLoading());
     let urlSession = session.sessionId;
     stopRecording(
       {
@@ -137,19 +138,19 @@ const ModifyForm = (props) => {
           session.unpublish(publisher);
         }
         session.disconnect();
-        dispatch({ type: "UNSET_LOADING" });
+        dispatch(unSetLoading());
       },
       (error) => {
-        dispatch({ type: "UNSET_LOADING" });
+        dispatch(unSetLoading());
       }
     );
   };
 
   const handleRestartRecording = () => {
-    dispatch({ type: "SET_LOADING" });
+    dispatch(setLoading());
     MakeSession(videoRef);
     setRecordingURL("");
-    dispatch({ type: "UNSET_LOADING" });
+    dispatch(unSetLoading());
   };
 
   return (

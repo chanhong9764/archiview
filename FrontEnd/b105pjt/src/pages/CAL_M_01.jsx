@@ -17,9 +17,11 @@ import "../assets/css/CAL_M_01.css";
 import { selectImg } from "../api/naverAPI";
 import { detailCompanyRecruits } from "../api/calendarAPI";
 import { CircularProgress } from "@mui/material";
+import { updateCompany } from "../store/slice/replySlice";
+import { openAlert } from "../store/slice/modalSlice";
 
 const CAL_M_01 = (props) => {
-  const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const { isLoggedIn } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [dense, setDense] = useState(false);
@@ -41,34 +43,37 @@ const CAL_M_01 = (props) => {
 
   // "질문 더보기" 클릭 핸들러
   const handleMoreQuestionsClick = () => {
-    dispatch({
-      type: "UPDATE_SELECTED_COMPANY",
-      selectedCompany: {
-        id: dummyData.company.id,
-        name: dummyData.company.name,
-      },
-    });
+    dispatch(
+      updateCompany({
+        selectedCompany: {
+          id: dummyData.company.id,
+          name: dummyData.company.name,
+        },
+      })
+    );
 
     navigate("/search"); // useNavigate 훅을 사용해 /search 경로로 이동
   };
 
   const handleClickListItem = () => {
     if (isLoggedIn) {
-      dispatch({
-        type: "UPDATE_SELECTED_COMPANY",
-        selectedCompany: {
-          id: dummyData.company.id,
-          name: dummyData.company.name,
-        },
-      });
+      dispatch(
+        updateCompany({
+          selectedCompany: {
+            id: dummyData.company.id,
+            name: dummyData.company.name,
+          },
+        })
+      );
       navigate("/addquestion", { replace: true });
     } else {
-      dispatch({
-        type: "OPEN_ALERT",
-        payload: {
-          message: "로그인이 필요합니다.",
-        },
-      });
+      dispatch(
+        openAlert({
+          payload: {
+            message: "로그인이 필요합니다.",
+          },
+        })
+      );
     }
   };
 

@@ -97,8 +97,7 @@ function SCH_P_01() {
       if (role === "ROLE_USER") {
         dispatch(
           openAlert({
-            message:
-              "MEMBER 등급이 아닙니다.\n답변을 작성하고, 등업 신청 부탁드립니다.",
+            message: "MEMBER 등급이 아닙니다.\n답변을 작성하고, 등업 신청 부탁드립니다.",
           })
         );
         navigate("/myinterview");
@@ -131,10 +130,7 @@ function SCH_P_01() {
             <div>
               <video
                 controls
-                src={
-                  "https://i10b105.p.ssafy.io/api/files/recording/" +
-                  replyDetails.videoUrl
-                }
+                src={"https://i10b105.p.ssafy.io/api/files/recording/" + replyDetails.videoUrl}
                 width="500"
               ></video>
             </div>
@@ -159,64 +155,40 @@ function SCH_P_01() {
   return (
     <ThemeProvider theme={theme}>
       <Container sx={{ mt: 4, mb: 4 }}>
-        <Tabcompo
-          setQuestions={setQuestions}
-          inView={inView}
-          questions={questions}
-        />
-        {questions.map((question, index) => (
-          <Accordion
-            key={index}
-            title={
-              <Typography variant="h6" color="primary" gutterBottom>
-                {question.content}
-              </Typography>
-            }
-          >
-            <Grid container spacing={2}>
-              {question.replies.map((reply) => (
-                <Grid item xs={12} sm={6} md={4} key={reply.id}>
-                  <Card
-                    onClick={() => handleViewDetails(reply)}
-                    sx={cardStyles}
-                  >
-                    <CardMedia
-                      component="img"
-                      sx={{
-                        height: 140,
-                        objectFit: "cover",
-                        borderRadius: "15px 15px 0 0",
-                        filter:
-                          role === "ROLE_MEMBER" ||
-                          role === "ROLE_ADMIN" ||
-                          reply.userId === userId
-                            ? "blur(0px)"
-                            : "blur(10px)",
-                      }}
-                      image={
-                        "https://i10b105.p.ssafy.io/api/files/thumbnail/" +
-                        reply.thumbnailUrl
-                      }
-                      alt="Thumbnail Image"
-                    />
-                    <CardContent>
-                      <Typography
-                        variant="subtitle1"
-                        sx={{ fontWeight: "bold" }}
-                      >
-                        {reply.userId}
-                      </Typography>
-                      <Typography variant="body2">{reply.script}</Typography>
-                      <Typography variant="caption" color="textSecondary">
-                        {reply.companyName}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
-          </Accordion>
-        ))}
+        <Tabcompo setQuestions={setQuestions} inView={inView} questions={questions} />
+        <Grid container spacing={2}>
+          {questions.map((question, index) =>
+            question.replies.map((reply) => (
+              <Grid item xs={12} sm={6} md={4} key={reply.id}>
+                <Card onClick={() => handleViewDetails(reply)} sx={cardStyles}>
+                  <CardMedia
+                    component="img"
+                    sx={{
+                      height: 140,
+                      objectFit: "cover",
+                      borderRadius: "15px 15px 0 0",
+                      filter:
+                        role === "ROLE_MEMBER" || role === "ROLE_ADMIN" || reply.userId === userId
+                          ? "blur(0px)"
+                          : "blur(10px)",
+                    }}
+                    image={"https://i10b105.p.ssafy.io/api/files/thumbnail/" + reply.thumbnailUrl}
+                    alt="Thumbnail Image"
+                  />
+                  <CardContent>
+                    <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+                      {reply.userId}
+                    </Typography>
+                    <Typography variant="body2">{reply.script}</Typography>
+                    <Typography variant="caption" color="textSecondary">
+                      {reply.companyName}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))
+          )}
+        </Grid>
         <DetailModal />
         <div ref={ref} />
       </Container>

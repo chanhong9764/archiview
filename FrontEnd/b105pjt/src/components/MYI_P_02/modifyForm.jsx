@@ -75,7 +75,6 @@ const ModifyForm = (props) => {
   const [script, setScript] = useState(props.reply.replies[0].script);
 
   useEffect(() => {
-    console.log("props>>", props.reply.content);
     // 컴포넌트 정리
     dispatch({ type: "SET_LOADING" });
     MakeSession(videoRef)

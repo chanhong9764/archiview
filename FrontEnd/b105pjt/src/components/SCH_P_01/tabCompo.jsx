@@ -72,10 +72,13 @@ export default function TabCompo({
   const [pickTagList, setPickTagList] = useState([]);
   const [tagSearchOpen, setTagSearchOpen] = useState(false);
   const [pgno, setPgno] = useState(1);
-  const [companyName, setCompanyName] = useState("");
   const [tabCsList, setTabCsList] = useState([]);
   const [tabJobList, setTabJobList] = useState([]);
   const [isClick, setisClick] = useState(false);
+  const [company, setCompany] = useState({
+    id: "",
+    name: "",
+  });
 
   useEffect(() => {
     if (setCsList && setJobList) {
@@ -97,7 +100,7 @@ export default function TabCompo({
   useEffect(() => {
     setisClick(false);
     setPgno(1);
-  }, [tagDataList, companyName]);
+  }, [tagDataList, company]);
 
   useEffect(() => {
     const csList = dumyData.csList.map(function (ojt) {
@@ -143,9 +146,17 @@ export default function TabCompo({
     setTagDataList([]);
     setChecked([]);
     setPickTagList([]);
-    setCompanyName("");
-    setCompanyId("");
     setQuestions([]);
+  };
+
+  const resetCompany = () => {
+    setCompany({
+      id: "",
+      name: "",
+    });
+    if (setCompanyId) {
+      setCompanyId("");
+    }
   };
 
   const handleOpenSearchBar = () => {
@@ -166,7 +177,7 @@ export default function TabCompo({
   const onClickSearch = async () => {
     const data = {
       userId: userId,
-      company: companyName,
+      company: company.name,
       cs: tagDataList
         .filter((item) => item.tab === "csList")
         .map((item) => item.smallTag)
@@ -179,7 +190,6 @@ export default function TabCompo({
         .join(),
       pgno: pgno,
     };
-    console.log(data);
     await questionSearch(data).then((res) => {
       if (res.data.data) {
         if (!isClick) {
@@ -252,8 +262,9 @@ export default function TabCompo({
         }}
       >
         <AutoCompleteCompo
-          setCompanyName={setCompanyName}
+          setCompany={setCompany}
           setCompanyId={setCompanyId}
+          company={company}
         />
         <div>
           {tagSearchOpen ? (

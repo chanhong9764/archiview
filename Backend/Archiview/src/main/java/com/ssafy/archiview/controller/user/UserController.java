@@ -4,23 +4,15 @@ import com.####.archiview.dto.token.EmailTokenDto;
 import com.####.archiview.dto.user.UserDto;
 import com.####.archiview.entity.User;
 import com.####.archiview.jwt.jwtUtil;
-import com.####.archiview.response.code.ErrorCode;
 import com.####.archiview.response.code.SuccessCode;
-import com.####.archiview.response.exception.RestApiException;
 import com.####.archiview.response.structure.SuccessResponse;
 import com.####.archiview.service.user.MailService;
 import com.####.archiview.service.user.UserService;
-import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
-
 @CrossOrigin("*")
 @RequiredArgsConstructor
 @RestController
@@ -29,7 +21,7 @@ public class UserController {
     private final UserService service;
     private final MailService mailService;
     private final jwtUtil jwtUtil;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
     @PostMapping  // 회원가입
     public ResponseEntity<Object> userAdd(@RequestBody @Valid UserDto.AddRequestDto requestDto, HttpServletRequest request) {
         service.userAdd(requestDto, request);

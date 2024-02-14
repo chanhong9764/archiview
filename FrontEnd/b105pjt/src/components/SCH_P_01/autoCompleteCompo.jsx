@@ -10,26 +10,25 @@ import { getCompanyList } from "../../api/commonsAPI";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-export default function CheckboxesTags({ setCompanyName, setCompanyId }) {
-  const [company, setCompany] = useState([]);
+export default function CheckboxesTags({ setCompany, setCompanyId, company }) {
+  const [companies, setCompanies] = useState([]);
 
   function handlebox(value) {
-    let companyName = "";
-    let compnayId = "";
+    setCompany(value);
+    let companyId = "";
     if (value !== null) {
-      companyName = value.name;
-      compnayId = value.id;
+      companyId = value.id;
     }
-    setCompanyName(companyName);
     if (setCompanyId) {
-      setCompanyId(compnayId);
+      setCompanyId(companyId);
     }
   }
 
   useEffect(() => {
     const getCompany = async () => {
       await getCompanyList((res) => {
-        setCompany(res.data.data);
+        setCompanies(res.data.data);
+        console.log(res.data.data);
       });
     };
     getCompany();
@@ -39,7 +38,8 @@ export default function CheckboxesTags({ setCompanyName, setCompanyId }) {
     <Autocomplete
       id="company"
       freeSolo
-      options={company}
+      options={companies}
+      value={company}
       getOptionLabel={(option) => option.name}
       renderOption={(props, option, { selected }) => (
         <li {...props}>
@@ -47,12 +47,20 @@ export default function CheckboxesTags({ setCompanyName, setCompanyId }) {
           {option.name}
         </li>
       )}
-      onChange={(event, newValue) => {
-        handlebox(newValue);
+      onChange={(e, value) => {
+        handlebox(value);
       }}
-      style={{ width: 462, paddingBottom: "9px", padding: "10px" }}
+      sx={{
+        width: 462,
+        paddingBottom: "9px",
+        padding: "10px",
+      }}
       renderInput={(params) => (
-        <TextField {...params} label="회사명" placeholder="Favorites" />
+        <TextField
+          {...params}
+          label="회사명"
+          placeholder="회사명을 입력해주세요"
+        />
       )}
     />
   );

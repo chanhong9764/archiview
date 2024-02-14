@@ -165,15 +165,6 @@ const CAL_M_01 = (props) => {
           </Grid>
         </Grid>
 
-        <Grid className="moreList" item xs={12}>
-          <Button
-            onClick={handleMoreQuestionsClick}
-            className="moreList-content"
-          >
-            질문 더보기
-          </Button>
-        </Grid>
-
         <Grid item xs={12}>
           <List dense={dense}>
             {dummyData.questions && dummyData.questions.length > 0 ? (

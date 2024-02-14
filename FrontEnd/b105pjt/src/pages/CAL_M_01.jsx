@@ -38,6 +38,7 @@ const CAL_M_01 = (props) => {
   const hoverAnchorStyle = {
     ...defaultAnchorStyle,
     fontWeight: "bold",
+    cursor: "pointer"
   }
 
   useEffect(() => {
@@ -153,12 +154,12 @@ const CAL_M_01 = (props) => {
                     borderRadius: "10px",
                     height: "30px",
                   }}>
-                  <Link
+                  <div
                     style={questionListHover ? hoverAnchorStyle : defaultAnchorStyle}
                     onMouseEnter={() => setQuestionListHover(true)}
                     onMouseLeave={() => setQuestionListHover(false)}
                     onClick={handleMoreQuestionsClick}
-                  >질문목록</Link>
+                  >질문목록</div>
                 </div>
               </div>
             </div>

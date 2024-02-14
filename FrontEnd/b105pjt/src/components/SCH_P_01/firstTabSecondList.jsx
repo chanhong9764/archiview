@@ -16,8 +16,6 @@ export default function firstTabSecondList({
   setSmallTagData,
   pickTagList,
   setPickTagList,
-  setChecked,
-  checked,
 }) {
   function checkTagData(content) {
     if (
@@ -91,9 +89,6 @@ export default function firstTabSecondList({
   };
 
   const handleClick = (data) => {
-    // if (!checked.includes(data.bigTag)) {
-    //   setChecked([...checked, data.bigTag]);
-    // }
     setSmallTagData((smallTagData) => {
       if (smallTagData.length === smallTagList.length) {
         changeTagData([data.key], [data.smallTag]);
@@ -118,7 +113,6 @@ export default function firstTabSecondList({
         ) {
           changeTagData([...smallTagData, data.key], [data.smallTag]);
           plusPickTagData(data);
-          setChecked([...checked, bigTagData]);
           return [...smallTagData, data.key];
         } else {
           changeTagData(

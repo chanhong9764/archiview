@@ -16,8 +16,6 @@ export default function ChipsArray({
   setSmallTagData,
   pickTagList,
   setPickTagList,
-  setChecked,
-  checked,
 }) {
   function checkTagData(content) {
     if (
@@ -118,7 +116,6 @@ export default function ChipsArray({
         ) {
           changeTagData([...smallTagData, data.key], [data.smallTag]);
           plusPickTagData(data);
-          setChecked([...checked, bigTagData]);
           return [...smallTagData, data.key];
         } else {
           changeTagData(

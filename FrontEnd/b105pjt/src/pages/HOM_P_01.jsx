@@ -48,56 +48,60 @@ const HOM_P_01 = () => {
   }, []);
 
   return (
-    <div className="hompage">
-      <div>
-        <img style={{ width: "400px" }} src={Logo} alt="Main Logo" />
-      </div>
-      <div>
-        <Autocomplete
-          style={{ width: "500px", borderRadius: "50px" }}
-          id="company"
-          freeSolo
-          options={company}
-          getOptionLabel={(option) => option.name}
-          renderOption={(props, option, { selected }) => (
-            <li {...props}>
-              <Checkbox
-                icon={icon}
-                checkedIcon={checkedIcon}
-                checked={selected}
-              />
-              {option.name}
-            </li>
-          )}
-          onKeyDown={handleKeyPress}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="회사명으로 면접 질문 검색"
-              sx={{
-                "& .MuiInputBase-root.MuiOutlinedInput-root .MuiInputBase-input":
-                  {
-                    // 입력된 값에 대한 스타일 지정
-                    padding: 0,
-                    paddingBottom: "9px",
-                    paddingTop: "9px",
-                  },
-              }}
-              InputProps={{
-                ...params.InputProps,
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={handleSearchBtn}>
-                      <SearchIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
+    <>
+      {Logo && (
+        <div className="hompage">
+          <div>
+            <img style={{ width: "400px" }} src={Logo} alt="Main Logo" />
+          </div>
+          <div>
+            <Autocomplete
+              style={{ width: "500px", borderRadius: "50px" }}
+              id="company"
+              freeSolo
+              options={company}
+              getOptionLabel={(option) => option.name}
+              renderOption={(props, option, { selected }) => (
+                <li {...props}>
+                  <Checkbox
+                    icon={icon}
+                    checkedIcon={checkedIcon}
+                    checked={selected}
+                  />
+                  {option.name}
+                </li>
+              )}
+              onKeyDown={handleKeyPress}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="회사명으로 면접 질문 검색"
+                  sx={{
+                    "& .MuiInputBase-root.MuiOutlinedInput-root .MuiInputBase-input":
+                      {
+                        // 입력된 값에 대한 스타일 지정
+                        padding: 0,
+                        paddingBottom: "9px",
+                        paddingTop: "9px",
+                      },
+                  }}
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={handleSearchBtn}>
+                          <SearchIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              )}
             />
-          )}
-        />
-      </div>
-    </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

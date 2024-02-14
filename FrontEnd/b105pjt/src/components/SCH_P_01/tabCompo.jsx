@@ -62,7 +62,6 @@ export default function TabCompo({
     jsList: [{ name: "", jobSubList: "" }],
   });
 
-  const [tab, setTab] = useState("csList");
   const [value, setValue] = useState(0);
   const [tagDataList, setTagDataList] = useState([]);
   const [checked, setChecked] = useState([]);
@@ -93,9 +92,12 @@ export default function TabCompo({
           .flat()
       );
     }
+  }, [tagDataList]);
+
+  useEffect(() => {
     setisClick(false);
     setPgno(1);
-  }, [tagDataList]);
+  }, [tagDataList, companyName]);
 
   useEffect(() => {
     const csList = dumyData.csList.map(function (ojt) {
@@ -141,6 +143,9 @@ export default function TabCompo({
     setTagDataList([]);
     setChecked([]);
     setPickTagList([]);
+    setCompanyName("");
+    setCompanyId("");
+    setQuestions([]);
   };
 
   const handleOpenSearchBar = () => {
@@ -156,7 +161,6 @@ export default function TabCompo({
     setBigTagList(value);
     setSmallTagList([]);
     setSmallTagData([]);
-    setTab(tabData);
   };
 
   const onClickSearch = async () => {
@@ -175,6 +179,7 @@ export default function TabCompo({
         .join(),
       pgno: pgno,
     };
+    console.log(data);
     await questionSearch(data).then((res) => {
       if (res.data.data) {
         if (!isClick) {
@@ -389,11 +394,13 @@ export default function TabCompo({
           onClick={() => handleReset()}
           startIcon={<RestartAltIcon />}
         ></Button>
-        <Button
-          color="primary"
-          startIcon={<SearchIcon />}
-          onClick={onClickSearch}
-        ></Button>
+        {!setCsList && (
+          <Button
+            color="primary"
+            startIcon={<SearchIcon />}
+            onClick={onClickSearch}
+          ></Button>
+        )}
       </Box>
     </Box>
   );

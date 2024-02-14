@@ -13,23 +13,43 @@ import SearchIcon from "@mui/icons-material/Search";
 import "../assets/css/HOM_P_01.css";
 import { useNavigate } from "react-router-dom";
 import { getCompanyList } from "../api/commonsAPI";
+import { useDispatch } from "react-redux";
 
 const HOM_P_01 = () => {
   const [company, setCompany] = useState([]);
-
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
   const navigate = useNavigate();
-  const [companyName, setCompanyName] = useState("");
+
+  const [companyName, setCompanyName] = useState();
+  const [companyId, setCompanyId] = useState();
+
+  const dispatch = useDispatch();
+  function handlebox(value) {
+    if (value !== null) {
+      setCompanyName(value.name);
+      setCompanyId(value.id);
+      console.log(companyId, companyName);
+      dispatch({
+        type: "UPDATE_SELECTED_COMPANY",
+        selectedCompany: {
+          id: companyId,
+          name: companyName,
+        },
+      })
+    }
+  }
 
   const handleSearchBtn = () => {
-    navigate("/search", {
-      state: {
-        companyName: companyName,
+    dispatch({
+      type: "UPDATE_SELECTED_COMPANY",
+      selectedCompany: {
+        id: companyId || -1,
+        name: companyName || "",
       },
-      replace: true,
     });
+    navigate("/search", {replace: true});
   };
 
   const handleKeyPress = (e) => {
@@ -71,6 +91,9 @@ const HOM_P_01 = () => {
                   {option.name}
                 </li>
               )}
+              onChange={(event, newValue) => {
+                handlebox(newValue);
+              }}
               onKeyDown={handleKeyPress}
               renderInput={(params) => (
                 <TextField

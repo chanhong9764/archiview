@@ -10,6 +10,7 @@ import {
   ListItemAvatar,
   ListItemText,
   Button,
+  Link,
 } from "@mui/material";
 import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 import CreateIcon from "@mui/icons-material/Create";
@@ -27,6 +28,17 @@ const CAL_M_01 = (props) => {
   const [imageUrl, setImageUrl] = useState("");
 
   const title = props.event.title;
+
+  const [urlHover, setUrlHover] = useState(false);
+  const [questionListHover, setQuestionListHover] = useState(false);
+  const defaultAnchorStyle = {
+    color: "black",
+    textDecoration: "none",
+  }
+  const hoverAnchorStyle = {
+    ...defaultAnchorStyle,
+    fontWeight: "bold",
+  }
 
   useEffect(() => {
     detailCompanyRecruits(props.event.id, (resp) => {
@@ -108,7 +120,47 @@ const CAL_M_01 = (props) => {
           </Grid>
           <Grid item xs={12}>
             <div className="content-title">
-              {dummyData.recruit && `${dummyData.recruit.title}`}
+              <div style={{display: "flex"}}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    margin: "10px 10px 0px 0px",
+                    padding: "0px 5px 0px 5px",
+                    backgroundColor: "transparent",
+                    border: "1px solid black",
+                    borderRadius: "10px",
+                    height: "30px",
+                  }}>
+                  <a
+                    href={dummyData.recruit && dummyData.company.url}
+                    target="_blank"
+                    style={urlHover ? hoverAnchorStyle : defaultAnchorStyle}
+                    onMouseEnter={() => setUrlHover(true)}
+                    onMouseLeave={() => setUrlHover(false)}
+                  >채용공고</a>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    margin: "10px 10px 0px 0px",
+                    padding: "0px 5px 0px 5px",
+                    backgroundColor: "transparent",
+                    border: "1px solid black",
+                    borderRadius: "10px",
+                    height: "30px",
+                  }}>
+                  <Link
+                    style={questionListHover ? hoverAnchorStyle : defaultAnchorStyle}
+                    onMouseEnter={() => setQuestionListHover(true)}
+                    onMouseLeave={() => setQuestionListHover(false)}
+                    onClick={handleMoreQuestionsClick}
+                  >질문목록</Link>
+                </div>
+              </div>
             </div>
           </Grid>
         </Grid>

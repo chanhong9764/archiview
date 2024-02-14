@@ -111,86 +111,90 @@ const LoginModal = ({ onSwitch, close }) => {
   };
 
   return (
-    <div className="LOG-M-01-Content">
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <div className="Logo">
-            <img src={Logo} style={{ width: "65%" }} alt="" />
-          </div>
-        </Grid>
+    <>
+      {Logo && (
+        <div className="LOG-M-01-Content">
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <div className="Logo">
+                <img src={Logo} style={{ width: "65%" }} alt="" />
+              </div>
+            </Grid>
 
-        <Grid item xs={12}>
-          <TextField
-            className="Form-input"
-            required
-            label="ID"
-            name="id"
-            defaultValue=""
-            variant="filled"
-            onKeyDown={handleKeyPress}
-            onChange={handleIdChange}
-          />
-        </Grid>
+            <Grid item xs={12}>
+              <TextField
+                className="Form-input"
+                required
+                label="ID"
+                name="id"
+                defaultValue=""
+                variant="filled"
+                onKeyDown={handleKeyPress}
+                onChange={handleIdChange}
+              />
+            </Grid>
 
-        <Grid item xs={12}>
-          <TextField
-            className="Form-input"
-            required
-            type="password"
-            label="PW"
-            name="pw"
-            defaultValue=""
-            variant="filled"
-            onKeyDown={handleKeyPress}
-            onChange={handlePwChange}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <span style={{ color: "red", fontSize: 13 }}>{message}</span>
-        </Grid>
-        <Grid item xs={12}>
-          <Button
-            className="Login-btn"
-            variant="contained"
-            endIcon={<LoginIcon />}
-            onClick={handleLogin}
-            color="primary"
-          >
-            로그인
-          </Button>
-        </Grid>
+            <Grid item xs={12}>
+              <TextField
+                className="Form-input"
+                required
+                type="password"
+                label="PW"
+                name="pw"
+                defaultValue=""
+                variant="filled"
+                onKeyDown={handleKeyPress}
+                onChange={handlePwChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <span style={{ color: "red", fontSize: 13 }}>{message}</span>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                className="Login-btn"
+                variant="contained"
+                endIcon={<LoginIcon />}
+                onClick={handleLogin}
+                color="primary"
+              >
+                로그인
+              </Button>
+            </Grid>
 
-        <Grid className="Link-group" item xs={12}>
-          <div
-            className="hoverable-div"
-            onClick={handleClickFindID}
-            style={{ marginRight: "20px", cursor: "default" }}
-          >
-            아이디 찾기
-          </div>
-          <div
-            className="hoverable-div"
-            onClick={handleClickFindPW}
-            style={{
-              borderRight: "1px solid #000",
-              borderLeft: "1px solid #000",
-              padding: "0 20px",
-              cursor: "default",
-            }}
-          >
-            비밀번호 찾기
-          </div>
-          <div
-            className="hoverable-div"
-            onClick={handleClickAssignUser}
-            style={{ marginLeft: "20px", cursor: "default" }}
-          >
-            회원가입
-          </div>
-        </Grid>
-      </Grid>
-      {foundId && <indIDResult id={foundId} onClose={handleCloseResult} />}
-    </div>
+            <Grid className="Link-group" item xs={12}>
+              <div
+                className="hoverable-div"
+                onClick={handleClickFindID}
+                style={{ marginRight: "20px", cursor: "default" }}
+              >
+                아이디 찾기
+              </div>
+              <div
+                className="hoverable-div"
+                onClick={handleClickFindPW}
+                style={{
+                  borderRight: "1px solid #000",
+                  borderLeft: "1px solid #000",
+                  padding: "0 20px",
+                  cursor: "default",
+                }}
+              >
+                비밀번호 찾기
+              </div>
+              <div
+                className="hoverable-div"
+                onClick={handleClickAssignUser}
+                style={{ marginLeft: "20px", cursor: "default" }}
+              >
+                회원가입
+              </div>
+            </Grid>
+          </Grid>
+          {foundId && <indIDResult id={foundId} onClose={handleCloseResult} />}
+        </div>
+      )}
+    </>
   );
 };
 

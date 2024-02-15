@@ -54,6 +54,15 @@
 
 ### 사전준비 단계 (서버)
 
+1. archiview 폴더의 application.yml의 다음 요소들을 환경에 맞게 수정한다.
+
+```
+jpa.hibernate.ddl-auto: update (초기 구동시에는 create)
+server.ssl.key-store: ssl 키의 파일 위치
+```
+
+2. signaling 폴더의 application.properties와 application-prod.properties 파일을 환경에 맞게 수정한다.
+
 ### 배포 단계
 
 1. docker compose up 명령어 혹은 Jenkins를 활용하여 각 서버의 docker-compose.yml을 다음과 같은 순서로 구동한다.
@@ -69,6 +78,12 @@
 ```
 
 2. MySQL의 user에 'role' column이 'ADMIN'인 관리자 계정을 추가한다. (관리자 계정 생성 및 삭제는 보안을 위해 DB 직접 접근을 통해 수동으로 관리해야한다.)
+
+```
+TLDR:
+
+mysql 폴더의 덤프파일을 이용한다면 user 테이블에서 ADMIN으로 지정된 계정을 사용한다.
+```
 
 ## 4. 트러블슈팅
 

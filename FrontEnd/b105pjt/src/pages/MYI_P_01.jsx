@@ -255,6 +255,19 @@ const MYI_P_01 = () => {
                       sx={{ ...textOverflowStyles }}
                     >
                       {question.companyName}
+                      <br />
+                    </Typography>
+                    <Typography
+                      variant="caption"
+                      sx={{ ...textOverflowStyles }}
+                      color="primary"
+                    >
+                      {question.csList.map((item) => (
+                        <span key={item}>#{item} </span>
+                      ))}
+                      {question.jobList.map((item) => (
+                        <span key={item}>#{item} </span>
+                      ))}
                     </Typography>
                   </CardContent>
                 </Card>

@@ -26,12 +26,10 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom{
         final int SizeConstant = 10;
         final int pgno = requestDto.getPgno() * SizeConstant - SizeConstant;
 
-        if(!StringUtils.hasText(requestDto.getUserId())) {
-            andBuilder.and(reply.user.role.eq(Role.ROLE_MEMBER));
-        }
-
         if(StringUtils.hasText(requestDto.getUserId())) {
             andBuilder.and(reply.user.id.eq(requestDto.getUserId()));
+        } else {
+            andBuilder.and(reply.user.role.eq(Role.ROLE_MEMBER));
         }
 
         if(StringUtils.hasText(requestDto.getCompanyName())) {

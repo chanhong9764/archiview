@@ -10,7 +10,11 @@ import { useDispatch } from "react-redux";
 import { closeModal } from "../store/slice/modalSlice";
 const LOG_M_01 = () => {
   const [currentComponent, setCurrentComponent] = useState("Login");
+<<<<<<< HEAD
+  const [emailToken, setEmailToken] = useState("");
+=======
   const dispatch = useDispatch();
+>>>>>>> 0f3fa30b9574622b330dfdccaa9760ce8bfc344e
 
   const switchComponent = (componentName) => {
     setCurrentComponent(componentName);
@@ -23,11 +27,11 @@ const LOG_M_01 = () => {
       case "FindID":
         return <FindIDModal onSwitch={switchComponent} />;
       case "FindPW":
-        return <FindPWModal onSwitch={switchComponent} />;
+        return <FindPWModal onSwitch={switchComponent} setEmailToken={setEmailToken} />;
       case "Assign":
         return <AssignUser onSwitch={switchComponent} />;
       case "ChangePW":
-        return <ChangPWModal onSwitch={switchComponent} />;
+        return <ChangPWModal onSwitch={switchComponent} emailToken={emailToken}/>;
       default:
         return null;
     }

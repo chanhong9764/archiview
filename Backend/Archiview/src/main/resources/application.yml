@@ -34,6 +34,7 @@ spring:
   data:
     redis:
       host: redis
+#      host: 127.0.0.1
       port: 6379
 #      password: ssafyb105
 
@@ -62,4 +63,3 @@ logging:
         type:
           descriptor:
             sql: trace
-

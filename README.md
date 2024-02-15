@@ -56,7 +56,7 @@
 ## 📦 프로젝트 구조
 
 #### 아키텍쳐
-![아키텍쳐](Readme/archiview_아키텍쳐.jpg)
+![아키텍쳐](Readme/archiview_아키텍쳐.JPG)
 
 #### 프론트엔드 파일구조
 ```

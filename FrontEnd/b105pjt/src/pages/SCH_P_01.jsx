@@ -58,6 +58,12 @@ const cardStyles = {
   },
 };
 
+const textOverflowStyles = {
+  overflow: "hidden",
+  whiteSpace: "nowrap",
+  textOverflow: "ellipsis",
+};
+
 function SCH_P_01() {
   const { isLoggedIn, role, userId } = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -111,7 +117,7 @@ function SCH_P_01() {
   const handleCloseModal = () => {
     setModalOpen(false); // 모달을 닫기
   };
-
+  console.log(questions);
   // 모달 컴포넌트
   const DetailModal = () => (
     <Dialog open={modalOpen} onClose={handleCloseModal}>
@@ -191,12 +197,33 @@ function SCH_P_01() {
                     alt="Thumbnail Image"
                   />
                   <CardContent>
-                    <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-                      {reply.userId}
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ fontWeight: "bold", ...textOverflowStyles }}
+                    >
+                      {question.content}
                     </Typography>
-                    <Typography variant="body2">{reply.script}</Typography>
-                    <Typography variant="caption" color="textSecondary">
-                      {reply.companyName}
+                    <Typography variant="body2" sx={{ ...textOverflowStyles }}>
+                      {reply.script}
+                    </Typography>
+                    <Typography
+                      variant="caption"
+                      sx={{ ...textOverflowStyles }}
+                    >
+                      {question.companyName}
+                      <br />
+                    </Typography>
+                    <Typography
+                      variant="caption"
+                      sx={{ ...textOverflowStyles }}
+                      color="primary"
+                    >
+                      {question.csList.map((item) => (
+                        <span key={item}>#{item} </span>
+                      ))}
+                      {question.jobList.map((item) => (
+                        <span key={item}>#{item} </span>
+                      ))}
                     </Typography>
                   </CardContent>
                 </Card>

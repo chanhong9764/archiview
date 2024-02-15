@@ -189,10 +189,10 @@ export default function TabCompo({
     await questionSearch(data).then((res) => {
       if (res.data.data) {
         if (!isClick) {
-          updateSearch(parsingData(res.data.data));
+          updateSearch(res.data.data);
           setisClick(true);
         } else {
-          updateSearch([...questions, ...parsingData(res.data.data)]);
+          updateSearch([...questions, ...res.data.data]);
         }
       } else {
         if (!isClick) {
@@ -205,16 +205,6 @@ export default function TabCompo({
   const updateSearch = async (updateQuestions) => {
     setQuestions(updateQuestions);
     setPgno((page) => page + 1);
-  };
-
-  const parsingData = (data) => {
-    return data.map((item) => {
-      return {
-        id: item.id,
-        content: item.content,
-        replies: item.replies,
-      };
-    });
   };
 
   return (

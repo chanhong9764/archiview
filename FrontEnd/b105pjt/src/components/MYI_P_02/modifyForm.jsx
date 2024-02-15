@@ -169,12 +169,7 @@ const ModifyForm = (props) => {
         variant="filled"
         value={title}
       />
-
-      <div className="Insert-search">
-        <SearchTab></SearchTab>
-      </div>
-
-      <div>
+      <div style={{ marginTop: "10px" }}>
         {recordingURL && (
           <div>
             <div>

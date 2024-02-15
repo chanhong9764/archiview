@@ -24,7 +24,7 @@ const InfoSection = () => {
   const [isModalOpen, setModalOpen] = useState(false);
 
   const navigate = useNavigate();
-  const accessToken = useSelector((state) => state.user);
+  const { accessToken } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (!validatePassword(password)) {
@@ -77,6 +77,7 @@ const InfoSection = () => {
       .catch((error) => {
         alert("비밀번호 변경에 실패했습니다.");
       });
+
     setModalOpen(false); // 모달 닫기
     navigate("/mypage", { replace: true });
   };

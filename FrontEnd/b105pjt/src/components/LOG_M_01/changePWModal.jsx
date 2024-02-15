@@ -3,12 +3,16 @@ import React, { useState } from 'react';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import Logo from '../../assets/img/mainLogo-removebg-preview.png';
 import { changePW } from '../../api/userAPI';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { closeModal } from '../../store/slice/modalSlice';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const ChangPWModal = ({ currentComponent, data, onSwitch, emailToken }) => {
+    const dispatch = useDispatch();
     const [openSnackbar, setOpenSnackbar] = useState(false);
 
     const handleAssignClick = async () => {
@@ -24,6 +28,7 @@ const ChangPWModal = ({ currentComponent, data, onSwitch, emailToken }) => {
         )
             .then((resp) => {
                 alert('비밀번호가 변경되었습니다.');
+                dispatch(closeModal());
             })
             .catch((error) => {
                 alert('비밀번호 변경에 실패했습니다.');

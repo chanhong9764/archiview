@@ -24,18 +24,6 @@ async function findPW(param, success, fail) {
 }
 
 async function changePW(param, token, success, fail) {
-    // const config = {
-    //   headers: {
-    //     Authorization: token,
-    //   },
-    // };
-    // const userPw = {
-    //   pw: param
-    // }
-
-    // await baseURL.patch("users/update-password", userPw, config).then(success).catch(fail);
-    console.log('password : ' + param.pw);
-    console.log('token : ' + token.Authorization);
     const config = {
         headers: token,
     };

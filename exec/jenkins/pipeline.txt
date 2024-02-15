@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('clone'){
             steps{
-                git credentialsId: '6154b13d-c45c-459d-8b82-f9517964ee7f', 
+                git credentialsId: '비밀키', 
                 url: 'https://lab.####.com/s10-webmobile1-sub2/S10P12B105.git'
             }
         }

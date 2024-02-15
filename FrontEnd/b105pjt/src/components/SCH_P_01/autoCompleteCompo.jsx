@@ -6,30 +6,39 @@ import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { useEffect, useState } from "react";
 import { getCompanyList } from "../../api/commonsAPI";
+import { useSelector, useDispatch } from "react-redux";
+import { updateCompany } from "../../store/slice/replySlice";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-export default function CheckboxesTags({ setCompanyName, setCompanyId }) {
-  const [company, setCompany] = useState([]);
+export default function CheckboxesTags() {
+  const [companies, setCompanies] = useState([]);
+
+  const { selectedCompany } = useSelector((state) => state.reply);
+  const dispatch = useDispatch();
 
   function handlebox(value) {
     let companyName = "";
-    let compnayId = "";
+    let companyId = "";
     if (value !== null) {
       companyName = value.name;
-      compnayId = value.id;
+      companyId = value.id;
     }
-    setCompanyName(companyName);
-    if (setCompanyId) {
-      setCompanyId(compnayId);
-    }
+    dispatch(
+      updateCompany({
+        selectedCompany: {
+          id: companyId,
+          name: companyName,
+        },
+      })
+    );
   }
 
   useEffect(() => {
     const getCompany = async () => {
       await getCompanyList((res) => {
-        setCompany(res.data.data);
+        setCompanies(res.data.data);
       });
     };
     getCompany();
@@ -39,20 +48,36 @@ export default function CheckboxesTags({ setCompanyName, setCompanyId }) {
     <Autocomplete
       id="company"
       freeSolo
-      options={company}
+      options={companies}
       getOptionLabel={(option) => option.name}
+      value={{
+        id: selectedCompany.id || "",
+        name: selectedCompany.name || "",
+      }}
       renderOption={(props, option, { selected }) => (
         <li {...props}>
-          <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
+          <Checkbox
+            icon={icon}
+            checkedIcon={checkedIcon}
+            checked={selected || option.name == selectedCompany.name}
+          />
           {option.name}
         </li>
       )}
-      onChange={(event, newValue) => {
-        handlebox(newValue);
+      onChange={(e, value) => {
+        handlebox(value);
       }}
-      style={{ width: 462, paddingBottom: "9px", padding: "10px" }}
+      sx={{
+        width: 462,
+        paddingBottom: "9px",
+        padding: "10px",
+      }}
       renderInput={(params) => (
-        <TextField {...params} label="회사명" placeholder="Favorites" />
+        <TextField
+          {...params}
+          label="회사명"
+          placeholder="회사명을 입력해주세요"
+        />
       )}
     />
   );

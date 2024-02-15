@@ -8,8 +8,6 @@ const MYI_P_02 = () => {
   const location = useLocation();
   const { reply } = location.state || {};
 
-  console.log("Received reply:", reply);
-
   return (
     <div>
       <MyNavbar></MyNavbar>

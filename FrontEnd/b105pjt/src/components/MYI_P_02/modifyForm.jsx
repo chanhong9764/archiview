@@ -16,17 +16,22 @@ import {
   getRecording,
   listRecordings,
 } from "../../api/openViduAPI";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import ConfirmModal from "./confirmModal";
+import { setLoading, unSetLoading } from "../../store/slice/loadingSlice";
+import { deleteReply, modifyReply } from "../../api/replyAPI";
+import { useNavigate } from "react-router-dom";
+import { deleteReplyByAdmin } from "../../api/adminAPI";
 
 let session;
 let publisher;
 let sessionName;
+let replyId;
 
 const MakeSession = async (videoRef) => {
   const OV = new OpenVidu();
@@ -69,21 +74,22 @@ const ModifyForm = (props) => {
     "https://i10b105.p.ssafy.io/api/files/recording/" +
       props.reply.replies[0].videoUrl
   );
+  replyId = props.reply.replies[0].id;
   const [isRecording, setIsRecording] = useState(false);
   const dispatch = useDispatch();
-  const [title, setTitle] = useState(props.reply.content);
+  const title = props.reply.content;
   const [script, setScript] = useState(props.reply.replies[0].script);
+  const [url, setUrl] = useState(props.reply.replies[0].videoUrl);
 
   useEffect(() => {
-    console.log("props>>", props.reply.content);
     // 컴포넌트 정리
-    dispatch({ type: "SET_LOADING" });
+    dispatch(setLoading());
     MakeSession(videoRef)
       .then(() => {
-        dispatch({ type: "UNSET_LOADING" });
+        dispatch(unSetLoading());
       })
       .catch((error) => {
-        dispatch({ type: "UNSET_LOADING" });
+        dispatch(unSetLoading());
       });
 
     return () => {
@@ -99,7 +105,7 @@ const ModifyForm = (props) => {
   }, []);
 
   const handleRecordStart = () => {
-    dispatch({ type: "SET_LOADING" });
+    dispatch(setLoading());
     startRecording(
       {
         session: session.sessionId,
@@ -109,17 +115,18 @@ const ModifyForm = (props) => {
       },
       (resp) => {
         setIsRecording(true);
-        dispatch({ type: "UNSET_LOADING" });
+        dispatch(unSetLoading());
       },
       (error) => {
-        dispatch({ type: "UNSET_LOADING" });
+        dispatch(unSetLoading());
       }
     );
   };
 
   const handleRecordStop = () => {
-    dispatch({ type: "SET_LOADING" });
+    dispatch(setLoading());
     let urlSession = session.sessionId;
+    setUrl(urlSession);
     stopRecording(
       {
         recording: session.sessionId,
@@ -138,19 +145,19 @@ const ModifyForm = (props) => {
           session.unpublish(publisher);
         }
         session.disconnect();
-        dispatch({ type: "UNSET_LOADING" });
+        dispatch(unSetLoading());
       },
       (error) => {
-        dispatch({ type: "UNSET_LOADING" });
+        dispatch(unSetLoading());
       }
     );
   };
 
   const handleRestartRecording = () => {
-    dispatch({ type: "SET_LOADING" });
+    dispatch(setLoading());
     MakeSession(videoRef);
     setRecordingURL("");
-    dispatch({ type: "UNSET_LOADING" });
+    dispatch(unSetLoading());
   };
 
   return (
@@ -161,7 +168,6 @@ const ModifyForm = (props) => {
         label="제목"
         variant="filled"
         value={title}
-        onChange={(e) => setTitle(e.target.value)} // 제목 상태 업데이트
       />
 
       <div className="Insert-search">
@@ -226,47 +232,55 @@ const ModifyForm = (props) => {
         onChange={(e) => setScript(e.target.value)} // 스크립트 상태 업데이트
         style={{ paddingTop: "5px" }}
       />
-      <BtnGroupInsert />
+      <BtnGroupInsert id={replyId} script={script} url={url} />
     </div>
   );
 };
 
-const BtnGroupInsert = () => {
-  const [openConfirm, setOpenConfirm] = useState(false);
-  const [confirmType, setConfirmType] = useState(""); // "edit" 또는 "delete"
+const BtnGroupInsert = ({ id, script, url }) => {
+  const navigate = useNavigate();
+  const token = localStorage.getItem("accessToken");
+  const { role } = useSelector((state) => state.user);
 
-  // 수정 확인 모달 열기
   const handleEdit = () => {
-    setConfirmType("edit");
-    setOpenConfirm(true);
+    navigate("/myinterview");
+    modifyReply(
+      {
+        id: id,
+        script: script,
+        videoUrl: url,
+        thumbnailUrl: url,
+      },
+      token,
+      (resp) => {},
+      (err) => {}
+    );
   };
 
-  // 삭제 확인 모달 열기
   const handleDelete = () => {
-    setConfirmType("delete");
-    setOpenConfirm(true);
-  };
-
-  // 모달의 "예" 버튼 클릭 처리
-  const handleConfirm = () => {
-    if (confirmType === "edit") {
-      // 수정 로직을 여기에 추가하세요.
-    } else if (confirmType === "delete") {
-      // 삭제 로직을 여기에 추가하세요.
+    if (role === "ROLE_ADMIN") {
+      deleteReplyByAdmin(replyId, token).then((resp) => {
+        navigate("/myinterview");
+      });
+    } else {
+      deleteReply(replyId, token, (resp) => {
+        navigate("/myinterview");
+      });
     }
-    setOpenConfirm(false); // 모달 닫기
   };
 
   return (
     <div className="Insert-btn-group">
-      <Button
-        variant="outlined"
-        startIcon={<ModeEditIcon />}
-        color="success"
-        onClick={handleEdit}
-      >
-        수정
-      </Button>
+      {role !== "ROLE_ADMIN" && (
+        <Button
+          variant="outlined"
+          startIcon={<ModeEditIcon />}
+          color="success"
+          onClick={handleEdit}
+        >
+          수정
+        </Button>
+      )}
       <Button
         variant="contained"
         endIcon={<DeleteForeverIcon />}
@@ -275,17 +289,6 @@ const BtnGroupInsert = () => {
       >
         삭제
       </Button>
-
-      <ConfirmModal
-        open={openConfirm}
-        onClose={() => setOpenConfirm(false)}
-        onConfirm={handleConfirm}
-        title={confirmType === "edit" ? "알림" : "알림"}
-      >
-        {confirmType === "edit"
-          ? "정말로 수정하시겠습니까?"
-          : "정말로 삭제하시겠습니까?"}
-      </ConfirmModal>
     </div>
   );
 };

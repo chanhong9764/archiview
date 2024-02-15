@@ -88,6 +88,8 @@ FRONT-END
 │  └─utils
 ├─hoc
 ├─pages
+├─store
+│  └─slice
 └─utils
 ```
 

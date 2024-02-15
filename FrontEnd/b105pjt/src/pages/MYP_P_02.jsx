@@ -12,6 +12,7 @@ const Page = () => {
         paddingTop: "20px",
         justifyContent: "center",
         alignItems: "center",
+        marginTop: "50px",
       }}
     >
       <InfoSection />

@@ -27,9 +27,9 @@ const ProfileSection = () => {
   const accessToken = localStorage.getItem("accessToken");
   const { profile } = useSelector((state) => state.user);
 
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [introduce, setIntroduce] = useState();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [introduce, setIntroduce] = useState("");
 
   useEffect(() => {
     userDetail(
@@ -40,8 +40,12 @@ const ProfileSection = () => {
       },
       (resp) => {
         setName(resp.data.data.name);
-        setEmail(resp.data.data.email);
-        setIntroduce(resp.data.data.introduce);
+        if (resp.data.data.email) {
+          setEmail(resp.data.data.email);
+        }
+        if (resp.data.data.introduce) {
+          setIntroduce(resp.data.data.introduce);
+        }
       }
     );
   }, []);

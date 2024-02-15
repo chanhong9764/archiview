@@ -10,11 +10,8 @@ import { useDispatch } from "react-redux";
 import { closeModal } from "../store/slice/modalSlice";
 const LOG_M_01 = () => {
   const [currentComponent, setCurrentComponent] = useState("Login");
-<<<<<<< HEAD
   const [emailToken, setEmailToken] = useState("");
-=======
   const dispatch = useDispatch();
->>>>>>> 0f3fa30b9574622b330dfdccaa9760ce8bfc344e
 
   const switchComponent = (componentName) => {
     setCurrentComponent(componentName);

@@ -4,6 +4,14 @@
 💡 "혼자서는 빨리 갈 수 있지만, 함께라면 더 멀리 갈 수 있다."
 ```
 
+## 팀원
+- **홍길동** - 프로젝트 리더 & 개발자 - [이메일](mailto:email@example.com)
+- **김철수** - 프론트엔드 개발자 - [이메일](mailto:email@example.com)
+- **이영희** - 백엔드 개발자 - [이메일](mailto:email@example.com)
+- **박보검** - UI/UX 디자이너 - [이메일](mailto:email@example.com)
+
+## 개발기간
+
 ## 서비스 가치
 - 설문 결과, 사이트를 이용한 면접 관리 사이트는 **블루오션**
     - 면접 관리를 하는 인원은 절반도 되지 않으며, 한다 하더라도 대부분 개인 저장을 함 [**/ [설문 결과 링크]**](https://leeward-letter-425.notion.site/256e4cf5a94e4b3cab78c7bac1204b3d)
@@ -22,4 +30,222 @@
 |회원 관리|X|X|X|O|
 
 ## 기술 스택
+![기술 스택](Readme/기술_스택.PNG)
+
+## 프로젝트 구조
+
+#### 아키텍쳐
+
+#### 프론트엔드 파일구조
+```
+FRONT-END
+│  App.js
+│  index.js
+│  reportWebVitals.js
+│  setupProxy.js
+│  setupTests.js
+│  
+├─api
+│      adminAPI.js
+│      calendarAPI.js
+│      commonsAPI.js
+│      mypageAPI.js
+│      naverAPI.js
+│      openViduAPI.js
+│      questionAPI.js
+│      replyAPI.js
+│      userAPI.js
+│      
+├─assets
+│  ├─css
+│  │      App.css
+│  │      CAL_M_01.css
+│  │      CAL_P_01.css
+│  │      HOM_P_01.css
+│  │      LOG_M_01_login.css
+│  │      MYI_P_02.css
+│  │      
+│  ├─font
+│  │      Pretendard-Regular.ttf
+│  │      
+│  └─img
+│          colorLogo-removebg-preview.png
+│          instagram.jpg
+│          jjangoo.jpg
+│          loading.gif
+│          mainLogo-removebg-preview.png
+│          mainLogo_noSlogun-removebg-preview.png
+│          symbolLogo-removebg-preview.png
+│          symbolLogo_Slogun-removebg-preview.png
+│          user.png
+│          video.png
+│          
+├─components
+│  ├─ADM_P_01
+│  │      manageAccount.js
+│  │      manageGrade.js
+│  │      
+│  ├─HOM_M_01
+│  │      btnGroupInsert.jsx
+│  │      
+│  ├─LOG_M_01
+│  │      assignUser.jsx
+│  │      changePWModal.jsx
+│  │      findIDModal.jsx
+│  │      findIDResult.jsx
+│  │      findPWModal.jsx
+│  │      loginModal.jsx
+│  │      
+│  ├─MYI_P_01
+│  │      accordion.jsx
+│  │      profileSection.jsx
+│  │      
+│  ├─MYI_P_02
+│  │      btnGroupInsert.jsx
+│  │      confirmModal.jsx
+│  │      insertForm.jsx
+│  │      modifyForm.jsx
+│  │      myNavbar.jsx
+│  │      openVideo.jsx
+│  │      
+│  ├─MYP_P_01
+│  │      actionButton.jsx
+│  │      adminButton.jsx
+│  │      passwordCheck.jsx
+│  │      passwordModal.jsx
+│  │      profileSection.jsx
+│  │      
+│  ├─MYP_P_02
+│  │      confirmModal.jsx
+│  │      infoSection.jsx
+│  │      profileSection.jsx
+│  │      saveButton.jsx
+│  │      
+│  ├─SCH_P_01
+│  │      autoCompleteCompo.jsx
+│  │      firstTabFirstList.jsx
+│  │      firstTabSecondList.jsx
+│  │      fitstTabFirstListCompo.jsx
+│  │      secondTabFirstList.jsx
+│  │      secondTabFirstListCompo.jsx
+│  │      secondTabSecondList.jsx
+│  │      tabCompo.jsx
+│  │      tagListCompo.jsx
+│  │      
+│  └─utils
+│          alertModal.jsx
+│          footer.jsx
+│          loading.jsx
+│          navbar.jsx
+│          navbarComponent.jsx
+│          searchSection.jsx
+│          
+├─hoc
+│      adminAuth.jsx
+│      memberAuth.jsx
+│      userAuth.jsx
+│      
+├─pages
+│      ADM_P_01.jsx
+│      CAL_M_01.jsx
+│      CAL_P_01.jsx
+│      HOM_M_01.jsx
+│      HOM_P_01.jsx
+│      LOG_M_01.jsx
+│      MYI_P_01.jsx
+│      MYI_P_02.jsx
+│      MYI_P_02_Modify.jsx
+│      MYP_P_01.jsx
+│      MYP_P_02.jsx
+│      SCH_P_01.jsx
+│      
+└─utils
+        cookie.js
+        httpCommons.js
+        httpStatusCode.js
+        transformEventData.js
+        useForm.js
+```
+
+#### 백엔드 파일구조
+```
+BACK-END
+├─.idea
+├─Archiview
+│  ├─gradle
+│  │  └─wrapper
+│  └─src
+│      ├─main
+│      │  ├─java
+│      │  │  └─com
+│      │  │      └─####
+│      │  │          └─archiview
+│      │  │              ├─config
+│      │  │              ├─controller
+│      │  │              │  ├─admin
+│      │  │              │  ├─common
+│      │  │              │  ├─question
+│      │  │              │  ├─recruit
+│      │  │              │  ├─reply
+│      │  │              │  ├─token
+│      │  │              │  └─user
+│      │  │              ├─dto
+│      │  │              │  ├─comment
+│      │  │              │  ├─common
+│      │  │              │  ├─company
+│      │  │              │  ├─mail
+│      │  │              │  ├─question
+│      │  │              │  ├─recruit
+│      │  │              │  ├─reply
+│      │  │              │  ├─token
+│      │  │              │  └─user
+│      │  │              ├─entity
+│      │  │              ├─filter
+│      │  │              ├─jwt
+│      │  │              ├─repository
+│      │  │              │  ├─Question
+│      │  │              │  └─Recruit
+│      │  │              ├─response
+│      │  │              │  ├─code
+│      │  │              │  ├─exception
+│      │  │              │  ├─handler
+│      │  │              │  └─structure
+│      │  │              ├─service
+│      │  │              │  ├─common
+│      │  │              │  ├─question
+│      │  │              │  ├─recruit
+│      │  │              │  ├─reply
+│      │  │              │  ├─token
+│      │  │              │  └─user
+│      │  │              └─validation
+│      │  │                  └─user
+│      │  └─resources
+│      │      └─ssl
+│      └─test
+│          └─java
+│              └─com
+│                  └─####
+│                      └─archiview
+└─SignalingServer
+    ├─gradle
+    │  └─wrapper
+    └─src
+        ├─main
+        │  ├─java
+        │  │  └─com
+        │  │      └─####
+        │  │          └─archiview
+        │  │              └─signalingserver
+        │  │                  ├─config
+        │  │                  └─controller
+        │  └─resources
+        │      └─ssl
+        └─test
+            └─java
+                └─com
+                    └─####
+                        └─archiview
+                            └─signalingserver
+
+```
 

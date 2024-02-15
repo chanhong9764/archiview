@@ -122,21 +122,6 @@ const MYI_P_01 = () => {
         setAuth(true);
       }
       setProfileData(eventData);
-      userDetail(accessToken, (resp) => {
-        searchQuestion(
-          {
-            headers: {
-              Authorization: accessToken,
-            },
-          },
-          {
-            userId: eventData.id,
-          },
-          (resp) => {
-            if (resp.data.data) setQuestions(resp.data.data);
-          }
-        );
-      });
     }
   }, []);
 

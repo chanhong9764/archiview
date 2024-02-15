@@ -76,22 +76,6 @@ function SCH_P_01() {
 
   const accessToken = localStorage.getItem("accessToken");
 
-  useEffect(() => {
-    // selectedReply가 변경될 때마다 API 호출
-    if (selectedReply) {
-      selectReply(
-        {
-          Authorization: accessToken,
-        },
-        selectedReply.id,
-        (resp) => {
-          setReplyDetails(resp.data.data.reply);
-          setModalOpen(true);
-        }
-      );
-    }
-  }, [selectedReply]); // selectedReply가 변경될 때만 이 effect를 실행
-
   const handleViewDetails = (reply) => {
     if (!isLoggedIn) {
       dispatch(
@@ -109,7 +93,16 @@ function SCH_P_01() {
         );
         navigate("/myinterview");
       } else {
-        setSelectedReply(reply);
+        selectReply(
+          {
+            Authorization: accessToken,
+          },
+          reply.id,
+          (resp) => {
+            setReplyDetails(resp.data.data.reply);
+            setModalOpen(true);
+          }
+        );
       }
     }
   };
@@ -117,7 +110,6 @@ function SCH_P_01() {
   const handleCloseModal = () => {
     setModalOpen(false); // 모달을 닫기
   };
-  console.log(questions);
   // 모달 컴포넌트
   const DetailModal = () => (
     <Dialog open={modalOpen} onClose={handleCloseModal}>
@@ -141,7 +133,7 @@ function SCH_P_01() {
                   "https://i10b105.p.####.io/api/files/recording/" +
                   replyDetails.videoUrl
                 }
-                width="500"
+                width="100%"
               ></video>
             </div>
             {replyDetails.script && (

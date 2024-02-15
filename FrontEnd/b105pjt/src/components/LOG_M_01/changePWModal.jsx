@@ -13,6 +13,7 @@ const ChangPWModal = ({ currentComponent, data, onSwitch, emailToken }) => {
 
     const handleAssignClick = async () => {
         // setOpenSnackbar(true);
+        
         await changePW(
             {
                 pw: password,
@@ -28,10 +29,6 @@ const ChangPWModal = ({ currentComponent, data, onSwitch, emailToken }) => {
                 alert('비밀번호 변경에 실패했습니다.');
             });
     };
-    // setTimeout(() => {
-    //   setOpenSnackbar(false);
-    //   onSwitch("Login");
-    // }, 1000);
 
     // 간단한 비밀번호 검증시 사용되는 변수
     const [password, setPassword] = useState('');

@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 @CrossOrigin("*")
 @RequiredArgsConstructor
@@ -66,6 +67,7 @@ public class UserController {
         return SuccessResponse.createSuccess(SuccessCode.PASSWORD_SUCCESS);
     }
 
+
     @PatchMapping("/update-password")  // 패스워드 변경
     public ResponseEntity<Object> updatePassword(@RequestBody UserDto.passwordDto dto, HttpServletRequest request){
         String userInfo;
@@ -92,6 +94,7 @@ public class UserController {
         return SuccessResponse.createSuccess(SuccessCode.EMAIL_SUCCESS, dto);
     }
 
+
     @GetMapping("/find-email")  // 아이디, 패스워드 찾기용 이메일 인증 요청
     public ResponseEntity<Object> findMailSend(@RequestParam("email") String email) {
         int auth_number = mailService.findSendMail(email);
@@ -99,6 +102,7 @@ public class UserController {
         return SuccessResponse.createSuccess(SuccessCode.EMAIL_SUCCESS, dto);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PatchMapping("/upgrade")  // 등업 신청
     public ResponseEntity<Object> applyUserUpgrade(HttpServletRequest request){
         String userId = jwtUtil.getUsername(request);

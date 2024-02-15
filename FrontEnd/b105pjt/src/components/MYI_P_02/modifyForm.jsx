@@ -252,12 +252,8 @@ const BtnGroupInsert = ({ id, script, url }) => {
         thumbnailUrl: url,
       },
       token,
-      (resp) => {
-        console.log("handleEdit >> ", resp);
-      },
-      (err) => {
-        console.log("handleEdit >> ", err);
-      }
+      (resp) => {},
+      (err) => {}
     );
   };
 

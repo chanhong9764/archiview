@@ -24,7 +24,7 @@ const InsertForm = () => {
   const [userId, setUserId] = useState();
 
   const dispatch = useDispatch();
-  const {selectedCompany} = useSelector((state) => state.reply);
+  const { selectedCompany } = useSelector((state) => state.reply);
 
   function handlerContent(event) {
     setContent(event.target.value);
@@ -34,7 +34,6 @@ const InsertForm = () => {
   }
 
   function onClickApply() {
-    console.log(selectedCompany);
     createReply(
       {
         Authorization: accessToken,

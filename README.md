@@ -55,132 +55,24 @@
 #### 프론트엔드 파일구조
 ```
 FRONT-END
-│  App.js
-│  index.js
-│  reportWebVitals.js
-│  setupProxy.js
-│  setupTests.js
-│  
-├─api
-│      adminAPI.js
-│      calendarAPI.js
-│      commonsAPI.js
-│      mypageAPI.js
-│      naverAPI.js
-│      openViduAPI.js
-│      questionAPI.js
-│      replyAPI.js
-│      userAPI.js
-│      
+├─api      
 ├─assets
 │  ├─css
-│  │      App.css
-│  │      CAL_M_01.css
-│  │      CAL_P_01.css
-│  │      HOM_P_01.css
-│  │      LOG_M_01_login.css
-│  │      MYI_P_02.css
-│  │      
 │  ├─font
-│  │      Pretendard-Regular.ttf
-│  │      
-│  └─img
-│          colorLogo-removebg-preview.png
-│          instagram.jpg
-│          jjangoo.jpg
-│          loading.gif
-│          mainLogo-removebg-preview.png
-│          mainLogo_noSlogun-removebg-preview.png
-│          symbolLogo-removebg-preview.png
-│          symbolLogo_Slogun-removebg-preview.png
-│          user.png
-│          video.png
-│          
+│  └─img  
 ├─components
-│  ├─ADM_P_01
-│  │      manageAccount.js
-│  │      manageGrade.js
-│  │      
-│  ├─HOM_M_01
-│  │      btnGroupInsert.jsx
-│  │      
-│  ├─LOG_M_01
-│  │      assignUser.jsx
-│  │      changePWModal.jsx
-│  │      findIDModal.jsx
-│  │      findIDResult.jsx
-│  │      findPWModal.jsx
-│  │      loginModal.jsx
-│  │      
-│  ├─MYI_P_01
-│  │      accordion.jsx
-│  │      profileSection.jsx
-│  │      
-│  ├─MYI_P_02
-│  │      btnGroupInsert.jsx
-│  │      confirmModal.jsx
-│  │      insertForm.jsx
-│  │      modifyForm.jsx
-│  │      myNavbar.jsx
-│  │      openVideo.jsx
-│  │      
-│  ├─MYP_P_01
-│  │      actionButton.jsx
-│  │      adminButton.jsx
-│  │      passwordCheck.jsx
-│  │      passwordModal.jsx
-│  │      profileSection.jsx
-│  │      
-│  ├─MYP_P_02
-│  │      confirmModal.jsx
-│  │      infoSection.jsx
-│  │      profileSection.jsx
-│  │      saveButton.jsx
-│  │      
-│  ├─SCH_P_01
-│  │      autoCompleteCompo.jsx
-│  │      firstTabFirstList.jsx
-│  │      firstTabSecondList.jsx
-│  │      fitstTabFirstListCompo.jsx
-│  │      secondTabFirstList.jsx
-│  │      secondTabFirstListCompo.jsx
-│  │      secondTabSecondList.jsx
-│  │      tabCompo.jsx
-│  │      tagListCompo.jsx
-│  │      
-│  └─utils
-│          alertModal.jsx
-│          footer.jsx
-│          loading.jsx
-│          navbar.jsx
-│          navbarComponent.jsx
-│          searchSection.jsx
-│          
+│  ├─ADM_P_01     
+│  ├─HOM_M_01     
+│  ├─LOG_M_01     
+│  ├─MYI_P_01    
+│  ├─MYI_P_02     
+│  ├─MYP_P_01     
+│  ├─MYP_P_02     
+│  ├─SCH_P_01     
+│  └─utils          
 ├─hoc
-│      adminAuth.jsx
-│      memberAuth.jsx
-│      userAuth.jsx
-│      
 ├─pages
-│      ADM_P_01.jsx
-│      CAL_M_01.jsx
-│      CAL_P_01.jsx
-│      HOM_M_01.jsx
-│      HOM_P_01.jsx
-│      LOG_M_01.jsx
-│      MYI_P_01.jsx
-│      MYI_P_02.jsx
-│      MYI_P_02_Modify.jsx
-│      MYP_P_01.jsx
-│      MYP_P_02.jsx
-│      SCH_P_01.jsx
-│      
 └─utils
-        cookie.js
-        httpCommons.js
-        httpStatusCode.js
-        transformEventData.js
-        useForm.js
 ```
 
 #### 백엔드 파일구조
@@ -189,7 +81,6 @@ BACK-END
 ├─.idea
 ├─Archiview
 │  ├─gradle
-│  │  └─wrapper
 │  └─src
 │      ├─main
 │      │  ├─java
@@ -198,43 +89,14 @@ BACK-END
 │      │  │          └─archiview
 │      │  │              ├─config
 │      │  │              ├─controller
-│      │  │              │  ├─admin
-│      │  │              │  ├─common
-│      │  │              │  ├─question
-│      │  │              │  ├─recruit
-│      │  │              │  ├─reply
-│      │  │              │  ├─token
-│      │  │              │  └─user
 │      │  │              ├─dto
-│      │  │              │  ├─comment
-│      │  │              │  ├─common
-│      │  │              │  ├─company
-│      │  │              │  ├─mail
-│      │  │              │  ├─question
-│      │  │              │  ├─recruit
-│      │  │              │  ├─reply
-│      │  │              │  ├─token
-│      │  │              │  └─user
 │      │  │              ├─entity
 │      │  │              ├─filter
 │      │  │              ├─jwt
 │      │  │              ├─repository
-│      │  │              │  ├─Question
-│      │  │              │  └─Recruit
 │      │  │              ├─response
-│      │  │              │  ├─code
-│      │  │              │  ├─exception
-│      │  │              │  ├─handler
-│      │  │              │  └─structure
 │      │  │              ├─service
-│      │  │              │  ├─common
-│      │  │              │  ├─question
-│      │  │              │  ├─recruit
-│      │  │              │  ├─reply
-│      │  │              │  ├─token
-│      │  │              │  └─user
 │      │  │              └─validation
-│      │  │                  └─user
 │      │  └─resources
 │      │      └─ssl
 │      └─test

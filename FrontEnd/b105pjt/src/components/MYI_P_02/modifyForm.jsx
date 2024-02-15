@@ -16,7 +16,7 @@ import {
   getRecording,
   listRecordings,
 } from "../../api/openViduAPI";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
@@ -26,6 +26,7 @@ import ConfirmModal from "./confirmModal";
 import { setLoading, unSetLoading } from "../../store/slice/loadingSlice";
 import { deleteReply, modifyReply } from "../../api/replyAPI";
 import { useNavigate } from "react-router-dom";
+import { deleteReplyByAdmin } from "../../api/adminAPI";
 
 let session;
 let publisher;
@@ -81,7 +82,6 @@ const ModifyForm = (props) => {
   const [url, setUrl] = useState(props.reply.replies[0].videoUrl);
 
   useEffect(() => {
-    console.log("props>>", props);
     // 컴포넌트 정리
     dispatch(setLoading());
     MakeSession(videoRef)
@@ -240,6 +240,7 @@ const ModifyForm = (props) => {
 const BtnGroupInsert = ({ id, script, url }) => {
   const navigate = useNavigate();
   const token = localStorage.getItem("accessToken");
+  const { role } = useSelector((state) => state.user);
 
   const handleEdit = () => {
     navigate("/myinterview");
@@ -261,29 +262,29 @@ const BtnGroupInsert = ({ id, script, url }) => {
   };
 
   const handleDelete = () => {
-    deleteReply(
-      replyId,
-      token,
-      (resp) => {
-        console.log("deleteReply resp >>", resp);
-      },
-      (err) => {
-        console.log("deleteReply err >>", err);
-      }
-    );
-    navigate("/myinterview");
+    if (role === "ROLE_ADMIN") {
+      deleteReplyByAdmin(replyId, token).then((resp) => {
+        navigate("/myinterview");
+      });
+    } else {
+      deleteReply(replyId, token, (resp) => {
+        navigate("/myinterview");
+      });
+    }
   };
 
   return (
     <div className="Insert-btn-group">
-      <Button
-        variant="outlined"
-        startIcon={<ModeEditIcon />}
-        color="success"
-        onClick={handleEdit}
-      >
-        수정
-      </Button>
+      {role !== "ROLE_ADMIN" && (
+        <Button
+          variant="outlined"
+          startIcon={<ModeEditIcon />}
+          color="success"
+          onClick={handleEdit}
+        >
+          수정
+        </Button>
+      )}
       <Button
         variant="contained"
         endIcon={<DeleteForeverIcon />}

@@ -9,8 +9,8 @@ pipeline {
     stages {
         stage('clone'){
             steps{
-                git credentialsId: '비밀키', 
-                url: 'https://lab.####.com/s10-webmobile1-sub2/S10P12B105.git'
+                git credentialsId: '[아카이뷰 깃 비밀키]', 
+                url: '[아카이뷰 깃 URL]'
             }
         }
         stage('Frontend Build'){

@@ -61,23 +61,25 @@
 #### 프론트엔드 파일구조
 ```
 FRONT-END
-├─api      
+├─api
 ├─assets
 │  ├─css
 │  ├─font
-│  └─img  
+│  └─img
 ├─components
-│  ├─ADM_P_01     
-│  ├─HOM_M_01     
-│  ├─LOG_M_01     
-│  ├─MYI_P_01    
-│  ├─MYI_P_02     
-│  ├─MYP_P_01     
-│  ├─MYP_P_02     
-│  ├─SCH_P_01     
-│  └─utils          
+│  ├─ADM_P_01
+│  ├─HOM_M_01
+│  ├─LOG_M_01
+│  ├─MYI_P_01
+│  ├─MYI_P_02
+│  ├─MYP_P_01
+│  ├─MYP_P_02
+│  ├─SCH_P_01
+│  └─utils
 ├─hoc
 ├─pages
+├─store
+│  └─slice
 └─utils
 ```
 

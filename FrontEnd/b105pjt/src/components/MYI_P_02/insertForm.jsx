@@ -7,6 +7,7 @@ import { useState } from "react";
 import { createReply } from "../../api/replyAPI";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { updateCompany } from "../../store/slice/replySlice";
 
 const InsertForm = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const InsertForm = () => {
   const [userId, setUserId] = useState();
 
   const dispatch = useDispatch();
-  const selectedCompany = useSelector((state) => state.selectedCompany);
+  const {selectedCompany} = useSelector((state) => state.reply);
 
   function handlerContent(event) {
     setContent(event.target.value);

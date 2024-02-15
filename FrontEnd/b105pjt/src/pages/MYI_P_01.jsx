@@ -79,8 +79,10 @@ const MYI_P_01 = () => {
   const [profileData, setProfileData] = useState(null);
   const [block, setBlock] = useState(null);
   const [role, setRole] = useState(null);
-  const [auth, setAuth] = useState(null);
-  const [userId, setUserId] = useState(useSelector((state) => state.userId));
+  const [auth, setAuth] = useState(false);
+  const [userId, setUserId] = useState(
+    useSelector((state) => state.user.userId)
+  );
   const [ref, inView] = useInView();
 
   const accessToken = localStorage.getItem("accessToken");
@@ -93,9 +95,11 @@ const MYI_P_01 = () => {
     if (!eventData) {
       userDetail(accessToken, (resp) => {
         setUserId(resp.data.data.id);
-        setAuth(resp.data.data.auth);
         setRole(resp.data.data.role);
         setProfileData(resp.data.data);
+        if (resp.data.data.auth) {
+          setAuth(true);
+        }
         searchQuestion(
           {
             Authorization: accessToken,
@@ -108,16 +112,15 @@ const MYI_P_01 = () => {
           }
         );
       });
-      if (role === "ROLE_USER") {
-        setIsUpgradBtn(true);
-      }
     }
     // admin 페이지에서 온 경우
     else {
       setAdminBtn(true);
       setRole(eventData.role);
       setUserId(eventData.id);
-      setAuth(eventData.auth);
+      if (eventData.auth !== "-") {
+        setAuth(true);
+      }
       setProfileData(eventData);
       userDetail(accessToken, (resp) => {
         searchQuestion(
@@ -137,8 +140,12 @@ const MYI_P_01 = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (role === "ROLE_USER") {
+      setIsUpgradBtn(true);
+    }
+  }, [role]);
   const handleViewDetails = (reply) => {
-    console.log("handleViewDetails>> ", reply);
     navigate("/revise", { state: { reply } });
   };
 

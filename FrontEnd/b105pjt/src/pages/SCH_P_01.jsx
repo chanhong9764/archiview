@@ -97,7 +97,8 @@ function SCH_P_01() {
       if (role === "ROLE_USER") {
         dispatch(
           openAlert({
-            message: "MEMBER 등급이 아닙니다.\n답변을 작성하고, 등업 신청 부탁드립니다.",
+            message:
+              "MEMBER 등급이 아닙니다.\n답변을 작성하고, 등업 신청 부탁드립니다.",
           })
         );
         navigate("/myinterview");
@@ -130,20 +131,25 @@ function SCH_P_01() {
             <div>
               <video
                 controls
-                src={"https://i10b105.p.ssafy.io/api/files/recording/" + replyDetails.videoUrl}
+                src={
+                  "https://i10b105.p.ssafy.io/api/files/recording/" +
+                  replyDetails.videoUrl
+                }
                 width="500"
               ></video>
             </div>
-            <div
-              style={{
-                border: "1px solid #007BFF",
-                borderRadius: "3px",
-                padding: "10px",
-                marginTop: "10px",
-              }}
-            >
-              {replyDetails.script}
-            </div>
+            {replyDetails.script && (
+              <div
+                style={{
+                  border: "1px solid #007BFF",
+                  borderRadius: "3px",
+                  padding: "10px",
+                  marginTop: "10px",
+                }}
+              >
+                {replyDetails.script}
+              </div>
+            )}
           </DialogContentText>
         ) : (
           <DialogContentText>Loading...</DialogContentText> // 데이터 로딩 중 표시
@@ -155,7 +161,11 @@ function SCH_P_01() {
   return (
     <ThemeProvider theme={theme}>
       <Container sx={{ mt: 4, mb: 4 }}>
-        <Tabcompo setQuestions={setQuestions} inView={inView} questions={questions} />
+        <Tabcompo
+          setQuestions={setQuestions}
+          inView={inView}
+          questions={questions}
+        />
         <Grid container spacing={2}>
           {questions.map((question, index) =>
             question.replies.map((reply) => (
@@ -168,11 +178,16 @@ function SCH_P_01() {
                       objectFit: "cover",
                       borderRadius: "15px 15px 0 0",
                       filter:
-                        role === "ROLE_MEMBER" || role === "ROLE_ADMIN" || reply.userId === userId
+                        role === "ROLE_MEMBER" ||
+                        role === "ROLE_ADMIN" ||
+                        reply.userId === userId
                           ? "blur(0px)"
                           : "blur(10px)",
                     }}
-                    image={"https://i10b105.p.ssafy.io/api/files/thumbnail/" + reply.thumbnailUrl}
+                    image={
+                      "https://i10b105.p.ssafy.io/api/files/thumbnail/" +
+                      reply.thumbnailUrl
+                    }
                     alt="Thumbnail Image"
                   />
                   <CardContent>

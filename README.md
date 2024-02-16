@@ -43,6 +43,8 @@
 
 ## 🔧 서비스 기능
 
+![](Readme/Archiview_PT.mp4)
+
 | 기능          | NON-LOGIN | LOGIN-USER | MEMBER | ADMIN |
 | ------------- | --------- | ---------- | ------ | ----- |
 | 취업 캘린더   | O         | O          | O      | O     |

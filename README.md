@@ -112,47 +112,37 @@ BACK-END
 ├─Archiview
 │  ├─gradle
 │  └─src
-│      ├─main
-│      │  ├─java
-│      │  │  └─com
-│      │  │      └─####
-│      │  │          └─archiview
-│      │  │              ├─config
-│      │  │              ├─controller
-│      │  │              ├─dto
-│      │  │              ├─entity
-│      │  │              ├─filter
-│      │  │              ├─jwt
-│      │  │              ├─repository
-│      │  │              ├─response
-│      │  │              ├─service
-│      │  │              └─validation
-│      │  └─resources
-│      │      └─ssl
-│      └─test
-│          └─java
-│              └─com
-│                  └─####
-│                      └─archiview
+│      └─main
+│         ├─java
+│         │  └─com
+│         │      └─####
+│         │          └─archiview
+│         │              ├─config
+│         │              ├─controller
+│         │              ├─dto
+│         │              ├─entity
+│         │              ├─filter
+│         │              ├─jwt
+│         │              ├─repository
+│         │              ├─response
+│         │              ├─service
+│         │              └─validation
+│         └─resources
+│             └─ssl
+│
 └─SignalingServer
     ├─gradle
     │  └─wrapper
     └─src
-        ├─main
-        │  ├─java
-        │  │  └─com
-        │  │      └─####
-        │  │          └─archiview
-        │  │              └─signalingserver
-        │  │                  ├─config
-        │  │                  └─controller
-        │  └─resources
-        │      └─ssl
-        └─test
-            └─java
-                └─com
-                    └─####
-                        └─archiview
-                            └─signalingserver
+        └─main
+           ├─java
+           │  └─com
+           │      └─####
+           │          └─archiview
+           │              └─signalingserver
+           │                  ├─config
+           │                  └─controller
+           └─resources
+               └─ssl
 
 ```

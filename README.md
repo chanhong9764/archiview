@@ -112,47 +112,37 @@ BACK-END
 ├─Archiview
 │  ├─gradle
 │  └─src
-│      ├─main
-│      │  ├─java
-│      │  │  └─com
-│      │  │      └─ssafy
-│      │  │          └─archiview
-│      │  │              ├─config
-│      │  │              ├─controller
-│      │  │              ├─dto
-│      │  │              ├─entity
-│      │  │              ├─filter
-│      │  │              ├─jwt
-│      │  │              ├─repository
-│      │  │              ├─response
-│      │  │              ├─service
-│      │  │              └─validation
-│      │  └─resources
-│      │      └─ssl
-│      └─test
-│          └─java
-│              └─com
-│                  └─ssafy
-│                      └─archiview
+│      └─main
+│         ├─java
+│         │  └─com
+│         │      └─ssafy
+│         │          └─archiview
+│         │              ├─config
+│         │              ├─controller
+│         │              ├─dto
+│         │              ├─entity
+│         │              ├─filter
+│         │              ├─jwt
+│         │              ├─repository
+│         │              ├─response
+│         │              ├─service
+│         │              └─validation
+│         └─resources
+│             └─ssl
+│
 └─SignalingServer
     ├─gradle
     │  └─wrapper
     └─src
-        ├─main
-        │  ├─java
-        │  │  └─com
-        │  │      └─ssafy
-        │  │          └─archiview
-        │  │              └─signalingserver
-        │  │                  ├─config
-        │  │                  └─controller
-        │  └─resources
-        │      └─ssl
-        └─test
-            └─java
-                └─com
-                    └─ssafy
-                        └─archiview
-                            └─signalingserver
+        └─main
+           ├─java
+           │  └─com
+           │      └─ssafy
+           │          └─archiview
+           │              └─signalingserver
+           │                  ├─config
+           │                  └─controller
+           └─resources
+               └─ssl
 
 ```

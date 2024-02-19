@@ -1,16 +1,16 @@
-package com.####.archiview.controller.reply;
+package com.ssafy.archiview.controller.reply;
 
-import com.####.archiview.dto.comment.CommentDto;
-import com.####.archiview.dto.reply.ReplyDto;
-import com.####.archiview.response.code.SuccessCode;
-import com.####.archiview.response.structure.SuccessResponse;
-import com.####.archiview.service.reply.ReplyService;
+import com.ssafy.archiview.dto.comment.CommentDto;
+import com.ssafy.archiview.dto.reply.ReplyDto;
+import com.ssafy.archiview.response.code.SuccessCode;
+import com.ssafy.archiview.response.structure.SuccessResponse;
+import com.ssafy.archiview.service.reply.ReplyService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import com.####.archiview.jwt.jwtUtil;
+import com.ssafy.archiview.jwt.jwtUtil;
 
 import java.util.List;
 

@@ -1,12 +1,12 @@
-package com.####.archiview.filter;
+package com.ssafy.archiview.filter;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.####.archiview.dto.user.CustomUserDetails;
-import com.####.archiview.jwt.jwtUtil;
-import com.####.archiview.response.code.ErrorCode;
-import com.####.archiview.response.structure.ErrorResponse;
-import com.####.archiview.service.user.CustomUserDetailsService;
+import com.ssafy.archiview.dto.user.CustomUserDetails;
+import com.ssafy.archiview.jwt.jwtUtil;
+import com.ssafy.archiview.response.code.ErrorCode;
+import com.ssafy.archiview.response.structure.ErrorResponse;
+import com.ssafy.archiview.service.user.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

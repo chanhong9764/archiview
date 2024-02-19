@@ -1,7 +1,7 @@
-package com.####.archiview.response.structure;
+package com.ssafy.archiview.response.structure;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.####.archiview.response.code.SuccessCode;
+import com.ssafy.archiview.response.code.SuccessCode;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

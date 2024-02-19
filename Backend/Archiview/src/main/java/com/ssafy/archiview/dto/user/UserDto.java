@@ -1,11 +1,11 @@
-package com.####.archiview.dto.user;
+package com.ssafy.archiview.dto.user;
 
-import com.####.archiview.entity.Role;
-import com.####.archiview.entity.User;
-import com.####.archiview.validation.user.UserEmail;
-import com.####.archiview.validation.user.UserId;
-import com.####.archiview.validation.user.UserName;
-import com.####.archiview.validation.user.UserPassword;
+import com.ssafy.archiview.entity.Role;
+import com.ssafy.archiview.entity.User;
+import com.ssafy.archiview.validation.user.UserEmail;
+import com.ssafy.archiview.validation.user.UserId;
+import com.ssafy.archiview.validation.user.UserName;
+import com.ssafy.archiview.validation.user.UserPassword;
 import lombok.*;
 
 public class UserDto {

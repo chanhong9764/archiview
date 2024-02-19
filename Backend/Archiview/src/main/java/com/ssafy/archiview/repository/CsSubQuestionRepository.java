@@ -1,7 +1,7 @@
-package com.####.archiview.repository;
+package com.ssafy.archiview.repository;
 
-import com.####.archiview.entity.CsSub;
-import com.####.archiview.entity.CsSubQuestion;
+import com.ssafy.archiview.entity.CsSub;
+import com.ssafy.archiview.entity.CsSubQuestion;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,13 +1,13 @@
-package com.####.archiview.controller.user;
+package com.ssafy.archiview.controller.user;
 
-import com.####.archiview.dto.token.EmailTokenDto;
-import com.####.archiview.dto.user.UserDto;
-import com.####.archiview.entity.User;
-import com.####.archiview.jwt.jwtUtil;
-import com.####.archiview.response.code.SuccessCode;
-import com.####.archiview.response.structure.SuccessResponse;
-import com.####.archiview.service.user.MailService;
-import com.####.archiview.service.user.UserService;
+import com.ssafy.archiview.dto.token.EmailTokenDto;
+import com.ssafy.archiview.dto.user.UserDto;
+import com.ssafy.archiview.entity.User;
+import com.ssafy.archiview.jwt.jwtUtil;
+import com.ssafy.archiview.response.code.SuccessCode;
+import com.ssafy.archiview.response.structure.SuccessResponse;
+import com.ssafy.archiview.service.user.MailService;
+import com.ssafy.archiview.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

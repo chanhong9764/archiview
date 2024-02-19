@@ -1,4 +1,4 @@
-package com.####.archiview.dto.token;
+package com.ssafy.archiview.dto.token;
 
 import lombok.*;
 

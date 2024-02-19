@@ -1,8 +1,8 @@
-package com.####.archiview.filter;
+package com.ssafy.archiview.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.####.archiview.response.code.ErrorCode;
-import com.####.archiview.response.structure.ErrorResponse;
+import com.ssafy.archiview.response.code.ErrorCode;
+import com.ssafy.archiview.response.structure.ErrorResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.UnsupportedJwtException;

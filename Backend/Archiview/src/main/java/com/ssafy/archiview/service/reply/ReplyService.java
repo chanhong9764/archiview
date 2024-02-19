@@ -1,8 +1,8 @@
-package com.####.archiview.service.reply;
+package com.ssafy.archiview.service.reply;
 
-import com.####.archiview.dto.comment.CommentDto;
-import com.####.archiview.dto.reply.ReplyDto;
-import com.####.archiview.entity.Reply;
+import com.ssafy.archiview.dto.comment.CommentDto;
+import com.ssafy.archiview.dto.reply.ReplyDto;
+import com.ssafy.archiview.entity.Reply;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.####.archiview.signalingserver;
+package com.ssafy.archiview.signalingserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

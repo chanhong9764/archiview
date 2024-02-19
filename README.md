@@ -115,7 +115,7 @@ BACK-END
 │      └─main
 │         ├─java
 │         │  └─com
-│         │      └─####
+│         │      └─ssafy
 │         │          └─archiview
 │         │              ├─config
 │         │              ├─controller
@@ -137,7 +137,7 @@ BACK-END
         └─main
            ├─java
            │  └─com
-           │      └─####
+           │      └─ssafy
            │          └─archiview
            │              └─signalingserver
            │                  ├─config

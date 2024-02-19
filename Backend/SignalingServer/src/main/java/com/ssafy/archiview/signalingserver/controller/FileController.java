@@ -1,4 +1,4 @@
-package com.####.archiview.signalingserver.controller;
+package com.ssafy.archiview.signalingserver.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

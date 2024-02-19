@@ -1,9 +1,9 @@
-package com.####.archiview.response.handler;
+package com.ssafy.archiview.response.handler;
 
-import com.####.archiview.response.code.ErrorCode;
-import com.####.archiview.response.code.ResponseCode;
-import com.####.archiview.response.exception.RestApiException;
-import com.####.archiview.response.structure.ErrorResponse;
+import com.ssafy.archiview.response.code.ErrorCode;
+import com.ssafy.archiview.response.code.ResponseCode;
+import com.ssafy.archiview.response.exception.RestApiException;
+import com.ssafy.archiview.response.structure.ErrorResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;

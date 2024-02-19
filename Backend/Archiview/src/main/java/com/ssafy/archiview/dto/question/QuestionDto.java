@@ -1,7 +1,7 @@
-package com.####.archiview.dto.question;
+package com.ssafy.archiview.dto.question;
 
-import com.####.archiview.dto.reply.ReplyDto;
-import com.####.archiview.entity.Question;
+import com.ssafy.archiview.dto.reply.ReplyDto;
+import com.ssafy.archiview.entity.Question;
 import lombok.*;
 
 import java.util.List;

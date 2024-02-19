@@ -1,8 +1,8 @@
-package com.####.archiview.service.common;
+package com.ssafy.archiview.service.common;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.####.archiview.dto.common.CommonDto;
-import com.####.archiview.dto.company.CompanyDto;
+import com.ssafy.archiview.dto.common.CommonDto;
+import com.ssafy.archiview.dto.company.CompanyDto;
 
 import java.util.List;
 

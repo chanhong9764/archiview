@@ -1,6 +1,6 @@
-package com.####.archiview.dto.company;
+package com.ssafy.archiview.dto.company;
 
-import com.####.archiview.dto.question.QuestionDto;
+import com.ssafy.archiview.dto.question.QuestionDto;
 import lombok.Builder;
 import lombok.Getter;
 

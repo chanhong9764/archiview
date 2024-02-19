@@ -1,4 +1,4 @@
-package com.####.archiview.response.code;
+package com.ssafy.archiview.response.code;
 
 import org.springframework.http.HttpStatus;
 

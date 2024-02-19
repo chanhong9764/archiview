@@ -1,9 +1,9 @@
-package com.####.archiview.controller.token;
+package com.ssafy.archiview.controller.token;
 
-import com.####.archiview.dto.token.TokenDto;
-import com.####.archiview.response.code.SuccessCode;
-import com.####.archiview.response.structure.SuccessResponse;
-import com.####.archiview.service.token.TokenService;
+import com.ssafy.archiview.dto.token.TokenDto;
+import com.ssafy.archiview.response.code.SuccessCode;
+import com.ssafy.archiview.response.structure.SuccessResponse;
+import com.ssafy.archiview.service.token.TokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

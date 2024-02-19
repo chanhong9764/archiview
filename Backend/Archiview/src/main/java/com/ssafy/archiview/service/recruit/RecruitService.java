@@ -1,7 +1,7 @@
-package com.####.archiview.service.recruit;
+package com.ssafy.archiview.service.recruit;
 
-import com.####.archiview.dto.recruit.RecruitDto;
-import com.####.archiview.entity.Recruit;
+import com.ssafy.archiview.dto.recruit.RecruitDto;
+import com.ssafy.archiview.entity.Recruit;
 
 import java.util.List;
 

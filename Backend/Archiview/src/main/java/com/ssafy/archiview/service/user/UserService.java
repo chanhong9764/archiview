@@ -1,7 +1,7 @@
-package com.####.archiview.service.user;
+package com.ssafy.archiview.service.user;
 
-import com.####.archiview.dto.user.UserDto;
-import com.####.archiview.entity.User;
+import com.ssafy.archiview.dto.user.UserDto;
+import com.ssafy.archiview.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;

@@ -1,10 +1,10 @@
-package com.####.archiview.service.question;
+package com.ssafy.archiview.service.question;
 
-import com.####.archiview.dto.question.QuestionDto;
-import com.####.archiview.entity.Question;
-import com.####.archiview.repository.Question.QuestionRepository;
-import com.####.archiview.response.code.ErrorCode;
-import com.####.archiview.response.exception.RestApiException;
+import com.ssafy.archiview.dto.question.QuestionDto;
+import com.ssafy.archiview.entity.Question;
+import com.ssafy.archiview.repository.Question.QuestionRepository;
+import com.ssafy.archiview.response.code.ErrorCode;
+import com.ssafy.archiview.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

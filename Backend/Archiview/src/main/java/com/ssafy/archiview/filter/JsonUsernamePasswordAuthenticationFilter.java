@@ -1,16 +1,16 @@
-package com.####.archiview.filter;
+package com.ssafy.archiview.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.####.archiview.dto.token.TokenDto;
-import com.####.archiview.dto.user.CustomUserDetails;
-import com.####.archiview.dto.user.UserDto;
-import com.####.archiview.entity.RefreshToken;
-import com.####.archiview.repository.RefreshTokenRepository;
-import com.####.archiview.entity.User;
-import com.####.archiview.jwt.jwtUtil;
-import com.####.archiview.repository.UserRepository;
-import com.####.archiview.response.code.ErrorCode;
-import com.####.archiview.response.code.SuccessCode;
+import com.ssafy.archiview.dto.token.TokenDto;
+import com.ssafy.archiview.dto.user.CustomUserDetails;
+import com.ssafy.archiview.dto.user.UserDto;
+import com.ssafy.archiview.entity.RefreshToken;
+import com.ssafy.archiview.repository.RefreshTokenRepository;
+import com.ssafy.archiview.entity.User;
+import com.ssafy.archiview.jwt.jwtUtil;
+import com.ssafy.archiview.repository.UserRepository;
+import com.ssafy.archiview.response.code.ErrorCode;
+import com.ssafy.archiview.response.code.SuccessCode;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

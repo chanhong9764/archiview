@@ -1,7 +1,7 @@
-package com.####.archiview.repository;
+package com.ssafy.archiview.repository;
 
-import com.####.archiview.entity.Comment;
-import com.####.archiview.entity.Like;
+import com.ssafy.archiview.entity.Comment;
+import com.ssafy.archiview.entity.Like;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

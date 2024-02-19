@@ -1,4 +1,4 @@
-package com.####.archiview;
+package com.ssafy.archiview;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

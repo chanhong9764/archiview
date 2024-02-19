@@ -1,6 +1,6 @@
-package com.####.archiview.dto.user;
+package com.ssafy.archiview.dto.user;
 
-import com.####.archiview.entity.User;
+import com.ssafy.archiview.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

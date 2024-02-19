@@ -1,10 +1,10 @@
-package com.####.archiview.dto.reply;
+package com.ssafy.archiview.dto.reply;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.####.archiview.dto.comment.CommentDto;
-import com.####.archiview.dto.question.QuestionDto;
-import com.####.archiview.entity.*;
+import com.ssafy.archiview.dto.comment.CommentDto;
+import com.ssafy.archiview.dto.question.QuestionDto;
+import com.ssafy.archiview.entity.*;
 import lombok.*;
 
 import java.util.ArrayList;

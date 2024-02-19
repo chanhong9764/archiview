@@ -1,6 +1,6 @@
-package com.####.archiview.entity;
+package com.ssafy.archiview.entity;
 
-import com.####.archiview.dto.recruit.RecruitDto;
+import com.ssafy.archiview.dto.recruit.RecruitDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

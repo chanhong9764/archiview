@@ -1,4 +1,4 @@
-package com.####.archiview.signalingserver.controller;
+package com.ssafy.archiview.signalingserver.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;

@@ -1,9 +1,9 @@
-package com.####.archiview.jwt;
+package com.ssafy.archiview.jwt;
 
-import com.####.archiview.dto.token.EmailTokenDto;
-import com.####.archiview.dto.token.TokenDto;
-import com.####.archiview.response.code.ErrorCode;
-import com.####.archiview.response.exception.RestApiException;
+import com.ssafy.archiview.dto.token.EmailTokenDto;
+import com.ssafy.archiview.dto.token.TokenDto;
+import com.ssafy.archiview.response.code.ErrorCode;
+import com.ssafy.archiview.response.exception.RestApiException;
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,6 +1,6 @@
-package com.####.archiview.entity;
+package com.ssafy.archiview.entity;
 
-import com.####.archiview.dto.question.QuestionDto;
+import com.ssafy.archiview.dto.question.QuestionDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;

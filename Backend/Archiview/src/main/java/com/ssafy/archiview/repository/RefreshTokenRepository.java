@@ -1,8 +1,8 @@
-package com.####.archiview.repository;
+package com.ssafy.archiview.repository;
 
-import com.####.archiview.entity.RefreshToken;
-import com.####.archiview.response.code.ErrorCode;
-import com.####.archiview.response.exception.RestApiException;
+import com.ssafy.archiview.entity.RefreshToken;
+import com.ssafy.archiview.response.code.ErrorCode;
+import com.ssafy.archiview.response.exception.RestApiException;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

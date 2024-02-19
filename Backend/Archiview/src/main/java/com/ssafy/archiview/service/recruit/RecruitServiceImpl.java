@@ -1,12 +1,12 @@
-package com.####.archiview.service.recruit;
+package com.ssafy.archiview.service.recruit;
 
-import com.####.archiview.dto.recruit.RecruitDto;
-import com.####.archiview.entity.Question;
-import com.####.archiview.entity.Recruit;
-import com.####.archiview.repository.Question.QuestionRepository;
-import com.####.archiview.repository.Recruit.RecruitRepository;
-import com.####.archiview.response.code.ErrorCode;
-import com.####.archiview.response.exception.RestApiException;
+import com.ssafy.archiview.dto.recruit.RecruitDto;
+import com.ssafy.archiview.entity.Question;
+import com.ssafy.archiview.entity.Recruit;
+import com.ssafy.archiview.repository.Question.QuestionRepository;
+import com.ssafy.archiview.repository.Recruit.RecruitRepository;
+import com.ssafy.archiview.response.code.ErrorCode;
+import com.ssafy.archiview.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

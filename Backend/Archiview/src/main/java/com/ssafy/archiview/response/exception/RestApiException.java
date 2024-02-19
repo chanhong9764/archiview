@@ -1,6 +1,6 @@
-package com.####.archiview.response.exception;
+package com.ssafy.archiview.response.exception;
 
-import com.####.archiview.response.code.ResponseCode;
+import com.ssafy.archiview.response.code.ResponseCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

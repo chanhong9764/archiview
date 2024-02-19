@@ -1,4 +1,4 @@
-package com.####.archiview.signalingserver.config;
+package com.ssafy.archiview.signalingserver.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

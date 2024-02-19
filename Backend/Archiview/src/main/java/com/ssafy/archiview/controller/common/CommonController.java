@@ -1,11 +1,11 @@
-package com.####.archiview.controller.common;
+package com.ssafy.archiview.controller.common;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.####.archiview.dto.common.CommonDto;
-import com.####.archiview.dto.company.CompanyDto;
-import com.####.archiview.response.code.SuccessCode;
-import com.####.archiview.response.structure.SuccessResponse;
-import com.####.archiview.service.common.CommonService;
+import com.ssafy.archiview.dto.common.CommonDto;
+import com.ssafy.archiview.dto.company.CompanyDto;
+import com.ssafy.archiview.response.code.SuccessCode;
+import com.ssafy.archiview.response.structure.SuccessResponse;
+import com.ssafy.archiview.service.common.CommonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,7 +1,7 @@
-package com.####.archiview.dto.recruit;
+package com.ssafy.archiview.dto.recruit;
 
-import com.####.archiview.dto.company.CompanyDto;
-import com.####.archiview.dto.question.QuestionDto;
+import com.ssafy.archiview.dto.company.CompanyDto;
+import com.ssafy.archiview.dto.question.QuestionDto;
 import lombok.*;
 
 import java.time.LocalDateTime;

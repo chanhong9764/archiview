@@ -1,6 +1,6 @@
-package com.####.archiview.repository;
+package com.ssafy.archiview.repository;
 
-import com.####.archiview.entity.*;
+import com.ssafy.archiview.entity.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

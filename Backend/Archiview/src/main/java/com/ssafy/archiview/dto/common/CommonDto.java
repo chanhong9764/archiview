@@ -1,6 +1,6 @@
-package com.####.archiview.dto.common;
+package com.ssafy.archiview.dto.common;
 
-import com.####.archiview.entity.CsSub;
+import com.ssafy.archiview.entity.CsSub;
 import lombok.*;
 
 import java.util.List;

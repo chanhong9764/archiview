@@ -1,9 +1,9 @@
-package com.####.archiview.repository.Question;
+package com.ssafy.archiview.repository.Question;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.####.archiview.dto.question.QuestionDto;
-import com.####.archiview.entity.*;
+import com.ssafy.archiview.dto.question.QuestionDto;
+import com.ssafy.archiview.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
 

@@ -1,7 +1,7 @@
-package com.####.archiview.repository.Question;
+package com.ssafy.archiview.repository.Question;
 
-import com.####.archiview.entity.Question;
-import com.####.archiview.entity.Recruit;
+import com.ssafy.archiview.entity.Question;
+import com.ssafy.archiview.entity.Recruit;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

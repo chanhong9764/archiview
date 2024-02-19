@@ -36,7 +36,7 @@ spring:
       host: redis
 #      host: 127.0.0.1
       port: 6379
-#      password: ####
+#      password: ssafyb105
 
 # jwt secret key
 jwt:
@@ -53,7 +53,7 @@ server:
     enabled: true
     key-store: classpath:/ssl/keystore.p12
     key-store-type: PKCS12
-    key-store-password: ####
+    key-store-password: ssafyb105
 
 logging:
   level:

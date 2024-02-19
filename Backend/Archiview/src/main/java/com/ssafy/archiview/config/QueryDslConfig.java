@@ -1,4 +1,4 @@
-package com.####.archiview.config;
+package com.ssafy.archiview.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

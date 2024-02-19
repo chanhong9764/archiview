@@ -1,4 +1,4 @@
-package com.####.archiview.response.code;
+package com.ssafy.archiview.response.code;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

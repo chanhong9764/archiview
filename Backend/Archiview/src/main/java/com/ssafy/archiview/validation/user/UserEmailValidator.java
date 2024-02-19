@@ -1,4 +1,4 @@
-package com.####.archiview.validation.user;
+package com.ssafy.archiview.validation.user;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

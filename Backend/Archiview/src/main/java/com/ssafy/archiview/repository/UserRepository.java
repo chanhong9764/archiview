@@ -1,8 +1,8 @@
-package com.####.archiview.repository;
+package com.ssafy.archiview.repository;
 
-import com.####.archiview.entity.User;
-import com.####.archiview.response.code.ErrorCode;
-import com.####.archiview.response.exception.RestApiException;
+import com.ssafy.archiview.entity.User;
+import com.ssafy.archiview.response.code.ErrorCode;
+import com.ssafy.archiview.response.exception.RestApiException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

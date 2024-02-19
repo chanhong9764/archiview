@@ -1,12 +1,12 @@
-package com.####.archiview.config;
+package com.ssafy.archiview.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.####.archiview.filter.JwtAccessDeniedHandler;
-import com.####.archiview.filter.JwtExceptionHandlerFilter;
-import com.####.archiview.jwt.*;
-import com.####.archiview.filter.JsonUsernamePasswordAuthenticationFilter;
-import com.####.archiview.filter.JwtAuthFilter;
-import com.####.archiview.service.user.CustomUserDetailsService;
+import com.ssafy.archiview.filter.JwtAccessDeniedHandler;
+import com.ssafy.archiview.filter.JwtExceptionHandlerFilter;
+import com.ssafy.archiview.jwt.*;
+import com.ssafy.archiview.filter.JsonUsernamePasswordAuthenticationFilter;
+import com.ssafy.archiview.filter.JwtAuthFilter;
+import com.ssafy.archiview.service.user.CustomUserDetailsService;
 import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

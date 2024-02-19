@@ -1,4 +1,4 @@
-package com.####.archiview.jwt;
+package com.ssafy.archiview.jwt;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

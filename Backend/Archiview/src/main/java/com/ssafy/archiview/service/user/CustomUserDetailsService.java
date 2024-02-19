@@ -1,10 +1,10 @@
-package com.####.archiview.service.user;
+package com.ssafy.archiview.service.user;
 
-import com.####.archiview.dto.user.CustomUserDetails;
-import com.####.archiview.entity.User;
-import com.####.archiview.repository.UserRepository;
-import com.####.archiview.response.code.ErrorCode;
-import com.####.archiview.response.exception.RestApiException;
+import com.ssafy.archiview.dto.user.CustomUserDetails;
+import com.ssafy.archiview.entity.User;
+import com.ssafy.archiview.repository.UserRepository;
+import com.ssafy.archiview.response.code.ErrorCode;
+import com.ssafy.archiview.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,4 +1,4 @@
-package com.####.archiview.entity;
+package com.ssafy.archiview.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

@@ -1,13 +1,13 @@
-package com.####.archiview.controller.admin;
+package com.ssafy.archiview.controller.admin;
 
 
 
-import com.####.archiview.dto.user.UserDto;
-import com.####.archiview.response.code.SuccessCode;
-import com.####.archiview.response.structure.SuccessResponse;
-import com.####.archiview.service.question.QuestionService;
-import com.####.archiview.service.reply.ReplyService;
-import com.####.archiview.service.user.UserService;
+import com.ssafy.archiview.dto.user.UserDto;
+import com.ssafy.archiview.response.code.SuccessCode;
+import com.ssafy.archiview.response.structure.SuccessResponse;
+import com.ssafy.archiview.service.question.QuestionService;
+import com.ssafy.archiview.service.reply.ReplyService;
+import com.ssafy.archiview.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

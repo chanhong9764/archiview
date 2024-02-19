@@ -1,4 +1,4 @@
-package com.####.archiview.dto.mail;
+package com.ssafy.archiview.dto.mail;
 
 public class MailDto {
     private String receiver;

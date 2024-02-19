@@ -1,6 +1,6 @@
-package com.####.archiview.dto.token;
+package com.ssafy.archiview.dto.token;
 
-import com.####.archiview.entity.Role;
+import com.ssafy.archiview.entity.Role;
 import lombok.*;
 
 @Getter

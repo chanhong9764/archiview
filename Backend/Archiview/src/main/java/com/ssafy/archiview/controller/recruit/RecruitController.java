@@ -1,11 +1,11 @@
-package com.####.archiview.controller.recruit;
+package com.ssafy.archiview.controller.recruit;
 
 import com.querydsl.core.BooleanBuilder;
-import com.####.archiview.dto.recruit.RecruitDto;
-import com.####.archiview.entity.Recruit;
-import com.####.archiview.response.code.SuccessCode;
-import com.####.archiview.response.structure.SuccessResponse;
-import com.####.archiview.service.recruit.RecruitService;
+import com.ssafy.archiview.dto.recruit.RecruitDto;
+import com.ssafy.archiview.entity.Recruit;
+import com.ssafy.archiview.response.code.SuccessCode;
+import com.ssafy.archiview.response.structure.SuccessResponse;
+import com.ssafy.archiview.service.recruit.RecruitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

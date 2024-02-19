@@ -1,6 +1,6 @@
-package com.####.archiview.service.question;
+package com.ssafy.archiview.service.question;
 
-import com.####.archiview.dto.question.QuestionDto;
+import com.ssafy.archiview.dto.question.QuestionDto;
 
 import java.util.List;
 

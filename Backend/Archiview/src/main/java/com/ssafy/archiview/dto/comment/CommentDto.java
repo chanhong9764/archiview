@@ -1,8 +1,8 @@
-package com.####.archiview.dto.comment;
+package com.ssafy.archiview.dto.comment;
 
-import com.####.archiview.entity.Comment;
-import com.####.archiview.entity.Reply;
-import com.####.archiview.entity.User;
+import com.ssafy.archiview.entity.Comment;
+import com.ssafy.archiview.entity.Reply;
+import com.ssafy.archiview.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

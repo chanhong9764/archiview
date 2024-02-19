@@ -1,4 +1,4 @@
-package com.####.archiview.config;
+package com.ssafy.archiview.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

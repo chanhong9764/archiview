@@ -1,12 +1,12 @@
-package com.####.archiview.repository.Recruit;
+package com.ssafy.archiview.repository.Recruit;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.####.archiview.dto.recruit.RecruitDto;
-import com.####.archiview.entity.QRecruit;
-import com.####.archiview.entity.Recruit;
+import com.ssafy.archiview.dto.recruit.RecruitDto;
+import com.ssafy.archiview.entity.QRecruit;
+import com.ssafy.archiview.entity.Recruit;
 import lombok.RequiredArgsConstructor;
 
 import java.text.SimpleDateFormat;

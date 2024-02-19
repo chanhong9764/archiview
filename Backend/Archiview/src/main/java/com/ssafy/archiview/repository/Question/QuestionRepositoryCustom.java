@@ -1,7 +1,7 @@
-package com.####.archiview.repository.Question;
+package com.ssafy.archiview.repository.Question;
 
-import com.####.archiview.dto.question.QuestionDto;
-import com.####.archiview.entity.Question;
+import com.ssafy.archiview.dto.question.QuestionDto;
+import com.ssafy.archiview.entity.Question;
 
 import java.util.List;
 

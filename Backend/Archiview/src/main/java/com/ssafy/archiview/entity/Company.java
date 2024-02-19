@@ -1,7 +1,7 @@
-package com.####.archiview.entity;
+package com.ssafy.archiview.entity;
 
-import com.####.archiview.dto.common.CommonDto;
-import com.####.archiview.dto.company.CompanyDto;
+import com.ssafy.archiview.dto.common.CommonDto;
+import com.ssafy.archiview.dto.company.CompanyDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

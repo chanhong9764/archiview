@@ -2,9 +2,11 @@ package com.####.archiview.service.user;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.####.archiview.dto.user.UserDto;
+import com.####.archiview.entity.RefreshToken;
 import com.####.archiview.entity.Role;
 import com.####.archiview.entity.User;
 import com.####.archiview.jwt.jwtUtil;
+import com.####.archiview.repository.RefreshTokenRepository;
 import com.####.archiview.repository.UserRepository;
 import com.####.archiview.response.code.ErrorCode;
 import com.####.archiview.response.exception.RestApiException;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService{
     private final UserRepository repository;
+    private final RefreshTokenRepository tokenRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final jwtUtil jwtUtil;
 
@@ -41,9 +44,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public void userLogout(HttpServletRequest request) {
         String userId = jwtUtil.getUsername(request);
-        User user = repository.getById(userId);
-        user.updateRefreshToken(null);  // refreshToken 삭제
-        repository.save(user);
+        RefreshToken token = tokenRepository.getById(userId);
+        tokenRepository.delete(token);
+//        User user = repository.getById(userId);
+//        user.updateRefreshToken(null);  // refreshToken 삭제
+//        repository.save(user);
     }
 
     @Override

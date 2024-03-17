@@ -1,0 +1,36 @@
+.content-center {
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  font-size: x-large;
+  font-weight: bold;
+  height: 40px;
+}
+
+.border-line {
+  border-bottom: 1px solid #000;
+}
+
+.content-title {
+  margin-top: 2px;
+}
+
+.listItem {
+  border-top: 1px solid #e0e0e0; /* 위쪽 테두리 추가 */
+  border-bottom: 1px solid #e0e0e0; /* 아래쪽 테두리 추가 */
+  padding: 8px 0; /* 상하 패딩 추가 */
+}
+
+.moreList {
+  display: flex;
+  justify-content: flex-end; /* 오른쪽 정렬 */
+  width: 10px;
+  font-size: 0.775rem; /* 글자 크기 조정 */
+}
+
+.moreList-content:hover {
+  font-weight: bold; /* 호버 시 볼드체 */
+  cursor: pointer;
+}

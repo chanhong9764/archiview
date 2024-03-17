@@ -1,0 +1,57 @@
+.App {
+  min-width: 1000px;
+}
+
+::-webkit-scrollbar {
+  width: 0.2em;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  outline: "1px solid slategray";
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("../font/Pretendard-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Pretendard";
+}
+
+#root,
+.App {
+  min-height: calc(
+    100vh - 50px
+  ); /* 50px는 예시로, 실제 필요한 값을 사용하세요 */
+  display: flex;
+  flex-direction: column;
+}
+
+.Footer {
+  margin-top: auto; /* 푸터를 하단에 고정 */
+}
+
+/* 미디어 쿼리를 사용하여 화면 크기에 따라 스타일을 조정 */
+@media (max-width: 600px) {
+  .App {
+    min-height: calc(100vh - 100px); /* 모바일 환경에서 필요한 높이 조정 */
+  }
+  /* 여기에 모바일 환경을 위한 추가 스타일을 정의할 수 있습니다. */
+}

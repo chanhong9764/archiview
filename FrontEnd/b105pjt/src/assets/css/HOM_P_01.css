@@ -1,0 +1,16 @@
+.hompage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin-top: 75px;
+}
+
+.hompage > div {
+  margin: 10px;
+}
+
+.MuiAutocomplete-inputRoot {
+  padding-right: 9px !important;
+}

@@ -1,13 +1,9 @@
 package com.ssafy.archiview.controller.question;
 
 import com.ssafy.archiview.dto.question.QuestionDto;
-import com.ssafy.archiview.response.code.ErrorCode;
 import com.ssafy.archiview.response.code.SuccessCode;
-import com.ssafy.archiview.response.exception.RestApiException;
 import com.ssafy.archiview.response.structure.SuccessResponse;
 import com.ssafy.archiview.service.question.QuestionService;
-import com.ssafy.archiview.jwt.jwtUtil;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

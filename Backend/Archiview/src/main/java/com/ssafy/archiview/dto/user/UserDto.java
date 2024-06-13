@@ -7,10 +7,10 @@ import com.ssafy.archiview.validation.user.UserId;
 import com.ssafy.archiview.validation.user.UserName;
 import com.ssafy.archiview.validation.user.UserPassword;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class UserDto {
     @Getter
-    @Setter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class AddRequestDto {
         @UserId
@@ -30,6 +30,9 @@ public class UserDto {
             this.name = name;
         }
 
+        public void updatePassword(String pw) {
+            this.pw = pw;
+        }
         public User toEntity() {
             return User.builder()
                     .id(id)

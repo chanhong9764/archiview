@@ -7,7 +7,7 @@ import com.ssafy.archiview.dto.user.UserDto;
 import com.ssafy.archiview.entity.RefreshToken;
 import com.ssafy.archiview.repository.RefreshTokenRepository;
 import com.ssafy.archiview.entity.User;
-import com.ssafy.archiview.jwt.jwtUtil;
+import com.ssafy.archiview.utils.jwtUtil;
 import com.ssafy.archiview.repository.UserRepository;
 import com.ssafy.archiview.response.code.ErrorCode;
 import com.ssafy.archiview.response.code.SuccessCode;
@@ -47,16 +47,11 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
 
     private final ObjectMapper objectMapper;
     @Autowired
-    public JsonUsernamePasswordAuthenticationFilter(ObjectMapper objectMapper, jwtUtil jwtUtil /* ,
-                                                    AuthenticationSuccessHandler authenticationSuccessHandler, // 로그인 성공 시 처리할 핸들러
-                                                    AuthenticationFailureHandler authenticationFailureHandler // 로그인 실패 시 처리할 핸들러 */
-    ) {
+    public JsonUsernamePasswordAuthenticationFilter(ObjectMapper objectMapper, jwtUtil jwtUtil) {
 
         super(DEFAULT_LOGIN_PATH_REQUEST_MATCHER);   // 위에서 설정한 /api/users/login의 요청에, GET으로 온 요청을 처리하기 위해 설정한다.
         this.objectMapper = objectMapper;
         this.jwtUtil = jwtUtil;
-//        setAuthenticationFailureHandler(authenticationFailureHandler);
-//        setAuthenticationSuccessHandler(authenticationSuccessHandler);
     }
 
     @Override

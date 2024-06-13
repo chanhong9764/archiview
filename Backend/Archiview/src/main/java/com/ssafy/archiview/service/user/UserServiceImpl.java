@@ -1,11 +1,10 @@
 package com.ssafy.archiview.service.user;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.archiview.dto.user.UserDto;
 import com.ssafy.archiview.entity.RefreshToken;
 import com.ssafy.archiview.entity.Role;
 import com.ssafy.archiview.entity.User;
-import com.ssafy.archiview.jwt.jwtUtil;
+import com.ssafy.archiview.utils.jwtUtil;
 import com.ssafy.archiview.repository.RefreshTokenRepository;
 import com.ssafy.archiview.repository.UserRepository;
 import com.ssafy.archiview.response.code.ErrorCode;
@@ -13,6 +12,7 @@ import com.ssafy.archiview.response.exception.RestApiException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final RefreshTokenRepository tokenRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService{
             throw new RestApiException(ErrorCode.DUPLICATED_USER);
         });
         // 패스워드 암호화
-        requestDto.setPw(bCryptPasswordEncoder.encode(requestDto.getPw()));
+        requestDto.updatePassword(bCryptPasswordEncoder.encode(requestDto.getPw()));
         repository.save(requestDto.toEntity());
     }
 

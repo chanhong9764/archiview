@@ -9,7 +9,6 @@ import com.ssafy.archiview.entity.QRecruit;
 import com.ssafy.archiview.entity.Recruit;
 import lombok.RequiredArgsConstructor;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 @RequiredArgsConstructor

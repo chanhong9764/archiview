@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import com.ssafy.archiview.jwt.jwtUtil;
+import com.ssafy.archiview.utils.jwtUtil;
 
 import java.util.List;
 

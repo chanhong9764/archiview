@@ -1,18 +1,21 @@
 package com.ssafy.archiview.controller.user;
 
+import com.ssafy.archiview.dto.mail.MailDto;
 import com.ssafy.archiview.dto.token.EmailTokenDto;
 import com.ssafy.archiview.dto.user.UserDto;
 import com.ssafy.archiview.entity.User;
-import com.ssafy.archiview.jwt.jwtUtil;
+import com.ssafy.archiview.utils.jwtUtil;
 import com.ssafy.archiview.response.code.SuccessCode;
 import com.ssafy.archiview.response.structure.SuccessResponse;
 import com.ssafy.archiview.service.user.MailService;
 import com.ssafy.archiview.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 @CrossOrigin("*")
 @RequiredArgsConstructor
@@ -82,8 +85,8 @@ public class UserController {
 
     @PatchMapping  // 프로필, 자기소개 변경
     public ResponseEntity<Object> updateUserDetail(@RequestBody UserDto.userDetailDto dto, HttpServletRequest request){
-        String userId = jwtUtil.getUsername(request);
-        service.updateUserDetail(dto.getProfileUrl(), dto.getIntroduce(), userId);
+        // String userId = jwtUtil.getUsername(request);
+        service.updateUserDetail(dto.getProfileUrl(), dto.getIntroduce(), "chan9784");
         return SuccessResponse.createSuccess(SuccessCode.PROFILE_UPDATE_SUCCESS);
     }
 
@@ -97,9 +100,14 @@ public class UserController {
 
     @GetMapping("/find-email")  // 아이디, 패스워드 찾기용 이메일 인증 요청
     public ResponseEntity<Object> findMailSend(@RequestParam("email") String email) {
-        int auth_number = mailService.findSendMail(email);
-        EmailTokenDto.findEmailResponseDto dto = jwtUtil.createEmailToken(email, auth_number);
-        return SuccessResponse.createSuccess(SuccessCode.EMAIL_SUCCESS, dto);
+        mailService.findSendMail(email);
+        return SuccessResponse.createSuccess(SuccessCode.EMAIL_SUCCESS);
+    }
+
+    @PostMapping("/check-auth")
+    public ResponseEntity<Object> checkAuth(@RequestBody MailDto.authRequestDto dto) {
+        mailService.checkAuth(dto);
+        return SuccessResponse.createSuccess(SuccessCode.AUTH_SUCCESS);
     }
 
     @PreAuthorize("hasRole('USER')")

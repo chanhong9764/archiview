@@ -1,4 +1,4 @@
-package com.ssafy.archiview.jwt;
+package com.ssafy.archiview.utils;
 
 import com.ssafy.archiview.dto.token.EmailTokenDto;
 import com.ssafy.archiview.dto.token.TokenDto;
@@ -48,7 +48,10 @@ public class jwtUtil {
                 .expiration(new Date(System.currentTimeMillis() + refreshTokenValidTime))
                 .signWith(secretKey)
                 .compact();
-        return new TokenDto.createTokenDto(accessToken, refreshToken);
+        return TokenDto.createTokenDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 
     public String createAccessToken(String userId, String role){
@@ -68,7 +71,10 @@ public class jwtUtil {
                 .expiration(new Date(System.currentTimeMillis() + emailTokenValidTime))  // 토큰 만료 시간
                 .signWith(secretKey)
                 .compact();
-        return new EmailTokenDto.findEmailResponseDto(emailToken, auth_number);
+        return EmailTokenDto.findEmailResponseDto.builder()
+                .emailToken(emailToken)
+                .authNumber(auth_number)
+                .build();
     }
 
     public String getUsername(HttpServletRequest request) {  // 아이디를 검증하는 메서드

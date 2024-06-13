@@ -28,6 +28,7 @@ public enum ErrorCode implements ResponseCode {
     UPDATE_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "이미 승인된 사용자입니다."),
     BLOCK_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "이미 정지된 사용자입니다."),
     UPGRADE_NOT_ACCEPTED(HttpStatus.BAD_REQUEST, "등업 신청에 실패했습니다."),
+    INVALID_NUMBER(HttpStatus.UNAUTHORIZED, "인증번호가 일치하지 않습니다."),
 
     /*
         QUESTION

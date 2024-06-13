@@ -10,14 +10,15 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.domain.Persistable;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+
 @Entity
 @Getter
 @DynamicInsert
+@DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User implements Persistable<String> {
     @Id
@@ -90,17 +91,6 @@ public class User implements Persistable<String> {
     @Override
     public boolean isNew() {
         return this.createdAt == null;
-    }
-
-    public UserDto.logoutDto toLogoutDto(){
-        return UserDto.logoutDto.builder()
-                .id(id)
-                .email(email)
-                .name(name)
-                .introduce(introduce)
-                .profileUrl(profileUrl)
-                .role(role)
-                .build();
     }
 
     public UserDto.DetailResponseDto toDetailResponseDto() {

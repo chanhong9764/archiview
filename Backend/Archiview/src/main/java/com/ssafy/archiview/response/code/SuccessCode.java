@@ -26,6 +26,7 @@ public enum SuccessCode implements ResponseCode {
     USER_DOWNGRADE_SUCCESS(HttpStatus.OK, "유저 강등에 성공했습니다."),
     USER_BLOCK_SUCCESS(HttpStatus.OK, "유저 정지에 성공했습니다."),
     USER_APPLY_UPGRADE_SUCCESS(HttpStatus.OK, "등업 신청에 성공했습니다."),
+    AUTH_SUCCESS(HttpStatus.OK, "인증에 성공했습니다."),
     /*
         QUESTION
      */

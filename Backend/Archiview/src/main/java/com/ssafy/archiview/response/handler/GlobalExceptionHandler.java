@@ -48,12 +48,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * RequestBody javax.validation.Valid or @Validated 으로 binding error 발생시 발생
      */
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+    public ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException e,
             HttpHeaders headers,
             HttpStatusCode status,
             WebRequest request) {
-        System.out.println("hihih");
         final ResponseCode responseCode = ErrorCode.INVALID_PARAMETER;
         return handleExceptionInternal(e, responseCode);
     }

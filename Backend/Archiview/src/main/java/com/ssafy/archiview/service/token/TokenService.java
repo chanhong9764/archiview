@@ -3,7 +3,7 @@ package com.ssafy.archiview.service.token;
 import com.ssafy.archiview.dto.token.TokenDto;
 import com.ssafy.archiview.entity.RefreshToken;
 import com.ssafy.archiview.entity.User;
-import com.ssafy.archiview.jwt.jwtUtil;
+import com.ssafy.archiview.utils.jwtUtil;
 import com.ssafy.archiview.repository.RefreshTokenRepository;
 import com.ssafy.archiview.repository.UserRepository;
 import com.ssafy.archiview.response.code.ErrorCode;
@@ -25,7 +25,9 @@ public class TokenService {
 
         if(refreshToken.equals(token.getRefreshToken())){
             String updateToken = jwtUtil.createAccessToken(user.getId(), String.valueOf(user.getRole()));
-            return new TokenDto.updateTokenDto(updateToken);
+            return TokenDto.updateTokenDto.builder()
+                    .accessToken(updateToken)
+                    .build();
         }
         else {
             throw new RestApiException(ErrorCode.UNSUPPORTED_TOKEN);

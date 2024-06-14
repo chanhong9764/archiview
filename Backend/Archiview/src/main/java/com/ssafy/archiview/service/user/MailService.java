@@ -1,7 +1,6 @@
 package com.ssafy.archiview.service.user;
 
 import com.ssafy.archiview.dto.mail.MailDto;
-import com.ssafy.archiview.entity.User;
 import com.ssafy.archiview.repository.UserRepository;
 import com.ssafy.archiview.response.code.ErrorCode;
 import com.ssafy.archiview.response.exception.RestApiException;
@@ -59,25 +58,24 @@ public class MailService {
         return authNumber;
     }
 
-    public int findSendMail(String email){
+    public void findSendMail(String email){
         repository.findByEmail(email).orElseThrow(
                 () -> new RestApiException(ErrorCode.USER_NOT_FOUND));
-        return sendEmail(email);
+        sendEmail(email);
     }
 
-    public int joinSendMail(String email){
+    public void joinSendMail(String email){
         repository.findByEmail(email).ifPresent(user -> {
             throw new RestApiException(ErrorCode.DUPLICATED_USER);
         });
-        return sendEmail(email);
+        sendEmail(email);
     }
 
-    public boolean checkAuth(MailDto.authRequestDto dto) {
+    public void checkAuth(MailDto.authRequestDto dto) {
         String number = redisTemplate.opsForValue().get(dto.getEmail());
 
-        if(StringUtils.hasText(number) && number.equals(dto.getNumber())) {
-            return true;
+        if(!StringUtils.hasText(number) || !number.equals(dto.getNumber())) {
+            throw new RestApiException(ErrorCode.INVALID_NUMBER);
         }
-        throw new RestApiException(ErrorCode.INVALID_NUMBER);
     }
 }

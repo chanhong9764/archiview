@@ -7,6 +7,7 @@ import com.ssafy.archiview.dto.user.UserDto;
 import com.ssafy.archiview.entity.RefreshToken;
 import com.ssafy.archiview.repository.RefreshTokenRepository;
 import com.ssafy.archiview.entity.User;
+import com.ssafy.archiview.response.exception.RestApiException;
 import com.ssafy.archiview.utils.jwtUtil;
 import com.ssafy.archiview.repository.UserRepository;
 import com.ssafy.archiview.response.code.ErrorCode;
@@ -61,7 +62,6 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
         // PrincipalDetailsService의 loadUserByUsername()가 실행됨
         // 3. PrincipalDetails를 세션에 담고 (권한 관리를 위해서)
         // 4. JWT토큰을 만들어서 응답
-        System.out.println("로그인 필터입니다.");
         if (request.getContentType() == null || !request.getContentType().equals(CONTENT_TYPE)) {  // Json 요청이 아니면 에러 발생
             throw new AuthenticationServiceException("Authentication Content-Type not supported: " + request.getContentType());
         }
@@ -92,9 +92,8 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authentication) throws IOException {
-        System.out.println("login success");
         // 유저 권한 추출
-        String authoritie = authentication.getAuthorities().stream()
+        String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
@@ -102,8 +101,11 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
         String userId = customUserDetails.getUsername();  // userId 추출
-        User user = userRepository.findById(userId).get();
-        TokenDto.createTokenDto token = jwtUtil.createJwt(userId, user.getRole().toString());  // 토큰 생성
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RestApiException(ErrorCode.USER_NOT_FOUND));
+
+        TokenDto.createTokenDto token = jwtUtil.createJwt(user.getId(), user.getRole().toString());  // 토큰 생성
 
         UserDto.loginResponseDto responseDto = UserDto.loginResponseDto.builder()
                 .accessToken(token.getAccessToken())
@@ -121,12 +123,14 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
                 .id(user.getId())
                 .refreshToken(token.getRefreshToken())
                 .build();
+
         refreshTokenRepository.save(refreshToken);  // 발급받은 refreshToken을 redis에 저장
 
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("code", SuccessCode.LOGIN_SUCCESS.name());
         map.put("message", SuccessCode.LOGIN_SUCCESS.getMessage());
         map.put("data", responseDto);
+
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.OK.value());
         response.getWriter().write(new ObjectMapper().writeValueAsString(map));

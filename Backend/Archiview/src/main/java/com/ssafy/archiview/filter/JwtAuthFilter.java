@@ -3,6 +3,7 @@ package com.ssafy.archiview.filter;
 import com.ssafy.archiview.dto.user.CustomUserDetails;
 import com.ssafy.archiview.utils.jwtUtil;
 import com.ssafy.archiview.service.user.CustomUserDetailsService;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,53 +11,34 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Slf4j
 @RequiredArgsConstructor
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {  // OncePerRequestFilter : 한번 실행 보장
-    private final CustomUserDetailsService customuserDetailsService;
     private final jwtUtil jwtUtil;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String accessToken = request.getHeader("Authorization");
-        String refreshToken = request.getHeader("RefreshToken");
-        // 헤더에 토큰이 있는 경우
-        if(accessToken != null) {
-          // 토큰 검증
-            if(refreshToken != null){  // 리프레시 토큰이 존재 (엑세스 토큰 재발급 요청)
-                if(jwtUtil.validateToken(refreshToken)) {
-                    setAuthentication(request);
+        String token = jwtUtil.resolveToken(request);
+
+        try {
+            if (token != null && jwtUtil.validateToken(token)) {
+                Authentication authentication = jwtUtil.getAuthentication(token);
+                if(jwtUtil.isValidAccessToken(token)) {
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                } else {
+                    throw new JwtException("만료된 토큰입니다.");
                 }
             }
-            else {  // 재발급 요청 외 모든 요청
-                if(jwtUtil.validateToken(accessToken)) {
-                    setAuthentication(request);
-                }
-            }
+        } catch (JwtException e) {
+            request.setAttribute("exception", e);
         }
         filterChain.doFilter(request, response);  // 다음 필터로 넘김
-    }
-
-    public void setAuthentication(HttpServletRequest request){
-        String userId = jwtUtil.getUsername(request);
-
-        if(userId == null) {  // 이메일 인증 토큰이면 return
-            return;
-        }
-        // 유저와 토큰 일치 시 userDetail 생성
-        CustomUserDetails userDetails = (CustomUserDetails) customuserDetailsService.loadUserByUsername(userId);
-        if (userDetails != null){
-            // UserDetails, Password, Role -> 접근권한 인증 Token 생성
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                    new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
-            // 현재 Request의 Security Context에 접근권한 설정
-            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-        }
     }
 }

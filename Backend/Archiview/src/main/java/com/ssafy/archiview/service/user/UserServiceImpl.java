@@ -1,5 +1,6 @@
 package com.ssafy.archiview.service.user;
 
+import com.ssafy.archiview.dto.token.TokenDto;
 import com.ssafy.archiview.dto.user.UserDto;
 import com.ssafy.archiview.entity.RefreshToken;
 import com.ssafy.archiview.entity.Role;
@@ -11,25 +12,29 @@ import com.ssafy.archiview.response.code.ErrorCode;
 import com.ssafy.archiview.response.exception.RestApiException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final RefreshTokenRepository tokenRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final jwtUtil jwtUtil;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Override
     public void userAdd(UserDto.AddRequestDto requestDto, HttpServletRequest request) {
-        String userEmail = jwtUtil.getUserEmail(request);
+        String userEmail = jwtUtil.getUserEmail(request.getHeader("Authorization"));
         if(!userEmail.equals(requestDto.getEmail())){
             throw new RestApiException(ErrorCode.UNSUPPORTED_TOKEN);
         }
@@ -42,19 +47,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void userLogout(HttpServletRequest request) {
-        String userId = jwtUtil.getUsername(request);
+    public void userLogout(String accessToken) {
+        String userId = jwtUtil.getUsername(accessToken);
+        // Redis에서 RefreshToken 삭제
         RefreshToken token = tokenRepository.getById(userId);
         tokenRepository.delete(token);
-//        User user = repository.getById(userId);
-//        user.updateRefreshToken(null);  // refreshToken 삭제
-//        repository.save(user);
+
+        // AccessToken 블랙리스트 등록
+        redisTemplate.opsForValue().set(
+                accessToken,
+                "logout",
+                jwtUtil.getValidTime(accessToken) - System.currentTimeMillis(),
+                TimeUnit.MILLISECONDS
+        );
     }
 
     @Override
-    @Transactional
-    public void userDelete(HttpServletRequest request) {
-        String userId = jwtUtil.getUsername(request);  // 엑세스 토큰에서 userId 추출
+    public void userDelete(String userId) {
         User user = repository.getById(userId);  // 추출된 userId로 DB 조회
         repository.delete(user);
     }
@@ -79,7 +88,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void updatePassword(String userInfo, String userPw) {
         User user = repository.findById(userInfo).orElseGet(() ->
                 repository.findByEmail(userInfo).orElseThrow(
@@ -105,14 +113,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public void updateUserDetail(String profileUrl, String introduce, String id) {
+    public UserDto.DetailResponseDto updateUserDetail(String profileUrl, String introduce, String id) {
         User user = repository.getById(id);
         user.updateUserDetail(profileUrl, introduce);
+
+        return user.toDetailResponseDto();
     }
 
     @Override
-    @Transactional
     public void userUpgrade(String userId) {
         User user = repository.getById(userId);
         if(user.getRole().equals(Role.ROLE_MEMBER) || !user.isAuth()) {
@@ -123,7 +131,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void userDowngrade(String userId) {
         User user = repository.getById(userId);
         if(user.getRole().equals(Role.ROLE_USER)){
@@ -133,7 +140,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void userBlock(String userId) {
         User user = repository.getById(userId);
         if(!user.getRole().equals(Role.ROLE_BLOCK)) {
@@ -146,12 +152,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void userApplyUpgrade(String userId) {
         User user = repository.getById(userId);
-        if(!user.getRole().equals(Role.ROLE_USER) || user.isAuth()) {
+        if(user.isAuth()) {
             throw new RestApiException(ErrorCode.UPGRADE_NOT_ACCEPTED);
         }
         user.updateUserAuth(true);
+    }
+
+    @Override
+    public TokenDto.updateTokenDto updateAccessToken(String refreshToken){
+        String userId = jwtUtil.getUsername(refreshToken);
+        String role = jwtUtil.getRole(refreshToken);
+
+        RefreshToken token = tokenRepository.getById(userId);  // redis에 저장된 RefreshToken Entity
+
+        if(refreshToken.equals(token.getRefreshToken())){
+            return TokenDto.updateTokenDto.builder()
+                    .accessToken(jwtUtil.createAccessToken(userId, role))
+                    .build();
+        } else {
+            throw new RestApiException(ErrorCode.UNSUPPORTED_TOKEN);
+        }
     }
 }

@@ -26,14 +26,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {  // OncePerRequestFilt
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = jwtUtil.resolveToken(request);
-
         try {
             if (token != null && jwtUtil.validateToken(token)) {
-                Authentication authentication = jwtUtil.getAuthentication(token);
-                if(jwtUtil.isValidAccessToken(token)) {
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                } else {
-                    throw new JwtException("만료된 토큰입니다.");
+                if(!jwtUtil.checkClaims(token)) {
+                    Authentication authentication = jwtUtil.getAuthentication(token);
+                    if (jwtUtil.isValidAccessToken(token)) {
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    } else {
+                        throw new JwtException("만료된 토큰입니다.");
+                    }
                 }
             }
         } catch (JwtException e) {

@@ -73,6 +73,8 @@ public class SecurityConfig {
                         // 이메일 전송
                         .requestMatchers(HttpMethod.GET, "/api/users/find-email").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/users/join-email").permitAll()
+                        // 패스워드 변경
+                        .requestMatchers(HttpMethod.PATCH, "/update-password").permitAll()
 //                        .requestMatchers("/api/replies/**").permitAll()  // 답변
                         .requestMatchers("/api/recruits/**").permitAll() //  채용공고
                         .requestMatchers("/api/questions/**").permitAll() //  질문

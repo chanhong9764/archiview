@@ -39,7 +39,7 @@ public class jwtUtil {
     }
     Long accessTokenValidTime = 60 * 30 * 1000L;  // 엑세스 토큰 유효기간 30분
     Long refreshTokenValidTime = 60 * 60 * 24 * 14 * 1000L;  // 리프레시 토큰 유효기간 2주
-    Long emailTokenValidTime = 60 * 3 * 1000L;  // 유효기간 3분
+    Long TokenValidTime = 60 * 10 * 1000L;  // 유효기간 10분
     public TokenDto.createTokenDto createJwt(String username, String role) {
         String accessToken = Jwts.builder()
                 .claim("role", role)
@@ -69,6 +69,17 @@ public class jwtUtil {
                 .claim("userId", userId)
                 .issuedAt(new Date(System.currentTimeMillis()))  // 토큰 발행 시간
                 .expiration(new Date(System.currentTimeMillis() + accessTokenValidTime))  // 토큰 만료 시간
+                .signWith(secretKey)
+                .compact();
+    }
+
+
+
+    public String createValidToken(String email) {
+        return Jwts.builder()
+                .claim("email", email)
+                .issuedAt(new Date(System.currentTimeMillis()))  // 토큰 발행 시간
+                .expiration(new Date(System.currentTimeMillis() + TokenValidTime))  // 토큰 만료 시간
                 .signWith(secretKey)
                 .compact();
     }

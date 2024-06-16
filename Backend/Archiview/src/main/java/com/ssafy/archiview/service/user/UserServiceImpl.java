@@ -33,11 +33,7 @@ public class UserServiceImpl implements UserService {
     private final RedisTemplate<String, String> redisTemplate;
 
     @Override
-    public void userAdd(UserDto.AddRequestDto requestDto, HttpServletRequest request) {
-        String userEmail = jwtUtil.getUserEmail(request.getHeader("Authorization"));
-        if(!userEmail.equals(requestDto.getEmail())){
-            throw new RestApiException(ErrorCode.UNSUPPORTED_TOKEN);
-        }
+    public void userAdd(UserDto.AddRequestDto requestDto) {
         repository.findById(requestDto.getId()).ifPresent(user -> {
             throw new RestApiException(ErrorCode.DUPLICATED_USER);
         });
@@ -101,15 +97,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findId(String name, String email) {
+    public String findId(String name, String email) {
         return repository.findByNameAndEmail(name, email)
-                .orElseThrow(()-> new RestApiException(ErrorCode.USER_NOT_FOUND));
-    }
-
-    @Override
-    public User findPassword(String userId, String email) {
-        return repository.findByIdAndEmail(userId, email)
-                .orElseThrow(()-> new RestApiException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(()-> new RestApiException(ErrorCode.USER_NOT_FOUND)).getId();
     }
 
     @Override

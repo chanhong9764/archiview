@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface UserService {
     // 회원가입
-    void userAdd(UserDto.AddRequestDto requestDto, HttpServletRequest request);
+    void userAdd(UserDto.AddRequestDto requestDto);
     // 로그아웃
     void userLogout(String accessToken);
     // 회원탈퇴
@@ -24,9 +24,7 @@ public interface UserService {
     // 패스워드 변경
     void updatePassword(String userInfo, String userPw);
     // 아이디 찾기
-    User findId(String name, String email);
-    // 패스워드 찾기
-    User findPassword(String userId, String email);
+    String findId(String name, String email);
     UserDto.DetailResponseDto updateUserDetail(String profileUrl, String introduce, String id);
     // 유저 등업 승인
     void userUpgrade(String userId);

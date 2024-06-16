@@ -4,6 +4,8 @@ import com.ssafy.archiview.dto.mail.MailDto;
 import com.ssafy.archiview.dto.token.TokenDto;
 import com.ssafy.archiview.dto.user.UserDto;
 import com.ssafy.archiview.entity.User;
+import com.ssafy.archiview.response.code.ErrorCode;
+import com.ssafy.archiview.response.exception.RestApiException;
 import com.ssafy.archiview.utils.jwtUtil;
 import com.ssafy.archiview.response.code.SuccessCode;
 import com.ssafy.archiview.response.structure.SuccessResponse;
@@ -48,26 +50,24 @@ public class UserController {
 
     @PostMapping  // 회원가입
     public ResponseEntity<Object> userAdd(@RequestBody @Valid UserDto.AddRequestDto requestDto, HttpServletRequest request) {
-        service.userAdd(requestDto, request);
+        String email = jwtUtil.getUserEmail(jwtUtil.resolveToken(request));
+        if(email.equals(requestDto.getEmail())) {
+            service.userAdd(requestDto);
+        } else {
+            throw new RestApiException(ErrorCode.UNSUPPORTED_TOKEN);
+        }
         return SuccessResponse.createSuccess(SuccessCode.JOIN_SUCCESS);
     }
 
     @GetMapping("/find-id")  // 아이디 찾기
     public ResponseEntity<Object> findId(@RequestParam String name, HttpServletRequest request){
-        String email = jwtUtil.getUserEmail(request.getHeader("Authorization"));
-        User user = service.findId(name, email);
-        return SuccessResponse.createSuccess(SuccessCode.FIND_ID_SUCCESS, user.getId());
-    }
-
-    @GetMapping("/find-password")  // 패스워드 찾기
-    public ResponseEntity<Object> findPassword(@RequestParam String id, @RequestParam String email){
-        service.findPassword(id, email);
-        return SuccessResponse.createSuccess(SuccessCode.FIND_PASSWORD_SUCCESS);
+        String email = jwtUtil.getUserEmail(jwtUtil.resolveToken(request));
+        return SuccessResponse.createSuccess(SuccessCode.FIND_ID_SUCCESS, service.findId(name, email));
     }
 
     @PatchMapping("/update-password")  // 패스워드 변경
     public ResponseEntity<Object> updatePassword(@RequestBody UserDto.passwordDto dto, HttpServletRequest request){
-        String token = request.getHeader("Authorization");
+        String token = jwtUtil.resolveToken(request);
         String userInfo;
         if(jwtUtil.checkClaims(token)){
             userInfo = jwtUtil.getUsername(token);
@@ -93,7 +93,7 @@ public class UserController {
     @PostMapping("/check-auth") // 인증번호 검증
     public ResponseEntity<Object> checkAuth(@RequestBody MailDto.authRequestDto dto) {
         mailService.checkAuth(dto);
-        return SuccessResponse.createSuccess(SuccessCode.AUTH_SUCCESS);
+        return SuccessResponse.createSuccess(SuccessCode.AUTH_SUCCESS, jwtUtil.createValidToken(dto.getEmail()));
     }
 
     @PostMapping("/valid-password")  // 패스워드 확인

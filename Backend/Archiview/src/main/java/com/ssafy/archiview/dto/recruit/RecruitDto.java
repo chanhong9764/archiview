@@ -51,13 +51,11 @@ public class RecruitDto {
 
     @Getter
     public static class DetailResponseDto {
-        private final RecruitDto.info recruit;
-        private final CompanyDto.info company;
+        private final DetailListResponseDto recruit;
         private final List<QuestionDto.info> questions;
         @Builder
-        public DetailResponseDto(info recruit, CompanyDto.info company, List<QuestionDto.info> questions) {
+        public DetailResponseDto(DetailListResponseDto recruit, List<QuestionDto.info> questions) {
             this.recruit = recruit;
-            this.company = company;
             this.questions = questions;
         }
     }

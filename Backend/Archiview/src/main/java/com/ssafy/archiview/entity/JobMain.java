@@ -21,7 +21,7 @@ public class JobMain {
     @NotNull
     private String name;
 
-    @OneToMany(mappedBy = "jobMain", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "jobMain")
     private List<JobSub> jobSubList = new ArrayList<>();
 
     public CommonDto.jobMainDto toDto() {

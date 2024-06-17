@@ -20,21 +20,18 @@ public class RecruitServiceImpl implements RecruitService {
     private final QuestionRepository questionRepository;
     @Override
     public List<RecruitDto.DetailListResponseDto> recruitDetailList(RecruitDto.DetailListRequestDto requestDto) {
-       return recruitRepository.searchAll(requestDto).stream()
-                .map(Recruit::toDetailListDto)
-                .collect(Collectors.toList());
+       return recruitRepository.searchAll(requestDto);
     }
 
     @Override
     public RecruitDto.DetailResponseDto recruitDetail(int id) {
         Recruit recruit = recruitRepository.findById(id)
                 .orElseThrow(() -> new RestApiException(ErrorCode.RECRUIT_NOT_FOUND));
-        // 질문 가져올 기준 정해야됨(답변, 댓글, 좋아요 등등)
+        // 기준 정해야 됨
         List<Question> questions = questionRepository.findTop5ByCompanyId(recruit.getCompany().getId());
 
         return RecruitDto.DetailResponseDto.builder()
-                .recruit(recruit.toInfoDto())
-                .company(recruit.getCompany().toDto())
+                .recruit(recruit.toDetailListDto())
                 .questions(questions.stream()
                         .map(Question::toDto)
                         .collect(Collectors.toList()))

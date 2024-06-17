@@ -4,9 +4,9 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.archiview.dto.question.QuestionDto;
 import com.ssafy.archiview.dto.recruit.RecruitDto;
-import com.ssafy.archiview.entity.QRecruit;
-import com.ssafy.archiview.entity.Recruit;
+import com.ssafy.archiview.entity.*;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -15,12 +15,15 @@ import java.util.List;
 public class RecruitRepositoryImpl implements RecruitRepositoryCustom {
     private final JPAQueryFactory factory;
     @Override
-    public List<Recruit> searchAll(RecruitDto.DetailListRequestDto requestDto) {
+    public List<RecruitDto.DetailListResponseDto> searchAll(RecruitDto.DetailListRequestDto requestDto) {
         BooleanBuilder builder = new BooleanBuilder();
         QRecruit recruit = QRecruit.recruit;
+        QCompany company = QCompany.company;
 
         StringExpression start = Expressions.stringTemplate("FUNCTION('DATE_FORMAT', {0}, '%Y-%m')", recruit.start);
         StringExpression end = Expressions.stringTemplate("FUNCTION('DATE_FORMAT', {0}, '%Y-%m')", recruit.end);
+
+        builder.and(start.eq(requestDto.getDate()).or(end.eq(requestDto.getDate())));
 
         if(requestDto.getCompanyId() != 0) {
             builder.and(recruit.company.id.eq(requestDto.getCompanyId()));
@@ -28,9 +31,11 @@ public class RecruitRepositoryImpl implements RecruitRepositoryCustom {
 
         return factory
                 .selectFrom(recruit)
-                .join(recruit.company).fetchJoin()
-                .where(builder
-                        .and(start.eq(requestDto.getDate()).or(end.eq(requestDto.getDate()))))
-                .fetch();
+                .leftJoin(recruit.company, company)
+                .fetchJoin()
+                .where(builder)
+                .fetch().stream()
+                .map(Recruit::toDetailListDto)
+                .toList();
     }
 }

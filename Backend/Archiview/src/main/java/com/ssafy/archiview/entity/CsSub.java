@@ -20,7 +20,7 @@ public class CsSub {
     @Column(name = "name", length = 64)
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cs_main_id")
     private CsMain csMain;
     @Builder

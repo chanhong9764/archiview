@@ -4,12 +4,17 @@ import com.ssafy.archiview.response.code.ErrorCode;
 import com.ssafy.archiview.response.code.ResponseCode;
 import com.ssafy.archiview.response.exception.RestApiException;
 import com.ssafy.archiview.response.structure.ErrorResponse;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -42,6 +47,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleIllegalArgument(final IllegalArgumentException e) {
         final ResponseCode responseCode = ErrorCode.INVALID_PARAMETER;
         return handleExceptionInternal(responseCode, e.getMessage());
+    }
+
+    @ExceptionHandler({SignatureException.class, MalformedJwtException.class, UnsupportedJwtException.class})
+    public ResponseEntity<Object> handleJwtException(final Exception e) {
+        final ResponseCode responseCode = ErrorCode.INVALID_PARAMETER;
+        return handleExceptionInternal(responseCode, "유효하지 않은 토큰입니다.");
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<Object> handleJwtAuthException(final ExpiredJwtException e) {
+        final ResponseCode responseCode = ErrorCode.UNAUTHORIZED_REQUEST;
+        return handleExceptionInternal(responseCode, "만료된 토큰입니다.");
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> handleAuthException(final AccessDeniedException e) {
+        final ResponseCode responseCode = ErrorCode.FORBIDDEN_ACCESS;
+        return handleExceptionInternal(responseCode, "권한이 존재하지 않습니다.");
     }
 
     /**

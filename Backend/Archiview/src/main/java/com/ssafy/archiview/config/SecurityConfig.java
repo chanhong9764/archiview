@@ -1,11 +1,11 @@
 package com.ssafy.archiview.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.archiview.filter.JwtAccessDeniedHandler;
-import com.ssafy.archiview.filter.JwtExceptionHandlerFilter;
 import com.ssafy.archiview.filter.JsonUsernamePasswordAuthenticationFilter;
 import com.ssafy.archiview.filter.JwtAuthFilter;
-import com.ssafy.archiview.service.user.CustomUserDetailsService;
+import com.ssafy.archiview.utils.JwtAccessDeniedHandler;
+import com.ssafy.archiview.utils.JwtAuthenticationEntryPoint;
+import com.ssafy.archiview.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,15 +29,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 @EnableMethodSecurity
 public class SecurityConfig {
-    //AuthenticationManager가 인자로 받을 AuthenticationConfiguraion 객체 생성자 주입
-    private final AuthenticationConfiguration authenticationConfiguration;
-    private final CustomUserDetailsService customUserDetailsService;
-    private final com.ssafy.archiview.utils.jwtUtil jwtUtil;
-
     private final ObjectMapper objectMapper;
     private final UserDetailsService loginService;
     private final JwtAuthFilter jwtAuthFilter;
-    private final JwtExceptionHandlerFilter jwtExceptionHandlerFilter;
+    private final JwtUtil jwtUtil;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     //AuthenticationManager Bean 등록
     @Bean
@@ -82,10 +79,10 @@ public class SecurityConfig {
                         .anyRequest().authenticated())  // 나머지 요청은 모두 인증 되어야 함.
                 .addFilterBefore(jsonUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthFilter, JsonUsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtExceptionHandlerFilter, JwtAuthFilter.class)
 
-                .exceptionHandling((exceptionHandling) ->
-                        exceptionHandling.accessDeniedHandler(new JwtAccessDeniedHandler())
+                .exceptionHandling((exceptionHandling) -> exceptionHandling
+                        .accessDeniedHandler(jwtAccessDeniedHandler)
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
         );
         return http.build();
     }

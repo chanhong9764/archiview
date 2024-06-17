@@ -46,13 +46,4 @@ public class Recruit {
                 .end(end.format(DateTimeFormatter.ISO_DATE))
                 .build();
     }
-
-    public RecruitDto.info toInfoDto() {
-        return RecruitDto.info.builder()
-                .id(id)
-                .title(title)
-                .start(start.format(DateTimeFormatter.ISO_DATE))
-                .end(end.format(DateTimeFormatter.ISO_DATE))
-                .build();
-    }
 }

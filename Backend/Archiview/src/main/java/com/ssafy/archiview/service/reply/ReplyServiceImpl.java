@@ -35,12 +35,19 @@ public class ReplyServiceImpl implements ReplyService {
     public ReplyDto.DetailResponseDto replyDetail(ReplyDto.DetailRequestDto requestDto) {
         Reply reply = replyRepository.findById(requestDto.getId())
                 .orElseThrow(() -> new RestApiException(ErrorCode.REPLY_NOT_FOUND));
-        // 추천 여부 조회
-        Optional<Like> isLike = likeRepository.findByReplyIdAndUserId(reply.getId(), requestDto.getUserId());
+
+        boolean isLike = false;
+
+        for(Like temp : reply.getLikes()) {
+            if(temp.getUser().getId().equals(requestDto.getUserId())) {
+                isLike = true;
+                break;
+            }
+        }
 
         return ReplyDto.DetailResponseDto.builder()
                 .reply(reply)
-                .isLike(isLike.isPresent())
+                .isLike(isLike)
                 .build();
     }
 
@@ -48,6 +55,7 @@ public class ReplyServiceImpl implements ReplyService {
     public void replyDelete(ReplyDto.DeleteRequestDto requestDto) {
         Reply reply = replyRepository.findById(requestDto.getId())
                 .orElseThrow(() -> new RestApiException(ErrorCode.REPLY_NOT_FOUND));
+
         if(!requestDto.getUserId().equals(reply.getUser().getId())) {
             throw new RestApiException(ErrorCode.UNAUTHORIZED_REQUEST);
         }
@@ -156,10 +164,11 @@ public class ReplyServiceImpl implements ReplyService {
         Reply reply = replyRepository.findById(requestDto.getId())
                 .orElseThrow(() -> new RestApiException(ErrorCode.REPLY_NOT_FOUND));
 
-        likeRepository.findByReplyIdAndUserId(requestDto.getId(), requestDto.getUserId())
-                        .ifPresent(like -> {
-                            throw new RestApiException(ErrorCode.LIKE_CONFLICT);
-                        });
+        for(Like temp : reply.getLikes()) {
+            if(temp.getUser().getId().equals(requestDto.getUserId())) {
+                throw new RestApiException(ErrorCode.LIKE_CONFLICT);
+            }
+        }
 
         User user = userRepository.getById(requestDto.getUserId());
         likeRepository.save(requestDto.toEntity(reply, user));

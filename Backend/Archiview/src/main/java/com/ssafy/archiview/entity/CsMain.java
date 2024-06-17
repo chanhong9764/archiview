@@ -21,7 +21,7 @@ public class CsMain {
     @NotNull
     private String name;
 
-    @OneToMany(mappedBy = "csMain", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "csMain")
     private List<CsSub> csSubList = new ArrayList<>();
 
     public CommonDto.csMainDto toDto() {

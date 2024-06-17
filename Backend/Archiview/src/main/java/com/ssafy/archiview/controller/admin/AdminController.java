@@ -8,7 +8,6 @@ import com.ssafy.archiview.response.structure.SuccessResponse;
 import com.ssafy.archiview.service.question.QuestionService;
 import com.ssafy.archiview.service.reply.ReplyService;
 import com.ssafy.archiview.service.user.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

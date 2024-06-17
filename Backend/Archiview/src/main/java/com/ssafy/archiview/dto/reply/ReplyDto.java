@@ -69,10 +69,15 @@ public class ReplyDto {
         }
     }
     @Getter
-    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class DetailRequestDto {
-        private final int id;
-        private final String userId;
+        private int id;
+        private String userId;
+        @Builder
+        public DetailRequestDto(int id, String userId) {
+            this.id = id;
+            this.userId = userId;
+        }
     }
 
     @Getter

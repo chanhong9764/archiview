@@ -14,7 +14,7 @@ public class JobSub {
     @Column(name = "name", length = 64)
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_main_id")
     private JobMain jobMain;
 }

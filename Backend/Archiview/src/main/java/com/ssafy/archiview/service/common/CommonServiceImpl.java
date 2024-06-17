@@ -1,24 +1,16 @@
 package com.ssafy.archiview.service.common;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.ssafy.archiview.dto.common.CommonDto;
-import com.ssafy.archiview.dto.company.CompanyDto;
 import com.ssafy.archiview.entity.Company;
 import com.ssafy.archiview.entity.CsMain;
-import com.ssafy.archiview.entity.JobMain;
 import com.ssafy.archiview.repository.CompanyRepository;
-import com.ssafy.archiview.repository.CsMainRepository;
-import com.ssafy.archiview.repository.JobMainRepository;
-import com.ssafy.archiview.response.code.ErrorCode;
-import com.ssafy.archiview.response.exception.RestApiException;
+import com.ssafy.archiview.repository.CsMain.CsMainRepository;
+import com.ssafy.archiview.repository.JobMain.JobMainRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,12 +30,9 @@ public class CommonServiceImpl implements CommonService {
 
     @Override
     public CommonDto.tagResponseDto tagList() {
-        List<CommonDto.csMainDto> csList = csMainRepository.findAll().stream()
-                .map(CsMain::toDto)
-                .toList();
-        List<CommonDto.jobMainDto> jsList = jobMainRepository.findAll().stream()
-                .map(JobMain::toDto)
-                .toList();
+        List<CommonDto.csMainDto> csList = csMainRepository.getCsTagList();
+        List<CommonDto.jobMainDto> jsList = jobMainRepository.getJobTagList();
+
         return CommonDto.tagResponseDto.builder()
                 .csList(csList)
                 .jsList(jsList)
@@ -65,7 +54,6 @@ public class CommonServiceImpl implements CommonService {
                 .retrieve()
                 .bodyToMono(CommonDto.SearchResponse.class)
                 .block();
-        System.out.println();
         return new CommonDto.SearchResponseDto(response.getItems().get(0).getThumbnail());
     }
 }

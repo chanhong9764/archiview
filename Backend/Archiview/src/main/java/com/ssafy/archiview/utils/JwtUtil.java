@@ -1,21 +1,15 @@
 package com.ssafy.archiview.utils;
 
 import com.ssafy.archiview.dto.token.TokenDto;
-import com.ssafy.archiview.response.code.ErrorCode;
-import com.ssafy.archiview.response.exception.RestApiException;
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -30,11 +24,11 @@ import java.util.Date;
 import java.util.stream.Collectors;
 
 @Component
-public class jwtUtil {
+public class JwtUtil {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
     private SecretKey secretKey;
-    public jwtUtil(@Value("${jwt.secret}") String secret){
+    public JwtUtil(@Value("${jwt.secret}") String secret){
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
     }
     Long accessTokenValidTime = 60 * 30 * 1000L;  // 엑세스 토큰 유효기간 30분
@@ -112,7 +106,7 @@ public class jwtUtil {
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
-    private Claims parseClaims(String accessToken) {  // 엑세스 토큰 클레임 추출
+    private Claims parseClaims(String accessToken) throws JwtException {  // 엑세스 토큰 클레임 추출
         try {
             return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(accessToken).getPayload();
         } catch (ExpiredJwtException e) {
@@ -127,11 +121,10 @@ public class jwtUtil {
     }
 
     // 이메일 토큰인지, 로그인 토큰인지 확인하는 메서드
-    public boolean checkClaims(String token) {
-        String payload = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId", String.class);
+    public boolean checkClaims(String token) throws JwtException {
         // 로그인 토큰이면 true
         // 이메일 토큰이면 false
-        return !(payload == null);
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId").toString() != null;
     }
 
     public Long getValidTime(String token) {

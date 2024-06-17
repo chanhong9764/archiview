@@ -3,23 +3,19 @@ package com.ssafy.archiview.controller.user;
 import com.ssafy.archiview.dto.mail.MailDto;
 import com.ssafy.archiview.dto.token.TokenDto;
 import com.ssafy.archiview.dto.user.UserDto;
-import com.ssafy.archiview.entity.User;
 import com.ssafy.archiview.response.code.ErrorCode;
 import com.ssafy.archiview.response.exception.RestApiException;
-import com.ssafy.archiview.utils.jwtUtil;
+import com.ssafy.archiview.utils.JwtUtil;
 import com.ssafy.archiview.response.code.SuccessCode;
 import com.ssafy.archiview.response.structure.SuccessResponse;
 import com.ssafy.archiview.service.user.MailService;
 import com.ssafy.archiview.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 @CrossOrigin("*")
 @RequiredArgsConstructor
@@ -28,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService service;
     private final MailService mailService;
-    private final jwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
     @GetMapping  // 회원상세조회
     public ResponseEntity<Object> userDetail(Authentication authentication) {

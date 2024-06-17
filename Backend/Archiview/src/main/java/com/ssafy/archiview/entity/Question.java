@@ -24,17 +24,17 @@ public class Question {
     @NotNull
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "question")
     private List<CsSubQuestion> csSubQuestionList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "question")
     private List<JobSubQuestion> jobSubQuestionList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "question")
     private List<Reply> replyList = new ArrayList<>();
 
     @Builder

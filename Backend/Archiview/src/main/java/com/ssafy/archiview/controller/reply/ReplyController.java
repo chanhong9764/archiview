@@ -5,13 +5,12 @@ import com.ssafy.archiview.dto.reply.ReplyDto;
 import com.ssafy.archiview.response.code.SuccessCode;
 import com.ssafy.archiview.response.structure.SuccessResponse;
 import com.ssafy.archiview.service.reply.ReplyService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import com.ssafy.archiview.utils.jwtUtil;
+import com.ssafy.archiview.utils.JwtUtil;
 
 import java.util.List;
 
@@ -20,11 +19,15 @@ import java.util.List;
 @RequestMapping("/api/replies")
 public class ReplyController {
     private final ReplyService service;
-    private final jwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> replyDetail(@PathVariable("id") int id, Authentication authentication) {
-        ReplyDto.DetailResponseDto responseDto = service.replyDetail(new ReplyDto.DetailRequestDto(id, authentication.getName()));
+        ReplyDto.DetailResponseDto responseDto = service.replyDetail(
+                ReplyDto.DetailRequestDto.builder()
+                        .id(id)
+                        .userId(authentication.getName()).build()
+        );
         return SuccessResponse.createSuccess(SuccessCode.SELECT_REPLY_SUCCESS, responseDto);
     }
 

@@ -4,7 +4,10 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+<<<<<<< HEAD
 .idea/
+=======
+>>>>>>> a6a80dda1c780000130ad95aff2210526ca9497a
 
 ### STS ###
 .apt_generated
@@ -19,6 +22,10 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
+<<<<<<< HEAD
+=======
+*.idea
+>>>>>>> a6a80dda1c780000130ad95aff2210526ca9497a
 *.iws
 *.iml
 *.ipr

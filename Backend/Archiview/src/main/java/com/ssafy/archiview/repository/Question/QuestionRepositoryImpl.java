@@ -1,7 +1,6 @@
 package com.ssafy.archiview.repository.Question;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.archiview.dto.question.QuestionDto;
 import com.ssafy.archiview.entity.*;
@@ -9,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 @RequiredArgsConstructor
 public class QuestionRepositoryImpl implements QuestionRepositoryCustom{

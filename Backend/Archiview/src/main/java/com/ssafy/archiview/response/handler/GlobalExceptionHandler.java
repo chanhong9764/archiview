@@ -4,17 +4,23 @@ import com.ssafy.archiview.response.code.ErrorCode;
 import com.ssafy.archiview.response.code.ResponseCode;
 import com.ssafy.archiview.response.exception.RestApiException;
 import com.ssafy.archiview.response.structure.ErrorResponse;
+<<<<<<< HEAD
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.SignatureException;
+=======
+>>>>>>> a6a80dda1c780000130ad95aff2210526ca9497a
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+<<<<<<< HEAD
 import org.springframework.security.access.AccessDeniedException;
+=======
+>>>>>>> a6a80dda1c780000130ad95aff2210526ca9497a
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -49,6 +55,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(responseCode, e.getMessage());
     }
 
+<<<<<<< HEAD
     @ExceptionHandler({SignatureException.class, MalformedJwtException.class, UnsupportedJwtException.class})
     public ResponseEntity<Object> handleJwtException(final Exception e) {
         final ResponseCode responseCode = ErrorCode.INVALID_PARAMETER;
@@ -67,15 +74,25 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(responseCode, "권한이 존재하지 않습니다.");
     }
 
+=======
+>>>>>>> a6a80dda1c780000130ad95aff2210526ca9497a
     /**
      * RequestBody javax.validation.Valid or @Validated 으로 binding error 발생시 발생
      */
     @Override
+<<<<<<< HEAD
     public ResponseEntity<Object> handleMethodArgumentNotValid(
+=======
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+>>>>>>> a6a80dda1c780000130ad95aff2210526ca9497a
             MethodArgumentNotValidException e,
             HttpHeaders headers,
             HttpStatusCode status,
             WebRequest request) {
+<<<<<<< HEAD
+=======
+        System.out.println("hihih");
+>>>>>>> a6a80dda1c780000130ad95aff2210526ca9497a
         final ResponseCode responseCode = ErrorCode.INVALID_PARAMETER;
         return handleExceptionInternal(e, responseCode);
     }

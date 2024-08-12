@@ -8,10 +8,8 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisKeyValueAdapter;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
-// @Indexed TTL 만료 시, 삭제를 하기 위해 설정
 @EnableRedisRepositories(enableKeyspaceEvents = RedisKeyValueAdapter.EnableKeyspaceEvents.ON_STARTUP)
 public class RedisConfig {
     @Value("${spring.data.redis.host}")
@@ -22,17 +20,5 @@ public class RedisConfig {
     @Bean
     public RedisConnectionFactory redisConnectionFactory(){
         return new LettuceConnectionFactory(redisHost, redisPort);
-    }
-
-    @Bean
-    // Redis 데이터 조작을 위한 템플릿 클래스, Redis의 데이터를 저장하고 읽는 등의 작업에 사용
-    // RedisRepository를 사용할 것이므로 redisTemplate은 사용하지 않음
-    // 트랜잭션 적용을 위해선 redisTemplate을 사용해야함
-    public RedisTemplate<?, ?> redisTemplate() {
-        RedisTemplate<String, String> template = new RedisTemplate<>();
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new StringRedisSerializer());
-        template.setConnectionFactory(redisConnectionFactory());
-        return template;
     }
 }

@@ -123,14 +123,12 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
                 .id(user.getId())
                 .refreshToken(token.getRefreshToken())
                 .build();
-
         refreshTokenRepository.save(refreshToken);  // 발급받은 refreshToken을 redis에 저장
 
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("code", SuccessCode.LOGIN_SUCCESS.name());
         map.put("message", SuccessCode.LOGIN_SUCCESS.getMessage());
         map.put("data", responseDto);
-
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.OK.value());
         response.getWriter().write(new ObjectMapper().writeValueAsString(map));

@@ -1,9 +1,10 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/archiview?serverTimezone=Asia/Seoul
-    username: ssafy
-    password: ssafy
+    url: [데이터베이스 URL]
+#    url: jdbc:mysql://localhost:3306/archiview?serverTimezone=Asia/Seoul
+    username: [USER_ID]
+    password: [USER_PASSWORD]
 
   jpa:
     # Hibernate가 실행한 모든 SQL을 출력
@@ -14,13 +15,13 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-         # 실행한 SQL의 가독성을 좋게 변환
-         format_sql: true
+        # 실행한 SQL의 가독성을 좋게 변환
+        # format_sql: true
   mail:
     host: smtp.gmail.com
     port: 587
-    username: chan97842@gmail.com
-    password: [비밀번호]
+    username: [GOOGLE_ID]
+    password: [GOOGLE_KEY_VALUE]
     properties:
       mail:
         smtp:
@@ -32,8 +33,10 @@ spring:
 # redis
   data:
     redis:
-      host: localhost
+      host: redis
+#      host: 127.0.0.1
       port: 6379
+#      password: ssafyb105
 
 # jwt secret key
 jwt:
@@ -55,3 +58,4 @@ logging:
         type:
           descriptor:
             sql: trace
+

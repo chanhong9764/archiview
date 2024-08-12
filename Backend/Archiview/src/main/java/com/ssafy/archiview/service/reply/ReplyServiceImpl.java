@@ -35,6 +35,7 @@ public class ReplyServiceImpl implements ReplyService {
     public ReplyDto.DetailResponseDto replyDetail(ReplyDto.DetailRequestDto requestDto) {
         Reply reply = replyRepository.findById(requestDto.getId())
                 .orElseThrow(() -> new RestApiException(ErrorCode.REPLY_NOT_FOUND));
+<<<<<<< HEAD
 
         boolean isLike = false;
 
@@ -48,6 +49,14 @@ public class ReplyServiceImpl implements ReplyService {
         return ReplyDto.DetailResponseDto.builder()
                 .reply(reply)
                 .isLike(isLike)
+=======
+        // 추천 여부 조회
+        Optional<Like> isLike = likeRepository.findByReplyIdAndUserId(reply.getId(), requestDto.getUserId());
+
+        return ReplyDto.DetailResponseDto.builder()
+                .reply(reply)
+                .isLike(isLike.isPresent())
+>>>>>>> a6a80dda1c780000130ad95aff2210526ca9497a
                 .build();
     }
 
@@ -55,7 +64,10 @@ public class ReplyServiceImpl implements ReplyService {
     public void replyDelete(ReplyDto.DeleteRequestDto requestDto) {
         Reply reply = replyRepository.findById(requestDto.getId())
                 .orElseThrow(() -> new RestApiException(ErrorCode.REPLY_NOT_FOUND));
+<<<<<<< HEAD
 
+=======
+>>>>>>> a6a80dda1c780000130ad95aff2210526ca9497a
         if(!requestDto.getUserId().equals(reply.getUser().getId())) {
             throw new RestApiException(ErrorCode.UNAUTHORIZED_REQUEST);
         }
@@ -164,11 +176,18 @@ public class ReplyServiceImpl implements ReplyService {
         Reply reply = replyRepository.findById(requestDto.getId())
                 .orElseThrow(() -> new RestApiException(ErrorCode.REPLY_NOT_FOUND));
 
+<<<<<<< HEAD
         for(Like temp : reply.getLikes()) {
             if(temp.getUser().getId().equals(requestDto.getUserId())) {
                 throw new RestApiException(ErrorCode.LIKE_CONFLICT);
             }
         }
+=======
+        likeRepository.findByReplyIdAndUserId(requestDto.getId(), requestDto.getUserId())
+                        .ifPresent(like -> {
+                            throw new RestApiException(ErrorCode.LIKE_CONFLICT);
+                        });
+>>>>>>> a6a80dda1c780000130ad95aff2210526ca9497a
 
         User user = userRepository.getById(requestDto.getUserId());
         likeRepository.save(requestDto.toEntity(reply, user));
